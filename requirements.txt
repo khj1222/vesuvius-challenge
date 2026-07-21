@@ -1,0 +1,19 @@
+# vesuvius-challenge — 시스템 Python 3.10 + cu128 (uv 미설치)
+#
+# torch는 cu128 인덱스에서 설치:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+# 나머지는 아래 그대로:
+#   pip install -r requirements.txt
+
+numpy>=1.26
+tifffile>=2024.1        # surface volume TIFF 레이어 로딩
+opencv-python>=4.9      # 라벨/마스크 IO, PNG 저장
+Pillow>=10.0
+tqdm>=4.66
+
+# 학습/추론 (torch는 위 cu128 인덱스로 별도 설치)
+# torch>=2.4
+# segmentation-models-pytorch>=0.3   # TODO(phase2): 사전학습 인코더 비교 시
+
+# 선택: 실험 트래킹 (커뮤니티 표준)
+# wandb>=0.17

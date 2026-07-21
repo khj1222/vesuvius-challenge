@@ -1,0 +1,30 @@
+# 데이터 (대용량 TIFF 볼륨 — 절대 커밋 금지)
+data/
+*.tif
+*.tiff
+*.zarr/
+
+# 외부 파이프라인 클론 (ScrollPrize/villa — 커밋 금지)
+external/
+
+# 모델 체크포인트
+checkpoints/
+*.pt
+*.pth
+
+# 산출 이미지 (submission/README.md와 최종 제출본만 예외로 add)
+submission/*.png
+
+# 파이썬
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# 실험 트래킹
+wandb/
+
+# OS
+Thumbs.db
+.DS_Store
