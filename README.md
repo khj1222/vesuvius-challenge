@@ -80,5 +80,5 @@ vesuvius-challenge/
 - [x] docs 오리엔테이션 (공식 검증 2026-07-19)
 - [x] **데이터 다운로드 + 파이프라인 재현 완주** (2026-07-21, 첫 예측물 그리스어 판독)
 - [x] **기여 한 겹**: `ink_viz` 시각화 툴 + Windows 재현 워크스루
+- [x] **github khj1222/vesuvius-challenge 푸시 (public)** — 2026-07-21
 - [ ] 첫 Progress Prize 제출 (타깃 8월 라운드, 스트레치 7/31)
-- [ ] github khj1222/vesuvius-challenge 푸시 (public)
