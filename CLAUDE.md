@@ -32,7 +32,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
   - `tools/run_cv_folds.py` — k-fold 무인 실행 드라이버.
   - **실측**: 검증 패치 0→1,337(학습 2,710→2,240). 클린 20k런 **F1 0.8232 / IoU 0.6995**(step 20000, threshold 146), 누수 기준선 0.8594. 영역별 F1 **0.796~0.895** → 단일 split에서 ~0.05 미만 차이는 노이즈.
   - **새 함정**: ①`create_label_zarrs`는 **tiled TIFF만 스트리밍**(striped면 25GiB 할당 후 사망) ②패치 캐시가 **파일 경로 기준**이라 마스크 갈아끼워도 낡은 split 재사용(새 out_dir 필수) ③`out_dir`은 cwd 기준(학습은 `--directory`, 툴은 `--project`).
-- **진행 중(2026-07-25 저녁)**: 3-fold 교차검증 무인 실행(`runs/cv_folds.log`, 폴드당 ~1.7h, 총 ~5h). 완료 시 `runs/ink_fold_cv_summary.json`에 fold별 F1·분산.
+- ✅ **3-fold 교차검증 완료(2026-07-25, 5h25m, 커밋 `5a176b4`)**: fold별 best F1 = 0.8497 / 0.8537 / 0.8383, **평균 0.8472 · spread 0.0154**(`runs/ink_fold_cv_summary.json`). 단일 split(0.8232)까지 합치면 **동일 config 4회 평가가 0.823~0.854** → **~0.03 F1 미만 개선 주장은 노이즈**(후보 B ablation의 판정 기준선). 그리고 **3런 중 2런이 step 17000에서 정점 후 20000에 하락**(단일 런도 18000 딥) → 튜토리얼 20k 스케줄은 최적을 살짝 지나침. fold 2가 잉크밀도 최고 영역(0.2748)을 떼고 최저점 → 점수차의 주원인은 학습량이 아니라 **held-out 구성**.
 - **사용자 결정(2026-07-25)**: ①**7/31 라운드에 제출**(스트레치 아님, 확정) ②3-fold 돌림 ③메인테이너 문의는 **결과 나온 뒤 사용자가 직접 게시**(초안 = 세션 스크래치패드; 질문 2개 = val mask 부재가 의도인지 + striped TIFF OOM PR 받을지). Claude는 GitHub 인증 없음 → 게시 불가·금지.
 - ✅ **푸시 완료(2026-07-25)**: 커밋 `8370471`+`deb23a4` → https://github.com/khj1222/vesuvius-challenge
 - ✅ **업스트림 이슈 게시(2026-07-25, 사용자 직접)**: https://github.com/ScrollPrize/villa/issues/1231 — 질문 2개(①배포 세그먼트에 `_validation_mask` 없는 게 의도인지 ②`create_label_zarrs`의 striped TIFF OOM에 PR 받을지). 본문 원본 = `submission/maintainer_issue.md`. **답변 오면 방향에 반영할 것**(이미 내부 마스크가 있다면 하네스의 포지셔닝을 바꿔야 함).
