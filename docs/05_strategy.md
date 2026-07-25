@@ -24,6 +24,53 @@ Vesuvius Progress Prize는 **metric 리더보드가 아니다.** 심사 = ①조
 - 타깃 = **8월 라운드(8/31)**. 8월 슬롯 여유 있을 때 Week0 관통. 안 되면 9월 걸러 10월 라운드로. **급할 것 없음이 강점.**
 - jump-ai 결선(진출 시 9/7~10/2)과 겹치면 **Vesuvius를 미룬다** — 우선순위 하위. 이건 "보너스 트랙"이지 주력 아님.
 
+## 타깃 조사 결과 (2026-07-25)
+
+### 무엇이 실제로 상을 받았나 (scrollprize.org/winners, 라운드 목표 = "Improve the tools and training methods needed to read the scrolls")
+
+| 라운드 | 수상자 | 금액 | 기여 |
+|---|---|---|---|
+| 2026-06 | Paulo Sergio Camillo | $2,000 | CT 스캔 아티팩트 기반 3D 세그멘테이션 augmentation 추가 + ScrollFiesta 성능 개선 |
+| 2026-06 | Joseph Balmaceda | $1,000 | 파이버 포맷 변환기 (NML→CSV/JSON/SWC + 길이·분기·방향 분석) |
+| 2026-05 | Ben Kyles | $10,000 | ScrollFiesta — 표면 예측 자동 메싱 + 토폴로지 오류 보정 |
+| 2026-05 | Paulo Sergio Camillo | $2,000 | Scroll Decohesion / Realistic Warp / Squeeze 변환 |
+
+**해석**: $1k~$2k 티어의 실제 눈금이 예상보다 낮다. 포맷 변환기 하나가 $1k. **연구 돌파가 아니라 "파이프라인 옆에 붙는 실용 도구"가 티어권.** $10k는 ScrollFiesta급 시스템이라 별개 리그.
+
+### help-wanted 이슈 (ScrollPrize/villa, 전체 3개)
+
+- **#192 Accurate 3d ink labels** — `good first issue` + `help wanted`. 2025-04-18 개설, **코멘트 0 · 담당자 없음 · 브랜치/PR 없음 (15개월 무주공산)**. 요구: 현재 "2D 라벨을 z축 복사"를 대체하는 **진짜 3D 잉크 라벨**, zarr/tif, 전처리 불필요한 ready-to-run 이미지/라벨 쌍.
+- **#191 Surface/Fiber Predictions in Compressed or Highly Curved areas** — 코멘트 7, 2026-07-23 갱신(활발). nnUNetv2 기반, 표면/파이버 트랙 = 우리 파이프라인 밖.
+- **#193 Methods for generating surface/fiber/ink labels** — #192의 상위 일반화 버전.
+
+### 2026 Open Problems 중 우리 사정권
+
+- **#7 Cross-Scroll Ink Generalization** — 데이터 다운로드 부담 큼(스크롤당 수십 GB).
+- **#8 Direct 3D Ink Segmentation** — #192와 같은 방향. self-distillation 언급.
+- (#2~#6은 표면/토폴로지/스파이럴 = 우리 파이프라인 밖)
+
+### ★ 직접 발견한 갭: 튜토리얼 파이프라인에 held-out 검증이 없다
+
+우리 20k iter 실측 런에서 확인(2026-07-21 산출물 기준):
+
+- 패치 캐시 `runs/ink_tutorial/flat_ink_patches_...json` → `is_validation: true` **0개** / false 2,710개.
+- `runs/ink_tutorial/val_previews/` **빈 디렉터리**.
+- 원인: 데이터셋 세그먼트 `w00_20231016151002`에 `_validation_mask` 자산이 **없음**(`_inklabels`·`_supervision_mask`만 배포됨).
+- 근거 보강: `preprocessing/create_label_zarrs.py`는 `_validation_mask.{tif,tiff,png}`를 **지원하지만**, 튜토리얼 문서(`scrollprize.org/docs/07_tutorial5.md`)엔 validation 언급이 **0회**이고, 마스크를 만들어주는 도구도 없음.
+- 결과: `evaluation/metrics/`에 구현된 Confusion·BalancedAccuracy·**DRD**·**pFM**이 튜토리얼 사용자에겐 **한 번도 실행되지 않는 죽은 코드**. `val_every: 500`은 빈 루프.
+
+즉 이 파이프라인을 따라 한 사람은 **어떤 변경이 좋아졌는지 수치로 말할 수단이 없다.**
+
+### 후보 3개
+
+| | 후보 | 산출물 | 비용 | 근거/리스크 |
+|---|---|---|---|---|
+| **A** | **잉크 파이프라인 held-out 검증 하네스** | ① 세그먼트에서 재현가능(시드 고정)하게 검증 영역을 떼어 `_validation_mask` 생성하는 CLI ② 그걸 쓰는 튜토리얼 config + 문서 ③ ckpt 스윕해 DRD/pFM/balanced-acc 뽑는 eval 스크립트 ④ 우리 20k 런의 실측 수치 공개 | 2~4일 (런당 5090 1.5h) | 라운드 목표 문구에 정확히 부합("training methods"). 이미 있는 metric 코드를 살리는 얇은 PR이라 머지 가능성 높음. **리스크: 메인테이너가 내부적으로 val mask를 갖고 있을 수 있음 → 착수 전 이슈/디스코드 확인 필수.** |
+| **B** | **잉크용 스크롤 특화 augmentation 이식 + ablation** | ink의 `create_training_transforms`가 안 쓰는 `sheet_compression`·`thick_slice`·`layer_mix_dropout`을 2.5D 잉크 학습에 적용하고 효과 측정 → "잉크 권장 augmentation set" PR | 3~5일 (ablation 런 수만큼) | Paulo가 정확히 이 카테고리로 **$2k 두 번** 수상 = 선례 확실. **단 A가 없으면 측정 불가(A 선행 필수)**, 그리고 Paulo와 직접 경합. |
+| **C** | **villa #192 정확한 3D 잉크 라벨** | 학습된 ckpt의 z별 응답으로 잉크 깊이를 국소화 → 3D 라벨 후보 생성 + 검수 툴 + 데이터셋 공개 | 2~4주 | 보상 잠재력 최대(메인테이너가 명시적으로 원함 + 데이터셋은 채택도 큼). **단 정답이 없어 "정확함"을 증명하기 어려움 — 15개월간 아무도 안 건드린 이유일 가능성.** 8/31도 빠듯. |
+
+**권장 순서 = A → B → C (사다리).** A가 만든 측정 기반이 B의 ablation을 가능하게 하고, B/C의 주장도 A 없이는 수치로 못 세운다. A는 7/31 라운드에 맞출 수 있는 유일한 후보.
+
 ## 리스크 / 함정
 
 - ⚠️ **재현만 하고 끝내면 0상.** 반드시 "채택될 한 겹"을 얹어야 함.

@@ -34,9 +34,10 @@ Design notes
 
 Dependencies: numpy, tifffile, Pillow (preview/stats); plus zarr + numcodecs
 for ``overlay``. All are present in the ink-detection ``uv`` environment, so the
-simplest way to run this is:
+simplest way to run this is (``--project`` borrows that environment without
+changing the working directory, so relative paths still resolve from here):
 
-    uv run --directory external/villa/ink-detection python tools/ink_viz.py ...
+    uv run --project external/villa/ink-detection python tools/ink_viz.py ...
 
 License: MIT.
 """

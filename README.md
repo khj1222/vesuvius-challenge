@@ -38,10 +38,18 @@
 점수 리더보드가 아니라 **유용성·채택·문서화**로 심사되는 트랙이라, 재현 위에 남이 바로
 쓸 기여를 얹음:
 
-1. **[`tools/ink_viz.py`](tools/ink_viz.py)** — 예측 TIFF(700MB, 뷰어로 열면 새까맣게 보임)를
+1. **[held-out 검증 하네스](docs/09_validation_harness.md)** — 공식 튜토리얼대로 학습하면
+   **검증 세트가 0개**다(배포 세그먼트에 `_validation_mask`가 없음). `val_every`는 빈 루프를
+   돌고, 저장소에 구현된 DRD·pseudo-F-measure는 한 번도 실행되지 않는다. 즉 "이 변경이
+   나아졌나?"에 아무도 수치로 답할 수 없는 상태. 이걸 메우는 툴 3종:
+   [`make_validation_mask.py`](tools/make_validation_mask.py) (주석 영역 단위 결정론적 held-out) ·
+   [`eval_validation.py`](tools/eval_validation.py) (임계값 스윕 + DRD/pFM + 영역별 분해) ·
+   [`sweep_checkpoints.py`](tools/sweep_checkpoints.py) (체크포인트별 곡선).
+   → 우리 세그먼트에서 **검증 패치 0 → 1,337개**.
+2. **[`tools/ink_viz.py`](tools/ink_viz.py)** — 예측 TIFF(700MB, 뷰어로 열면 새까맣게 보임)를
    판독 가능한 이미지로 바꾸는 재사용 CLI: `stats` / `preview` / `surface` / `overlay`
    (원본 CT 위 잉크 오버레이). 사용법 [tools/README.md](tools/README.md).
-2. **[Windows 재현 워크스루](docs/08_windows_reproduction.md)** — 공식 튜토리얼에 없는
+3. **[Windows 재현 워크스루](docs/08_windows_reproduction.md)** — 공식 튜토리얼에 없는
    실측 함정 7종을 문서화(실 데이터 ~86GB, 추론 `--no-compile`/Triton, 5090 cu128,
    `merge-ink-pipelines` 브랜치 등).
 
@@ -65,9 +73,10 @@ vesuvius-challenge/
 ├── CLAUDE.md            ← 새 세션 부팅용 (상태·컨벤션·다음 액션)
 ├── todo.md              ← Week0 체크리스트
 ├── requirements.txt     ← 시스템 Python 3.10 + cu128
-├── docs/                ← 01~07 오리엔테이션 + 08 Windows 재현 워크스루
-│   └── images/          ← before/after 산출 이미지
-├── tools/               ← ink_viz.py (예측 TIFF 시각화 CLI) + README
+├── docs/                ← 01~07 오리엔테이션 + 08 재현 워크스루 + 09 검증 하네스
+│   └── images/          ← before/after 산출 이미지 + 검증 split 그림
+├── configs/             ← 검증이 실제로 도는 학습 config
+├── tools/               ← ink_viz + 검증 하네스 3종 CLI + README
 ├── src/                 ← ⚠️ 죽은 2023 Kaggle 포맷 스캐폴드 (참고용)
 └── submission/          ← 제출 산출물 패키지 (이미지 + writeup)
 ```
@@ -81,4 +90,5 @@ vesuvius-challenge/
 - [x] **데이터 다운로드 + 파이프라인 재현 완주** (2026-07-21, 첫 예측물 그리스어 판독)
 - [x] **기여 한 겹**: `ink_viz` 시각화 툴 + Windows 재현 워크스루
 - [x] **github khj1222/vesuvius-challenge 푸시 (public)** — 2026-07-21
+- [x] **held-out 검증 하네스** (2026-07-25) — 검증 패치 0 → 1,033개, DRD·pFM 최초 실행
 - [ ] 첫 Progress Prize 제출 (타깃 8월 라운드, 스트레치 7/31)
