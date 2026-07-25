@@ -36,7 +36,14 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - **사용자 결정(2026-07-25)**: ①**7/31 라운드에 제출**(스트레치 아님, 확정) ②3-fold 돌림 ③메인테이너 문의는 **결과 나온 뒤 사용자가 직접 게시**(초안 = 세션 스크래치패드; 질문 2개 = val mask 부재가 의도인지 + striped TIFF OOM PR 받을지). Claude는 GitHub 인증 없음 → 게시 불가·금지.
 - ✅ **푸시 완료(2026-07-25)**: 커밋 `8370471`+`deb23a4` → https://github.com/khj1222/vesuvius-challenge
 - ✅ **업스트림 이슈 게시(2026-07-25, 사용자 직접)**: https://github.com/ScrollPrize/villa/issues/1231 — 질문 2개(①배포 세그먼트에 `_validation_mask` 없는 게 의도인지 ②`create_label_zarrs`의 striped TIFF OOM에 PR 받을지). 본문 원본 = `submission/maintainer_issue.md`. **답변 오면 방향에 반영할 것**(이미 내부 마스크가 있다면 하네스의 포지셔닝을 바꿔야 함).
-- **다음**: 3-fold 결과 → `docs/09` 분산 표 채우기 → 커밋·푸시 → 7/31 제출 폼 작성(https://forms.gle/xoF5C3QsYutKP97x7).
+- ✅ **업스트림 PR 제출(2026-07-25)**: https://github.com/ScrollPrize/villa/pull/1234 — `create_label_zarrs`가 striped TIFF를 스트리밍하도록 수정(1파일 +54−8, base `merge-ink-pipelines`, mergeable, 리뷰 대기). 로컬 브랜치 `external/villa` `fix/stream-untiled-label-images`(`a5179a8`), 패치 사본 `submission/villa-pr-stream-untiled-labels.patch`. ⚠️ base를 `main`으로 잘못 열면 231파일 diff가 되니 반드시 `merge-ink-pipelines`. 검증 = 합성 이미지 6레벨 바이트 동일 + 실제 32249×51380 striped 83초 변환.
+
+## 다음 액션 (2026-07-26 재개 지점 — 제출 마무리)
+
+1. **awesome-scroll-tools PR** — 폼의 필수 체크박스("Pull request submitted!")를 채우려면 선행 필수. 대상 = `scrollprize.org/docs/20_community_projects.md`의 `### 🖋️ Scroll segments-based Ink Detection` → `#### ⚙️ Tools`. **base는 `main`**(이 파일은 main에 있음, PR #1234와 반대). 항목 문안 = `submission/2026-07_progress_prize.md` 1단계. 포크(khj1222/villa) 이미 있음.
+2. **폼 제출** — https://forms.gle/xoF5C3QsYutKP97x7 (필수 7칸). 답변 전문 = `submission/2026-07_progress_prize.md` 2단계. **사용자가 채울 칸 = 이메일·실명 2개뿐**(공개 저장소라 비워둠).
+3. (선택) 이슈 #1231 / PR #1234에 반응 오면 반영. "내부에 val mask 있다"는 답이 오면 폼 5번 서술의 전제를 조정.
+- **마감 7/31 23:59 PT.** 롤링이라 놓쳐도 8/31 재제출 가능.
 
 ## 이전 상태 (2026-07-21)
 
