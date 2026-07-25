@@ -1,5 +1,9 @@
 # PR to ScrollPrize/villa — stream untiled label images
 
+**Submitted: https://github.com/ScrollPrize/villa/pull/1234** (2026-07-25, open —
+base `merge-ink-pipelines`, 1 file, +54 −8, mergeable). Opened against `main` by mistake
+first; the base was changed in place, which collapsed a spurious 231-file diff to the real one.
+
 **Branch (local):** `fix/stream-untiled-label-images` in `external/villa` (commit `a5179a8`)
 **Patch:** [`villa-pr-stream-untiled-labels.patch`](villa-pr-stream-untiled-labels.patch)
 **Base branch: `merge-ink-pipelines`** — not `main`. `ink-detection/koine_machines/` does not

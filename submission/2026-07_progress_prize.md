@@ -43,7 +43,8 @@ Individual submission — no team.
 ```
 https://github.com/khj1222/vesuvius-challenge
 Walkthrough: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/09_validation_harness.md
-Related upstream issue: https://github.com/ScrollPrize/villa/issues/1231
+Upstream PR (fixes an OOM this work surfaced): https://github.com/ScrollPrize/villa/pull/1234
+Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
 ```
 
 **5. Short description of how your contributions substantially increase the probability of reading complete scrolls**
@@ -69,10 +70,10 @@ evidence; the tutorial's 20k schedule overshoots, with 2 of 3 folds peaking at s
 and falling by 20000; and the F1-optimal threshold drifts between 122 and 198 across
 checkpoints, so fixed-threshold comparisons partly measure calibration, not quality.
 
-It also surfaced two pipeline defects (create_label_zarrs OOMs on striped TIFF input; the
-patch cache is keyed by asset paths, so replacing a mask silently reuses the old split),
-both filed upstream. Anyone proposing an ink-detection improvement can now be asked for a
-number that means something.
+It also surfaced two pipeline defects: create_label_zarrs OOMs on striped TIFF input (fixed
+in PR #1234, verified byte-identical to the existing tiled path), and the patch cache is
+keyed by asset paths, so replacing a mask silently reuses the old split. Anyone proposing
+an ink-detection improvement can now be asked for a number that means something.
 ```
 
 **6. Pull Request Submission** → check "Pull request submitted!" (after step 1)
