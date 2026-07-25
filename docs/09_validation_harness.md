@@ -201,6 +201,34 @@ on a single split is not distinguishable from which letters happened to be held
 out. The picture shows why the misses cluster where they do — the model recovers
 stroke cores and loses the edges.
 
+### 3-fold cross-validation
+
+`run_cv_folds.py --folds 3` retrains from scratch per fold (5 h 25 m total on one
+RTX 5090). Each fold holds out about a third of the supervised area:
+
+| fold | held-out groups | held-out area | val ink density | best step | best F1 | IoU | threshold |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 0 | 7, 11, 4 | 33.7% | 0.2037 | 17000 | 0.8497 | 0.7387 | 176 |
+| 1 | 0, 8, 1, 10, 5 | 33.8% | 0.2081 | 17000 | 0.8537 | 0.7448 | 149 |
+| 2 | 12, 9, 2, 6, 3 | 32.5% | 0.2748 | 20000 | 0.8383 | 0.7217 | 149 |
+
+**mean F1 0.8472, spread 0.0154** (`runs/ink_fold_cv_summary.json`).
+
+Read together with the 20% single split above (0.8232), four evaluations of the
+*same unchanged config* land between 0.823 and 0.854. So:
+
+* **A change worth less than ~0.03 F1 on one split is not evidence of anything.**
+  That is the practical noise floor on this segment, and it is larger than the
+  margin a lot of tuning would produce.
+* **The last checkpoint is not the best one.** Two of the three folds peak at
+  step 17000 and then *drop* by 20000 (fold 1: 0.8537 → 0.8474); the single-split
+  run dips at 18000 too. The tutorial's 20k schedule runs slightly past the
+  optimum, which is invisible without a held-out set.
+* Fold 2 held out the ink-densest regions (0.2748 vs 0.2037/0.2081) and scored
+  lowest — the composition of the held-out set, not the amount of training data,
+  drives most of the difference. Fold 0 trained on the *least* data and still
+  beat fold 2.
+
 ### Leakage baseline
 
 The checkpoint from our original tutorial run (trained before any mask existed,
@@ -233,8 +261,9 @@ to even notice the difference.
 ## Limitations
 
 * **Four regions.** A 20% held-out split of this segment is four annotated
-  regions. Per-region F1 varies by ~0.07 even on a leakage baseline, so treat
-  small differences between runs as noise unless they hold across `--folds`.
+  regions. Per-region F1 varies by ~0.07 even on a leakage baseline, and the
+  measured spread across 3 folds plus the single split is 0.823–0.854 — treat
+  anything smaller than ~0.03 F1 as noise unless it holds across `--folds`.
 * **One segment.** The held-out regions come from the *same* segment the model
   trains on, so this measures within-segment generalization, not cross-scroll
   transfer ([open problem #7](https://scrollprize.org/2026_open_problems)). It is

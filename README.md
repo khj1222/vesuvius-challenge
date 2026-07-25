@@ -45,7 +45,8 @@
    [`make_validation_mask.py`](tools/make_validation_mask.py) (주석 영역 단위 결정론적 held-out) ·
    [`eval_validation.py`](tools/eval_validation.py) (임계값 스윕 + DRD/pFM + 영역별 분해) ·
    [`sweep_checkpoints.py`](tools/sweep_checkpoints.py) (체크포인트별 곡선).
-   → 우리 세그먼트에서 **검증 패치 0 → 1,337개**.
+   → 우리 세그먼트에서 **검증 패치 0 → 1,337개**. 3-fold 교차검증까지 돌려
+   **"~0.03 F1 미만 개선은 노이즈"**라는 기준선과 **"마지막 체크포인트가 최적이 아니다"**(3런 중 2런이 17k에서 정점)를 실측.
 2. **[`tools/ink_viz.py`](tools/ink_viz.py)** — 예측 TIFF(700MB, 뷰어로 열면 새까맣게 보임)를
    판독 가능한 이미지로 바꾸는 재사용 CLI: `stats` / `preview` / `surface` / `overlay`
    (원본 CT 위 잉크 오버레이). 사용법 [tools/README.md](tools/README.md).

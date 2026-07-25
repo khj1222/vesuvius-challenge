@@ -34,7 +34,9 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
   - **새 함정**: ①`create_label_zarrs`는 **tiled TIFF만 스트리밍**(striped면 25GiB 할당 후 사망) ②패치 캐시가 **파일 경로 기준**이라 마스크 갈아끼워도 낡은 split 재사용(새 out_dir 필수) ③`out_dir`은 cwd 기준(학습은 `--directory`, 툴은 `--project`).
 - **진행 중(2026-07-25 저녁)**: 3-fold 교차검증 무인 실행(`runs/cv_folds.log`, 폴드당 ~1.7h, 총 ~5h). 완료 시 `runs/ink_fold_cv_summary.json`에 fold별 F1·분산.
 - **사용자 결정(2026-07-25)**: ①**7/31 라운드에 제출**(스트레치 아님, 확정) ②3-fold 돌림 ③메인테이너 문의는 **결과 나온 뒤 사용자가 직접 게시**(초안 = 세션 스크래치패드; 질문 2개 = val mask 부재가 의도인지 + striped TIFF OOM PR 받을지). Claude는 GitHub 인증 없음 → 게시 불가·금지.
-- **다음**: 3-fold 결과 → `docs/09` 분산 표 채우기 → 푸시(사용자 승인 필요) → 제출 폼 작성.
+- ✅ **푸시 완료(2026-07-25)**: 커밋 `8370471`+`deb23a4` → https://github.com/khj1222/vesuvius-challenge
+- ✅ **업스트림 이슈 게시(2026-07-25, 사용자 직접)**: https://github.com/ScrollPrize/villa/issues/1231 — 질문 2개(①배포 세그먼트에 `_validation_mask` 없는 게 의도인지 ②`create_label_zarrs`의 striped TIFF OOM에 PR 받을지). 본문 원본 = `submission/maintainer_issue.md`. **답변 오면 방향에 반영할 것**(이미 내부 마스크가 있다면 하네스의 포지셔닝을 바꿔야 함).
+- **다음**: 3-fold 결과 → `docs/09` 분산 표 채우기 → 커밋·푸시 → 7/31 제출 폼 작성(https://forms.gle/xoF5C3QsYutKP97x7).
 
 ## 이전 상태 (2026-07-21)
 
