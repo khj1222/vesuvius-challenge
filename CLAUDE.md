@@ -23,7 +23,20 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - git: `khj1222/vesuvius-challenge` (푸시 대기). 데이터·체크포인트·TIFF는 커밋 금지(.gitignore 처리).
 - 코드 스타일: 주변 코드 관례 따를 것. 스텁엔 `# TODO(week0):` 마커로 미완 지점 표시.
 
-## 현재 상태 / 다음 액션 (2026-07-21 갱신)
+## 현재 상태 / 다음 액션 (2026-07-25 갱신)
+
+- ✅ **기여 #2 = held-out 검증 하네스 완성(2026-07-25, 커밋 `8370471`, 로컬만 — 푸시 대기).** 튜토리얼은 **검증 세트가 0개**로 학습됨(배포 세그먼트에 `_validation_mask` 없음 → `val_every`가 빈 루프, `evaluation/metrics/`의 DRD·pFM 미실행). 이걸 메우는 툴 4종 + config + 문서를 만듦. 상세 = `docs/09_validation_harness.md`.
+  - `tools/make_validation_mask.py` — **주석 영역 단위** held-out 생성. ⚠️ supervision은 연속 리본이 아니라 **글자 박스 15개**(면적 1.5~20.7%, 잉크밀도 0.114~0.440, 4개는 이웃과 패치(256px)보다 가까움) → 사각 밴드로 자르면 글자가 반으로 쪼개져 인접 픽셀 누수. 그래서 영역 통째 배정 + 패치거리 내 영역은 그룹 병합 + 부분집합 완전탐색. 결정론적. `--folds K` 지원.
+  - `tools/eval_validation.py` — 임계값 스윕(누적 히스토그램) + DRD/pFM(저장소 metric 클래스 호출) + **영역별 분해**.
+  - `tools/sweep_checkpoints.py` — ckpt별 채점(`infer --mask-path`로 166블록만, ~30초) + CSV + PIL 곡선.
+  - `tools/run_cv_folds.py` — k-fold 무인 실행 드라이버.
+  - **실측**: 검증 패치 0→1,337(학습 2,710→2,240). 클린 20k런 **F1 0.8232 / IoU 0.6995**(step 20000, threshold 146), 누수 기준선 0.8594. 영역별 F1 **0.796~0.895** → 단일 split에서 ~0.05 미만 차이는 노이즈.
+  - **새 함정**: ①`create_label_zarrs`는 **tiled TIFF만 스트리밍**(striped면 25GiB 할당 후 사망) ②패치 캐시가 **파일 경로 기준**이라 마스크 갈아끼워도 낡은 split 재사용(새 out_dir 필수) ③`out_dir`은 cwd 기준(학습은 `--directory`, 툴은 `--project`).
+- **진행 중(2026-07-25 저녁)**: 3-fold 교차검증 무인 실행(`runs/cv_folds.log`, 폴드당 ~1.7h, 총 ~5h). 완료 시 `runs/ink_fold_cv_summary.json`에 fold별 F1·분산.
+- **사용자 결정(2026-07-25)**: ①**7/31 라운드에 제출**(스트레치 아님, 확정) ②3-fold 돌림 ③메인테이너 문의는 **결과 나온 뒤 사용자가 직접 게시**(초안 = 세션 스크래치패드; 질문 2개 = val mask 부재가 의도인지 + striped TIFF OOM PR 받을지). Claude는 GitHub 인증 없음 → 게시 불가·금지.
+- **다음**: 3-fold 결과 → `docs/09` 분산 표 채우기 → 푸시(사용자 승인 필요) → 제출 폼 작성.
+
+## 이전 상태 (2026-07-21)
 
 - ✅ **파이프라인 로컬 end-to-end 완주(2026-07-21).** 다운로드→학습(20k iter, ~1h31m)→추론까지 5090서 다 돌았고, **첫 예측 TIFF에 그리스 대문자가 또렷이 판독됨**. 산출물: `external/villa/ink-detection/predictions/w00_20231016151002.tif`(697MB, 32249×51380 uint8; nonzero 82%·>128 11%) + 프리뷰 PNG `..._preview.png`. **남은 일 = 재현 위 "한 겹"(개선/툴/문서) + 제출**(아래 4번). 나머지 항목은 이 완주의 근거·재현법 기록.
 
