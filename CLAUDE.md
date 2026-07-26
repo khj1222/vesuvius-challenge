@@ -48,7 +48,11 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 ## 다음 액션 (대기/선택)
 
 1. **반응 오면 대응**: 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231)(val mask 부재가 의도인지) · PR [#1234](https://github.com/ScrollPrize/villa/pull/1234)(striped TIFF OOM, 리뷰 대기) · PR #1249(머지 대기). **"내부엔 이미 val mask가 있다"는 답이 오면 하네스 포지셔닝과 제출 서술의 전제를 조정**해야 함.
-2. **8월 라운드(8/31)**: 롤링이라 추가 기여로 재제출 가능. 다음 타깃 선정은 미정 — villa help-wanted 이슈 + 2026 오픈문제 재조사부터.
+2. **8월 라운드(8/31) 타깃 = villa [#192](https://github.com/ScrollPrize/villa/issues/192) "Accurate 3d ink labels" + 하네스 업스트림화(보조)** — 2026-07-26 재조사 후 결정. 계획·근거·마일스톤·리스크 전문 = `docs/05_strategy.md` 하단 "8월 라운드" 절.
+   - 핵심 논리: 7월에 만든 held-out 하네스가 **"z복사 라벨 vs 3D 라벨"을 같은 fold·시드로 비교**하게 해줌 → 15개월간 아무도 증명 못 한 라벨 품질 주장을 수치로 세울 수 있음. 판정 기준선 = ~0.03 F1 미만은 노이즈.
+   - ⚠️ **순환성 리스크**: 깊이 프로파일을 z복사 라벨로 학습한 모델에서 뽑음 → self-distillation **대조군 arm 필수**(이게 없으면 결과 무의미).
+   - ⚠️ **니치 혼잡**: 7월 마감 직전 TAUIL-Abd-Elilah가 재현성 감사로 8건, Jinhojeong이 라벨 품질 측정 툴(#193)을 냄. "측정 툴 하나 더"는 중복 → 하네스를 **쓰는** 쪽으로 갈 것.
+   - 첫 스텝: 감독 영역(166블록, 추론 ~30초)에서 z-occlusion / z-서브윈도우로 깊이 기여도 뽑아 시각 검수.
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
 ## 이전 상태 (2026-07-21)
