@@ -69,8 +69,9 @@ Running it on w00_20231016151002 turned 0 validation patches into 1,337 and prod
 results nobody could previously see: the practical noise floor is ~0.03 F1 (3 folds plus a
 20% split of one unchanged config span 0.823-0.854), so smaller reported gains are not
 evidence; the tutorial's 20k schedule overshoots, with 2 of 3 folds peaking at step 17000
-and falling by 20000; and the F1-optimal threshold drifts between 122 and 198 across
-checkpoints, so fixed-threshold comparisons partly measure calibration, not quality.
+and falling by 20000; and the F1-optimal threshold drifts between 122 and 198 across the 20
+checkpoints of a single run (61-203 once the cross-validation runs are included), so
+fixed-threshold comparisons partly measure calibration, not quality.
 
 It also surfaced two pipeline defects: create_label_zarrs OOMs on striped TIFF input (fixed
 in PR #1234, verified byte-identical to the existing tiled path), and the patch cache is
@@ -94,6 +95,7 @@ an ink-detection improvement can now be asked for a number that means something.
 | 3-fold 0.8497 / 0.8537 / 0.8383, mean 0.8472, spread 0.0154 | `runs/ink_fold_cv_summary.json` |
 | leakage baseline 0.8594 | `runs/eval_leaky_regions.json` |
 | per-region F1 0.796–0.895 | `runs/ink_holdout_20k/validation/final_full.json` |
+| F1-optimal threshold 122–198 (61–203 with CV runs) | `threshold` column of `runs/{ink_holdout_20k,ink_fold0,ink_fold1,ink_fold2}/validation/summary.csv` |
 | 15 supervised regions, 4 within one patch of a neighbour | `docs/09_validation_harness.md` |
 
 (Run artifacts live under the gitignored `external/villa/ink-detection/`; the numbers are
