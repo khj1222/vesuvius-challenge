@@ -38,12 +38,18 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - ✅ **업스트림 이슈 게시(2026-07-25, 사용자 직접)**: https://github.com/ScrollPrize/villa/issues/1231 — 질문 2개(①배포 세그먼트에 `_validation_mask` 없는 게 의도인지 ②`create_label_zarrs`의 striped TIFF OOM에 PR 받을지). 본문 원본 = `submission/maintainer_issue.md`. **답변 오면 방향에 반영할 것**(이미 내부 마스크가 있다면 하네스의 포지셔닝을 바꿔야 함).
 - ✅ **업스트림 PR 제출(2026-07-25)**: https://github.com/ScrollPrize/villa/pull/1234 — `create_label_zarrs`가 striped TIFF를 스트리밍하도록 수정(1파일 +54−8, base `merge-ink-pipelines`, mergeable, 리뷰 대기). 로컬 브랜치 `external/villa` `fix/stream-untiled-label-images`(`a5179a8`), 패치 사본 `submission/villa-pr-stream-untiled-labels.patch`. ⚠️ base를 `main`으로 잘못 열면 231파일 diff가 되니 반드시 `merge-ink-pipelines`. 검증 = 합성 이미지 6레벨 바이트 동일 + 실제 32249×51380 striped 83초 변환.
 
-## 다음 액션 (2026-07-26 재개 지점 — 제출 마무리)
+## 🏁 7월 라운드 제출 완료 (2026-07-26)
 
-1. ✅ **awesome-scroll-tools PR 완료(2026-07-26)**: https://github.com/ScrollPrize/villa/pull/1249 — `scrollprize.org/docs/20_community_projects.md`의 `#### ⚙️ Tools`에 하네스 1줄 추가(base `main`, 1파일 +3). 브랜치 `khj1222/villa` `add-ink-validation-harness`(`2aba59a`, main tip `650076f`에서 분기). ⚠️ `gh` CLI는 **미설치**(구 메모 무관) — git push는 GCM 자격증명으로 되고, PR 생성만 사용자가 웹에서. 작업은 sparse worktree `D:\vw`에서 함(`external/villa` 작업트리 보존 목적; 불필요하면 `git worktree remove --force D:/vw`).
-2. **폼 제출 ← 지금 여기** — https://forms.gle/xoF5C3QsYutKP97x7 (필수 7칸). 답변 전문 = `submission/2026-07_progress_prize.md` 2단계. **사용자가 채울 칸 = 이메일·실명 2개뿐**(공개 저장소라 비워둠). 6번 체크박스는 PR #1249로 충족.
-3. (선택) 이슈 #1231 / PR #1234에 반응 오면 반영. "내부에 val mask 있다"는 답이 오면 폼 5번 서술의 전제를 조정.
-- **마감 7/31 23:59 PT.** 롤링이라 놓쳐도 8/31 재제출 가능.
+- ✅ **Google Form 제출 완료(2026-07-26, 마감 7/31 23:59 PT 대비 5일 여유).** 제출 명의 = Hyojun Kwon / bluekgssk@gmail.com, 개인 자격. **답변 7칸 전문 = `submission/2026-07_progress_prize.md`**(제출본과 동일하게 유지 중 — 심사 문의 오면 이 파일이 근거).
+- ✅ **awesome-scroll-tools PR**: https://github.com/ScrollPrize/villa/pull/1249 — `scrollprize.org/docs/20_community_projects.md`의 `#### ⚙️ Tools`에 하네스 1줄 추가(base **`main`**, 1파일 +3, 저자 표기 `by khj1222`). 브랜치 `khj1222/villa` `add-ink-validation-harness`(`2aba59a`, main tip `650076f`에서 분기). 폼 6번 필수 체크박스를 이걸로 충족.
+- ⚠️ **`gh` CLI 미설치**(bash/PowerShell 둘 다). git push는 GCM 자격증명으로 됨 → **브랜치 푸시까지는 Claude가 가능, PR 생성/이슈 게시는 사용자가 웹에서.** villa 쪽 작업은 sparse worktree(`git worktree add --no-checkout --detach D:/vw <ref>` + `sparse-checkout set --cone scrollprize.org/docs`)로 할 것: `external/villa` 작업트리는 `merge-ink-pipelines` + 수정된 `pyproject.toml` 상태라 체크아웃 전환 금지. 경로가 길면 `Filename too long`으로 실패하니 **짧은 경로**(`D:/vw`) 필수.
+- 📌 **제출 문안 정확성**: 5번의 "threshold 122–198"은 `ink_holdout_20k` 20체크포인트 기준이고 fold 런 포함 시 61–203 → 제출본은 둘 다 명시하도록 수정됨(커밋 `21a27c1`). 향후 수치 인용 시 근거는 `runs/*/validation/summary.csv`의 `threshold` 열.
+
+## 다음 액션 (대기/선택)
+
+1. **반응 오면 대응**: 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231)(val mask 부재가 의도인지) · PR [#1234](https://github.com/ScrollPrize/villa/pull/1234)(striped TIFF OOM, 리뷰 대기) · PR #1249(머지 대기). **"내부엔 이미 val mask가 있다"는 답이 오면 하네스 포지셔닝과 제출 서술의 전제를 조정**해야 함.
+2. **8월 라운드(8/31)**: 롤링이라 추가 기여로 재제출 가능. 다음 타깃 선정은 미정 — villa help-wanted 이슈 + 2026 오픈문제 재조사부터.
+3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
 ## 이전 상태 (2026-07-21)
 
