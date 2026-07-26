@@ -41,10 +41,11 @@
 1. **[held-out 검증 하네스](docs/09_validation_harness.md)** — 공식 튜토리얼대로 학습하면
    **검증 세트가 0개**다(배포 세그먼트에 `_validation_mask`가 없음). `val_every`는 빈 루프를
    돌고, 저장소에 구현된 DRD·pseudo-F-measure는 한 번도 실행되지 않는다. 즉 "이 변경이
-   나아졌나?"에 아무도 수치로 답할 수 없는 상태. 이걸 메우는 툴 3종:
+   나아졌나?"에 아무도 수치로 답할 수 없는 상태. 이걸 메우는 툴 4종:
    [`make_validation_mask.py`](tools/make_validation_mask.py) (주석 영역 단위 결정론적 held-out) ·
    [`eval_validation.py`](tools/eval_validation.py) (임계값 스윕 + DRD/pFM + 영역별 분해) ·
-   [`sweep_checkpoints.py`](tools/sweep_checkpoints.py) (체크포인트별 곡선).
+   [`sweep_checkpoints.py`](tools/sweep_checkpoints.py) (체크포인트별 곡선) ·
+   [`run_cv_folds.py`](tools/run_cv_folds.py) (k-fold 무인 실행).
    → 우리 세그먼트에서 **검증 패치 0 → 1,337개**. 3-fold 교차검증까지 돌려
    **"~0.03 F1 미만 개선은 노이즈"**라는 기준선과 **"마지막 체크포인트가 최적이 아니다"**(3런 중 2런이 17k에서 정점)를 실측.
 2. **[`tools/ink_viz.py`](tools/ink_viz.py)** — 예측 TIFF(700MB, 뷰어로 열면 새까맣게 보임)를
@@ -53,6 +54,16 @@
 3. **[Windows 재현 워크스루](docs/08_windows_reproduction.md)** — 공식 튜토리얼에 없는
    실측 함정 7종을 문서화(실 데이터 ~86GB, 추론 `--no-compile`/Triton, 5090 cu128,
    `merge-ink-pipelines` 브랜치 등).
+
+### 업스트림(ScrollPrize/villa) 기여
+
+- **[PR #1234](https://github.com/ScrollPrize/villa/pull/1234)** — `create_label_zarrs`가 striped
+  TIFF를 스트리밍하도록 수정. 기존 코드는 피라미드를 메모리에 통째로 올려 25GiB를 할당하다
+  죽는다(tiled TIFF만 스트리밍됨). 하네스용 마스크를 만들다 발견했고, 기존 tiled 경로와
+  6레벨 바이트 동일 + 실제 32249×51380 striped 이미지 83초 변환으로 검증.
+- **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — 배포 세그먼트에
+  `_validation_mask`가 없는 것이 의도인지 메인테이너 문의.
+- **[PR #1249](https://github.com/ScrollPrize/villa/pull/1249)** — 커뮤니티 프로젝트 목록 등재.
 
 ## 빠른 시작 (재현)
 
