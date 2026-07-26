@@ -6,19 +6,20 @@
 
 ---
 
-## Step 1 — PR to awesome-scroll-tools
+## Step 1 — PR to awesome-scroll-tools ✅ done
 
+**Submitted:** https://github.com/ScrollPrize/villa/pull/1249 (2026-07-26)
 **File:** `scrollprize.org/docs/20_community_projects.md` on `ScrollPrize/villa` **`main`**
 **Section:** `### 🖋️ Scroll segments-based Ink Detection` → `#### ⚙️ Tools`
-**How:** open the file on GitHub → pencil icon → add the entry → "Create a new branch and start a pull request".
+**Branch:** `khj1222/villa` `add-ink-validation-harness` (`2aba59a`, 1 file +3), cut from `main` tip `650076f`.
 
-Entry to add (append to that Tools list, matching the existing `- [name](url) by Author. Description.` style):
+Entry added (matching the existing `- [name](url) by Author. Description.` style):
 
 ```markdown
-- [Ink detection validation harness](https://github.com/khj1222/vesuvius-challenge) by <YOUR NAME>. The ink-detection tutorial trains with no held-out data, so improvements cannot be told from noise. This generates a `_validation_mask` for a labeled segment by holding out whole annotated regions (splitting by pixels cuts letters in half), scores predictions inside it (threshold sweep, DRD / pseudo-F-measure, per-region breakdown), sweeps checkpoints, and runs k-fold. Also includes a native-Windows walkthrough of the tutorial.
+- [Ink detection validation harness](https://github.com/khj1222/vesuvius-challenge) by khj1222. The ink-detection tutorial trains with no held-out data, so improvements cannot be told apart from noise. This generates a `_validation_mask` for a labeled segment by holding out whole annotated regions (splitting by pixels cuts letters in half), scores predictions inside it (threshold sweep, DRD / pseudo-F-measure, per-region breakdown), sweeps checkpoints, and runs k-fold. Also includes a native-Windows walkthrough of the tutorial.
 ```
 
-Suggested PR title: `Add ink-detection validation harness to community projects`
+PR title: `Add ink-detection validation harness to community projects`
 
 ---
 
@@ -45,6 +46,7 @@ https://github.com/khj1222/vesuvius-challenge
 Walkthrough: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/09_validation_harness.md
 Upstream PR (fixes an OOM this work surfaced): https://github.com/ScrollPrize/villa/pull/1234
 Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
+Community projects listing PR: https://github.com/ScrollPrize/villa/pull/1249
 ```
 
 **5. Short description of how your contributions substantially increase the probability of reading complete scrolls**
@@ -76,7 +78,7 @@ keyed by asset paths, so replacing a mask silently reuses the old split. Anyone 
 an ink-detection improvement can now be asked for a number that means something.
 ```
 
-**6. Pull Request Submission** → check "Pull request submitted!" (after step 1)
+**6. Pull Request Submission** → check "Pull request submitted!" (step 1 done → PR #1249)
 
 **7. Terms and conditions** → "Yes, I agree"
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)

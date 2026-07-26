@@ -40,8 +40,8 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 
 ## 다음 액션 (2026-07-26 재개 지점 — 제출 마무리)
 
-1. **awesome-scroll-tools PR** — 폼의 필수 체크박스("Pull request submitted!")를 채우려면 선행 필수. 대상 = `scrollprize.org/docs/20_community_projects.md`의 `### 🖋️ Scroll segments-based Ink Detection` → `#### ⚙️ Tools`. **base는 `main`**(이 파일은 main에 있음, PR #1234와 반대). 항목 문안 = `submission/2026-07_progress_prize.md` 1단계. 포크(khj1222/villa) 이미 있음.
-2. **폼 제출** — https://forms.gle/xoF5C3QsYutKP97x7 (필수 7칸). 답변 전문 = `submission/2026-07_progress_prize.md` 2단계. **사용자가 채울 칸 = 이메일·실명 2개뿐**(공개 저장소라 비워둠).
+1. ✅ **awesome-scroll-tools PR 완료(2026-07-26)**: https://github.com/ScrollPrize/villa/pull/1249 — `scrollprize.org/docs/20_community_projects.md`의 `#### ⚙️ Tools`에 하네스 1줄 추가(base `main`, 1파일 +3). 브랜치 `khj1222/villa` `add-ink-validation-harness`(`2aba59a`, main tip `650076f`에서 분기). ⚠️ `gh` CLI는 **미설치**(구 메모 무관) — git push는 GCM 자격증명으로 되고, PR 생성만 사용자가 웹에서. 작업은 sparse worktree `D:\vw`에서 함(`external/villa` 작업트리 보존 목적; 불필요하면 `git worktree remove --force D:/vw`).
+2. **폼 제출 ← 지금 여기** — https://forms.gle/xoF5C3QsYutKP97x7 (필수 7칸). 답변 전문 = `submission/2026-07_progress_prize.md` 2단계. **사용자가 채울 칸 = 이메일·실명 2개뿐**(공개 저장소라 비워둠). 6번 체크박스는 PR #1249로 충족.
 3. (선택) 이슈 #1231 / PR #1234에 반응 오면 반영. "내부에 val mask 있다"는 답이 오면 폼 5번 서술의 전제를 조정.
 - **마감 7/31 23:59 PT.** 롤링이라 놓쳐도 8/31 재제출 가능.
 
