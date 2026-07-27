@@ -12,6 +12,8 @@ artifact the pipeline already understands.
 | [`eval_validation.py`](eval_validation.py) | Score a prediction inside that region (F1/IoU/balanced acc, DRD, pseudo-F-measure) |
 | [`sweep_checkpoints.py`](sweep_checkpoints.py) | Score every checkpoint of a run and plot the curve |
 | [`run_cv_folds.py`](run_cv_folds.py) | Run the whole k-fold protocol unattended and report the spread |
+| [`depth_profile.py`](depth_profile.py) | Ask a trained model *where along z* it takes its ink evidence |
+| [`depth_contrast.py`](depth_contrast.py) | Ask the raw CT the same question, with no model in the loop |
 
 ## Run them
 
@@ -146,6 +148,73 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3
 
 Budget training-time × K — about 1.7 h per fold for the tutorial config on an
 RTX 5090, so 3 folds is an overnight job.
+
+---
+
+# `depth_profile` — where along z does the model read the ink?
+
+Ink labels on these segments are drawn once in 2D and copied down every one of
+the 65 z layers ([villa #192](https://github.com/ScrollPrize/villa/issues/192)).
+A model trained on them can score well while keying on surface texture instead
+of ink, and nothing in the pipeline says which it is doing. This asks the model,
+by perturbing the input volume it is given:
+
+| variant | what it does | reads as |
+|---|---|---|
+| `occlude` | blanks a band of z slices | how far the ink response falls = **necessity** |
+| `window` | blanks everything *except* a band | how much response survives = **sufficiency** |
+
+Both are measured on ink-labeled pixels **and** on the labeled background inside
+the same supervision mask. That control is the point: blanking slices moves the
+model's output on its own, so only the ink-minus-background separation is
+evidence about ink.
+
+```bash
+python tools/depth_profile.py SEGMENT_DIR RUN_DIR/ckpt_020000.pth
+python tools/depth_profile.py SEGMENT_DIR CKPT --mask validation_mask --limit-blocks 8
+```
+
+Outputs `depth_profile.{json,csv}`, `depth_curve.png`, and two per-region depth
+maps — `depth_map_occlusion.png` (the band each ink pixel needs most; measured
+against that pixel's own unperturbed logit) and `depth_map_window.png` (the band
+that alone scores it highest).
+
+Blanking fills with `0.0` **after** the per-patch robust normalization, which is
+that patch's median — so a blanked slice leaks nothing about what it replaced.
+Reading, normalization and z-window selection are imported from
+`koine_machines.inference.infer`, so the volume profiled is the volume the model
+sees at inference time.
+
+`--mask {supervision_mask,validation_mask}` · `--occlude-width 4` ·
+`--window-width 8 --window-stride 4` · `--batch-size N` (variants per forward) ·
+`--min-ink-pixels N` (blocks with no ink are skipped; the background control
+then rides on the same blocks as the ink) · `--limit-blocks N` ·
+`--no-depth-map` · `--depth-map-downsample N`
+
+### `depth_contrast.py`
+
+The profile above is a statement about a checkpoint that was trained on z-copied
+labels — circular by construction. This one is not: it averages the raw
+(robust-normalized) CT intensity per z layer over ink pixels and over background
+pixels, and reports the difference. No checkpoint, no torch, no GPU.
+
+```bash
+python tools/depth_contrast.py SEGMENT_DIR
+```
+
+`--mask {supervision_mask,validation_mask}` · `--block 256` · `--limit-blocks N` ·
+`--min-ink-pixels N` · `--raw` (skip normalization, average uint8 instead)
+
+Emits `depth_contrast.{json,csv,png}`; the plot's second panel draws one gray
+line per annotated region over the segment-wide average, which is where the
+interesting disagreement shows up.
+
+**Two things not to over-read.** A window's *absolute* logit is not comparable
+to the baseline — blanking 56 of 64 slices is far off the training distribution,
+and the background response rises with it. And with `z_projection_mode: max` the
+curve carries a sawtooth from the network's z-pooling grid, so read the trend
+and the ink-vs-background gap, not individual points. Full write-up:
+[`docs/10_depth_localization.md`](../docs/10_depth_localization.md).
 
 ---
 

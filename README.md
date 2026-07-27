@@ -54,6 +54,13 @@
 3. **[Windows 재현 워크스루](docs/08_windows_reproduction.md)** — 공식 튜토리얼에 없는
    실측 함정 7종을 문서화(실 데이터 ~86GB, 추론 `--no-compile`/Triton, 5090 cu128,
    `merge-ink-pipelines` 브랜치 등).
+4. **[깊이 국소화 측정](docs/10_depth_localization.md)** — 잉크 라벨은 2D로 그려 z축으로
+   복사된다([villa #192](https://github.com/ScrollPrize/villa/issues/192)). 그럼 모델은
+   잉크를 보는가, 표면 무늬를 보는가? [`depth_profile.py`](tools/depth_profile.py)는 z밴드를
+   지우거나(필요성) 그것만 남겨(충분성) 모델에 직접 묻고,
+   [`depth_contrast.py`](tools/depth_contrast.py)는 **모델 없이** 원본 CT의 z별 잉크-배경
+   AUC를 잰다 — 학습된 모델로만 물으면 순환논증이 되기 때문. 두 측정이 독립적으로
+   **z≈16–36**(64층 중)을 가리켰고, 단일 복셀 밝기로는 잉크가 거의 구분되지 않는다(AUC ≤ 0.55).
 
 ### 업스트림(ScrollPrize/villa) 기여
 
@@ -85,7 +92,7 @@ vesuvius-challenge/
 ├── CLAUDE.md            ← 새 세션 부팅용 (상태·컨벤션·다음 액션)
 ├── todo.md              ← Week0 체크리스트
 ├── requirements.txt     ← 시스템 Python 3.10 + cu128
-├── docs/                ← 01~07 오리엔테이션 + 08 재현 워크스루 + 09 검증 하네스
+├── docs/                ← 01~07 오리엔테이션 + 08 재현 + 09 검증 하네스 + 10 깊이 국소화
 │   └── images/          ← before/after 산출 이미지 + 검증 split 그림
 ├── configs/             ← 검증이 실제로 도는 학습 config
 ├── tools/               ← ink_viz + 검증 하네스 3종 CLI + README
