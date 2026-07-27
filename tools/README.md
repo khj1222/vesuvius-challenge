@@ -14,6 +14,7 @@ artifact the pipeline already understands.
 | [`run_cv_folds.py`](run_cv_folds.py) | Run the whole k-fold protocol unattended and report the spread |
 | [`depth_profile.py`](depth_profile.py) | Ask a trained model *where along z* it takes its ink evidence |
 | [`depth_contrast.py`](depth_contrast.py) | Ask the raw CT the same question, with no model in the loop |
+| [`make_3d_labels.py`](make_3d_labels.py) | Turn the one-plane ink annotation into a measured 3D label |
 
 ## Run them
 
@@ -153,8 +154,10 @@ RTX 5090, so 3 folds is an overnight job.
 
 # `depth_profile` — where along z does the model read the ink?
 
-Ink labels on these segments are drawn once in 2D and copied down every one of
-the 65 z layers ([villa #192](https://github.com/ScrollPrize/villa/issues/192)).
+Ink labels on these segments are drawn in 2D and stored on a single z plane of
+65 — depth is manufactured downstream, by projecting that plane along the
+surface normal with a constant thickness
+([villa #192](https://github.com/ScrollPrize/villa/issues/192)).
 A model trained on them can score well while keying on surface texture instead
 of ink, and nothing in the pipeline says which it is doing. This asks the model,
 by perturbing the input volume it is given:
@@ -193,8 +196,8 @@ then rides on the same blocks as the ink) · `--limit-blocks N` ·
 
 ### `depth_contrast.py`
 
-The profile above is a statement about a checkpoint that was trained on z-copied
-labels — circular by construction. This one is not: it averages the raw
+The profile above is a statement about a checkpoint trained against a depthless
+label — circular by construction. This one is not: it averages the raw
 (robust-normalized) CT intensity per z layer over ink pixels and over background
 pixels, and reports the difference. No checkpoint, no torch, no GPU.
 
@@ -215,6 +218,50 @@ and the background response rises with it. And with `z_projection_mode: max` the
 curve carries a sawtooth from the network's z-pooling grid, so read the trend
 and the ink-vs-background gap, not individual points. Full write-up:
 [`docs/10_depth_localization.md`](../docs/10_depth_localization.md).
+
+### `make_3d_labels.py`
+
+Uses the occlusion measurement to give the annotated area a band — a center and
+a half-width along z — and writes it out as a real 3D label on the surface
+volume's own grid. Depth is estimated per 64 px cell (centroid of the cell's
+occlusion profile), then median-filtered across cells and bilinearly sampled
+back to full resolution, so the band is continuous across block boundaries.
+
+```bash
+python tools/make_3d_labels.py SEGMENT_DIR RUN_DIR/ckpt_020000.pth
+python tools/make_3d_labels.py SEGMENT_DIR CKPT --limit-blocks 12 --dry-run
+```
+
+| output | what it is |
+|---|---|
+| `<seg>_inklabels3d.zarr` | the 3D label: OME-Zarr pyramid, same grid, chunks and compressor as `_inklabels.zarr` |
+| `<seg>_inkdepth.zarr` | `center` and `half_width` per pixel (2D float32, NaN outside the annotation) — the compact form for a pipeline that projects along normals and wants a measured thickness instead of a constant |
+| `<seg>_inklabels3d.json` | parameters, per-region medians, coverage, thickness histogram |
+| `<seg>_inklabels3d_qc.png` | a y–z cross section per region: the CT with the band drawn on it |
+
+A pixel the annotator did not call ink never becomes ink — the tool only narrows
+the label in depth. Cells whose profile is too flat to localize fall back to
+their region's median band rather than inventing one; the run prints the peak and
+prominence distributions so `--min-response` / `--min-prominence` can be set from
+data instead of guessed, and a per-region center **spread** so you can see how
+much the depth surface actually moves inside one letter.
+
+`--cell 64` · `--regularize 3` (median filter, in cells) · `--min-cell-ink 64` ·
+`--estimator centroid|peak` · `--occlude-width 4` · `--half-width-fraction 0.5` ·
+`--min-half-width 2 --max-half-width 16` · `--min-response 0.2 --min-prominence 1.5` ·
+`--batch-size N` · `--limit-blocks N` · `--dry-run` · `--force`
+
+Two estimators that did **not** survive QC on this segment, kept in the docs so
+nobody repeats them: per-pixel depth (±12 voxels between neighbouring patches of
+one stroke) and per-cell argmax (±17 voxels inside a region, two regions 28
+apart). `--estimator peak` still exposes the second if you want to see it.
+
+⚠️ Nothing upstream reads a 3D label asset yet: `flat` collapses z with a maximum
+and trains on a 2D target, and `full_3d` builds its own target by projecting the
+annotated plane with a constant half-thickness. Consuming this needs a training
+change — which is the point of measuring first. Full write-up, including what the
+first two estimators got wrong:
+[`docs/11_measured_3d_labels.md`](../docs/11_measured_3d_labels.md).
 
 ---
 

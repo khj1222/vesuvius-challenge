@@ -7,11 +7,17 @@
 
 ## The gap
 
-Ink labels on these segments are drawn once, in 2D, and copied down the z axis:
-all 65 layers of `<segment>_inklabels.zarr` carry the same mask. Issue #192 has
-said since April 2025 that this risks teaching the model **surface features
-rather than ink**, and asks for real 3D label/image pairs. Fifteen months on it
-has one comment and no assignee.
+Ink labels on these segments are drawn once, in 2D. Measured on the published
+asset, `<segment>_inklabels.zarr` is a `(65, H, W)` array in which **exactly one
+z plane is populated** — the middle one, z 32 — and the other 64 are empty; the
+supervision mask is the same. The annotation carries no depth at all. Depth gets
+manufactured downstream: `full_3d` projects that plane along the surface normal
+with a constant half-thickness, and `flat` collapses z with a maximum so depth
+never enters the loss.
+
+Issue #192 has said since April 2025 that this risks teaching the model
+**surface features rather than ink**, and asks for real 3D label/image pairs.
+Fifteen months on it has one comment and no assignee.
 
 The reason is not that nobody wants 3D labels. It is that there has been no way
 to tell a good one from a bad one. Two things are needed before the work can
@@ -132,8 +138,8 @@ is why the occlusion map is the one shown.
 
 ## Second measurement: the volume, with no model in the loop
 
-Everything above is a statement about a checkpoint that was trained on z-copied
-labels, so it cannot on its own answer where the ink *is*.
+Everything above is a statement about a checkpoint trained against a label with
+no depth in it, so it cannot on its own answer where the ink *is*.
 `tools/depth_contrast.py` asks the raw CT the same question: per z layer, the
 mean robust-normalized intensity over ink-labeled pixels minus the same over
 labeled background inside the same supervision mask. No network, no checkpoint.
@@ -194,7 +200,7 @@ Depth has to be estimated locally and validated per region against the
   means different things in probability terms. The JSON carries both.
 * **The model arm measures the model, not the papyrus.** Every number in the
   first half is a statement about what *this* checkpoint uses, and that
-  checkpoint was trained on z-copied labels. That is why the second measurement
+  checkpoint was trained against a depthless label. That is why the second measurement
   exists — and why a training experiment built on any of this still needs a
   self-distillation control arm to show that a gain is not just self-agreement.
 * **One segment, one checkpoint.** Everything here is `w00_20231016151002` at

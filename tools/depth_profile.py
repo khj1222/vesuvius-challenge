@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """depth_profile.py -- where along z does a 2.5D ink model take its evidence?
 
-Ink labels in this dataset are drawn once in 2D and copied down the z axis
-(villa issue #192): every one of the 65 layers of a segment carries the same
-mask. A model trained on them can therefore score well while keying on surface
-texture rather than on ink, and nothing in the pipeline currently says which it
-is doing.
+Ink labels in this dataset are drawn in 2D and stored with no depth: of the 65
+z layers of `<segment>_inklabels.zarr`, exactly one -- the middle -- is
+populated. Depth is manufactured downstream, by projecting that plane along the
+surface normal with a constant thickness (villa issue #192). A model trained
+this way can score well while keying on surface texture rather than on ink, and
+nothing in the pipeline currently says which it is doing.
 
 This tool asks the trained model directly, on the annotated area only, with two
 complementary perturbations of the input volume:
@@ -83,10 +84,10 @@ def open_pyramid(segment_dir: Path, kind: str):
 
 
 def labeled_plane_index(group) -> int:
-    """Index of the z slice the 2D labels were copied to.
+    """Index of the one z slice the 2D annotation lives on.
 
-    They are copied to all of them; the middle one is what the rest of the
-    tooling reads, so read the same one here.
+    Measured on the published segment: of 65 planes only the middle one is
+    populated, in both the ink labels and the supervision mask.
     """
     return int(group["0"].shape[0] // 2)
 

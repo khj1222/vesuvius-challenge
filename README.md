@@ -61,6 +61,12 @@
    [`depth_contrast.py`](tools/depth_contrast.py)는 **모델 없이** 원본 CT의 z별 잉크-배경
    AUC를 잰다 — 학습된 모델로만 물으면 순환논증이 되기 때문. 두 측정이 독립적으로
    **z≈16–36**(64층 중)을 가리켰고, 단일 복셀 밝기로는 잉크가 거의 구분되지 않는다(AUC ≤ 0.55).
+5. **[측정된 3D 잉크 라벨](docs/11_measured_3d_labels.md)** — 배포된 주석은 65층 중
+   **z=32 한 장**뿐이고, 깊이는 하류에서 **고정 반두께 1.0복셀** 투영으로 만들어진다.
+   [`make_3d_labels.py`](tools/make_3d_labels.py)는 그 두께와 중심을 측정값으로 바꾼다:
+   64px 셀별 occlusion 프로파일의 무게중심 → 셀 격자 중앙값 필터 → 전해상도 보간.
+   결과는 라벨 피라미드와 같은 그리드·청크의 `_inklabels3d.zarr`(8복셀 두께, 영역별
+   중심 z 29.3–40.3). 픽셀 단위·argmax 추정은 QC에서 탈락했고 그 기록도 문서에 남겼다.
 
 ### 업스트림(ScrollPrize/villa) 기여
 
@@ -92,7 +98,7 @@ vesuvius-challenge/
 ├── CLAUDE.md            ← 새 세션 부팅용 (상태·컨벤션·다음 액션)
 ├── todo.md              ← Week0 체크리스트
 ├── requirements.txt     ← 시스템 Python 3.10 + cu128
-├── docs/                ← 01~07 오리엔테이션 + 08 재현 + 09 검증 하네스 + 10 깊이 국소화
+├── docs/                ← 01~07 오리엔테이션 + 08 재현 + 09 검증 하네스 + 10 깊이 국소화 + 11 3D 라벨
 │   └── images/          ← before/after 산출 이미지 + 검증 split 그림
 ├── configs/             ← 검증이 실제로 도는 학습 config
 ├── tools/               ← ink_viz + 검증 하네스 3종 CLI + README

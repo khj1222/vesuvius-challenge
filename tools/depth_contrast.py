@@ -3,7 +3,7 @@
 
 Companion to ``depth_profile.py``, which asks a trained model where it takes its
 ink evidence. That answer is useful but circular: the model was trained on
-labels that were copied down every z layer, so its depth preference is partly a
+a label that carries no depth at all, so its depth preference is partly a
 statement about its own training data.
 
 This tool asks the volume instead. For every z layer of the surface volume it
