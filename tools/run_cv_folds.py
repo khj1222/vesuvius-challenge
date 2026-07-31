@@ -15,9 +15,11 @@ Per fold it performs:
     2. delete the stale <seg>_validation_mask.zarr, re-run create_label_zarrs
        (the converter skips existing outputs, and the loader's patch cache is
         keyed by asset *paths*, so a stale zarr would silently survive)
-    3. train into runs/<prefix>_fold<i>       (a fresh out_dir per fold, again
+    3. with --label-version vN, re-extrude that split into the version's own
+       validation mask (the labels are written once; only the split moves)
+    4. train into runs/<prefix>_fold<i>       (a fresh out_dir per fold, again
                                                because of that path-keyed cache)
-    4. sweep_checkpoints.py over that run
+    5. sweep_checkpoints.py over that run
 
 and afterwards restores the single-split mask, so the segment is left in the
 state the rest of the tooling expects.
@@ -63,6 +65,10 @@ def main(argv=None) -> int:
     parser.add_argument("--only-fold", type=int, default=None, help="Run just this fold.")
     parser.add_argument("--sweep-every", type=int, default=4,
                         help="Evaluate every Nth checkpoint per fold. Default: 4")
+    parser.add_argument("--label-version", default=None,
+                        help="Label version the config trains on, e.g. v4. Each fold's held-out "
+                             "split is re-extruded into that version's validation mask; the labels "
+                             "themselves are written once by make_label_version.py.")
     parser.add_argument("--skip-restore", action="store_true",
                         help="Leave the last fold's mask in place instead of restoring the single split.")
     args = parser.parse_args(argv)
@@ -78,6 +84,14 @@ def main(argv=None) -> int:
             sys.exit(f"error: missing {path}")
 
     base_config = json.loads(base_config_path.read_text(encoding="utf-8"))
+    label_version = args.label_version
+    config_version = base_config.get("label_version")
+    if (label_version or None) != (config_version or None):
+        # Silently disagreeing here would train one arm and score it against
+        # another arm's held-out voxels, which nothing downstream would flag.
+        sys.exit(f"error: --label-version {label_version!r} does not match "
+                 f"the config's label_version {config_version!r}")
+    version_number = int(str(label_version).lstrip("v")) if label_version else None
     mask_zarr = segment_dir / f"{segment_dir.name}_validation_mask.zarr"
     folds = [args.only_fold] if args.only_fold is not None else list(range(args.folds))
     results: list[dict] = []
@@ -95,6 +109,11 @@ def main(argv=None) -> int:
             shutil.rmtree(mask_zarr)
         run([sys.executable, "-m", "koine_machines.preprocessing.create_label_zarrs", str(segment_dir)],
             cwd=pipeline_dir, step=f"fold {fold}: convert mask to zarr")
+
+        if version_number is not None:
+            run([sys.executable, str(TOOLS / "make_label_version.py"), str(segment_dir),
+                 "--version", str(version_number), "--refresh-validation"],
+                cwd=REPO, step=f"fold {fold}: extrude held-out split into {label_version}")
 
         out_dir = f"runs/{args.prefix}{fold}"
         fold_config = dict(base_config, out_dir=out_dir)
@@ -134,6 +153,10 @@ def main(argv=None) -> int:
             shutil.rmtree(mask_zarr)
         run([sys.executable, "-m", "koine_machines.preprocessing.create_label_zarrs", str(segment_dir)],
             cwd=pipeline_dir, step="restore: convert mask to zarr")
+        if version_number is not None:
+            run([sys.executable, str(TOOLS / "make_label_version.py"), str(segment_dir),
+                 "--version", str(version_number), "--refresh-validation"],
+                cwd=REPO, step=f"restore: extrude single split into {label_version}")
 
     out_path = pipeline_dir / "runs" / f"{args.prefix}_cv_summary.json"
     scores = [r["best_f1"] for r in results if r["best_f1"] is not None]

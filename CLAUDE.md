@@ -74,7 +74,18 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - **실측**: 748블록·잉크 2,207만px, 측정된 셀 5,704/6,860(잉크 픽셀 85.9%). **세그먼트 중앙 = center z 32.5 / half-width 4.0(=8복셀 두께)**, 영역별 중심 **29.3–40.3**, 영역 내 중심 spread 7.5–11.2복셀. 라벨 복셀 1.767억, 픽셀당 평균 8.0복셀. → 현행 기본값(3복셀 고정·중앙 대칭) 대비 **두께 8복셀 + 위치가 영역마다 이동**.
 - ⚠️ **추정기를 3번 갈아엎음(QC가 잡아냄)**: ①픽셀단위+9px 스무딩 → 한 획 안에서 ±12복셀 요동(시트 기하학상 불가) ②64px 셀+argmax → 영역 내 ±17복셀, 두 영역이 28복셀 차이(16밴드 argmax는 노이즈가 결정) ③**64px 셀 + centroid 중심 + FWHM 폭 + 셀격자 median 필터 + 이중선형 업샘플** → spread 절반, 영역 간 일치, 단면에서 밴드가 시트를 따라가는 리본. centroid의 2차 모먼트 폭은 클램프에 붙어 폐기(꼬리를 잼). `--estimator peak`로 ②재현 가능.
 - **QC 판정법**: 평면 프리뷰로는 깊이 라벨 검증 불가 → **y–z 단면(x가로·z세로)에 밴드 오버레이**가 유일한 실검. 리본이면 합격, 컨페티면 불합격.
-- ⚠️ **아직 소비처 없음**: `flat`은 2D 타깃, `full_3d`는 자체 투영 → **이 자산으로 학습하려면 파이프라인 수정 필요**(다음 스텝). 그래서 복셀 라벨과 함께 compact form(center/half_width)도 같이 냄.
+- ~~아직 소비처 없음~~ → **2026-07-31 해결**(아래 절). 복셀 라벨과 함께 낸 compact form(center/half_width)이 실제 소비 경로의 입력이 됨.
+
+## 깊이 라벨 소비 경로 (2026-07-31, 8월 트랙 3단계)
+
+- ✅ **villa 파이프라인 수정 + arm 자산 생성기 + 스모크 검증 완료.** 문서 = `docs/12_depth_training.md`, 패치 = `submission/villa-flat-depth-targets.patch`(train.py·infer.py·test_train.py, 미커밋 상태로 `external/villa` 작업트리에 적용됨 — 브랜치는 여전히 `fix/stream-untiled-label-images`).
+- **막고 있던 것**: `train.py`의 flat 분기가 `torch.amax(batch['inklabels'], dim=2)`로 **z를 손실 전에 접어버림** → 3D 라벨과 평면 라벨이 타깃 단계에서 바이트 동일. flat 모드에서 라벨 깊이 실험이 원천 불가였음(#192가 15개월 방치된 이유의 일부).
+- **수정**(`flat_depth_targets: true` config 게이트): ①모델·타깃 z_projection을 native 3D 모드와 같은 방식으로 끔 → 출력 `[B,1,Z,Y,X]` ②손실을 볼륨 대 볼륨으로(supervision을 ignore mask로) ③프리뷰는 `full_3d`가 쓰던 중앙 슬라이스 축약 재사용 ④**추론에 `--z-reduce max|mean`** 추가 → 볼륨 예측을 기존과 같은 2D TIFF로 환원. ④가 있어야 7월 하네스·fold 노이즈 기준선(~0.03 F1)이 그대로 적용됨.
+- ✅ **`tools/make_label_version.py`** — 밴드를 **label version**(`_inklabels_vN.zarr` 등, villa `discover_labels`가 이미 아는 규칙)으로 패키징. v1은 손대지 않음. 3 arm: **v2 `plane`**(현행 자산 그대로 = 1복셀) · **v3 `constant`**(중앙 32.47±4 고정 = `full_3d` 방식의 대조군) · **v4 `measured`**(`_inkdepth.zarr` 픽셀별 밴드). 버전당 ~10분.
+- ⚠️ **supervision을 기둥(column)으로 바꿔야 실험이 성립**: 세 arm 모두 주석 픽셀에서 **z ±16 기둥**을 감독(기본값 `--supervision-half-depth 16`). 이게 없으면 밴드 밖 복셀이 무감독이라 어떤 밴드든 손실이 동일. 전체 z를 안 쓰는 이유 = z>40의 음의 드리프트(이웃 wrap 가능성, `docs/10`)를 "배경"이라 부를 근거가 없음.
+- ⚠️ **검증 마스크도 같은 기둥으로 압출 필수**: 트레이너가 held-out을 **복셀 단위**로 학습 supervision에서 뺌 → 평면만 있는 마스크면 held-out 글자의 평면 밖 복셀이 학습에 남아 **누수**(그것도 정확히 테스트 대상 arm에 유리한 방향으로).
+- **실측**: v2/v3 완료(잉크 2,190만px 동일, 라벨 복셀 v2 2,190만(1.00/px) · v3 1억7,522만(8.00/px), 감독 복셀 31.7억, held-out 6.30억). 스모크 200iter: 패치 **2,234/1,337**(7월과 같은 held-out), 패치 캐시 키에 `labels-v2`가 들어가 **arm 간 split 오염 없음**, 3.6 it/s(2D와 동일 → 20k arm = ~1.5h), 모델 출력 `(1,1,64,256,256)`, 추론 166블록 34초로 2D TIFF 정상. villa 유닛테스트 4 passed.
+- **다음**: ①`run_cv_folds.py`에 `--label-version` 추가(fold마다 arm별 검증 마스크 재생성 필요) ②3 arm × 3 fold = 9런 ≈ 13.5h GPU ③채점은 기존 `sweep_checkpoints.py` + `eval_validation.py` 그대로(2D 환원 덕분).
 
 ## 이전 상태 (2026-07-21)
 

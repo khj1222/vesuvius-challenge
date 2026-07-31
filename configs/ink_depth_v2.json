@@ -1,0 +1,39 @@
+{
+  "out_dir": "runs/ink_depth_v2",
+  "seed": 42,
+  "mode": "flat",
+  "model_type": "vesuvius_unet",
+  "in_channels": 1,
+  "model_config": {
+    "autoconfigure": true
+  },
+  "targets": {
+    "ink": {
+      "out_channels": 1,
+      "activation": "none"
+    }
+  },
+  "patch_size": [
+    64,
+    256,
+    256
+  ],
+  "patch_overlap": 0.5,
+  "patch_min_labeled_coverage": 0.05,
+  "batch_size": 2,
+  "num_iterations": 20000,
+  "learning_rate": 0.01,
+  "mixed_precision": "fp16",
+  "dataloader_workers": 4,
+  "val_every": 500,
+  "val_steps": 50,
+  "save_every": 1000,
+  "datasets": [
+    {
+      "segments_path": "D:/vesuvius-challenge/data/ink-dataset/phercparis4",
+      "volume_scale": "0"
+    }
+  ],
+  "label_version": "v2",
+  "flat_depth_targets": true
+}

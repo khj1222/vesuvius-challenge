@@ -256,12 +256,45 @@ nobody repeats them: per-pixel depth (±12 voxels between neighbouring patches o
 one stroke) and per-cell argmax (±17 voxels inside a region, two regions 28
 apart). `--estimator peak` still exposes the second if you want to see it.
 
-⚠️ Nothing upstream reads a 3D label asset yet: `flat` collapses z with a maximum
-and trains on a 2D target, and `full_3d` builds its own target by projecting the
-annotated plane with a constant half-thickness. Consuming this needs a training
-change — which is the point of measuring first. Full write-up, including what the
-first two estimators got wrong:
+Full write-up, including what the first two estimators got wrong:
 [`docs/11_measured_3d_labels.md`](../docs/11_measured_3d_labels.md).
+
+### `make_label_version.py`
+
+Packages a band as a **label version** — the `_v2`, `_v3`, … assets villa's
+`Segment.discover_labels` already understands — so an experiment can switch
+labels with `"label_version": "v4"` in the config and leave the published `v1`
+data untouched.
+
+```bash
+python tools/make_label_version.py SEGMENT_DIR --version 2 --band plane
+python tools/make_label_version.py SEGMENT_DIR --version 3 --band constant
+python tools/make_label_version.py SEGMENT_DIR --version 4 --band measured
+```
+
+| band | what it says about depth | role |
+|---|---|---|
+| `plane` | one voxel, at the annotated plane | today's assets, read literally |
+| `constant` | a fixed band around the surface | `full_3d`'s model at this segment's measured thickness — the control |
+| `measured` | the per-pixel band from `_inkdepth.zarr` | the claim under test |
+
+Each version writes `_inklabels_vN.zarr`, `_supervision_mask_vN.zarr`,
+`_validation_mask_vN.zarr` and a `_labels_vN.json` report, about 10 minutes per
+version on this segment.
+
+All bands share one supervision geometry: a column of ±`--supervision-half-depth`
+voxels (16 by default) around the annotated plane. That column is what makes the
+bands distinguishable — everything inside it that is not ink is a negative. The
+validation mask is extruded through the same column on purpose: the trainer drops
+held-out voxels from training supervision voxel by voxel, so a plane-only mask
+would leak every off-plane voxel of the held-out letters.
+
+`--supervision-half-depth 16` · `--center` / `--half-width` (default: the segment
+medians from `_inklabels3d.json`) · `--dry-run` · `--force`
+
+Training on these needs `"flat_depth_targets": true`, which stops the flat loss
+from collapsing z. Write-up:
+[`docs/12_depth_training.md`](../docs/12_depth_training.md).
 
 ---
 

@@ -67,6 +67,12 @@
    64px 셀별 occlusion 프로파일의 무게중심 → 셀 격자 중앙값 필터 → 전해상도 보간.
    결과는 라벨 피라미드와 같은 그리드·청크의 `_inklabels3d.zarr`(8복셀 두께, 영역별
    중심 z 29.3–40.3). 픽셀 단위·argmax 추정은 QC에서 탈락했고 그 기록도 문서에 남겼다.
+6. **[깊이 라벨로 학습하기](docs/12_depth_training.md)** — 만든 3D 라벨을 **쓸 수가 없었다**:
+   flat 학습 루프가 손실 직전에 `amax(dim=2)`로 z를 접어, 3D 라벨과 평면 라벨이 타깃 단계에서
+   동일해진다. `flat_depth_targets` 게이트로 볼륨 대 볼륨 손실을 넣고, 추론에 `--z-reduce`를
+   더해 예측을 기존과 같은 2D 표면맵으로 환원한다 — 그래야 하네스 하나로 모든 arm을 같은 자로
+   잰다. [`make_label_version.py`](tools/make_label_version.py)는 비교할 세 라벨을 villa가
+   이미 아는 **label version**(`_vN`)으로 패키징한다: 평면 / 고정 밴드(대조군) / 측정된 밴드.
 
 ### 업스트림(ScrollPrize/villa) 기여
 
