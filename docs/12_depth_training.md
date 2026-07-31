@@ -71,6 +71,14 @@ Three bands, each the control for the next:
 If `v3` captures whatever `v4` gains, then measuring depth bought nothing and
 only thickness mattered. That arm exists so the claim can fail.
 
+**`v3` vs `v4` is the controlled comparison**, and `v2` is not. The two banded
+arms label the same number of voxels (8.00 per ink pixel), so they differ only in
+where the band sits. `v2` labels one voxel per pixel, which is 0.7% of the
+supervised column against `v3`/`v4`'s 5.5% — a different positive rate feeding a
+Dice+BCE loss, so a `v2`-vs-`v4` gap mixes placement with class balance. `v2`
+still belongs in the table as what today's assets literally say, but it is a
+reference point, not the control.
+
 ### Supervision has to become a column
 
 All three versions carry the same supervision: a column of ±16 voxels around the
@@ -97,10 +105,23 @@ and would have flattered exactly the arm under test.
 | | v2 `plane` | v3 `constant` | v4 `measured` |
 |---|---|---|---|
 | ink pixels | 21,902,496 | 21,902,496 | 21,902,496 |
-| label voxels | 21,902,496 | *see below* | *see below* |
-| voxels per ink pixel | 1.00 | | |
-| supervised voxels | 3,165,887,472 | | |
-| held-out voxels | 629,750,352 | | |
+| label voxels | 21,902,496 | 175,219,968 | 175,330,371 |
+| voxels per ink pixel | 1.00 | 8.00 | 8.01 |
+| band along z | 32 | 29–36 | moves with the sheet |
+| supervised voxels | 3,165,887,472 | 3,165,887,472 | 3,169,480,390 |
+| held-out voxels | 629,750,352 | 629,750,352 | 629,750,352 |
+
+`v3` and `v4` came out within 0.15% of each other on label voxels without being
+tuned to — `constant` takes its half width from the same measurement `measured`
+varies per pixel. The comparison therefore holds the positive count fixed and
+moves only the placement, which is exactly the question.
+
+`v4`'s supervised column is 3.6M voxels larger because the supervision is the
+column *unioned with the band*: where a measured band reaches past ±16, it brings
+its own supervision rather than being labelled ink outside the supervised set.
+Only 2,814 ink pixels (0.01%) fell back to the segment median for want of a depth
+estimate — the median filter and bilinear upsampling in `make_3d_labels.py` cover
+almost everything the per-cell measurement left blank.
 
 Each version takes about 10 minutes to write and lands at a few tens of MB, since
 the pyramid geometry, chunking and compressor are copied from the published
