@@ -52,8 +52,24 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - 핵심 논리: 7월에 만든 held-out 하네스가 **"z복사 라벨 vs 3D 라벨"을 같은 fold·시드로 비교**하게 해줌 → 15개월간 아무도 증명 못 한 라벨 품질 주장을 수치로 세울 수 있음. 판정 기준선 = ~0.03 F1 미만은 노이즈.
    - ⚠️ **순환성 리스크**: 깊이 프로파일을 z복사 라벨로 학습한 모델에서 뽑음 → self-distillation **대조군 arm 필수**(이게 없으면 결과 무의미).
    - ⚠️ **니치 혼잡**: 7월 마감 직전 TAUIL-Abd-Elilah가 재현성 감사로 8건, Jinhojeong이 라벨 품질 측정 툴(#193)을 냄. "측정 툴 하나 더"는 중복 → 하네스를 **쓰는** 쪽으로 갈 것.
-   - ✅ **첫 스텝 완료(2026-07-27) — 깊이 국소화 프로토타입.** 툴 2종 + 문서 `docs/10_depth_localization.md`. 상세는 아래 절.
+   - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)**. 각각 `docs/10` · `docs/11` · `docs/12`. **남은 건 4단계 = 9런 매트릭스 실행 + 결과 정리.**
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
+
+### ▶ 재개 지점 (2026-07-31 중단, 사용자가 "시간 될 때 하나씩" 진행하기로)
+
+**다음 할 일 = 3 arm × 3 fold 학습·채점.** 자산·툴·config·드라이버는 전부 준비 끝, 명령만 실행하면 됨. arm 단위로 끊어서 순서대로:
+
+```bash
+python tools/run_cv_folds.py data/ink-dataset/phercparis4/w00_20231016151002 --folds 3 --config configs/ink_depth_v4.json --label-version v4 --prefix ink_depth_v4_fold
+```
+(그 다음 `v3`, 마지막 `v2` — 같은 형식으로 config·label-version·prefix만 교체)
+
+- **시간 = arm당 ~5.4h, 전체 ~16.2h** (7월 3-fold 실측 fold당 104~111분 기준. 앞서 말한 13.5h는 낙관치였음). **v4 → v3까지 11h면 결정적 대조 완결**, v2는 참조점이라 마지막.
+- **디스크 ~198GB 필요**(ckpt 1.08GB × 20 × 9런). D드라이브 여유 607GB.
+- ⚠️ `save_every`를 늘려 디스크를 아끼지 말 것 — 7월 런 2개가 **step 17000 정점**이라 2000 간격이면 최적을 놓친다.
+- 채점은 드라이버가 자동으로 `sweep_checkpoints.py` 호출(2D 환원 덕에 기존 하네스 그대로).
+- 결과 나오면: `docs/12_depth_training.md`의 "What this does not settle" 첫 항목을 실제 수치로 교체 + #192에 코멘트 + 8월 제출 문안.
+- ⚠️ **villa 쪽 변경이 아직 `fix/stream-untiled-label-images` 브랜치에 미커밋 상태로 얹혀 있음.** PR 낼 땐 `merge-ink-pipelines`에서 새 브랜치를 따고 `submission/villa-flat-depth-targets.patch`를 적용할 것.
 
 ## 깊이 국소화 프로토타입 (2026-07-27, 8월 트랙 1주차)
 
