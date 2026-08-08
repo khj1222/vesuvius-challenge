@@ -65,14 +65,16 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)** → ✅ **4단계 9런 매트릭스(2026-08-09)**. 각각 `docs/10` · `docs/11` · `docs/12`. **실험은 끝났고 결과는 음의 결과** — 아래 "매트릭스 완료" 절.
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
-### ▶ 다음 세션 재개 지점 (2026-08-09 세션 종료 시점)
+### ▶ 다음 세션 재개 지점 (2026-08-09 갱신)
 
-**실험은 끝. 남은 건 전부 "내보내기" 작업이다.**
+**실험 끝, 업스트림 게시도 끝. 남은 건 8월 제출 문안 + 반응 대응.**
 
-1. 🔴 **#192에 결과 코멘트 게시** — 초안 완성본 = `submission/issue192_comment.md`(3 arm 표 반영됨). **Claude는 GitHub 인증이 없어 게시 불가, 사용자 몫.** 조기 공개가 심사 축이라 우선순위 최상.
-2. 🟡 **PR [#1234](https://github.com/ScrollPrize/villa/pull/1234) 리뷰 반영** — erdpx 요청(2D 피라미드만 메모리에, 레벨별로 `DEFAULT_LABEL_SLICE`에 직접 write). `merge-ink-pipelines`에서 새 브랜치 → 수정 → 합성 6레벨 바이트 동일 + 실제 striped TIFF 검증 → 푸시(기존 PR에 자동 반영). Claude 작업 가능, ~1-2h.
-3. 🟡 **`flat_depth_targets` PR** — 패치는 `submission/villa-flat-depth-targets.patch`에 준비됨. **#192 코멘트 반응을 보고 열 것**(저쪽이 접근 자체에 이견이 있으면 다시 짜야 함).
-4. 🟢 **8월 제출 문안** (마감 8/31 23:59 PT, 22일 남음). 재료: 음의 결과 3 arm + z 환원 함정 발견 + `flat_depth_targets` 경로 + 7월 수상 연속성.
+1. ✅ **#192 결과 코멘트 게시 완료(2026-08-09, 사용자 직접)** — 본문 원본 = `submission/issue192_comment.md`. **반응 오면 방향 결정 필요**(아래 3번).
+2. ✅ **PR #1234 리뷰 반영 완료(2026-08-09, `fc6d9a7`)** — ⚠️ **리뷰어 회신 코멘트는 아직 미게시**: `submission/pr1234_reply.md`. 코멘트를 달아야 erdpx가 알림을 받는다.
+3. 🟡 **`flat_depth_targets` PR** — 패치 = `submission/villa-flat-depth-targets.patch`. #192 코멘트에서 *"원하면 PR로 열겠다"*고 명시했으므로 **메인테이너가 원한다고 답하면 즉시 열 것**. 무응답이면 8월 제출 직전에 열어도 됨(제출물에 "PR 제출됨"이 있는 편이 낫다).
+4. 🟢 **8월 제출 문안** (마감 8/31 23:59 PT). 7월 답변 7칸 구조 = `submission/2026-07_progress_prize.md` 참고. 재료: 3 arm 음의 결과 + z 환원 함정 + `flat_depth_targets` 경로 + #1234 머지 진행 + 7월 수상 연속성.
+
+**#192 니치 상황(2026-08-09 조사)**: 선행 시도 2건 모두 닫힘 — [#923](https://github.com/ScrollPrize/villa/pull/923)(jonmarrs, 5월, 자칭 sketch, 하류 평가 없음) · [#1295](https://github.com/ScrollPrize/villa/pull/1295)(williamshermer-pixel, **2026-08-06 erdpx가 닫음** — 28쌍 중 2쌍만 제출 + 깊이 독립 검증 없음, CT 밝기로 밴드 배치). **둘 다 라벨 생성법만 냈고 학습해서 재보진 않음** → 우리 기여의 차별점이 "검증"이라는 게 확인됨. erdpx가 #1295에 요구한 게 정확히 "독립 검증된 깊이".
 
 ### ▶ ✅ 매트릭스 완료 (9런, GPU 16h, 2026-08-08~09)
 
