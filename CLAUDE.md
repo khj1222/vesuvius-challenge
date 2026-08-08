@@ -62,19 +62,26 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - 핵심 논리: 7월에 만든 held-out 하네스가 **"z복사 라벨 vs 3D 라벨"을 같은 fold·시드로 비교**하게 해줌 → 15개월간 아무도 증명 못 한 라벨 품질 주장을 수치로 세울 수 있음. 판정 기준선 = ~0.03 F1 미만은 노이즈.
    - ⚠️ **순환성 리스크**: 깊이 프로파일을 z복사 라벨로 학습한 모델에서 뽑음 → self-distillation **대조군 arm 필수**(이게 없으면 결과 무의미).
    - ⚠️ **니치 혼잡**: 7월 마감 직전 TAUIL-Abd-Elilah가 재현성 감사로 8건, Jinhojeong이 라벨 품질 측정 툴(#193)을 냄. "측정 툴 하나 더"는 중복 → 하네스를 **쓰는** 쪽으로 갈 것.
-   - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)**. 각각 `docs/10` · `docs/11` · `docs/12`. **4단계 = 9런 매트릭스 — v4 arm 완료(2026-08-08), v3·v2 남음.** 진행표는 아래 "매트릭스 진행 상황".
+   - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)** → ✅ **4단계 9런 매트릭스(2026-08-09)**. 각각 `docs/10` · `docs/11` · `docs/12`. **실험은 끝났고 결과는 음의 결과** — 아래 "매트릭스 완료" 절.
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
-### ▶ 매트릭스 진행 상황 (2026-08-08 갱신)
+### ▶ 다음 세션 재개 지점 (2026-08-09 세션 종료 시점)
 
-**arm 3개 중 1개 완료.** 명령 형식(arm당 ~5.4h, fold당 ~105분 실측):
+**실험은 끝. 남은 건 전부 "내보내기" 작업이다.**
+
+1. 🔴 **#192에 결과 코멘트 게시** — 초안 완성본 = `submission/issue192_comment.md`(3 arm 표 반영됨). **Claude는 GitHub 인증이 없어 게시 불가, 사용자 몫.** 조기 공개가 심사 축이라 우선순위 최상.
+2. 🟡 **PR [#1234](https://github.com/ScrollPrize/villa/pull/1234) 리뷰 반영** — erdpx 요청(2D 피라미드만 메모리에, 레벨별로 `DEFAULT_LABEL_SLICE`에 직접 write). `merge-ink-pipelines`에서 새 브랜치 → 수정 → 합성 6레벨 바이트 동일 + 실제 striped TIFF 검증 → 푸시(기존 PR에 자동 반영). Claude 작업 가능, ~1-2h.
+3. 🟡 **`flat_depth_targets` PR** — 패치는 `submission/villa-flat-depth-targets.patch`에 준비됨. **#192 코멘트 반응을 보고 열 것**(저쪽이 접근 자체에 이견이 있으면 다시 짜야 함).
+4. 🟢 **8월 제출 문안** (마감 8/31 23:59 PT, 22일 남음). 재료: 음의 결과 3 arm + z 환원 함정 발견 + `flat_depth_targets` 경로 + 7월 수상 연속성.
+
+### ▶ ✅ 매트릭스 완료 (9런, GPU 16h, 2026-08-08~09)
+
+재실행이 필요하면 (arm당 ~5.5h, fold당 ~110분 실측):
 
 ```bash
-python tools/run_cv_folds.py data/ink-dataset/phercparis4/w00_20231016151002 --folds 3 --config configs/ink_depth_v4.json --label-version v4 --prefix ink_depth_v4_fold --z-window 16:48
+uv run --project external/villa/ink-detection python tools/run_cv_folds.py data/ink-dataset/phercparis4/w00_20231016151002 --folds 3 --config configs/ink_depth_v4.json --label-version v4 --prefix ink_depth_v4_fold --z-window 16:48 --sweep-every 2
 ```
-(`v3` → `v2` 순으로 config·label-version·prefix 교체. **`--z-window 16:48` 필수** — 아래 참조)
-
-**✅ 매트릭스 완료 (9런, GPU 16h, 2026-08-08~09)**
+(config·label-version·prefix만 교체. **`--z-window 16:48` 필수** — 아래 참조. **`uv run --project` 필수** — 드라이버가 `sys.executable`로 학습까지 띄우므로 시스템 파이썬으로 돌리면 즉시 실패)
 
 | arm | 3-fold 평균 F1 | fold별 | spread |
 |---|---|---|---|
@@ -97,9 +104,9 @@ python tools/run_cv_folds.py data/ink-dataset/phercparis4/w00_20231016151002 --f
 - 전체-z 원본 숫자는 `runs/*/validation/`, 유효 숫자는 `runs/*/validation_z16_48/`에 보존. 종합 = `runs/ink_depth_v4_fold_cv_summary_z16_48.json`.
 - **v4 best step이 19000–20000(아직 상승 중)** — 7월 2D 런은 17000 정점 후 하락. 볼륨 타깃이 느리게 수렴. 스케줄은 arm 공정성 때문에 20k 고정 유지.
 - ⚠️ **v4의 0.8098을 7월 0.8472와 직접 비교 금지** — 학습 모드(2D 타깃·네트워크 내 z projection)와 라벨이 동시에 다름. 판정은 **v4 − v3**(~0.03 노이즈 기준).
-- **디스크**: arm당 ~65GB(ckpt 1.08GB × 20 × 3런). v4 소비 후 D 여유 확인할 것.
+- **디스크**: 9런 합계 ~195GB 소비(ckpt 1.08GB × 20 × 9). 2026-08-09 시점 D 여유 ~520GB.
 - ⚠️ `save_every`를 늘려 디스크를 아끼지 말 것 — 최적 step이 17000~20000에 걸쳐 있다.
-- 남은 일: v3(+v2) 실행 → `docs/12`의 "What this does not settle" 갱신 → #192 코멘트 → 8월 제출 문안.
+- ⚠️ **GPU 경합 주의**: 게임 클라이언트 등이 떠 있으면 3.0 → 1.1 it/s로 3배 느려진다(결과엔 무영향, 시간만). fold 0(v3)만 210분, 나머지는 105~125분.
 - ⚠️ **villa 쪽 변경이 아직 `fix/stream-untiled-label-images` 브랜치에 미커밋 상태로 얹혀 있음**(train.py·infer.py·test_train.py). PR 낼 땐 `merge-ink-pipelines`에서 새 브랜치를 따고 `submission/villa-flat-depth-targets.patch`를 적용할 것. 패치는 z-window 포함해 2026-08-08 재생성됨.
 
 ## 깊이 국소화 프로토타입 (2026-07-27, 8월 트랙 1주차)
