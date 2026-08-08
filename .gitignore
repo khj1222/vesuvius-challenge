@@ -15,6 +15,15 @@ checkpoints/
 # 산출 이미지 (submission/README.md와 최종 제출본만 예외로 add)
 submission/*.png
 
+# 개인 문서 — 이 저장소는 public. 신분증·세금양식·수취정보가 실수로 올라가면
+# 되돌릴 수 없다(히스토리에 남고, 푸시 즉시 크롤링 대상).
+*.pdf
+fw8ben*
+fw9*
+*_id.*
+*passport*
+*신분증*
+
 # 파이썬
 __pycache__/
 *.py[cod]
