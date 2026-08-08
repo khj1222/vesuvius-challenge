@@ -1,9 +1,11 @@
-# Draft comment for villa #192 "Accurate 3d ink labels"
+<!--
+Comment for villa #192 "Accurate 3d ink labels"
+  target: https://github.com/ScrollPrize/villa/issues/192
+  status: not posted as of 2026-08-09
 
-Status: draft, not posted. Claude has no GitHub auth — post manually.
-Target: https://github.com/ScrollPrize/villa/issues/192
-
----
+This header is an HTML comment, so the whole file can be pasted as-is —
+GitHub renders nothing for it.
+-->
 
 I ran the experiment this issue implies — train the same model on differently
 shaped 3D ink labels and score them against each other — and the result came out

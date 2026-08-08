@@ -1,46 +1,12 @@
-From a5179a89b3a6b262021809761623008764dbc5ef Mon Sep 17 00:00:00 2001
-From: khj1222 <39723594+khj1222@users.noreply.github.com>
-Date: Sat, 25 Jul 2026 21:39:22 +0900
-Subject: [PATCH] create_label_zarrs: stream untiled label images instead of
- building the pyramid in memory
-
-Converting a label image only streamed when the input TIFF was tiled.
-`_get_tiled_tiff_metadata` returns None for a striped TIFF (or a PNG), and
-`convert_image` then fell back to `build_pyramid_with_mode`, which materializes
-the whole DEFAULT_DEPTH-deep volume once per pyramid level. For a full-resolution
-segment label that is tens of GiB, even though 64 of the 65 slices are zeros:
-
-    ERROR ..._validation_mask.tif: Unable to allocate 25.1 GiB for an array
-          with shape (65, 16125, 25690) and data type uint8
-
-The shipped `_inklabels` / `_supervision_mask` TIFFs are tiled 256x256, so this
-only bites on label images produced elsewhere -- for example a validation mask
-written with a default `tifffile.imwrite`.
-
-Route untiled inputs through the same zarr-backed path the tiled branch already
-uses: create the datasets, write the 2D image into level 0 at DEFAULT_LABEL_SLICE
-in blocks, then build the downsampled levels from zarr. Peak memory becomes one
-2D image rather than DEFAULT_DEPTH times it.
-
-Verified on a 32249x51380 uint8 mask: the striped input that previously raised
-now converts in 83 s, and on a synthetic image all six pyramid levels, the
-non-empty z slice, and the group attrs are byte-identical between the tiled and
-untiled paths.
-
-Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
----
- .../preprocessing/create_label_zarrs.py       | 62 ++++++++++++++++---
- 1 file changed, 54 insertions(+), 8 deletions(-)
-
 diff --git a/ink-detection/koine_machines/preprocessing/create_label_zarrs.py b/ink-detection/koine_machines/preprocessing/create_label_zarrs.py
-index 38abe80..87669a1 100644
+index 38abe80..40e6562 100644
 --- a/ink-detection/koine_machines/preprocessing/create_label_zarrs.py
 +++ b/ink-detection/koine_machines/preprocessing/create_label_zarrs.py
-@@ -572,6 +572,55 @@ def _convert_tiled_tiff(
+@@ -572,6 +572,80 @@ def _convert_tiled_tiff(
      )
  
  
-+def _write_image_level_zero(
++def _write_label_slice(
 +    image_2d: np.ndarray,
 +    dataset: zarr.Array,
 +) -> None:
@@ -57,6 +23,32 @@ index 38abe80..87669a1 100644
 +        ]
 +
 +
++def _downsample_image_2d(
++    image_2d: np.ndarray,
++    *,
++    downsample_mode: Literal["nearest", "mean"],
++    band_rows: int = STREAM_BLOCK_SIZE,
++) -> np.ndarray:
++    if downsample_mode == "nearest":
++        return np.ascontiguousarray(image_2d[::2, ::2])
++
++    # Averaging in bands rather than in one pass: the accumulator _downsample_mean
++    # allocates is float64, eight times the output, which for a full-size label
++    # level is several GiB. Each output pixel still comes from the same four
++    # source pixels through the same code, so the result is unchanged -- bands
++    # start on even source rows precisely so that stays true.
++    out_height = (int(image_2d.shape[0]) + 1) // 2
++    out_width = (int(image_2d.shape[1]) + 1) // 2
++    out = np.empty((out_height, out_width), dtype=image_2d.dtype)
++
++    for y_start in range(0, out_height, band_rows):
++        y_stop = min(y_start + band_rows, out_height)
++        band = image_2d[2 * y_start : 2 * y_stop]
++        out[y_start:y_stop] = _downsample_mean(band[np.newaxis])[0]
++
++    return out
++
++
 +def _convert_untiled_image(
 +    input_path: Path,
 +    output_path: Path,
@@ -64,13 +56,14 @@ index 38abe80..87669a1 100644
 +    levels: int,
 +    overwrite: bool,
 +    downsample_mode: Literal["nearest", "mean"],
-+    chunk_workers: int,
 +    use_compression: bool,
 +) -> None:
-+    # Only the 2D image is held in memory; the label volume and its pyramid are
-+    # written through zarr. Building them in memory instead costs DEFAULT_DEPTH
-+    # times the image per level, which is tens of GiB for a full-size segment
-+    # label even though 64 of the 65 slices are zeros.
++    # The pyramid is built in 2D and each level written straight to its label
++    # slice. Embedding the image in the volume first, as build_pyramid_with_mode
++    # does, costs DEFAULT_DEPTH times the image per level -- tens of GiB for a
++    # full-size segment label, even though 64 of the 65 slices are zeros.
++    # Successive 2D levels quarter in size, so the whole pyramid is about 1.33x
++    # the source image and never touches disk twice.
 +    image = load_image(input_path)
 +    datasets = _create_ome_zarr_datasets(
 +        output_path,
@@ -80,19 +73,17 @@ index 38abe80..87669a1 100644
 +        overwrite=overwrite,
 +        use_compression=use_compression,
 +    )
-+    _write_image_level_zero(image, datasets[0])
-+    del image
-+    _build_downsample_levels_from_zarr(
-+        datasets,
-+        downsample_mode=downsample_mode,
-+        chunk_workers=chunk_workers,
-+    )
++
++    for index, dataset in enumerate(datasets):
++        if index:
++            image = _downsample_image_2d(image, downsample_mode=downsample_mode)
++        _write_label_slice(image, dataset)
 +
 +
  def convert_image(
      input_path: Path,
      *,
-@@ -607,16 +656,13 @@ def convert_image(
+@@ -607,16 +681,12 @@ def convert_image(
                  use_compression=use_compression,
              )
          else:
@@ -110,10 +101,6 @@ index 38abe80..87669a1 100644
 +                levels=levels,
                  overwrite=overwrite,
 +                downsample_mode=downsample_mode,
-+                chunk_workers=chunk_workers,
                  use_compression=use_compression,
              )
          wrote_primary = True
--- 
-2.53.0.windows.2
-
