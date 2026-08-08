@@ -41,13 +41,15 @@ volume:
 * previews take the annotated plane out of the volume, reusing the reduction the
   `full_3d` previews already used;
 * inference reduces a volume prediction back to a surface map with `--z-reduce`
-  (`max` by default, `mean` available).
+  (`max` by default, `mean` available) over the slices `--z-window` selects.
 
 That last one is what keeps the comparison honest. A model trained with
 `z_projection_mode: max` and a model trained on a depth-resolved target both end
 up writing the same kind of surface map, so the existing
 [validation harness](09_validation_harness.md) scores them with one yardstick
-and the fold-to-fold noise floor measured in July (~0.03 F1) still applies.
+and the fold-to-fold noise floor measured in July (~0.03 F1) still applies —
+**provided the reduction covers the supervised column and nothing else**, which
+is a trap sprung below.
 
 Patch against `merge-ink-pipelines`:
 [`submission/villa-flat-depth-targets.patch`](../submission/villa-flat-depth-targets.patch).
@@ -138,6 +140,61 @@ A 200-iteration smoke run on `v2` confirms the path end to end:
 * the model returns `(1, 1, 64, 256, 256)`;
 * inference over the supervised region writes the usual 2D TIFF in 34 s.
 
+## The reduction has to match the supervision
+
+Training on a depth-resolved label changes what inference has to do with the
+prediction, and getting that second half wrong is expensive in a way that is
+easy to misread as a bad label.
+
+The supervision is a column: `make_label_version.py` supervises `z ±16` around
+the annotated plane, because the negative drift past z40 is not something we can
+honestly call background ([`10_depth_localization.md`](10_depth_localization.md)).
+The loss therefore says nothing at all about the other 32 slices. Inference,
+meanwhile, reduced over all 64. Asking a `v4` checkpoint for its raw volume on
+12 supervised blocks (150,632 ink px, 582,216 background px) shows what lives
+out there:
+
+| z band | mean p(ink px) | mean p(background px) | difference |
+|---|---|---|---|
+| 0–14 (unsupervised) | 0.11 → 0.69 | 0.32 → 0.93 | **−0.30** |
+| 16–48 (supervised) | peak 0.506 @ z32 | 0.083 | **+0.42** |
+| 50–62 (unsupervised) | 0.64 → 0.16 | 0.59 → 0.55 | **−0.32** |
+
+Inside the column the model is clean and sharply peaked. Outside it both classes
+saturate above 0.6 — the network was never penalised there, so it does whatever
+it likes, and a max down the full axis reports *that*. Same checkpoint, same
+pixels, only the collapse differs:
+
+| volume → surface | best F1 | precision | recall |
+|---|---|---|---|
+| `max` over z0–64 | **0.535** | 0.422 | 0.732 |
+| `max` over z16–48 | **0.802** | 0.819 | 0.786 |
+| `mean` over z16–48 | 0.803 | 0.842 | 0.767 |
+| `mean` over z0–64 | 0.368 | 0.618 | 0.262 |
+
+Across the full 3-fold `v4` arm the effect is the same size, and the tell is the
+threshold: scored over the whole volume every fold's best threshold pinned to
+254, the top of the uint8 range, which is what saturation looks like.
+
+| fold | z0–64 (wrong) | z16–48 | best step | best threshold, z16–48 |
+|---|---|---|---|---|
+| 0 | 0.4708 | **0.7997** | 20000 | 168 |
+| 1 | 0.5122 | **0.8192** | 19000 | 136 |
+| 2 | 0.5308 | **0.8104** | 20000 | 139 |
+| mean | 0.5046 | **0.8098** | — | — |
+
+Spread across folds is 0.0195, inside the ~0.03 noise floor. Note where the best
+step lands: 19000–20000, still climbing, where the July 2D runs peaked at 17000
+and fell back. The volume task converges more slowly. The schedule stays at 20k
+for every arm anyway — changing it mid-matrix would cost the comparison.
+
+So `--z-window START:STOP` on `infer`, plumbed through `sweep_checkpoints.py`
+and `run_cv_folds.py`. It defaults to the whole volume, which leaves models
+without depth targets untouched. This is not only a scoring detail: a
+full-segment prediction TIFF written without it is degraded in exactly the same
+way, so anyone adopting depth-resolved labels needs the pair, not just the
+label.
+
 ## Reproduce
 
 ```bash
@@ -166,9 +223,14 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3 --config configs/ink_depth_v4
 
 ## What this does not settle
 
-* **The comparison has not been run.** This is the plumbing and the assets; the
-  3 arms × 3 folds still have to be trained and scored, and until they are, no
-  claim about label quality is supported.
+* **Only one arm has been run.** `v4` is trained and scored across 3 folds
+  (mean F1 0.8098); `v3` and `v2` are not. One arm on its own says nothing about
+  label quality — the number that matters is `v4 − v3`, against a ~0.03 noise
+  floor, and it does not exist yet.
+* **`v4` is not being compared to July's 0.8472.** That baseline is a different
+  training mode (2D targets, in-network z projection) on `v1` labels, so the
+  0.037 gap between them mixes the label change with the mode change. Only the
+  arms, which differ in the label alone, can separate the two.
 * **Circularity is unchanged.** The `v4` band comes from a model trained on the
   depthless annotation. `v3` is the control that can catch it, not a proof that
   there is nothing to catch.
