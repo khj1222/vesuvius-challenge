@@ -130,7 +130,18 @@ full-segment pass — then scores it. Emits `summary.csv` and a `curve.png` draw
 with Pillow (no matplotlib needed).
 
 `--every N` · `--batch-size N` · `--compile` (off by default: torch.compile needs
-Triton, which has no native Windows build) · `--keep-going` · `--no-image-metrics`
+Triton, which has no native Windows build) · `--keep-going` · `--no-image-metrics` ·
+`--z-window START:STOP` · `--out-dir DIR`
+
+**Scoring a depth-target run needs `--z-window`.** A model trained with
+`flat_depth_targets` predicts a volume, and inference collapses it to a surface
+map by taking a max down z. Outside the supervised column the loss never
+constrained anything, so ink and background both saturate there and that max
+reports the noise instead of the letters — measured at F1 **0.53 vs 0.80** on
+the same checkpoint. Pass the column the labels supervised (`16:48` for the
+default `--supervision-half-depth 16`). Re-scoring an old run wants `--out-dir`
+too: existing `val_*.tif` predictions are reused as-is, so a fresh directory is
+what makes the new reduction actually take effect.
 
 ### `run_cv_folds.py`
 
@@ -145,7 +156,13 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3
 ```
 
 `--folds K` · `--only-fold I` · `--prefix NAME` · `--sweep-every N` ·
-`--config PATH` · `--skip-restore`
+`--config PATH` · `--label-version vN` · `--z-window START:STOP` · `--skip-restore`
+
+With `--label-version`, each fold's held-out split is re-extruded into that
+version's own validation mask before training — the labels are written once by
+`make_label_version.py`, only the split moves. Depth-target arms also want
+`--z-window`, which is handed to the sweep; without it the fold scores measure
+the unsupervised slices (see above).
 
 Budget training-time × K — about 1.7 h per fold for the tutorial config on an
 RTX 5090, so 3 folds is an overnight job.

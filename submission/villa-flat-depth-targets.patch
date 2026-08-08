@@ -1,8 +1,8 @@
 diff --git a/ink-detection/koine_machines/inference/infer.py b/ink-detection/koine_machines/inference/infer.py
-index 61d59f9..f696359 100644
+index 61d59f9..78492a7 100644
 --- a/ink-detection/koine_machines/inference/infer.py
 +++ b/ink-detection/koine_machines/inference/infer.py
-@@ -59,11 +59,22 @@ class ChunkKey:
+@@ -59,11 +59,29 @@ class ChunkKey:
      col: int
  
  
@@ -14,7 +14,8 @@ index 61d59f9..f696359 100644
 +
  class TargetHeadWrapper(nn.Module):
 -    def __init__(self, model: torch.nn.Module, *, target_name: str):
-+    def __init__(self, model: torch.nn.Module, *, target_name: str, z_reduce: str = "max"):
++    def __init__(self, model: torch.nn.Module, *, target_name: str, z_reduce: str = "max",
++                 z_window: tuple[int, int] | None = None):
          super().__init__()
          self.model = model
          self.target_name = str(target_name)
@@ -23,10 +24,16 @@ index 61d59f9..f696359 100644
 +            raise ValueError(
 +                f"Unknown z reduction {z_reduce!r}; allowed: {sorted(_Z_REDUCTIONS)!r}"
 +            )
++        if z_window is not None:
++            start, stop = (int(v) for v in z_window)
++            if start < 0 or stop <= start:
++                raise ValueError(f"z window must be 0 <= start < stop, got {z_window!r}")
++            z_window = (start, stop)
++        self.z_window = z_window
  
      def forward(self, x: torch.Tensor) -> torch.Tensor:
          outputs = self.model(x)
-@@ -81,6 +92,12 @@ class TargetHeadWrapper(nn.Module):
+@@ -81,6 +99,25 @@ class TargetHeadWrapper(nn.Module):
              if len(logits) == 0:
                  raise ValueError(f"Target {self.target_name!r} returned an empty logits list")
              logits = logits[0]
@@ -35,11 +42,24 @@ index 61d59f9..f696359 100644
 +            # surface map this writes is that volume seen from above, which is
 +            # also what a z-projecting model would have produced, so the two
 +            # stay comparable on the same held-out split.
++            if self.z_window is not None:
++                # Only the slices the training loss actually covered. Outside
++                # the supervised column the network was free to predict
++                # anything, and it does: measured on a depth-target run, ink
++                # and background both saturate above 0.6 there, so reducing
++                # over the full volume reports that noise instead of the ink.
++                start, stop = self.z_window
++                depth = logits.shape[2]
++                if start >= depth:
++                    raise ValueError(
++                        f"z window {self.z_window} starts past the prediction depth {depth}"
++                    )
++                logits = logits[:, :, start:min(stop, depth)]
 +            logits = _Z_REDUCTIONS[self.z_reduce](logits)
          return logits
  
  
-@@ -351,6 +368,15 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+@@ -351,6 +388,26 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
              "When multiple GPUs are provided, each inference batch is split across those devices."
          ),
      )
@@ -52,24 +72,53 @@ index 61d59f9..f696359 100644
 +            "Only applies to models trained with depth-resolved targets."
 +        ),
 +    )
++    parser.add_argument(
++        "--z-window",
++        default=None,
++        metavar="START:STOP",
++        help=(
++            "Reduce only these z slices of a volume prediction, as a half-open range, "
++            "for example 16:48. Use the column the training labels supervised: slices "
++            "outside it carry no signal, and a max over them buries the ink. "
++            "Default: the whole volume."
++        ),
++    )
      parser.add_argument("--compile-mode", default="reduce-overhead")
      parser.add_argument("--no-compile", dest="compile_model", action="store_false")
      parser.set_defaults(compile_model=True)
-@@ -1155,7 +1181,12 @@ def resolve_amp_dtype(
+@@ -1155,7 +1212,30 @@ def resolve_amp_dtype(
      return checkpoint_amp_dtype(checkpoint_payload, checkpoint_path)
  
  
 -def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: Path | str) -> ConfiguredModel:
++def parse_z_window(value: str | None) -> tuple[int, int] | None:
++    """Parse a ``START:STOP`` z range; None (or empty) means the whole volume."""
++    if value is None or not str(value).strip():
++        return None
++    text = str(value).strip()
++    parts = text.split(":")
++    if len(parts) != 2:
++        raise ValueError(f"z window must look like START:STOP, got {text!r}")
++    try:
++        start, stop = (int(part) for part in parts)
++    except ValueError as exc:
++        raise ValueError(f"z window bounds must be integers, got {text!r}") from exc
++    if start < 0 or stop <= start:
++        raise ValueError(f"z window must be 0 <= start < stop, got {text!r}")
++    return start, stop
++
++
 +def build_repo_training_model_bundle(
 +    payload: dict[str, Any],
 +    checkpoint_path: Path | str,
 +    *,
 +    z_reduce: str = "max",
++    z_window: tuple[int, int] | None = None,
 +) -> ConfiguredModel:
      from koine_machines.models.make_model import make_model
  
      config = normalize_training_config_for_inference(payload["config"])
-@@ -1175,7 +1206,11 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
+@@ -1175,7 +1255,12 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
          len(incompat.unexpected_keys),
      )
  
@@ -78,11 +127,12 @@ index 61d59f9..f696359 100644
 +        base_model,
 +        target_name=infer_target_name_from_config(config),
 +        z_reduce=z_reduce,
++        z_window=z_window,
 +    )
      model.eval()
      return ConfiguredModel(
          model=model,
-@@ -1205,7 +1240,11 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
+@@ -1205,7 +1290,12 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
                  "Ignoring --metadata-json for config-backed checkpoint %s; the model will be rebuilt from checkpoint['config'].",
                  args.checkpoint,
              )
@@ -91,6 +141,7 @@ index 61d59f9..f696359 100644
 +            checkpoint_payload,
 +            args.checkpoint,
 +            z_reduce=getattr(args, "z_reduce", "max"),
++            z_window=parse_z_window(getattr(args, "z_window", None)),
 +        )
          configured_model.amp_dtype = resolved_amp_dtype
          return configured_model

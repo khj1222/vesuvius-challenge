@@ -69,6 +69,10 @@ def main(argv=None) -> int:
                         help="Label version the config trains on, e.g. v4. Each fold's held-out "
                              "split is re-extruded into that version's validation mask; the labels "
                              "themselves are written once by make_label_version.py.")
+    parser.add_argument("--z-window", default=None, metavar="START:STOP",
+                        help="Passed to sweep_checkpoints.py. For depth-target arms this must be "
+                             "the supervised column (e.g. 16:48), or the sweep scores a max over "
+                             "the unsupervised slices instead of the ink.")
     parser.add_argument("--skip-restore", action="store_true",
                         help="Leave the last fold's mask in place instead of restoring the single split.")
     args = parser.parse_args(argv)
@@ -123,9 +127,12 @@ def main(argv=None) -> int:
         run([sys.executable, "-m", "koine_machines.training.train", str(config_path)],
             cwd=pipeline_dir, step=f"fold {fold}: train -> {out_dir}")
 
-        run([sys.executable, str(TOOLS / "sweep_checkpoints.py"), str(pipeline_dir / out_dir),
-             str(segment_dir), "--every", str(args.sweep_every), "--no-image-metrics", "--keep-going"],
-            cwd=pipeline_dir, step=f"fold {fold}: sweep checkpoints")
+        sweep_command = [sys.executable, str(TOOLS / "sweep_checkpoints.py"), str(pipeline_dir / out_dir),
+                         str(segment_dir), "--every", str(args.sweep_every),
+                         "--no-image-metrics", "--keep-going"]
+        if args.z_window:
+            sweep_command += ["--z-window", str(args.z_window)]
+        run(sweep_command, cwd=pipeline_dir, step=f"fold {fold}: sweep checkpoints")
 
         summary = pipeline_dir / out_dir / "validation" / "summary.csv"
         best = None

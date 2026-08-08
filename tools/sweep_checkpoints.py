@@ -78,6 +78,7 @@ def run_inference(
     mask_path: Path,
     batch_size: int,
     compile_model: bool,
+    z_window: str | None = None,
 ) -> None:
     command = [
         sys.executable, "-m", "koine_machines.inference.infer",
@@ -85,6 +86,10 @@ def run_inference(
         "--mask-path", str(mask_path),
         "--batch-size", str(batch_size),
     ]
+    if z_window:
+        # Depth-target runs predict a volume, and only the supervised column of
+        # it means anything; without this the surface map is a max over noise.
+        command += ["--z-window", str(z_window)]
     if not compile_model:
         # torch.compile's inductor backend needs Triton, which has no native
         # Windows build; without this the first forward pass dies.
@@ -159,6 +164,12 @@ def main(argv=None) -> int:
     parser.add_argument("--batch-size", type=int, default=4, help="Inference batch size. Default: 4")
     parser.add_argument("--compile", dest="compile_model", action="store_true",
                         help="Let inference use torch.compile (needs Triton; not on native Windows).")
+    parser.add_argument("--z-window", default=None, metavar="START:STOP",
+                        help="For depth-target runs: reduce only these z slices of the volume "
+                             "prediction, e.g. 16:48 for a +-16 supervised column. Default: all.")
+    parser.add_argument("--out-dir", type=Path, default=None,
+                        help="Where predictions and summary.csv land. Default: RUN_DIR/validation. "
+                             "Use a separate dir when re-scoring, since existing val_*.tif are reused.")
     parser.add_argument("--keep-going", action="store_true", help="Continue if one checkpoint fails.")
     parser.add_argument("--no-image-metrics", dest="image_metrics", action="store_false",
                         help="Skip DRD / pseudo-F-measure for a faster sweep.")
@@ -187,13 +198,14 @@ def main(argv=None) -> int:
     if not checkpoints:
         sys.exit(f"error: no ckpt_*.pth under {run_dir}")
 
-    out_dir = run_dir / "validation"
-    out_dir.mkdir(exist_ok=True)
+    out_dir = args.out_dir.resolve() if args.out_dir else run_dir / "validation"
+    out_dir.mkdir(parents=True, exist_ok=True)
     evaluator = load_sibling_module("eval_validation")
 
     print(f"run        : {run_dir}")
     print(f"segment    : {segment_dir.name}")
     print(f"checkpoints: {len(checkpoints)} ({checkpoints[0][0]} .. {checkpoints[-1][0]})")
+    print(f"z window   : {args.z_window or 'whole volume'}")
     print(f"output     : {out_dir}\n")
 
     rows: list[dict] = []
@@ -211,6 +223,7 @@ def main(argv=None) -> int:
                     mask_path=mask_path,
                     batch_size=args.batch_size,
                     compile_model=args.compile_model,
+                    z_window=args.z_window,
                 )
             else:
                 print(f"    reusing {prediction.name}")
