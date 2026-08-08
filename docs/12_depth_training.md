@@ -197,36 +197,42 @@ label.
 
 ## The result: the measured band loses
 
-Two arms are trained and scored: `v4`, the per-pixel band measured in
-[`11_measured_3d_labels.md`](11_measured_3d_labels.md), and `v3`, a constant
-band at the segment median (centre 32.47, half-width 4). They differ in the
-label and nothing else — same folds, same held-out voxels, same seed, same
-config, same 20k schedule, both scored over the supervised column.
+Three arms, nine runs, 16 GPU-hours. Each arm changes the label and nothing
+else — same folds, same held-out voxels, same seed, same config, same 20k
+schedule, all scored over the supervised column.
 
-| fold | `v3` constant | `v4` measured | difference |
+| fold | `v2` plane | `v3` constant | `v4` measured |
 |---|---|---|---|
-| 0 | 0.8455 | 0.7997 | **+0.0458** |
-| 1 | 0.8452 | 0.8192 | **+0.0260** |
-| 2 | 0.8528 | 0.8104 | **+0.0424** |
-| **mean** | **0.8478** | **0.8098** | **+0.0381** |
-| spread | 0.0076 | 0.0195 | |
+| 0 | 0.8567 | 0.8455 | 0.7997 |
+| 1 | 0.8259 | 0.8452 | 0.8192 |
+| 2 | 0.8496 | 0.8528 | 0.8104 |
+| **mean** | **0.8441** | **0.8478** | **0.8098** |
+| spread | 0.0308 | 0.0076 | 0.0195 |
 
-**The constant band wins on every fold**, by more than the ~0.03 fold-to-fold
-noise floor measured in July. Three things make that hard to argue away:
+**The measured band comes last, on every fold.** It trails `v3` by 0.0381 on
+average — above the ~0.03 fold-to-fold noise floor measured in July — and trails
+`v2` by 0.0343, though on fold 1 that margin narrows to 0.0067.
+
+`v2` and `v3` are 0.0037 apart, which is nothing. That is the more interesting
+half of the result: **band thickness is not what matters.** One voxel and eight
+voxels score the same, so "give the label depth" neither helps nor hurts here.
+What costs 0.04 is letting the eight-voxel band wander per pixel.
+
+Three things make the negative result hard to argue away:
 
 * **`v3` is remarkably stable** — 0.8452 to 0.8528, a spread of 0.0076, tighter
-  than the July baseline's own 0.0154 across the same three splits.
+  than the July baseline's own 0.0154 across the same three splits. `v2` is the
+  jumpy one at 0.0308, which is what a 0.7% positive rate does to a Dice+BCE
+  loss; read any single `v2` fold with that in mind.
 * **`v3` reproduces the 2D baseline almost exactly**: 0.8478 against July's
-  0.8472 on the same folds. Depth-resolved targets are not the problem — a flat
-  band placed at the median costs nothing and gains nothing. What costs
-  something is moving that band around per pixel.
+  0.8472 on the same folds. Depth-resolved targets are not the problem.
 * **The circularity worry cuts the other way.** `v4`'s band was measured from a
   model trained on the depthless annotation, so any self-distillation effect
   should have flattered `v4`. It lost anyway.
 
-Nor is this a stopping artifact. Over the last 3,000 steps both arms gain about
+Nor is this a stopping artifact. Over the last 3,000 steps the arms gain about
 the same small amount — `v3` +0.0075 on average, `v4` +0.0068 — while the gap
-between them is 0.0381, five times larger.
+between them is five times larger.
 
 So on this segment, the premise behind villa
 [#192](https://github.com/ScrollPrize/villa/issues/192) — that a more accurate
@@ -269,11 +275,10 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3 --config configs/ink_depth_v4
 
 ## What this does not settle
 
-* **`v2` has not been run.** The plane arm is a reference point rather than a
-  control — at 1.00 label voxel per pixel against 8.00, its positive rate is
-  0.7% where the other two sit at 5.5%, so a Dice+BCE loss sees a different
-  class balance and not just a different geometry. It would say something about
-  how much depth supervision is worth at all; it cannot sharpen `v4 − v3`.
+* **`v2` is not a clean control.** At 1.00 label voxel per pixel against 8.00,
+  its positive rate is 0.7% where the other two sit at 5.5%, so a Dice+BCE loss
+  sees a different class balance and not just a different geometry. Its tie with
+  `v3` says thickness does not decide the outcome; it does not isolate why.
 * **One segment, three folds, one seed per fold.** The three splits share the
   same 15 annotated regions, so they are not independent samples of "papyrus" —
   they are three ways of cutting one letter set. Seed variance within a fold was

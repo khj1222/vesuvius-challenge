@@ -11,8 +11,9 @@ against the premise, so I want to put the numbers somewhere they can be argued
 with.
 
 **Short version:** on `w00_20231016151002`, a per-pixel *measured* ink band loses
-to a *constant* band by 0.038 F1, consistently across three folds. Depth-resolved
-targets themselves cost nothing; moving the band around per pixel is what costs.
+to a *constant* band by 0.038 F1, on every one of three folds. A one-voxel plane
+and an eight-voxel constant band tie, so depth-resolved targets themselves cost
+nothing — moving the band around per pixel is what costs.
 
 ## What was in the way first
 
@@ -41,11 +42,11 @@ than it sounds — see the trap at the bottom.
 Three label versions over the same segment, packaged as `_inklabels_vN.zarr` so
 `discover_labels` picks them up and the patch cache key keeps the arms separate:
 
-| arm | band |
-|---|---|
-| `v2` | the published plane, 1 voxel |
-| `v3` | **constant**: centre z 32.47, half-width 4 — the segment median |
-| `v4` | **measured**: per-pixel centre and FWHM half-width |
+| arm | band | label voxels / ink px |
+|---|---|---|
+| `v2` | the published plane, 1 voxel | 1.00 |
+| `v3` | **constant**: centre z 32.47, half-width 4 — the segment median | 8.00 |
+| `v4` | **measured**: per-pixel centre and FWHM half-width | 8.01 |
 
 `v4`'s band comes from two independent measurements that agree: occlusion/window
 profiling of a trained model puts its ink evidence at z≈16–36, and a model-free
@@ -66,23 +67,31 @@ for every arm — the label is the only thing that differs.
 
 ## Result
 
-| fold | `v3` constant | `v4` measured | difference |
+| fold | `v2` plane | `v3` constant | `v4` measured |
 |---|---|---|---|
-| 0 | 0.8455 | 0.7997 | +0.0458 |
-| 1 | 0.8452 | 0.8192 | +0.0260 |
-| 2 | 0.8528 | 0.8104 | +0.0424 |
-| **mean** | **0.8478** | **0.8098** | **+0.0381** |
-| spread | 0.0076 | 0.0195 | |
+| 0 | 0.8567 | 0.8455 | 0.7997 |
+| 1 | 0.8259 | 0.8452 | 0.8192 |
+| 2 | 0.8496 | 0.8528 | 0.8104 |
+| **mean** | **0.8441** | **0.8478** | **0.8098** |
+| spread | 0.0308 | 0.0076 | 0.0195 |
 
-Same sign on every fold, and 0.038 is above the ~0.03 fold-to-fold noise floor I
-measured in July by running one unchanged config four times.
+The measured band is last on every fold. It trails the constant band by 0.0381 on
+average — above the ~0.03 fold-to-fold noise floor I measured in July by running
+one unchanged config four times — and trails the plane by 0.0343, though on fold 1
+that margin narrows to 0.0067.
 
-Three things make it hard to explain away:
+**`v2` and `v3` tie** (0.0037 apart), which I did not expect and which I think is
+the more useful half: **thickness is not the variable.** One voxel and eight score
+the same. What costs 0.04 is letting the eight-voxel band move per pixel.
+
+Three things make the negative result hard to explain away:
 
 - **The constant arm reproduces the 2D baseline almost exactly** — 0.8478 against
   0.8472 for 2D targets on `v1` labels over the same three folds. So depth-resolved
-  training is not itself harmful; a flat band at the median is free.
+  training is not itself harmful.
 - **`v3` is very stable**: spread 0.0076, tighter than the 2D baseline's own 0.0154.
+  (`v2` is the jumpy arm at 0.0308 — a 0.7% positive rate against 5.5% changes what
+  Dice+BCE sees, so I would not read a single `v2` fold on its own.)
 - **Circularity runs the wrong way for the hypothesis.** `v4`'s band was read out of
   a model trained on the depthless annotation, so any self-distillation effect
   should have flattered `v4`. It lost anyway.
@@ -100,10 +109,9 @@ segment with more wander, could still win. The harness now runs that comparison 
 a day, so it is cheap to check.
 
 Limits worth stating: one segment, three folds that share the same 15 annotated
-regions, one seed per fold, and ±16 as a judgement call that bounds both arms. The
-`v2` plane arm has not run yet — it is a reference point rather than a control,
-since its positive rate is 0.7% against 5.5% and a Dice+BCE loss sees a different
-class balance, not just a different geometry.
+regions, one seed per fold, and ±16 as a judgement call that bounds all three arms.
+`v2` is not a clean control either — its tie with `v3` shows thickness does not
+decide the outcome, but the class-balance difference means it cannot say why.
 
 ## A trap for anyone else trying this
 
