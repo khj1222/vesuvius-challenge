@@ -38,6 +38,13 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - ✅ **업스트림 이슈 게시(2026-07-25, 사용자 직접)**: https://github.com/ScrollPrize/villa/issues/1231 — 질문 2개(①배포 세그먼트에 `_validation_mask` 없는 게 의도인지 ②`create_label_zarrs`의 striped TIFF OOM에 PR 받을지). 본문 원본 = `submission/maintainer_issue.md`. **답변 오면 방향에 반영할 것**(이미 내부 마스크가 있다면 하네스의 포지셔닝을 바꿔야 함).
 - ✅ **업스트림 PR 제출(2026-07-25)**: https://github.com/ScrollPrize/villa/pull/1234 — `create_label_zarrs`가 striped TIFF를 스트리밍하도록 수정(1파일 +54−8, base `merge-ink-pipelines`, mergeable, 리뷰 대기). 로컬 브랜치 `external/villa` `fix/stream-untiled-label-images`(`a5179a8`), 패치 사본 `submission/villa-pr-stream-untiled-labels.patch`. ⚠️ base를 `main`으로 잘못 열면 231파일 diff가 되니 반드시 `merge-ink-pipelines`. 검증 = 합성 이미지 6레벨 바이트 동일 + 실제 32249×51380 striped 83초 변환.
 
+## 🏆 7월 라운드 **수상** (2026-08-04 통보)
+
+- **Progress Prize 수상.** Paul Henderson(Research Team Lead, `paul@scrollprize.org`) 메일로 통보(2026-08-04 02:18, 리마인더 2026-08-07 02:01). 대상 = 7/26 제출한 held-out 검증 하네스.
+- **등급·금액은 미통보** — 지급 폼 작성 후 확인될 것으로 보임. 폼 링크는 메일 본문에 있고, **작성은 사용자 본인이** (지급·개인정보 입력은 Claude가 처리하지 않음).
+- 수락 조건인 permissive 라이선스 = 저장소 MIT라 이미 충족.
+- 8월 제출에 미치는 영향: "수상한 하네스를 **써서** #192의 라벨 품질 주장을 실제로 검증했다"는 연속성이 생김. 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231)이 무응답인 것과 별개로, 하네스의 전제(배포 세그먼트에 val mask 부재)는 사실상 인정받은 셈.
+
 ## 🏁 7월 라운드 제출 완료 (2026-07-26)
 
 - ✅ **Google Form 제출 완료(2026-07-26, 마감 7/31 23:59 PT 대비 5일 여유).** 제출 명의 = Hyojun Kwon / bluekgssk@gmail.com, 개인 자격. **답변 7칸 전문 = `submission/2026-07_progress_prize.md`**(제출본과 동일하게 유지 중 — 심사 문의 오면 이 파일이 근거).
@@ -50,7 +57,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 1. **업스트림 반응 (2026-08-02 확인)**:
    - ✅ **PR [#1249](https://github.com/ScrollPrize/villa/pull/1249) 머지됨**(2026-07-31, erdpx가 main으로). 하네스가 scrollprize.org 커뮤니티 툴 목록에 실제로 등재됨 → 제출 문안의 "PR 제출" 표현은 "머지 완료"로 갱신 가능.
    - ⚠️ **PR [#1234](https://github.com/ScrollPrize/villa/pull/1234)에 메인테이너 리뷰 도착**(2026-07-31, erdpx): *"2D 피라미드만 메모리에 만들고 각 레벨을 `DEFAULT_LABEL_SLICE`에 바로 써라 — zarr 레벨을 디스크에서 다시 읽을 필요가 없고 더 빠르며, N-slice 볼륨 materialize 회피는 유지된다."* 거부가 아니라 **개선 요청** → 그대로 반영해 푸시하면 머지 가능성 높음. **미대응 상태**(사용자가 "급하지 않다"고 보류, 2026-08-02).
-   - ⏳ 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231) — 여전히 **무응답**. **"내부엔 이미 val mask가 있다"는 답이 오면 하네스 포지셔닝과 제출 서술의 전제를 조정**해야 함.
+   - 🔄 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231) — 텍스트 답변은 아직 없지만 **2026-08-03경 `pmh47`(Paul Henderson)이 `erdpx`를 담당자로 배정**함(2026-08-08 확인). 즉 무시가 아니라 **트리아지 완료** 상태이고, 수상 통보(08-04) 직전 시점이라 이슈가 심사에 반영됐을 가능성이 높음. **"내부엔 이미 val mask가 있다"는 답이 오면 하네스 포지셔닝과 제출 서술의 전제를 조정**해야 하는 건 그대로.
 2. **8월 라운드(8/31) 타깃 = villa [#192](https://github.com/ScrollPrize/villa/issues/192) "Accurate 3d ink labels" + 하네스 업스트림화(보조)** — 2026-07-26 재조사 후 결정. 계획·근거·마일스톤·리스크 전문 = `docs/05_strategy.md` 하단 "8월 라운드" 절.
    - 핵심 논리: 7월에 만든 held-out 하네스가 **"z복사 라벨 vs 3D 라벨"을 같은 fold·시드로 비교**하게 해줌 → 15개월간 아무도 증명 못 한 라벨 품질 주장을 수치로 세울 수 있음. 판정 기준선 = ~0.03 F1 미만은 노이즈.
    - ⚠️ **순환성 리스크**: 깊이 프로파일을 z복사 라벨로 학습한 모델에서 뽑음 → self-distillation **대조군 arm 필수**(이게 없으면 결과 무의미).
@@ -69,9 +76,18 @@ python tools/run_cv_folds.py data/ink-dataset/phercparis4/w00_20231016151002 --f
 
 | arm | 상태 | 3-fold 평균 F1 | fold별 |
 |---|---|---|---|
-| v4 measured | ✅ 2026-08-08 | **0.8098** (spread 0.0195) | 0.7997 / 0.8192 / 0.8104 |
-| v3 constant | 대기 | — | 대조군, **다음 실행 대상** |
-| v2 plane | 대기 | — | 참조점(양성비 0.7% vs 5.5%라 대조군 아님) |
+| **v3 constant** | ✅ 2026-08-08 | **0.8478** (spread 0.0076) | 0.8455 / 0.8452 / 0.8528 |
+| v4 measured | ✅ 2026-08-08 | 0.8098 (spread 0.0195) | 0.7997 / 0.8192 / 0.8104 |
+| v2 plane | 대기 | — | 참조점(양성비 0.7% vs 5.5%라 대조군 아님), **다음 실행 대상** |
+
+### 🔬 판정: 측정된 밴드가 **졌다** (v3 − v4 = **+0.0381**)
+
+- **3 fold 전부 v3 우세**(+0.0458 / +0.0260 / +0.0424), 평균 격차가 노이즈 기준선 ~0.03을 넘음.
+- **v3 평균 0.8478 ≈ 7월 2D 베이스라인 0.8472**(차이 0.0006) → **깊이 타깃 자체는 무해**하고, 손해는 밴드를 픽셀마다 옮기는 데서 발생.
+- **v3의 spread 0.0076**으로 7월(0.0154)보다도 안정적.
+- **순환성이 오히려 v4에 유리했어야 함**(v4 밴드는 깊이 없는 라벨로 학습한 모델에서 측정) — 그런데도 졌으므로 self-distillation 변명이 성립 안 됨.
+- **스케줄 아티팩트 아님**: 마지막 3,000 step 상승폭이 v3 +0.0075 / v4 +0.0068로 비슷한데 격차는 그 5배.
+- → **#192의 전제("정확한 3D 라벨이 성능을 올린다")가 이 세그먼트에서 지지되지 않음.** 단, "#192가 틀렸다"가 아니라 **"이 경로로 만든 밴드가 고정 밴드를 못 이긴다"**로만 주장할 것. 상세·유보 = `docs/12` "The result: the measured band loses".
 
 - ⚠️ **채점에 `--z-window 16:48`이 없으면 결과가 무의미하다**(2026-08-08 실측). 추론이 z를 **0–64 전체 max**로 접는데 supervision은 **z16–48 기둥뿐** → 무감독 32장에서 잉크·배경 모두 0.6~0.93으로 포화, max가 그걸 끌어올림. 같은 ckpt·같은 픽셀에서 **F1 0.535(전체 z) vs 0.802(z16–48)**. 증상 = **best threshold가 254에 못박힘**. v4 첫 실행은 이걸로 0.4708/0.5122/0.5308이 나왔고 재채점으로 위 표가 됨(체크포인트는 무사, 재학습 불필요). 상세 = `docs/12` "The reduction has to match the supervision".
 - 전체-z 원본 숫자는 `runs/*/validation/`, 유효 숫자는 `runs/*/validation_z16_48/`에 보존. 종합 = `runs/ink_depth_v4_fold_cv_summary_z16_48.json`.

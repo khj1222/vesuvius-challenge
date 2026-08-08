@@ -195,6 +195,52 @@ full-segment prediction TIFF written without it is degraded in exactly the same
 way, so anyone adopting depth-resolved labels needs the pair, not just the
 label.
 
+## The result: the measured band loses
+
+Two arms are trained and scored: `v4`, the per-pixel band measured in
+[`11_measured_3d_labels.md`](11_measured_3d_labels.md), and `v3`, a constant
+band at the segment median (centre 32.47, half-width 4). They differ in the
+label and nothing else — same folds, same held-out voxels, same seed, same
+config, same 20k schedule, both scored over the supervised column.
+
+| fold | `v3` constant | `v4` measured | difference |
+|---|---|---|---|
+| 0 | 0.8455 | 0.7997 | **+0.0458** |
+| 1 | 0.8452 | 0.8192 | **+0.0260** |
+| 2 | 0.8528 | 0.8104 | **+0.0424** |
+| **mean** | **0.8478** | **0.8098** | **+0.0381** |
+| spread | 0.0076 | 0.0195 | |
+
+**The constant band wins on every fold**, by more than the ~0.03 fold-to-fold
+noise floor measured in July. Three things make that hard to argue away:
+
+* **`v3` is remarkably stable** — 0.8452 to 0.8528, a spread of 0.0076, tighter
+  than the July baseline's own 0.0154 across the same three splits.
+* **`v3` reproduces the 2D baseline almost exactly**: 0.8478 against July's
+  0.8472 on the same folds. Depth-resolved targets are not the problem — a flat
+  band placed at the median costs nothing and gains nothing. What costs
+  something is moving that band around per pixel.
+* **The circularity worry cuts the other way.** `v4`'s band was measured from a
+  model trained on the depthless annotation, so any self-distillation effect
+  should have flattered `v4`. It lost anyway.
+
+Nor is this a stopping artifact. Over the last 3,000 steps both arms gain about
+the same small amount — `v3` +0.0075 on average, `v4` +0.0068 — while the gap
+between them is 0.0381, five times larger.
+
+So on this segment, the premise behind villa
+[#192](https://github.com/ScrollPrize/villa/issues/192) — that a more accurate
+3D ink label should train a better model — is **not supported** by a band
+measured this way. That is a negative result, and it is worth exactly as much as
+a positive one would have been: the claim had gone fifteen months without a
+number attached, and now it has three.
+
+What it does *not* say is that #192 is wrong. It says this particular route to a
+3D label — per-pixel depth read out of a 2D-trained model, with FWHM widths and
+a median filter — does not beat putting the band in one place and leaving it
+there. A band measured some other way, or on a segment whose sheet wanders more
+than this one, could still win. The harness is now set up to check that in a day.
+
 ## Reproduce
 
 ```bash
@@ -223,20 +269,21 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3 --config configs/ink_depth_v4
 
 ## What this does not settle
 
-* **Only one arm has been run.** `v4` is trained and scored across 3 folds
-  (mean F1 0.8098); `v3` and `v2` are not. One arm on its own says nothing about
-  label quality — the number that matters is `v4 − v3`, against a ~0.03 noise
-  floor, and it does not exist yet.
-* **`v4` is not being compared to July's 0.8472.** That baseline is a different
-  training mode (2D targets, in-network z projection) on `v1` labels, so the
-  0.037 gap between them mixes the label change with the mode change. Only the
-  arms, which differ in the label alone, can separate the two.
-* **Circularity is unchanged.** The `v4` band comes from a model trained on the
-  depthless annotation. `v3` is the control that can catch it, not a proof that
-  there is nothing to catch.
-* **±16 is a judgement call**, informed by the contrast measurement but not
-  derived from it.
-* **One segment, one checkpoint**, as everywhere else in this repo.
+* **`v2` has not been run.** The plane arm is a reference point rather than a
+  control — at 1.00 label voxel per pixel against 8.00, its positive rate is
+  0.7% where the other two sit at 5.5%, so a Dice+BCE loss sees a different
+  class balance and not just a different geometry. It would say something about
+  how much depth supervision is worth at all; it cannot sharpen `v4 − v3`.
+* **One segment, three folds, one seed per fold.** The three splits share the
+  same 15 annotated regions, so they are not independent samples of "papyrus" —
+  they are three ways of cutting one letter set. Seed variance within a fold was
+  never measured; the ~0.03 noise floor comes from split variance alone.
+* **±16 is a judgement call**, and it bounds both arms. A wider column would
+  give `v4`'s deeper bands more room and might change the ranking.
+* **Circularity was never resolved, only rendered harmless.** The `v4` band
+  still comes from a model trained on the depthless annotation. `v3` was the
+  control that could have caught a self-distillation effect; it did not need to,
+  because `v4` lost. Had `v4` won, this caveat would have been the headline.
 
 ---
 
