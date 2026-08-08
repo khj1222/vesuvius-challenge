@@ -110,6 +110,24 @@ on a segment whose sheet is fairly flat. A band measured some other way, or a
 segment with more wander, could still win. The harness now runs that comparison in
 a day, so it is cheap to check.
 
+As far as I can tell this is the first time anyone has reported *training* on 3D
+ink labels and scoring the result: #923 was explicitly a sketch, and #1295 was
+closed for want of validated depths — both proposed a way to make the labels,
+neither measured a model trained on them. So the useful part of a negative result
+here may be the yardstick rather than the verdict.
+
+One measurement may help whoever picks this up next. #1295 places the band using
+CT brightness, which is the natural thing to reach for. Before building the `v4`
+band I checked how well a single voxel's brightness separates ink from background
+on this segment with no model in the loop
+([docs/10](https://github.com/khj1222/vesuvius-challenge/blob/main/docs/10_depth_localization.md)):
+per-slice AUC peaks at **0.546** at z24 and never exceeds 0.55 anywhere in the
+volume. Brightness does carry real signal — its peak sits in the same z range as
+the model's own evidence, which is why I trust both measurements — but it is far
+too weak to threshold a label out of on its own. Below z40 there is also a strong
+*negative* drift, ink darker than background, which reads as surface geometry
+rather than ink and is exactly what a brightness rule would happily label.
+
 Limits worth stating: one segment, three folds that share the same 15 annotated
 regions, one seed per fold, and ±16 as a judgement call that bounds all three arms.
 `v2` is not a clean control either — its tie with `v3` shows thickness does not
