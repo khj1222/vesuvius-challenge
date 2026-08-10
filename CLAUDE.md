@@ -71,7 +71,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 
 1. ✅ **#192 결과 코멘트 게시 완료(2026-08-09, 사용자 직접)** — 본문 원본 = `submission/issue192_comment.md`. **반응 오면 방향 결정 필요**(아래 3번).
 2. ✅ **PR #1234 리뷰 반영 + 회신 게시 완료(2026-08-09)** — 커밋 `fc6d9a7`, 회신 본문 = `submission/pr1234_reply.md`. **머지 충돌 없음, CI 4/5 통과**(실패한 Vercel은 외부 기여자 배포에 팀 승인이 필요한 항목이라 코드와 무관). erdpx 응답 대기. ⚠️ PR 제목·본문은 여전히 **구버전 구현을 설명**(“zarr에서 레벨을 다시 읽는다”) — 사용자가 수정 안 하기로 결정(2026-08-09), 회신 코멘트가 실제 구현을 설명하므로 실무상 문제 없음.
-3. 🟡 **`flat_depth_targets` PR** — 패치 = `submission/villa-flat-depth-targets.patch`. #192 코멘트에서 *"원하면 PR로 열겠다"*고 명시했으므로 **메인테이너가 원한다고 답하면 즉시 열 것**. 무응답이면 8월 제출 직전에 열어도 됨(제출물에 "PR 제출됨"이 있는 편이 낫다).
+3. 🟡 **`flat_depth_targets` PR** — 패치 = `submission/villa-flat-depth-targets.patch`, **제목·본문·제출 절차 초안 = `submission/villa-pr-flat-depth-targets.md`(2026-08-10 작성)**. #192 코멘트에서 *"원하면 PR로 열겠다"*고 명시했으므로 **메인테이너가 원한다고 답하면 즉시, 무응답이면 ~08-24에 선제로 열 것**(CI·리뷰 여유). ⚠️ 패치는 `git diff` 포맷이라 `git am` 불가(`git apply`+수동 커밋) — 절차는 초안 파일에.
 4. 🟢 **8월 제출 문안** (마감 8/31 23:59 PT). 7월 답변 7칸 구조 = `submission/2026-07_progress_prize.md` 참고. 재료: 3 arm 음의 결과 + z 환원 함정 + `flat_depth_targets` 경로 + #1234 머지 진행 + 7월 수상 연속성.
 
 **#192 니치 상황(2026-08-09 조사)**: 선행 시도 2건 모두 닫힘 — [#923](https://github.com/ScrollPrize/villa/pull/923)(jonmarrs, 5월, 자칭 sketch, 하류 평가 없음) · [#1295](https://github.com/ScrollPrize/villa/pull/1295)(williamshermer-pixel, **2026-08-06 erdpx가 닫음** — 28쌍 중 2쌍만 제출 + 깊이 독립 검증 없음, CT 밝기로 밴드 배치). **둘 다 라벨 생성법만 냈고 학습해서 재보진 않음** → 우리 기여의 차별점이 "검증"이라는 게 확인됨. erdpx가 #1295에 요구한 게 정확히 "독립 검증된 깊이".

@@ -13,7 +13,8 @@ The checkbox needs a PR. Three candidates, in order of preference:
 
 1. **`flat_depth_targets` upstream PR** — the villa-side change this round's experiment
    required (`train.py`, `infer.py`, `test_train.py`;
-   `submission/villa-flat-depth-targets.patch`, against `merge-ink-pipelines`). Best fit:
+   `submission/villa-flat-depth-targets.patch`, against `merge-ink-pipelines`).
+   **Title, body and submit procedure are pre-drafted: [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md).** Best fit:
    it is *this round's* contribution, and without it nobody can run a label-depth experiment
    in flat mode at all. The #192 comment already offered it — **open it if a maintainer says
    yes; if there is still no reply by ~2026-08-24, open it unprompted** so CI and a possible
