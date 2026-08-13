@@ -1,9 +1,11 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: branch pushed, NOT opened (2026-08-13).** The branch is ready — opening is one
-click. Open it when either trigger fires:
-- a maintainer answers the offer in the [#192 comment](https://github.com/ScrollPrize/villa/issues/192), or
-- there is still no reply by **~2026-08-24** (CI + a review round need lead time before the 08-31 deadline).
+**Status: ✅ OPENED as [#1434](https://github.com/ScrollPrize/villa/pull/1434) (2026-08-13,
+by the user).** Verified after opening: base `merge-ink-pipelines`, 3 files +129 −13,
+mergeable; Vercel bot pending team authorization (same code-unrelated check as #1234).
+Awaiting review. Keep the `D:/vw2` worktree until the PR is resolved — it holds the
+committed branch, and review fixes get committed and pushed from there
+(`git -C D:/vw2 ...`, push to `fork`). The title/body below are the as-submitted archive.
 
 **Branch:** `khj1222:feat/flat-depth-targets`, commit `8515746`, pushed 2026-08-13.
 **Open at:** https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets
@@ -32,7 +34,7 @@ version; the committed branch in `D:/vw2` is the source of truth now.
 
 ---
 
-## Remaining before opening
+## Pre-open checklist (historical — the PR is open)
 
 1. **Optional: one GPU smoke on the rebased branch** — deferred 2026-08-13 (user compute job
    held ~27/32 GB VRAM). Largely superseded the same day by a CPU functional check on the

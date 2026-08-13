@@ -2,35 +2,22 @@
 
 **Form:** https://forms.gle/xoF5C3QsYutKP97x7
 **Deadline:** 2026-08-31 23:59 PT
-**Status:** final draft v3 (2026-08-13 — upstream re-checked: no reply/reaction on the #192
-comment, #1234, or #1231 as of 08-13, so the framing stands; every field-5 number re-verified
-against `runs/*cv_summary*.json`; the flat_depth_targets branch is rebased, tested, and
-pushed — opening the PR is one click). Not submitted.
-**Order matters:** the form has a required "Pull request submitted!" checkbox, so settle step 1 first.
+**Status:** READY TO SUBMIT (2026-08-13 — text final; PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
+opened by the user and its URL swapped into fields 4 and 5, so the required checkbox is
+satisfied). Not submitted yet. Only remaining edit: if #1234 merges before submission day,
+relabel it in field 4 (see notes).
 
 ---
 
-## Step 1 — the pull request ⚠️ one click left
+## Step 1 — the pull request ✅ done
 
-The checkbox needs a PR. Three candidates, in order of preference:
-
-1. **`flat_depth_targets` upstream PR — READY, not yet opened.** Branch
-   `khj1222:feat/flat-depth-targets` (commit `8515746`) was rebased onto the current
-   `merge-ink-pipelines` tip (`33c463e`), unit-tested (7 passed), and pushed 2026-08-13.
-   **Open it here:** https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets
-   — title and body are in [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md)
-   (an optional pre-open GPU smoke is listed there too). Best fit: it is *this round's*
-   contribution, and without it nobody can run a label-depth experiment in flat mode at all.
-   The #192 comment already offered it — **open it if a maintainer says yes; if there is
-   still no reply by ~2026-08-24, open it unprompted** so CI and a possible review round
-   have lead time before 08-31. Opening earlier is now costless and buys review time;
-   upstream is actively reworking `infer.py` (the rebase already had to absorb one round of
-   it), so sitting on the branch risks another conflict cycle.
-2. **[#1234](https://github.com/ScrollPrize/villa/pull/1234)** — open, review addressed
-   2026-08-09, no conflicts. Counts, but it was July's PR.
-3. **Community-projects entry update** — extend the `#### ⚙️ Tools` line added by
-   [#1249](https://github.com/ScrollPrize/villa/pull/1249) (merged 2026-07-31) to mention the
-   depth-label comparison. Cheap and always available as a fallback.
+**[#1434](https://github.com/ScrollPrize/villa/pull/1434) opened 2026-08-13** — *this
+round's* PR: `flat_depth_targets` (base `merge-ink-pipelines`, 3 files +129 −13, mergeable;
+title/body archive = [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md)).
+Vercel bot pending team authorization, same code-unrelated check as on #1234.
+Also open: [#1234](https://github.com/ScrollPrize/villa/pull/1234) (July's PR, review
+addressed 2026-08-09). Fallback never needed: community-projects entry update on top of
+merged [#1249](https://github.com/ScrollPrize/villa/pull/1249).
 
 ---
 
@@ -58,7 +45,7 @@ Result writeup: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/12_
 How the depth was measured: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/10_depth_localization.md
 How the 3D label was built: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/11_measured_3d_labels.md
 Reported upstream on the issue it answers: https://github.com/ScrollPrize/villa/issues/192
-Upstream PR (this round, flat_depth_targets): <FILL IN once opened — see step 1>
+Upstream PR (this round, flat_depth_targets): https://github.com/ScrollPrize/villa/pull/1434
 Upstream PR (review addressed): https://github.com/ScrollPrize/villa/pull/1234
 Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
 Community projects listing (merged): https://github.com/ScrollPrize/villa/pull/1249
@@ -106,8 +93,8 @@ failure.
 Everything is MIT and documented end to end (docs/10–12 in the repo). The result went
 upstream to #192 as soon as the matrix finished rather than waiting for this form, the
 harness it stands on has been on the scrollprize.org community tools list since #1249
-merged, and the villa-side change is one config-gated patch that leaves existing paths
-untouched.
+merged, and the villa-side change is one config-gated patch, submitted upstream as PR
+#1434, that leaves existing paths untouched.
 ```
 
 **6. Pull Request Submission** → check "Pull request submitted!" (see step 1)
@@ -140,14 +127,10 @@ reproduced in `docs/12_depth_training.md`.)
 
 ## Notes for whoever finalises this
 
-* **Pre-submit swaps, in order** (the text is otherwise final):
-  1. Open the `flat_depth_targets` PR (step 1) and put its URL into field 4's
-     `<FILL IN>` line.
-  2. Optionally update field 5's closing sentence "the villa-side change is one
-     config-gated patch that leaves existing paths untouched" to "…is one config-gated
-     patch, submitted upstream as a PR, that leaves existing paths untouched".
+* **Pre-submit swaps** — 1 and 2 done 2026-08-13 (PR #1434 in fields 4 and 5). Remaining:
   3. If [#1234](https://github.com/ScrollPrize/villa/pull/1234) has merged by submission
-     day, change its field-4 label from "review addressed" to "merged".
+     day, change its field-4 label from "review addressed" to "merged". Same for #1434
+     if it moves (reviewed/merged) before the form goes in.
   4. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
 * **Update if #192 gets a reply.** If a maintainer says the `flat_depth_targets` route is

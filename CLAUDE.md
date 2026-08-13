@@ -67,12 +67,12 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 
 ### ▶ 다음 세션 재개 지점 (2026-08-13 갱신)
 
-**8월 제출 문안 = 최종본(v3). 남은 건 ①PR 열기(원클릭) ②폼 제출 ③반응 대응.**
+**8월 제출 = 폼 제출만 남음(문안 최종, PR 열림). 마감 8/31 23:59 PT.**
 
 1. ✅ **#192 결과 코멘트 게시 완료(2026-08-09, 사용자 직접)** — 본문 원본 = `submission/issue192_comment.md`. **2026-08-13 재확인: 답변·리액션 0.** 반응 오면 방향 결정 필요(아래 3번).
 2. ✅ **PR #1234 리뷰 반영 + 회신 게시 완료(2026-08-09)** — 커밋 `fc6d9a7`, 회신 본문 = `submission/pr1234_reply.md`. **2026-08-13 재확인: erdpx 무응답, 여전히 open.** ⚠️ PR 제목·본문은 여전히 **구버전 구현을 설명**(“zarr에서 레벨을 다시 읽는다”) — 사용자가 수정 안 하기로 결정(2026-08-09), 회신 코멘트가 실제 구현을 설명하므로 실무상 문제 없음.
-3. 🟡 **`flat_depth_targets` PR — 브랜치 준비 완료(2026-08-13), 여는 것만 남음.** `khj1222:feat/flat-depth-targets`(커밋 `8515746`)를 업스트림 새 tip `33c463e`에 **리베이스 + 충돌 3곳 해소 + 유닛테스트 7 passed** 후 푸시함. 열기 = https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets (제목·본문 = `submission/villa-pr-flat-depth-targets.md`). **메인테이너가 원한다고 답하면 즉시, 무응답이면 ~08-24에 선제로**(업스트림이 infer.py를 활발히 고치는 중이라 묵히면 또 충돌 남 — 리베이스에서 이미 한 번 흡수함: overlap 0.5·hann·`--stride`/`--blend-mode`·점유율 스킵). 선택: 열기 전 GPU 스모크 1회(절차·명령 = 초안 파일, 08-13엔 사용자 컴퓨트 작업이 GPU 점유 중이라 보류). 워크트리 `D:/vw2`는 PR 열 때까지 유지.
-4. 🟢 **8월 제출 문안 = 최종 v3(2026-08-13)**: 수치 전수 검증(runs JSON 대조) + 업스트림 무반응 확인 반영. 남은 건 제출 직전 스왑 4개(PR URL 기입 등, 파일 하단 "Pre-submit swaps" 절) 뿐. 마감 8/31 23:59 PT.
+3. ✅ **`flat_depth_targets` PR 열림(2026-08-13, 사용자 직접)**: https://github.com/ScrollPrize/villa/pull/1434 — base `merge-ink-pipelines`, 3파일 +129 −13, mergeable(Vercel 봇은 팀 승인 대기 = #1234와 동일한 코드 무관 항목). 리뷰 대기. 브랜치 `khj1222:feat/flat-depth-targets`(`8515746`) = 업스트림 tip `33c463e` 리베이스 + 충돌 3곳 해소 + 유닛테스트 7 passed + CPU 기능검증(z-window가 창 밖 노이즈 무시하는 것까지 더미로 실행 확인). **리뷰 수정은 워크트리 `D:/vw2`에서 커밋 → `git -C D:/vw2 push fork`** — PR 해소 전까지 D:/vw2 유지. 선택 사항이던 GPU 스모크는 CPU 검증으로 대체됨(남은 GPU 전용 = zarr 읽기·ckpt 로딩·CUDA, 충돌과 무관). ⚠️ vw2에서 테스트 돌릴 땐 `cd D:/vw2/ink-detection && uv run --project <external env> --no-sync ...` (`--directory`는 cwd를 옮겨 엉뚱한 트리 import).
+4. 🟢 **8월 제출 = 폼 제출만 남음(2026-08-13)**: 문안 최종, PR #1434가 4·5번 칸에 반영됨, 체크박스 요건 충족. 제출 직전 확인 1개 = #1234/#1434가 그새 머지·리뷰됐으면 라벨 갱신(파일 하단 notes). **제출 권장 시점 = ~08-24~27**(리뷰/머지가 오면 문안이 더 강해짐; 그 전에 반응 없어도 그대로 제출).
 
 **#192 니치 상황(2026-08-09 조사)**: 선행 시도 2건 모두 닫힘 — [#923](https://github.com/ScrollPrize/villa/pull/923)(jonmarrs, 5월, 자칭 sketch, 하류 평가 없음) · [#1295](https://github.com/ScrollPrize/villa/pull/1295)(williamshermer-pixel, **2026-08-06 erdpx가 닫음** — 28쌍 중 2쌍만 제출 + 깊이 독립 검증 없음, CT 밝기로 밴드 배치). **둘 다 라벨 생성법만 냈고 학습해서 재보진 않음** → 우리 기여의 차별점이 "검증"이라는 게 확인됨. erdpx가 #1295에 요구한 게 정확히 "독립 검증된 깊이".
 
