@@ -34,8 +34,16 @@ version; the committed branch in `D:/vw2` is the source of truth now.
 
 ## Remaining before opening
 
-1. **Optional but recommended: one GPU smoke on the rebased branch** — deferred 2026-08-13
-   because a user compute job held ~27/32 GB VRAM. When the GPU is free, from `D:/vw2/ink-detection`:
+1. **Optional: one GPU smoke on the rebased branch** — deferred 2026-08-13 (user compute job
+   held ~27/32 GB VRAM). Largely superseded the same day by a CPU functional check on the
+   ported tree (scratchpad `cpu_wrapper_check.py`, `CPU_WRAPPER_CHECK_OK`): windowed max
+   picks the in-window ink over louder out-of-window noise, default full-volume max
+   reproduces the documented failure mode, mean reduction correct, 2D models pass through
+   untouched, and `input_pad_depth_to` (upstream) coexists with `z_reduce`/`z_window` (ours)
+   — that constructor was the main merge point. `infer --help` registers both flag sets.
+   What only a GPU run still covers: real zarr reading + checkpoint loading + CUDA, none of
+   which the rebase conflicts touched. **OK to open without it.** If wanted anyway, from
+   `D:/vw2/ink-detection`:
    `uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.inference.infer <abs>/w00_20231016151002/w00_20231016151002.zarr D:/vesuvius-challenge/external/villa/ink-detection/runs/ink_depth_v4_fold0/ckpt_020000.pth <scratch>/smoke.tif --mask-path <abs>/w00_20231016151002/w00_20231016151002_validation_mask.tif --batch-size 4 --no-compile --z-window 16:48`
    (~30 s masked run; exercises the 5D path + z-window on top of upstream's new
    overlap/Hann/occupancy code). Unit tests already pass; this is belt-and-braces.
