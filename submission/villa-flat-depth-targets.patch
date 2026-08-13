@@ -1,8 +1,8 @@
 diff --git a/ink-detection/koine_machines/inference/infer.py b/ink-detection/koine_machines/inference/infer.py
-index 61d59f9..78492a7 100644
+index 5898a15..7690f82 100644
 --- a/ink-detection/koine_machines/inference/infer.py
 +++ b/ink-detection/koine_machines/inference/infer.py
-@@ -59,11 +59,29 @@ class ChunkKey:
+@@ -59,6 +59,12 @@ class ChunkKey:
      col: int
  
  
@@ -13,12 +13,19 @@ index 61d59f9..78492a7 100644
 +
 +
  class TargetHeadWrapper(nn.Module):
--    def __init__(self, model: torch.nn.Module, *, target_name: str):
-+    def __init__(self, model: torch.nn.Module, *, target_name: str, z_reduce: str = "max",
-+                 z_window: tuple[int, int] | None = None):
+     def __init__(
+         self,
+@@ -66,11 +72,24 @@ class TargetHeadWrapper(nn.Module):
+         *,
+         target_name: str,
+         input_pad_depth_to: int | None = None,
++        z_reduce: str = "max",
++        z_window: tuple[int, int] | None = None,
+     ):
          super().__init__()
          self.model = model
          self.target_name = str(target_name)
+         self.input_pad_depth_to = input_pad_depth_to
 +        self.z_reduce = str(z_reduce).strip().lower()
 +        if self.z_reduce not in _Z_REDUCTIONS:
 +            raise ValueError(
@@ -32,8 +39,8 @@ index 61d59f9..78492a7 100644
 +        self.z_window = z_window
  
      def forward(self, x: torch.Tensor) -> torch.Tensor:
-         outputs = self.model(x)
-@@ -81,6 +99,25 @@ class TargetHeadWrapper(nn.Module):
+         from koine_machines.models.input_padding import center_pad_input_depth
+@@ -91,6 +110,25 @@ class TargetHeadWrapper(nn.Module):
              if len(logits) == 0:
                  raise ValueError(f"Target {self.target_name!r} returned an empty logits list")
              logits = logits[0]
@@ -59,7 +66,7 @@ index 61d59f9..78492a7 100644
          return logits
  
  
-@@ -351,6 +388,26 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+@@ -479,6 +517,26 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
              "When multiple GPUs are provided, each inference batch is split across those devices."
          ),
      )
@@ -86,7 +93,7 @@ index 61d59f9..78492a7 100644
      parser.add_argument("--compile-mode", default="reduce-overhead")
      parser.add_argument("--no-compile", dest="compile_model", action="store_false")
      parser.set_defaults(compile_model=True)
-@@ -1155,7 +1212,30 @@ def resolve_amp_dtype(
+@@ -1328,7 +1386,30 @@ def resolve_amp_dtype(
      return checkpoint_amp_dtype(checkpoint_payload, checkpoint_path)
  
  
@@ -116,23 +123,18 @@ index 61d59f9..78492a7 100644
 +    z_window: tuple[int, int] | None = None,
 +) -> ConfiguredModel:
      from koine_machines.models.make_model import make_model
+     from koine_machines.models.input_padding import configured_input_pad_depth
  
-     config = normalize_training_config_for_inference(payload["config"])
-@@ -1175,7 +1255,12 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
-         len(incompat.unexpected_keys),
-     )
- 
--    model = TargetHeadWrapper(base_model, target_name=infer_target_name_from_config(config))
-+    model = TargetHeadWrapper(
-+        base_model,
-+        target_name=infer_target_name_from_config(config),
+@@ -1353,6 +1434,8 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
+         base_model,
+         target_name=infer_target_name_from_config(config),
+         input_pad_depth_to=configured_input_pad_depth(config),
 +        z_reduce=z_reduce,
 +        z_window=z_window,
-+    )
+     )
      model.eval()
      return ConfiguredModel(
-         model=model,
-@@ -1205,7 +1290,12 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
+@@ -1383,7 +1466,12 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
                  "Ignoring --metadata-json for config-backed checkpoint %s; the model will be rebuilt from checkpoint['config'].",
                  args.checkpoint,
              )
@@ -147,19 +149,19 @@ index 61d59f9..78492a7 100644
          return configured_model
      raise ValueError(
 diff --git a/ink-detection/koine_machines/training/tests/test_train.py b/ink-detection/koine_machines/training/tests/test_train.py
-index 1ff1eb9..6c27a2a 100644
+index 01564cc..886841a 100644
 --- a/ink-detection/koine_machines/training/tests/test_train.py
 +++ b/ink-detection/koine_machines/training/tests/test_train.py
-@@ -1,7 +1,7 @@
- import pytest
- 
+@@ -6,7 +6,7 @@ import torch
  from koine_machines.training.train import (
+     _append_jsonl,
+     _benchmark_summary,
 -    _disable_z_projection_for_normal_pooled_3d,
 +    _disable_z_projection_for_volume_targets,
      _full_3d_dilation_distances_for_level,
+     _masked_unsmoothed_bce_with_logits,
  )
- 
-@@ -32,7 +32,7 @@ def test_full_3d_dilation_distances_reject_mixed_volume_scales():
+@@ -82,7 +82,7 @@ def test_full_3d_dilation_distances_reject_mixed_volume_scales():
          _full_3d_dilation_distances_for_level(config)
  
  
@@ -168,7 +170,7 @@ index 1ff1eb9..6c27a2a 100644
      config = {
          "mode": "normal_pooled_3d",
          "model_config": {"z_projection_mode": "logsumexp"},
-@@ -50,7 +50,7 @@ def test_disable_z_projection_for_normal_pooled_3d_forces_projection_off():
+@@ -100,7 +100,7 @@ def test_disable_z_projection_for_normal_pooled_3d_forces_projection_off():
          },
      }
  
@@ -178,10 +180,10 @@ index 1ff1eb9..6c27a2a 100644
      assert config["model_config"]["z_projection_mode"] == "none"
      assert config["targets"]["ink"]["z_projection_mode"] == "none"
 diff --git a/ink-detection/koine_machines/training/train.py b/ink-detection/koine_machines/training/train.py
-index 4e05450..9018f83 100644
+index f7db9e8..48cf2bd 100644
 --- a/ink-detection/koine_machines/training/train.py
 +++ b/ink-detection/koine_machines/training/train.py
-@@ -65,7 +65,19 @@ def _uses_surface_mask_channel(mode):
+@@ -74,7 +74,19 @@ def _uses_surface_mask_channel(mode):
      return str(mode).strip().lower() in {"normal_pooled_3d", _FULL_3D_SINGLE_WRAP_MODE}
  
  
@@ -202,7 +204,7 @@ index 4e05450..9018f83 100644
      config.setdefault('model_config', {})['z_projection_mode'] = 'none'
      for target_info in (config.get('targets') or {}).values():
          if isinstance(target_info, dict):
-@@ -95,7 +107,7 @@ def _full_3d_dilation_distances_for_level(config):
+@@ -104,7 +116,7 @@ def _full_3d_dilation_distances_for_level(config):
      return label_dilation / factor, supervision_dilation / factor
  
  
@@ -211,7 +213,7 @@ index 4e05450..9018f83 100644
      batch: dict,
      preds: torch.Tensor,
      targets: torch.Tensor,
-@@ -103,7 +115,7 @@ def _build_full_3d_preview_batch(
+@@ -112,7 +124,7 @@ def _build_full_3d_preview_batch(
  ) -> tuple[dict, torch.Tensor, torch.Tensor, torch.Tensor]:
      if preds.ndim != 5 or targets.ndim != 5 or ignore_mask.ndim != 5:
          raise ValueError(
@@ -220,7 +222,7 @@ index 4e05450..9018f83 100644
          )
  
      z_index = int(batch['supervision_mask'].shape[-3] // 2)
-@@ -229,6 +241,7 @@ def train(config_path):
+@@ -284,6 +296,7 @@ def train(config_path):
      mode = str(config.get('mode', 'flat')).strip().lower()
      native_3d_mode = _is_native_3d_training_mode(mode)
      normal_pooled_mode = mode == 'normal_pooled_3d'
@@ -228,7 +230,7 @@ index 4e05450..9018f83 100644
      surface_mask_channel = _uses_surface_mask_channel(mode)
      pooling_config = config.get('normal_pooling') or {}
      deep_supervision_enabled = bool(config.get('enable_deep_supervision', False))
-@@ -237,8 +250,10 @@ def train(config_path):
+@@ -293,8 +306,10 @@ def train(config_path):
      if normal_pooled_mode and model_type.startswith('resnet3d'):
          raise ValueError("normal_pooled_3d is currently only supported with the vesuvius_unet model path")
      if native_3d_mode:
@@ -240,7 +242,7 @@ index 4e05450..9018f83 100644
  
      config.setdefault('volume_auth_json', None)
      requested_stitch_factor = int(config.get('stitch_factor', 1))
-@@ -539,6 +554,19 @@ def train(config_path):
+@@ -737,6 +752,19 @@ def train(config_path):
              ignore_mask = (batch['supervision_mask'] <= 0).to(dtype=targets.dtype)
              return preds, targets, ignore_mask
  
@@ -260,7 +262,7 @@ index 4e05450..9018f83 100644
          targets = (torch.amax(batch['inklabels'], dim=2) > 0).to(dtype=batch['inklabels'].dtype)
          supervision_mask = torch.amax(batch['supervision_mask'], dim=2)
          ignore_mask = (supervision_mask <= 0).to(dtype=targets.dtype)
-@@ -675,8 +703,8 @@ def train(config_path):
+@@ -930,8 +958,8 @@ def train(config_path):
              train_preview_targets = targets.detach()
              train_preview_ignore_mask = ignore_mask.detach()
              train_preview_volume_logits = (preds[0] if isinstance(preds, (list, tuple)) else preds).detach() if normal_pooled_mode else None
@@ -271,7 +273,7 @@ index 4e05450..9018f83 100644
                      batch,
                      train_preview_preds,
                      train_preview_targets,
-@@ -802,13 +830,13 @@ def train(config_path):
+@@ -1069,13 +1097,13 @@ def train(config_path):
                          val_preview_targets = val_targets.detach()
                          val_preview_ignore = val_ignore_mask.detach()
                          val_preview_volume_logits = preview_volume_preds.detach() if normal_pooled_mode else None

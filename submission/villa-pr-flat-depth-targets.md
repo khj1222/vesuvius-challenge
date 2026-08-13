@@ -1,43 +1,47 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: NOT opened.** Open it when either trigger fires:
+**Status: branch pushed, NOT opened (2026-08-13).** The branch is ready — opening is one
+click. Open it when either trigger fires:
 - a maintainer answers the offer in the [#192 comment](https://github.com/ScrollPrize/villa/issues/192), or
 - there is still no reply by **~2026-08-24** (CI + a review round need lead time before the 08-31 deadline).
 
-**Patch:** [`villa-flat-depth-targets.patch`](villa-flat-depth-targets.patch) — 3 files, +133 −15
-(`infer.py` +98, `train.py` +44, `test_train.py` +6). Regenerated 2026-08-08, includes `--z-window`.
-⚠️ Plain `git diff` format — `git apply`, **not** `git am` (unlike the #1234 patch).
-**Base branch: `merge-ink-pipelines`** — not `main`. `ink-detection/koine_machines/` does not
-exist on `main` (404); opening against `main` produces a spurious 231-file diff (#1234 made
-this mistake once).
-**Suggested branch:** `feat/flat-depth-targets`
+**Branch:** `khj1222:feat/flat-depth-targets`, commit `8515746`, pushed 2026-08-13.
+**Open at:** https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets
+(base **`merge-ink-pipelines`** — not `main`: `ink-detection/koine_machines/` is 404 on `main`,
+and a wrong base produces a spurious 231-file diff, as #1234 briefly did).
+Title/body below; **the user opens it on the web** (Claude has no `gh`/GitHub auth).
+
+**Rebased 2026-08-13** onto upstream tip `33c463e`. Upstream had reworked `infer.py`
+(default overlap 0.25→0.5, Hann blending, `--stride`/`--blend-mode`, per-patch occupancy
+skip, input depth padding, preprocessing selection) and extended `test_train.py`. Three
+conflicts, all clean unions (both sides kept): `TargetHeadWrapper.__init__` gains
+`input_pad_depth_to` (theirs) *and* `z_reduce`/`z_window` (ours); its construction site
+passes all three kwargs; the test-file import block merges their new imports with our
+rename. **Verified: `py_compile` on all 3 files + unit tests 7 passed** (upstream added 3
+tests to the base's 4) — run against the ported tree via
+`cd D:/vw2/ink-detection && uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m pytest koine_machines/training/tests/test_train.py`
+(⚠️ `--project`, not `--directory` — `--directory` moves cwd and imports the wrong tree).
+
+**Patch:** [`villa-flat-depth-targets.patch`](villa-flat-depth-targets.patch) — 3 files, +129 −13.
+Regenerated 2026-08-13 from the rebased commit (`git diff origin/merge-ink-pipelines..HEAD` in
+`D:/vw2`). Still plain `git diff` format — `git apply`, **not** `git am`. The copy applied to
+the `external/villa` working tree (uncommitted, on the #1234 branch) is the **pre-rebase**
+version; the committed branch in `D:/vw2` is the source of truth now.
+
 **Follows up:** the "happy to open it as a PR" offer at the end of `submission/issue192_comment.md`.
 
 ---
 
-## How to submit
+## Remaining before opening
 
-⚠️ Do **not** commit from `D:/vesuvius-challenge/external/villa` — that worktree sits on
-`fix/stream-untiled-label-images` (PR #1234) with these same changes applied **uncommitted**
-on top. Committing there would entangle the two PRs. Cut a fresh sparse worktree instead
-(short path — long paths fail with `Filename too long`):
-
-```bash
-cd D:/vesuvius-challenge/external/villa
-git worktree add --no-checkout -b feat/flat-depth-targets D:/vw2 merge-ink-pipelines
-cd D:/vw2
-git sparse-checkout set --cone ink-detection
-git checkout
-git apply --check D:/vesuvius-challenge/submission/villa-flat-depth-targets.patch
-git apply D:/vesuvius-challenge/submission/villa-flat-depth-targets.patch
-git add ink-detection/koine_machines
-git commit -m "train: keep label depth in the flat-mode loss behind flat_depth_targets"
-git push fork feat/flat-depth-targets
-```
-
-Claude can run everything above (push works via GCM); **opening the PR itself is done by the
-user on the web**: base = `merge-ink-pipelines`, compare = `khj1222:feat/flat-depth-targets`.
-Afterwards: `git -C D:/vesuvius-challenge/external/villa worktree remove D:/vw2`.
+1. **Optional but recommended: one GPU smoke on the rebased branch** — deferred 2026-08-13
+   because a user compute job held ~27/32 GB VRAM. When the GPU is free, from `D:/vw2/ink-detection`:
+   `uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.inference.infer <abs>/w00_20231016151002/w00_20231016151002.zarr D:/vesuvius-challenge/external/villa/ink-detection/runs/ink_depth_v4_fold0/ckpt_020000.pth <scratch>/smoke.tif --mask-path <abs>/w00_20231016151002/w00_20231016151002_validation_mask.tif --batch-size 4 --no-compile --z-window 16:48`
+   (~30 s masked run; exercises the 5D path + z-window on top of upstream's new
+   overlap/Hann/occupancy code). Unit tests already pass; this is belt-and-braces.
+2. User opens the PR at the compare URL above with the title/body below.
+3. After the PR is open: `git -C D:/vesuvius-challenge/external/villa worktree remove D:/vw2`
+   (keep `D:/vw2` until then — it is the committed branch and the place to run the smoke).
 
 ---
 
@@ -87,8 +91,8 @@ same way.
 
 ### Verification
 
-- Unit tests pass (`uv run pytest koine_machines/training/tests/test_train.py`, 4 passed);
-  the projection-gating tests are extended to cover the new flag.
+- Unit tests pass (`uv run pytest koine_machines/training/tests/test_train.py`, 7 passed on
+  the current branch tip); the projection-gating tests are extended to cover the new flag.
 - Default-off path unchanged: a config without the key takes the existing `amax` branch.
 - End-to-end: this path trained a 3-arm × 3-fold label-geometry matrix on
   `w00_20231016151002` (reported in #192). A constant 8-voxel band trained through it

@@ -65,14 +65,14 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)** → ✅ **4단계 9런 매트릭스(2026-08-09)**. 각각 `docs/10` · `docs/11` · `docs/12`. **실험은 끝났고 결과는 음의 결과** — 아래 "매트릭스 완료" 절.
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
-### ▶ 다음 세션 재개 지점 (2026-08-09 갱신)
+### ▶ 다음 세션 재개 지점 (2026-08-13 갱신)
 
-**실험 끝, 업스트림 게시도 끝. 남은 건 8월 제출 문안 + 반응 대응.**
+**8월 제출 문안 = 최종본(v3). 남은 건 ①PR 열기(원클릭) ②폼 제출 ③반응 대응.**
 
-1. ✅ **#192 결과 코멘트 게시 완료(2026-08-09, 사용자 직접)** — 본문 원본 = `submission/issue192_comment.md`. **반응 오면 방향 결정 필요**(아래 3번).
-2. ✅ **PR #1234 리뷰 반영 + 회신 게시 완료(2026-08-09)** — 커밋 `fc6d9a7`, 회신 본문 = `submission/pr1234_reply.md`. **머지 충돌 없음, CI 4/5 통과**(실패한 Vercel은 외부 기여자 배포에 팀 승인이 필요한 항목이라 코드와 무관). erdpx 응답 대기. ⚠️ PR 제목·본문은 여전히 **구버전 구현을 설명**(“zarr에서 레벨을 다시 읽는다”) — 사용자가 수정 안 하기로 결정(2026-08-09), 회신 코멘트가 실제 구현을 설명하므로 실무상 문제 없음.
-3. 🟡 **`flat_depth_targets` PR** — 패치 = `submission/villa-flat-depth-targets.patch`, **제목·본문·제출 절차 초안 = `submission/villa-pr-flat-depth-targets.md`(2026-08-10 작성)**. #192 코멘트에서 *"원하면 PR로 열겠다"*고 명시했으므로 **메인테이너가 원한다고 답하면 즉시, 무응답이면 ~08-24에 선제로 열 것**(CI·리뷰 여유). ⚠️ 패치는 `git diff` 포맷이라 `git am` 불가(`git apply`+수동 커밋) — 절차는 초안 파일에.
-4. 🟢 **8월 제출 문안** (마감 8/31 23:59 PT). 7월 답변 7칸 구조 = `submission/2026-07_progress_prize.md` 참고. 재료: 3 arm 음의 결과 + z 환원 함정 + `flat_depth_targets` 경로 + #1234 머지 진행 + 7월 수상 연속성.
+1. ✅ **#192 결과 코멘트 게시 완료(2026-08-09, 사용자 직접)** — 본문 원본 = `submission/issue192_comment.md`. **2026-08-13 재확인: 답변·리액션 0.** 반응 오면 방향 결정 필요(아래 3번).
+2. ✅ **PR #1234 리뷰 반영 + 회신 게시 완료(2026-08-09)** — 커밋 `fc6d9a7`, 회신 본문 = `submission/pr1234_reply.md`. **2026-08-13 재확인: erdpx 무응답, 여전히 open.** ⚠️ PR 제목·본문은 여전히 **구버전 구현을 설명**(“zarr에서 레벨을 다시 읽는다”) — 사용자가 수정 안 하기로 결정(2026-08-09), 회신 코멘트가 실제 구현을 설명하므로 실무상 문제 없음.
+3. 🟡 **`flat_depth_targets` PR — 브랜치 준비 완료(2026-08-13), 여는 것만 남음.** `khj1222:feat/flat-depth-targets`(커밋 `8515746`)를 업스트림 새 tip `33c463e`에 **리베이스 + 충돌 3곳 해소 + 유닛테스트 7 passed** 후 푸시함. 열기 = https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets (제목·본문 = `submission/villa-pr-flat-depth-targets.md`). **메인테이너가 원한다고 답하면 즉시, 무응답이면 ~08-24에 선제로**(업스트림이 infer.py를 활발히 고치는 중이라 묵히면 또 충돌 남 — 리베이스에서 이미 한 번 흡수함: overlap 0.5·hann·`--stride`/`--blend-mode`·점유율 스킵). 선택: 열기 전 GPU 스모크 1회(절차·명령 = 초안 파일, 08-13엔 사용자 컴퓨트 작업이 GPU 점유 중이라 보류). 워크트리 `D:/vw2`는 PR 열 때까지 유지.
+4. 🟢 **8월 제출 문안 = 최종 v3(2026-08-13)**: 수치 전수 검증(runs JSON 대조) + 업스트림 무반응 확인 반영. 남은 건 제출 직전 스왑 4개(PR URL 기입 등, 파일 하단 "Pre-submit swaps" 절) 뿐. 마감 8/31 23:59 PT.
 
 **#192 니치 상황(2026-08-09 조사)**: 선행 시도 2건 모두 닫힘 — [#923](https://github.com/ScrollPrize/villa/pull/923)(jonmarrs, 5월, 자칭 sketch, 하류 평가 없음) · [#1295](https://github.com/ScrollPrize/villa/pull/1295)(williamshermer-pixel, **2026-08-06 erdpx가 닫음** — 28쌍 중 2쌍만 제출 + 깊이 독립 검증 없음, CT 밝기로 밴드 배치). **둘 다 라벨 생성법만 냈고 학습해서 재보진 않음** → 우리 기여의 차별점이 "검증"이라는 게 확인됨. erdpx가 #1295에 요구한 게 정확히 "독립 검증된 깊이".
 
@@ -109,7 +109,7 @@ uv run --project external/villa/ink-detection python tools/run_cv_folds.py data/
 - **디스크**: 9런 합계 ~195GB 소비(ckpt 1.08GB × 20 × 9). 2026-08-09 시점 D 여유 ~520GB.
 - ⚠️ `save_every`를 늘려 디스크를 아끼지 말 것 — 최적 step이 17000~20000에 걸쳐 있다.
 - ⚠️ **GPU 경합 주의**: 게임 클라이언트 등이 떠 있으면 3.0 → 1.1 it/s로 3배 느려진다(결과엔 무영향, 시간만). fold 0(v3)만 210분, 나머지는 105~125분.
-- ⚠️ **villa 쪽 변경이 아직 `fix/stream-untiled-label-images` 브랜치에 미커밋 상태로 얹혀 있음**(train.py·infer.py·test_train.py). PR 낼 땐 `merge-ink-pipelines`에서 새 브랜치를 따고 `submission/villa-flat-depth-targets.patch`를 적용할 것. 패치는 z-window 포함해 2026-08-08 재생성됨.
+- ⚠️ **`external/villa` 작업트리의 미커밋 변경(train.py·infer.py·test_train.py)은 리베이스 전 구버전** — 커밋된 정본은 워크트리 `D:/vw2`의 `feat/flat-depth-targets`(`8515746`, 2026-08-13 푸시됨). `submission/villa-flat-depth-targets.patch`도 리베이스 후 버전으로 재생성됨(+129 −13). external/villa 쪽은 로컬 재실행용으로만 유효.
 
 ## 깊이 국소화 프로토타입 (2026-07-27, 8월 트랙 1주차)
 
