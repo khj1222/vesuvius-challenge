@@ -2,10 +2,11 @@
 
 **Form:** https://forms.gle/xoF5C3QsYutKP97x7
 **Deadline:** 2026-08-31 23:59 PT
-**Status:** READY TO SUBMIT (2026-08-13 — text final; PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
+**Status:** READY TO SUBMIT (2026-08-14 — text final; PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
 opened by the user and its URL swapped into fields 4 and 5, so the required checkbox is
-satisfied). Not submitted yet. Only remaining edit: if #1234 merges before submission day,
-relabel it in field 4 (see notes).
+satisfied; [#1234](https://github.com/ScrollPrize/villa/pull/1234) **merged 2026-08-14**
+and relabelled in field 4). Not submitted yet. Remaining pre-submit check: relabel #1434
+if it moves before submission day (see notes).
 
 ---
 
@@ -15,9 +16,10 @@ relabel it in field 4 (see notes).
 round's* PR: `flat_depth_targets` (base `merge-ink-pipelines`, 3 files +129 −13, mergeable;
 title/body archive = [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md)).
 Vercel bot pending team authorization, same code-unrelated check as on #1234.
-Also open: [#1234](https://github.com/ScrollPrize/villa/pull/1234) (July's PR, review
-addressed 2026-08-09). Fallback never needed: community-projects entry update on top of
-merged [#1249](https://github.com/ScrollPrize/villa/pull/1249).
+Also: [#1234](https://github.com/ScrollPrize/villa/pull/1234) (July's PR, review addressed
+2026-08-09) **merged by erdpx on 2026-08-14** — second merged upstream PR after
+[#1249](https://github.com/ScrollPrize/villa/pull/1249). Fallback never needed:
+community-projects entry update on top of merged #1249.
 
 ---
 
@@ -46,7 +48,7 @@ How the depth was measured: https://github.com/khj1222/vesuvius-challenge/blob/m
 How the 3D label was built: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/11_measured_3d_labels.md
 Reported upstream on the issue it answers: https://github.com/ScrollPrize/villa/issues/192
 Upstream PR (this round, flat_depth_targets): https://github.com/ScrollPrize/villa/pull/1434
-Upstream PR (review addressed): https://github.com/ScrollPrize/villa/pull/1234
+Upstream PR (merged 2026-08-14): https://github.com/ScrollPrize/villa/pull/1234
 Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
 Community projects listing (merged): https://github.com/ScrollPrize/villa/pull/1249
 ```
@@ -127,15 +129,22 @@ reproduced in `docs/12_depth_training.md`.)
 
 ## Notes for whoever finalises this
 
-* **Pre-submit swaps** — 1 and 2 done 2026-08-13 (PR #1434 in fields 4 and 5). Remaining:
-  3. If [#1234](https://github.com/ScrollPrize/villa/pull/1234) has merged by submission
-     day, change its field-4 label from "review addressed" to "merged". Same for #1434
-     if it moves (reviewed/merged) before the form goes in.
-  4. Tick the checkbox, submit, then sync this file to match what was actually sent
+* **Pre-submit swaps** — 1 and 2 done 2026-08-13 (PR #1434 in fields 4 and 5); 3 done
+  2026-08-14 ([#1234](https://github.com/ScrollPrize/villa/pull/1234) merged by erdpx,
+  field-4 label changed to "merged"). Remaining:
+  4. If #1434 moves (reviewed/merged) before the form goes in, relabel it the same way.
+  5. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
 * **Update if #192 gets a reply.** If a maintainer says the `flat_depth_targets` route is
   wanted, say so in field 5 and open the PR. If they say internal 3D labels already exist,
   the framing in the first paragraph has to change.
+  * 2026-08-13 activity so far changes nothing in the text: stantheman0128 (not a
+    maintainer) offered independent D/FWHM scoring of our v4 band against the 1.129um
+    scan (reply draft = [`issue192_reply_stantheman.md`](issue192_reply_stantheman.md));
+    pmh47 pushed back on their method. If their scoring of our band produces a result
+    before submission day, consider one sentence in field 5 — geometry-invalid band
+    supports "the estimator was wrong", geometry-valid supports the stronger reading
+    that even accurate per-pixel bands don't help this training setup.
 * **Do not quote a single `v2` fold.** Its spread is 0.0308; fold 0 alone reads as "the plane
   wins outright", which fold 1 contradicts.
 * **Keep the headline claim v4-vs-v3.** The 08-09 draft said the measured band is "worse
