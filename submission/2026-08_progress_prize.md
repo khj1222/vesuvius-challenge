@@ -2,11 +2,13 @@
 
 **Form:** https://forms.gle/xoF5C3QsYutKP97x7
 **Deadline:** 2026-08-31 23:59 PT
-**Status:** READY TO SUBMIT (2026-08-14 — text final; PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
-opened by the user and its URL swapped into fields 4 and 5, so the required checkbox is
-satisfied; [#1234](https://github.com/ScrollPrize/villa/pull/1234) **merged 2026-08-14**
-and relabelled in field 4). Not submitted yet. Remaining pre-submit check: relabel #1434
-if it moves before submission day (see notes).
+**Status:** READY TO SUBMIT (2026-08-16 — field 5 gained a robustness paragraph: 30k
+extension holds the gap at 0.036, and the full pipeline replicated on w02 widens it to
+0.098; evidence table updated to match. PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
+in fields 4 and 5 satisfies the required checkbox;
+[#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
+Not submitted yet. Remaining pre-submit check: relabel #1434 if it moves before submission
+day (see notes).
 
 ---
 
@@ -83,6 +85,13 @@ the 2D baseline (0.8478 vs 0.8472), so depth-resolved training is not itself har
 circularity ran in the measured band's favour — it was read out of a model trained on the
 depthless annotation, so self-distillation should have flattered it — yet it still lost.
 
+Two robustness checks hardened the verdict. Extending all six depth runs to 30k steps
+moves the gap from 0.038 to 0.036 — the measured band was not "stopped too early". And
+rerunning the entire pipeline unchanged on a second segment (w02) replicates the ordering
+with a wider margin: 0.8263 constant against 0.7287 measured, every measured fold below
+every constant fold, while the constant band again lands on that segment's own 2D baseline
+(0.8263 vs 0.8235 — itself within 0.001 of w00's, on a segment the harness had never seen).
+
 A negative result, but a load-bearing one: the obvious route to #192 — read depth out of a
 2D-trained model and follow the sheet per pixel — loses to simply fixing the band at one
 depth, and anyone with a better route can now test it in a day on the same apparatus. I
@@ -121,6 +130,8 @@ merged, and the villa-side change is one config-gated patch, submitted upstream 
 | model-free CT contrast AUC ≤ 0.55, peak 0.546 @ z24 | `runs/depth_contrast/`, `docs/10` |
 | reduction trap: F1 0.535 (z0–64) vs 0.802 (z16–48) | `docs/12`, "The reduction has to match the supervision" |
 | late-training gain +0.0075 (v3) / +0.0068 (v4) | step 17000 vs 20000 rows of the summaries above |
+| 30k extension: gap 0.038 → 0.036 | `runs/ink_depth_ext30k_summary.json`, `docs/12` |
+| w02 replication: 0.8263 vs 0.7287 (+0.098), w02 2D baseline 0.8235 | `runs/ink_w02_{v3,v4}_fold_cv_summary.json`, `runs/ink_w02_holdout_20k/validation/summary.csv`, `docs/12` |
 
 (Run artifacts live under the gitignored `external/villa/ink-detection/`; every number is
 reproduced in `docs/12_depth_training.md`.)

@@ -314,6 +314,42 @@ third decimal because the extension re-sweep scored the odd-thousand
 checkpoints; within this table the scored set is the same on both sides.
 Raw numbers: `runs/ink_depth_ext30k_summary.json`.)
 
+## Second segment: the result replicates on `w02`, wider
+
+The largest limit above was "one segment". So the whole pipeline was rerun,
+unchanged, on `w02_20231031143852` (the smallest other released PHercParis4
+ink segment, 86.8 GB): 2D baseline with a held-out split, depth measurement,
+measured 3D labels (QC cross-sections pass — the band rides the sheet and
+tilts where the sheet tilts), `v3`/`v4` label versions, and the same 3-fold
+protocol. Two consistency checks came out almost eerily aligned: the 2D
+baseline lands at **F1 0.8235** against `w00`'s 0.8232, and the measured
+band's geometry looks like `w00`'s (segment median centre 31.8 vs 32.5, same
+±4 half-width, per-region centres 26.4–40.3 that genuinely move).
+
+| fold | `v3` constant | `v4` measured |
+|---|---|---|
+| 0 | 0.8291 | 0.6436 |
+| 1 | 0.8133 | 0.7520 |
+| 2 | 0.8364 | 0.7905 |
+| **mean** | **0.8263** | **0.7287** |
+| spread | 0.0231 | 0.1469 |
+
+**Gap +0.098 — two and a half times `w00`'s.** The ordering is total: the
+best measured fold (0.7905) sits below the worst constant fold (0.8133). The
+constant band again reproduces the segment's 2D baseline (0.8263 vs 0.8235),
+so depth-resolved training stays harmless here too; what changed is that the
+per-pixel band now also destabilises training — `v4`'s spread is 0.147, its
+best checkpoints sit at steps 19000/13000/**9000**, peaking early and
+decaying, which reads as instability rather than slow convergence.
+
+Caveats stated plainly: `w02`'s measured coverage is lower (64.6% of
+annotated cells vs 85.9% on `w00`; unmeasured cells fall back to the segment
+median, 0.005% of ink pixels), and `v4`'s label budget is 12% thinner than
+`v3`'s here (7.04 vs 8.00 voxels per pixel, from half-width clamps) — the
+arms are not as budget-matched as on `w00`. But `w00`'s `v2`≈`v3` tie already
+showed an 8× budget difference costs nothing, so a 12% one does not explain a
+0.098 gap. Raw numbers: `runs/ink_w02_{v3,v4}_fold_cv_summary.json`.
+
 ---
 
 MIT-licensed.
