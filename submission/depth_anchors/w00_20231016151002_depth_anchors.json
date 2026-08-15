@@ -1,0 +1,33 @@
+{
+  "segment": "w00_20231016151002",
+  "scroll_source": "PHercParis4",
+  "coordinate_volume": "s1_090_surf",
+  "coordinate_maps": "x/y/z.tif sampled bilinearly at full_px * meta.scale",
+  "map_scale": [
+    0.10016534477472305,
+    0.10039844363927841
+  ],
+  "cell_px": 64,
+  "annotation_plane_layer": 32,
+  "volume_depth_layers": 65,
+  "anchors": 7005,
+  "band_source": "w00_20231016151002_inkdepth.zarr (per-cell centroid centre + FWHM half-width, median-filtered on the cell grid)",
+  "readback_caveat": "values are read back from the released per-pixel field, not the estimator's internal cell table; rows with sampled_from=block_median sit at region edges where the field is NaN-ragged and may mix neighbouring cells -- filter on sampled_from=center for the strictest anchor set",
+  "composition": "P(layer) = base + (layer - annotation_plane_layer) * layer_step * normal",
+  "assumptions": {
+    "layer_step_voxels": 1.0,
+    "normal_orientation": "cross(d/dx, d/dy) of the coordinate maps; the sign relative to increasing layer index is UNVERIFIED -- calibrate against a couple of known anchors and flip if needed"
+  },
+  "estimator_parameters": {
+    "occlude_width": 4,
+    "cell": 64,
+    "regularize": 3,
+    "min_cell_ink": 64,
+    "estimator": "centroid",
+    "half_width_fraction": 0.5,
+    "min_half_width": 2.0,
+    "max_half_width": 16.0,
+    "min_response": 0.2,
+    "min_prominence": 1.5
+  }
+}
