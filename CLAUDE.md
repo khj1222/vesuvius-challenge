@@ -73,7 +73,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - **30k 연장**: 격차 +0.038→+0.036, fold별 개선 ≤+0.008 → "일찍 끊음" 반론 종결. 원수치 `runs/ink_depth_ext30k_summary.json`.
    - **w02 재현**: 전체 파이프라인을 w02(86.8GB, `data/ink-dataset/phercparis4_w02/`로 격리 — ⚠️`segments_path`는 폴더 안 모든 세그먼트를 잡으므로 부모 분리 필수)에 그대로 반복. 2D 베이스라인 **0.8235**(w00 0.8232와 0.001 차), QC 리본 합격. **v3 0.8263 vs v4 0.7287 = 격차 +0.098(w00의 2.5배), 완전 순서(최고 v4 fold < 최저 v3 fold)**. v4 spread 0.147·조기 정점(9000) = 불안정화. 카베앗: 측정 커버리지 64.6%, v4 예산 12% 얇음(클램프). 원수치 `runs/ink_w02_{v3,v4}_fold_cv_summary.json`.
    - **앵커 내보내기**: `tools/export_depth_anchors.py` + `submission/depth_anchors/`(7,005셀, 스크롤 좌표+법선, 미검증 가정은 sidecar 명시) — stantheman 회신 시 링크만 전달.
-   - 📌 **#192 후속 코멘트 초안 = `submission/issue192_followup_w02.md`(미게시, 사용자 게시 대기)** — 30k+w02 결과 공유 + stantheman에게 앵커 준비됐음을 알림.
+   - ✅ **#192 후속 코멘트 게시 완료(2026-08-16, 사용자 직접)** — 본문 원본 = `submission/issue192_followup_w02.md`. 30k+w02 결과 공유 + stantheman에게 앵커 준비됐음을 알림. 다음 = 회신 대기.
    - ⚠️ 디스크 77GB 여유(08-16). 정리 후보 = w00 연장런·w02 런의 비최적 ckpt(사용자 확인 후).
 
 1. 🔔 **#192에 새 코멘트 2개(2026-08-13, 2026-08-14 발견)** — 우리 코멘트(08-09 게시, `submission/issue192_comment.md`)에 대한 직접 답변은 아니지만:

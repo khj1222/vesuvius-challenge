@@ -3,7 +3,8 @@ Follow-up comment for villa #192 "Accurate 3d ink labels"
   target: https://github.com/ScrollPrize/villa/issues/192
   context: follows our 2026-08-09 result comment and 2026-08-14 reply to
            stantheman0128. Reports the two robustness checks run 08-15/16.
-  status: DRAFT, not posted as of 2026-08-16 — user posts it themselves.
+  status: POSTED 2026-08-16 by the user. Keep this file identical to the
+          posted comment.
 
 This header is an HTML comment, so the whole file can be pasted as-is —
 GitHub renders nothing for it.
