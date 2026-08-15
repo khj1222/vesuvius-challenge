@@ -74,7 +74,8 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
    - **w02 재현**: 전체 파이프라인을 w02(86.8GB, `data/ink-dataset/phercparis4_w02/`로 격리 — ⚠️`segments_path`는 폴더 안 모든 세그먼트를 잡으므로 부모 분리 필수)에 그대로 반복. 2D 베이스라인 **0.8235**(w00 0.8232와 0.001 차), QC 리본 합격. **v3 0.8263 vs v4 0.7287 = 격차 +0.098(w00의 2.5배), 완전 순서(최고 v4 fold < 최저 v3 fold)**. v4 spread 0.147·조기 정점(9000) = 불안정화. 카베앗: 측정 커버리지 64.6%, v4 예산 12% 얇음(클램프). 원수치 `runs/ink_w02_{v3,v4}_fold_cv_summary.json`.
    - **앵커 내보내기**: `tools/export_depth_anchors.py` + `submission/depth_anchors/`(7,005셀, 스크롤 좌표+법선, 미검증 가정은 sidecar 명시) — stantheman 회신 시 링크만 전달.
    - ✅ **#192 후속 코멘트 게시 완료(2026-08-16, 사용자 직접)** — 본문 원본 = `submission/issue192_followup_w02.md`. 30k+w02 결과 공유 + stantheman에게 앵커 준비됐음을 알림. 다음 = 회신 대기.
-   - ⚠️ 디스크 77GB 여유(08-16). 정리 후보 = w00 연장런·w02 런의 비최적 ckpt(사용자 확인 후).
+   - ✅ 디스크 정리 완료(08-16, 사용자 승인): 비최적 ckpt 437개 삭제·493GB 회수 → **537GB 여유**. 보존 = 요약에 인용된 best step 전부 + 각 런의 20000(resume·깊이측정 베이스).
+   - 📌 **제출 8/24 재확인(2026-08-16, 사용자)**: "미리 내자" 논의 후 stantheman 채점·#1434 리뷰에 기회를 주기 위해 8/24 유지로 결정. 그날 = 업스트림 최종 확인 → 라벨 갱신 → 사용자 폼 복붙 제출 → 파일을 제출본과 동기화.
 
 1. 🔔 **#192에 새 코멘트 2개(2026-08-13, 2026-08-14 발견)** — 우리 코멘트(08-09 게시, `submission/issue192_comment.md`)에 대한 직접 답변은 아니지만:
    - **stantheman0128**: #1295가 닫힌 사유("독립 3D 레퍼런스 검증")를 구현 — `transform.json` 어파인 체인으로 canonical↔독립 1.129µm 볼륨을 ~1복셀 정합(NCC 0.950), ink3d 예측 앵커의 표면거리 D·FWHM을 채점(142앵커 중 99개 D≤3복셀, p=4.1e-24; 52.8% localized+thin). 저장소 = stantheman0128/vesuvius-ink3d-depth-validation(MIT, CPU). **@khj1222 직접 멘션: "당신의 v4 measured band에 D/FWHM 채점을 돌려주겠다"** — 학습 없이 밴드 기하를 독립 스캔과 대조 가능. 본인 명시 경계 = 기하만 검증, 잉크 정체는 아님.
