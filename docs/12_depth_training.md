@@ -290,6 +290,30 @@ python tools/run_cv_folds.py SEGMENT_DIR --folds 3 --config configs/ink_depth_v4
   control that could have caught a self-distillation effect; it did not need to,
   because `v4` lost. Had `v4` won, this caveat would have been the headline.
 
+## The "stopped too early" check: 20k → 30k
+
+One of the loose ends above had a cheap answer. The schedule was fixed at 20k
+for arm fairness, but `v4`'s best checkpoints sat at 19000–20000 — still
+rising — leaving the objection that the measured band merely converges slower.
+So all six depth runs (`v3`/`v4` × 3 folds) were resumed from `ckpt_020000` and
+run to 30000 steps: full-state resume (optimizer, scheduler, step), with the
+scheduler rebuilt for a 30k horizon, so the extension is a warm-restart tail
+starting at ~27% of peak LR — identical for both arms. Scored exactly as
+before (`--z-window 16:48`; `v4` into `validation_z16_48/`).
+
+| arm | best mean F1, steps ≤ 20k | best mean F1, any step | gain |
+|---|---|---|---|
+| `v3` constant | 0.8470 | 0.8495 | +0.0025 |
+| `v4` measured | 0.8087 | 0.8135 | +0.0048 |
+
+**Gap `v3` − `v4`: +0.038 at 20k, +0.036 with the extension.** Per fold the
+post-20k improvement never exceeds +0.008, inside the fold noise. Fifty percent
+more training does not move the verdict: the measured band loses by the same
+margin it lost at 20k. (The ≤20k column differs from the headline table in the
+third decimal because the extension re-sweep scored the odd-thousand
+checkpoints; within this table the scored set is the same on both sides.
+Raw numbers: `runs/ink_depth_ext30k_summary.json`.)
+
 ---
 
 MIT-licensed.
