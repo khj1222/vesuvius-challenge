@@ -42,7 +42,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 
 - **Progress Prize 수상.** Paul Henderson(Research Team Lead, `paul@scrollprize.org`) 메일로 통보(2026-08-04 02:18, 리마인더 2026-08-07 02:01). 대상 = 7/26 제출한 held-out 검증 하네스.
 - ✅ **지급 폼 제출 완료(2026-08-10, 사용자 직접 — 지급·개인정보 입력은 Claude가 처리하지 않음).**
-- ✅ **금액 확정 = $1,000(Papyrus 등급, 2026-08-18 확인)**: 공식 발표 포스트 https://scrollprize.substack.com/p/335k-awarded-in-july ("$33.5k awarded in July")에 **"Hyojun Kwon — an update to the ink tutorial that includes proper validation data"**로 실명 등재. 7월 총 수상 = $20k 1건(ScrollFiesta, 메싱) + $2.5k 1건(Will Stevens, 언래핑) + $1k 다수(우리 포함; TAUIL Abd Elilah도 $1k — 재현성 감사 니치도 같은 등급). ✅ **입금 완료(2026-08-18 확인)** — 송금인 = **Curious Cases Inc**(EIN 92-1989282, SF 소재 미국 비영리로 scrollprize.org 운영 법인, GuideStar 확인). 지급 사이클 전체 종결.
+- ✅ **금액 확정 = $1,000(Papyrus 등급, 2026-08-18 확인)**: 공식 발표 포스트 https://scrollprize.substack.com/p/335k-awarded-in-july ("$33.5k awarded in July")에 **"Hyojun Kwon — an update to the ink tutorial that includes proper validation data"**로 실명 등재. 7월 총 수상 = $20k 1건(ScrollFiesta, 메싱) + $2.5k 1건(Will Stevens, 언래핑) + $1k 다수(우리 포함; TAUIL Abd Elilah도 $1k — 재현성 감사 니치도 같은 등급). ✅ **전신송금 도착(2026-08-18)** — 송금인 = **Curious Cases Inc**(EIN 92-1989282, SF 소재 미국 비영리로 scrollprize.org 운영 법인, GuideStar 확인). 수취 사유("미국 비영리재단 Curious Cases Inc. 주최 연구 경진대회(Vesuvius Challenge) 상금 수령") 제출 완료 → 원화 입금은 통상 당일~1영업일. 입금 확인되면 지급 사이클 종결.
 - 수락 조건인 permissive 라이선스 = 저장소 MIT라 이미 충족.
 - 8월 제출에 미치는 영향: "수상한 하네스를 **써서** #192의 라벨 품질 주장을 실제로 검증했다"는 연속성이 생김. 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231)이 무응답인 것과 별개로, 하네스의 전제(배포 세그먼트에 val mask 부재)는 사실상 인정받은 셈.
 
