@@ -53,6 +53,10 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 - ⚠️ **`gh` CLI 미설치**(bash/PowerShell 둘 다). git push는 GCM 자격증명으로 됨 → **브랜치 푸시까지는 Claude가 가능, PR 생성/이슈 게시는 사용자가 웹에서.** villa 쪽 작업은 sparse worktree(`git worktree add --no-checkout --detach D:/vw <ref>` + `sparse-checkout set --cone scrollprize.org/docs`)로 할 것: `external/villa` 작업트리는 `merge-ink-pipelines` + 수정된 `pyproject.toml` 상태라 체크아웃 전환 금지. 경로가 길면 `Filename too long`으로 실패하니 **짧은 경로**(`D:/vw`) 필수.
 - 📌 **제출 문안 정확성**: 5번의 "threshold 122–198"은 `ink_holdout_20k` 20체크포인트 기준이고 fold 런 포함 시 61–203 → 제출본은 둘 다 명시하도록 수정됨(커밋 `21a27c1`). 향후 수치 인용 시 근거는 `runs/*/validation/summary.csv`의 `threshold` 열.
 
+## 9월 라운드 정찰 완료 (2026-08-18)
+
+- 상금판·데이터 인벤토리·후보 3안 전문 = **`docs/13_september_scouting.md`**. 요지: $1M 직행은 체급 밖, First Letters $50k는 PHerc0800/1447(mesh만 존재)이 최근접 경로, **진짜 기회 = 08-14 공개된 신규 공식 데이터셋 `ink_9um`**(4스크롤 29세그먼트, 검증 마스크 3개뿐 = 하네스 빈틈 재현, villa merge-ink-pipelines 소비, 네이티브 표면볼륨 1.7GB/세그먼트라 디스크 증설 불필요). 추천 = A안(하네스 확장 + leave-one-scroll-out으로 오픈 문제 #7 수치화) 먼저, B안(First Letters 렌더 경로)은 부산물로.
+
 ## 다음 액션 (대기/선택)
 
 1. **업스트림 반응 (2026-08-02 확인)**:
