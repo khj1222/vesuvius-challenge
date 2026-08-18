@@ -41,7 +41,8 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 ## 🏆 7월 라운드 **수상** (2026-08-04 통보)
 
 - **Progress Prize 수상.** Paul Henderson(Research Team Lead, `paul@scrollprize.org`) 메일로 통보(2026-08-04 02:18, 리마인더 2026-08-07 02:01). 대상 = 7/26 제출한 held-out 검증 하네스.
-- ✅ **지급 폼 제출 완료(2026-08-10, 사용자 직접 — 지급·개인정보 입력은 Claude가 처리하지 않음).** 등급·금액은 아직 미통보 — 폼 처리 후 확인될 것으로 보임.
+- ✅ **지급 폼 제출 완료(2026-08-10, 사용자 직접 — 지급·개인정보 입력은 Claude가 처리하지 않음).**
+- ✅ **금액 확정 = $1,000(Papyrus 등급, 2026-08-18 확인)**: 공식 발표 포스트 https://scrollprize.substack.com/p/335k-awarded-in-july ("$33.5k awarded in July")에 **"Hyojun Kwon — an update to the ink tutorial that includes proper validation data"**로 실명 등재. 7월 총 수상 = $20k 1건(ScrollFiesta, 메싱) + $2.5k 1건(Will Stevens, 언래핑) + $1k 다수(우리 포함; TAUIL Abd Elilah도 $1k — 재현성 감사 니치도 같은 등급). 남은 것 = 전신송금 입금 확인($1,000, KRW 자동환전).
 - 수락 조건인 permissive 라이선스 = 저장소 MIT라 이미 충족.
 - 8월 제출에 미치는 영향: "수상한 하네스를 **써서** #192의 라벨 품질 주장을 실제로 검증했다"는 연속성이 생김. 이슈 [#1231](https://github.com/ScrollPrize/villa/issues/1231)이 무응답인 것과 별개로, 하네스의 전제(배포 세그먼트에 val mask 부재)는 사실상 인정받은 셈.
 
