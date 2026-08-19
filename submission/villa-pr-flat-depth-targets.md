@@ -1,119 +1,185 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: ✅ OPENED as [#1434](https://github.com/ScrollPrize/villa/pull/1434) (2026-08-13,
-by the user).** Verified after opening: base `merge-ink-pipelines`, 3 files +129 −13,
-mergeable; Vercel bot pending team authorization (same code-unrelated check as #1234).
-Awaiting review. Keep the `D:/vw2` worktree until the PR is resolved — it holds the
-committed branch, and review fixes get committed and pushed from there
-(`git -C D:/vw2 ...`, push to `fork`). The title/body below are the as-submitted archive.
+**Status: ⛔ CLOSED by `erdpx` 2026-08-18 22:08 UTC, unmerged. Revision prepared
+2026-08-19 — needs a push + reopen by the user.**
+[#1434](https://github.com/ScrollPrize/villa/pull/1434) · branch
+`khj1222:feat/flat-depth-targets` · base `merge-ink-pipelines`.
 
-**Branch:** `khj1222:feat/flat-depth-targets`, commit `8515746`, pushed 2026-08-13.
-**Open at:** https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets
-(base **`merge-ink-pipelines`** — not `main`: `ink-detection/koine_machines/` is 404 on `main`,
-and a wrong base produces a spurious 231-file diff, as #1234 briefly did).
-Title/body below; **the user opens it on the web** (Claude has no `gh`/GitHub auth).
+## The review
 
-**Rebased 2026-08-13** onto upstream tip `33c463e`. Upstream had reworked `infer.py`
-(default overlap 0.25→0.5, Hann blending, `--stride`/`--blend-mode`, per-patch occupancy
-skip, input depth padding, preprocessing selection) and extended `test_train.py`. Three
-conflicts, all clean unions (both sides kept): `TargetHeadWrapper.__init__` gains
-`input_pad_depth_to` (theirs) *and* `z_reduce`/`z_window` (ours); its construction site
-passes all three kwargs; the test-file import block merges their new imports with our
-rename. **Verified: `py_compile` on all 3 files + unit tests 7 passed** (upstream added 3
-tests to the base's 4) — run against the ported tree via
-`cd D:/vw2/ink-detection && uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m pytest koine_machines/training/tests/test_train.py`
-(⚠️ `--project`, not `--directory` — `--directory` moves cwd and imports the wrong tree).
+> hi, thanks for the pr. please follow villa/CONTRIBUTING.md. also, the experiments only
+> validate max over the supervised z window; mean over the logits was not evaluated, so
+> we'd need evidence that it produces valid predictions before including it
 
-**Patch:** [`villa-flat-depth-targets.patch`](villa-flat-depth-targets.patch) — 3 files, +129 −13.
-Regenerated 2026-08-13 from the rebased commit (`git diff origin/merge-ink-pipelines..HEAD` in
-`D:/vw2`). Still plain `git diff` format — `git apply`, **not** `git am`. The copy applied to
-the `external/villa` working tree (uncommitted, on the #1234 branch) is the **pre-rebase**
-version; the committed branch in `D:/vw2` is the source of truth now.
+Two asks, both addressed below.
 
-**Follows up:** the "happy to open it as a PR" offer at the end of `submission/issue192_comment.md`.
+### 1. `mean` removed — commit `8922c5e`
+
+Correct on the substance. `--z-reduce mean` was carried on a **single** ad-hoc checkpoint
+comparison (`docs/12`, 0.803 vs `max` 0.802 over z16–48); it never entered the 3-fold
+matrix and no full-segment prediction was ever written with it. That is not evidence, so
+the flag is gone rather than argued for:
+
+* `_Z_REDUCTIONS` table and `--z-reduce` deleted; a volume prediction is always collapsed
+  with `max`.
+* `--z-window START:STOP` stays — that is the configuration the measurements cover.
+* New `LOGGER.warning` when a volume prediction is reduced over its full depth, i.e. the
+  exact footgun the window exists to avoid.
+
+Diff shrinks **+129 −13 → +112 −13**, still 3 files. Unit tests **7 passed**;
+`infer --help` no longer lists `--z-reduce` and still lists `--z-window`.
+
+### 2. `CONTRIBUTING.md` — what we had missed
+
+The file lives at the repo root on `main`; our checkouts are all `merge-ink-pipelines`
+descendants, so **we never had it locally.** Against its requirements the old body failed
+on three counts, all fixed in the rewrite below:
+
+| requirement | old body | now |
+|---|---|---|
+| before/after comparison on real scroll data (images/video) | numbers only, **0 figures** | `docs/images/w00_z_window_before_after.png` — held-out π, same checkpoint, both reductions |
+| bug fixes show the error and the resolution | described in prose | same figure |
+| LLM-assisted PRs carry **human-written** commentary on why it matters | absent | slot below — **the user writes this one, in their own words** |
+| concise and accessible | ~60 lines, wall of text | ~35 lines |
+
+Everything else it asks for we already satisfied: the change came out of running the
+pipeline on real scroll data (15 training runs, ~22 GPU-hours, two PHercParis4 segments),
+there is a motivation section, and no claim rests on synthetic data (the unit tests are
+synthetic; every number is from `w00`/`w02`).
+
+## Reopen procedure
+
+1. `git -C D:/vw2 push fork feat/flat-depth-targets` — the branch already carries
+   `8922c5e`. (Claude can push; PR actions need the web UI.)
+2. Reopen #1434 (the head branch still exists, so the button is there) — keeps
+   `erdpx`'s comment in the thread. Opening a fresh PR loses it.
+3. Replace the body with the one below, then **drag
+   `docs/images/w00_z_window_before_after.png` into the GitHub editor** at the marked
+   spot so it uploads to `user-images.githubusercontent.com`. Fallback if you would
+   rather link it: `https://raw.githubusercontent.com/khj1222/vesuvius-challenge/main/docs/images/w00_z_window_before_after.png`
+   (needs `main` pushed first).
+4. Post the reply comment at the bottom of this file.
+5. Write the "why this matters to me" paragraph yourself — that is the one part of this
+   PR that must not be model-written, and it is the requirement `CONTRIBUTING.md` is
+   most explicit about.
 
 ---
 
-## Pre-open checklist (historical — the PR is open)
+# ▼ PR TITLE
 
-1. **Optional: one GPU smoke on the rebased branch** — deferred 2026-08-13 (user compute job
-   held ~27/32 GB VRAM). Largely superseded the same day by a CPU functional check on the
-   ported tree (scratchpad `cpu_wrapper_check.py`, `CPU_WRAPPER_CHECK_OK`): windowed max
-   picks the in-window ink over louder out-of-window noise, default full-volume max
-   reproduces the documented failure mode, mean reduction correct, 2D models pass through
-   untouched, and `input_pad_depth_to` (upstream) coexists with `z_reduce`/`z_window` (ours)
-   — that constructor was the main merge point. `infer --help` registers both flag sets.
-   What only a GPU run still covers: real zarr reading + checkpoint loading + CUDA, none of
-   which the rebase conflicts touched. **OK to open without it.** If wanted anyway, from
-   `D:/vw2/ink-detection`:
-   `uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.inference.infer <abs>/w00_20231016151002/w00_20231016151002.zarr D:/vesuvius-challenge/external/villa/ink-detection/runs/ink_depth_v4_fold0/ckpt_020000.pth <scratch>/smoke.tif --mask-path <abs>/w00_20231016151002/w00_20231016151002_validation_mask.tif --batch-size 4 --no-compile --z-window 16:48`
-   (~30 s masked run; exercises the 5D path + z-window on top of upstream's new
-   overlap/Hann/occupancy code). Unit tests already pass; this is belt-and-braces.
-2. User opens the PR at the compare URL above with the title/body below.
-3. After the PR is open: `git -C D:/vesuvius-challenge/external/villa worktree remove D:/vw2`
-   (keep `D:/vw2` until then — it is the committed branch and the place to run the smoke).
-
----
-
-## PR title
-
-```
 train: keep label depth in the flat-mode loss behind an opt-in flat_depth_targets flag
-```
 
-## PR body
+# ▼ PR BODY (copy from here to the END marker)
 
-```markdown
-In `flat` mode the label never reaches the loss with its depth intact:
+## Motivation
 
-```python
-targets = (torch.amax(batch['inklabels'], dim=2) > 0).to(dtype=batch['inklabels'].dtype)
-supervision_mask = torch.amax(batch['supervision_mask'], dim=2)
-```
+Testing the premise of #192 — that more accurate 3D ink labels train better models — on
+PHercParis4 `w00_20231016151002` and `w02_20231031143852`, I hit a wall in the pipeline
+itself. In `flat` mode the label never reaches the loss with its depth intact:
 
-Every label voxel is max-pooled into one plane before the loss, so a depth-resolved label
-(e.g. an `_inklabels_vN.zarr` with a real z band) and the published single-plane label
-produce byte-identical targets — the experiments #192 asks about are not expressible in
-flat mode at all. `full_3d` does keep depth, but it wants the native scroll volume and
-builds its own band by projecting the flat annotation to a constant half-thickness, so it
-answers a different question.
+    targets = (torch.amax(batch['inklabels'], dim=2) > 0).to(dtype=batch['inklabels'].dtype)
+    supervision_mask = torch.amax(batch['supervision_mask'], dim=2)
 
-### Change
+Every label voxel is max-pooled into one plane first, so a depth-resolved label and the
+published single-plane label produce **byte-identical targets**. The experiment #192 asks
+for is not expressible in flat mode at all. `full_3d` does keep depth, but it wants the
+native scroll volume and builds its own band by projecting the flat annotation to a
+constant half-thickness, so it answers a different question.
 
-Everything is behind `flat_depth_targets: true` in the training config; without the key,
-nothing changes.
+## The half that is easy to get wrong
 
-- When set, z projection is disabled for model and targets the same way the native 3D
-  modes already do it, and the model emits `[B, 1, Z, Y, X]`.
-- The loss runs volume-to-volume, with `supervision_mask` as the ignore mask.
-- Train previews reuse the `full_3d` central-slice reduction.
-- `infer` gains `--z-reduce {max,mean}` and `--z-window start:stop` to collapse a volume
-  prediction back to the ordinary 2D TIFF. The defaults (`max`, full depth) reproduce the
-  existing behaviour, so current checkpoints and scripts are unaffected.
+Training on a depth-resolved label changes what inference must do with the prediction.
+The loss only constrains the supervised z column; outside it the network is free, and it
+saturates. A max down the full axis reports that noise instead of the ink:
 
-`--z-window` is not cosmetic. A depth-target model is only constrained inside the
-supervised z column; outside it, measurement shows ink and background both saturating
-above 0.6, and a full-volume max reports that noise. Same checkpoint, same pixels:
-best F1 0.535 reducing over z0–64 vs 0.802 over the supervised z16–48 (the tell is the
-best threshold pinning to 254). Whatever shape 3D labels eventually take, the inference
-reduction has to move with the supervision, or full-segment prediction TIFFs degrade the
-same way.
+<!-- IMAGE: drag docs/images/w00_z_window_before_after.png in here -->
 
-### Verification
+Same checkpoint, same held-out region, only the volume→surface collapse differs:
+**F1 0.499 → 0.814**. The tell is the threshold — scored over the whole volume, every
+fold's best threshold pinned to 254, the top of the uint8 range. A full-segment
+prediction TIFF written without the window is degraded the same way, so this is not just
+a scoring detail.
 
-- Unit tests pass (`uv run pytest koine_machines/training/tests/test_train.py`, 7 passed on
-  the current branch tip); the projection-gating tests are extended to cover the new flag.
-- Default-off path unchanged: a config without the key takes the existing `amax` branch.
-- End-to-end: this path trained a 3-arm × 3-fold label-geometry matrix on
-  `w00_20231016151002` (reported in #192). A constant 8-voxel band trained through it
-  reproduces the 2D baseline within noise (0.8478 vs 0.8472 mean F1 over the same three
-  folds), so the depth path is calibrated, not just plumbed. Output shape checked at
-  `(1, 1, 64, 256, 256)`; training throughput matches 2D targets (~3.6 it/s on the same
-  hardware).
-- Inference: masked 166-block run produces the usual 2D TIFF (~30 s); with the new flags
-  omitted, behaviour on existing 2D checkpoints is unchanged.
+## Change — opt-in, default path untouched
 
-Context and the full experiment write-up are in #192; this PR is the villa-side gate that
-made the experiment expressible. Whether or not a measured band ever wins, without it flat
-mode cannot express a label-depth experiment at all.
-```
+Everything is behind `flat_depth_targets: true`; without the key nothing changes.
+
+* z projection is disabled for model and targets the way the native 3D modes already do
+  it, and the model emits `[B, 1, Z, Y, X]`.
+* The loss runs volume-to-volume, with `supervision_mask` as the ignore mask.
+* Train previews reuse the `full_3d` central-slice reduction.
+* `infer` gains `--z-window START:STOP` to collapse a volume prediction back to the
+  ordinary 2D TIFF over the supervised slices, and warns when it is reduced over the full
+  depth. Default (no window) reproduces existing behaviour.
+
+## Verification on real scroll data
+
+| check | result |
+|---|---|
+| a constant 8-voxel band trained through this path vs the 2D baseline, same 3 folds | 0.8478 vs 0.8472 mean F1 — within the 0.03 noise floor, so the depth path is calibrated, not just plumbed |
+| the same on a second segment (`w02`) | 0.8263 vs its own 2D baseline 0.8235 |
+| `--z-window` across the full 3-fold arm | 0.5046 → 0.8098 mean F1 |
+| default-off path | a config without the key takes the existing `amax` branch, unchanged |
+| unit tests | 7 passed; projection-gating tests extended to cover the flag |
+| shapes / throughput | output `(1, 1, 64, 256, 256)`, ~3.6 it/s, unchanged from 2D targets |
+
+15 training runs, ~22 GPU-hours, two segments. The full write-up and raw numbers are in
+#192.
+
+## Changed since the first round
+
+`--z-reduce mean` is gone. It rested on one ad-hoc checkpoint comparison and never
+entered the matrix, so there was no evidence to offer for it — `max` over the supervised
+window is what the runs actually validate.
+
+## Why this matters to me
+
+<!-- USER: replace this block with your own words, ~3-5 sentences. Worth covering:
+     - what you were actually trying to do when you hit this (the #192 experiment)
+     - that the answer came out negative and you are still submitting the gate, because
+       the next person testing a label-depth idea hits the same wall
+     - your own read on whether this belongs in villa
+     - a line disclosing that the code was written with an LLM assistant and that you
+       ran, read and verified it — CONTRIBUTING asks for exactly this. -->
+
+# ▲ END OF PR BODY
+
+---
+
+# ▼ REPLY COMMENT (post after reopening)
+
+Thanks — both points taken.
+
+`mean` is removed (`8922c5e`). You are right that it was never evaluated: it rested on a
+single ad-hoc checkpoint comparison and never entered the 3-fold matrix, so I would
+rather drop it than argue from that. `max` over the supervised window is what the runs
+actually cover, and that is all the PR now ships. I also added a warning when a volume
+prediction gets reduced over its full depth, since that is the failure mode the window
+exists for.
+
+On CONTRIBUTING.md — I had genuinely not seen it: it is on `main`, and this work has been
+on `merge-ink-pipelines` throughout. Reading it now, the body was missing the before/after
+figure on real data and the human commentary, both of which are in the rewritten
+description. Sorry for the noise.
+
+# ▲ END OF REPLY COMMENT
+
+---
+
+## Archive
+
+* Patch: [`villa-flat-depth-targets.patch`](villa-flat-depth-targets.patch) — 3 files,
+  +112 −13, regenerated 2026-08-19 from `8922c5e`. Plain `git diff`: use `git apply`,
+  **not** `git am`.
+* Figure source: scratchpad `make_zwindow_figure.py`. Built from artifacts already on
+  disk — `runs/ink_depth_v4_fold1/validation/val_017000.tif` (full-depth max) and
+  `validation_z16_48/val_017000.tif` (windowed), same checkpoint, plus the published
+  `_inklabels.tif`. No GPU rerun. Crop = the held-out annotation region at
+  y 12384–15360, x 24256–26880; rendered ink-dark so the saturated panel reads as
+  buried rather than bright.
+* Worktree `D:/vw2` stays until the PR resolves — it holds the committed branch, and
+  review fixes get committed and pushed from there (`git -C D:/vw2 ...`, remote `fork`).
+  ⚠️ Run tests as `cd D:/vw2/ink-detection && uv run --project <repo>/external/villa/ink-detection --no-sync ...`
+  (`--project`, not `--directory` — the latter moves cwd and imports the wrong tree).
+* The `external/villa` working tree still holds the **pre-rebase** copy of this change,
+  uncommitted, on the #1234 branch. `D:/vw2` is the source of truth.

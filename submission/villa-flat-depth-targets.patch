@@ -1,36 +1,17 @@
 diff --git a/ink-detection/koine_machines/inference/infer.py b/ink-detection/koine_machines/inference/infer.py
-index 5898a15..7690f82 100644
+index 5898a15..9c9fb8f 100644
 --- a/ink-detection/koine_machines/inference/infer.py
 +++ b/ink-detection/koine_machines/inference/infer.py
-@@ -59,6 +59,12 @@ class ChunkKey:
-     col: int
- 
- 
-+_Z_REDUCTIONS = {
-+    "max": lambda logits: logits.amax(dim=2),
-+    "mean": lambda logits: logits.mean(dim=2),
-+}
-+
-+
- class TargetHeadWrapper(nn.Module):
-     def __init__(
-         self,
-@@ -66,11 +72,24 @@ class TargetHeadWrapper(nn.Module):
+@@ -66,11 +66,18 @@ class TargetHeadWrapper(nn.Module):
          *,
          target_name: str,
          input_pad_depth_to: int | None = None,
-+        z_reduce: str = "max",
 +        z_window: tuple[int, int] | None = None,
      ):
          super().__init__()
          self.model = model
          self.target_name = str(target_name)
          self.input_pad_depth_to = input_pad_depth_to
-+        self.z_reduce = str(z_reduce).strip().lower()
-+        if self.z_reduce not in _Z_REDUCTIONS:
-+            raise ValueError(
-+                f"Unknown z reduction {z_reduce!r}; allowed: {sorted(_Z_REDUCTIONS)!r}"
-+            )
 +        if z_window is not None:
 +            start, stop = (int(v) for v in z_window)
 +            if start < 0 or stop <= start:
@@ -40,16 +21,23 @@ index 5898a15..7690f82 100644
  
      def forward(self, x: torch.Tensor) -> torch.Tensor:
          from koine_machines.models.input_padding import center_pad_input_depth
-@@ -91,6 +110,25 @@ class TargetHeadWrapper(nn.Module):
+@@ -91,6 +98,32 @@ class TargetHeadWrapper(nn.Module):
              if len(logits) == 0:
                  raise ValueError(f"Target {self.target_name!r} returned an empty logits list")
              logits = logits[0]
 +        if logits.ndim == 5:
 +            # A model trained on depth-resolved targets predicts a volume. The
-+            # surface map this writes is that volume seen from above, which is
-+            # also what a z-projecting model would have produced, so the two
-+            # stay comparable on the same held-out split.
-+            if self.z_window is not None:
++            # surface map this writes is that volume under a max over z, which
++            # is what a z-projecting model would have produced, so the two stay
++            # comparable on the same held-out split.
++            if self.z_window is None:
++                LOGGER.warning(
++                    "Reducing a volume prediction over its full depth. Slices the "
++                    "training loss did not cover carry no signal and a max over "
++                    "them can bury the ink; pass --z-window with the supervised "
++                    "range instead."
++                )
++            else:
 +                # Only the slices the training loss actually covered. Outside
 +                # the supervised column the network was free to predict
 +                # anything, and it does: measured on a depth-target run, ink
@@ -62,23 +50,14 @@ index 5898a15..7690f82 100644
 +                        f"z window {self.z_window} starts past the prediction depth {depth}"
 +                    )
 +                logits = logits[:, :, start:min(stop, depth)]
-+            logits = _Z_REDUCTIONS[self.z_reduce](logits)
++            logits = logits.amax(dim=2)
          return logits
  
  
-@@ -479,6 +517,26 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+@@ -479,6 +512,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
              "When multiple GPUs are provided, each inference batch is split across those devices."
          ),
      )
-+    parser.add_argument(
-+        "--z-reduce",
-+        default="max",
-+        choices=sorted(_Z_REDUCTIONS),
-+        help=(
-+            "How a volume prediction becomes the surface map that gets written. "
-+            "Only applies to models trained with depth-resolved targets."
-+        ),
-+    )
 +    parser.add_argument(
 +        "--z-window",
 +        default=None,
@@ -93,7 +72,7 @@ index 5898a15..7690f82 100644
      parser.add_argument("--compile-mode", default="reduce-overhead")
      parser.add_argument("--no-compile", dest="compile_model", action="store_false")
      parser.set_defaults(compile_model=True)
-@@ -1328,7 +1386,30 @@ def resolve_amp_dtype(
+@@ -1328,7 +1372,29 @@ def resolve_amp_dtype(
      return checkpoint_amp_dtype(checkpoint_payload, checkpoint_path)
  
  
@@ -119,22 +98,20 @@ index 5898a15..7690f82 100644
 +    payload: dict[str, Any],
 +    checkpoint_path: Path | str,
 +    *,
-+    z_reduce: str = "max",
 +    z_window: tuple[int, int] | None = None,
 +) -> ConfiguredModel:
      from koine_machines.models.make_model import make_model
      from koine_machines.models.input_padding import configured_input_pad_depth
  
-@@ -1353,6 +1434,8 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
+@@ -1353,6 +1419,7 @@ def build_repo_training_model_bundle(payload: dict[str, Any], checkpoint_path: P
          base_model,
          target_name=infer_target_name_from_config(config),
          input_pad_depth_to=configured_input_pad_depth(config),
-+        z_reduce=z_reduce,
 +        z_window=z_window,
      )
      model.eval()
      return ConfiguredModel(
-@@ -1383,7 +1466,12 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
+@@ -1383,7 +1450,11 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
                  "Ignoring --metadata-json for config-backed checkpoint %s; the model will be rebuilt from checkpoint['config'].",
                  args.checkpoint,
              )
@@ -142,7 +119,6 @@ index 5898a15..7690f82 100644
 +        configured_model = build_repo_training_model_bundle(
 +            checkpoint_payload,
 +            args.checkpoint,
-+            z_reduce=getattr(args, "z_reduce", "max"),
 +            z_window=parse_z_window(getattr(args, "z_window", None)),
 +        )
          configured_model.amp_dtype = resolved_amp_dtype

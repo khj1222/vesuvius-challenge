@@ -143,7 +143,15 @@ reproduced in `docs/12_depth_training.md`.)
 * **Pre-submit swaps** — 1 and 2 done 2026-08-13 (PR #1434 in fields 4 and 5); 3 done
   2026-08-14 ([#1234](https://github.com/ScrollPrize/villa/pull/1234) merged by erdpx,
   field-4 label changed to "merged"). Remaining:
-  4. If #1434 moves (reviewed/merged) before the form goes in, relabel it the same way.
+  4. **#1434 was closed unmerged by erdpx on 2026-08-18** (asked for CONTRIBUTING.md
+     compliance, and for evidence before shipping `--z-reduce mean`). Revision ready
+     2026-08-19: `mean` dropped (`8922c5e`, +112 −13), body rewritten with a real-data
+     before/after figure — see
+     [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md). **Step 1 above
+     and field 5 both still describe it as open and must be relabelled before the form
+     goes in**, to whatever it actually is that day: reopened-and-under-review, merged,
+     or closed-with-a-revision-pending. Do not leave "opened 2026-08-13 ... mergeable"
+     standing — it is no longer true.
   5. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
 * **Update if #192 gets a reply.** If a maintainer says the `flat_depth_targets` route is
