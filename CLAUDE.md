@@ -72,7 +72,7 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 
 ### ▶ 다음 세션 재개 지점 (2026-08-16 갱신)
 
-**8월 제출 = 폼 제출만 남음(문안에 robustness 2종 반영 완료). 마감 8/31 23:59 PT. 제출 ~08-24(사용자 확정).**
+**8월 제출 = 폼 제출만 남음. 마감 8/31 23:59 PT. 제출 = 이번 주말 08-22(토)~08-23(일)(2026-08-19 사용자 확정, 기존 08-24에서 당김).** 제출 당일 = ①[#1535](https://github.com/ScrollPrize/villa/pull/1535) 상태 확인 후 라벨 갱신 ②stantheman0128 채점 회신 왔으면 5번 칸 1문장 ③사용자 폼 복붙 제출 ④`submission/2026-08_progress_prize.md`를 제출본과 동기화.
 
 0. 🔬 **추가 기여 3종 완료(2026-08-15~16)** — 상세는 memory `ink-pipeline-status` + `docs/12` 말미 2개 절:
    - **30k 연장**: 격차 +0.038→+0.036, fold별 개선 ≤+0.008 → "일찍 끊음" 반론 종결. 원수치 `runs/ink_depth_ext30k_summary.json`.

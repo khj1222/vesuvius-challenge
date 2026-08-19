@@ -7,8 +7,9 @@ extension holds the gap at 0.036, and the full pipeline replicated on w02 widens
 0.098; evidence table updated to match. PR [#1535](https://github.com/ScrollPrize/villa/pull/1535)
 in fields 4 and 5 satisfies the required checkbox;
 [#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
-Not submitted yet. Remaining pre-submit check: relabel #1535 if it moves before submission
-day (see notes).
+Not submitted yet — **going in this weekend, 2026-08-22/23** (moved up from 08-24 on
+08-19; deadline is 08-31 23:59 PT). Remaining pre-submit check: relabel #1535 if it moves
+before submission day (see notes).
 
 ---
 
