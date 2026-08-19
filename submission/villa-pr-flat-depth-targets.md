@@ -1,14 +1,26 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: ⛔ [#1434](https://github.com/ScrollPrize/villa/pull/1434) CLOSED by `erdpx`
-2026-08-18 22:08 UTC, unmerged, and NOT reopenable — the button never appeared, even
-after the branch was rolled back to the exact commit the closed PR points at
-(`8515746`), which rules out head divergence as the cause. Decision 2026-08-19: open a
-**fresh PR** from the same branch.** The revision itself is done and pushed:
-`khj1222:feat/flat-depth-targets` = `8922c5e`, base `merge-ink-pipelines`, +112 −13.
+**Status: ✅ [#1535](https://github.com/ScrollPrize/villa/pull/1535) OPEN — opened
+2026-08-19 11:18 UTC from the same branch, base `merge-ink-pipelines`, 2 commits,
+3 files +112 −13, mergeable (`unstable` = the Vercel team-authorization bot, the same
+code-unrelated check as #1234/#1434). Verified against the API after opening: head
+`8922c5e`, figure renders from the raw link, `Reopening #1434` first line present.**
 
-Already done on #1434 before that decision: the body was replaced with the rewrite below
-and the reply comment was posted. Both stay there; the new PR links back to them.
+⚠️ **Outstanding: the "Why this matters to me" section still holds the placeholder HTML
+comment.** It renders as a bare heading, and the raw markdown reads "USER: replace this
+block with your own words" — visible to anyone who opens the editor or quote-replies.
+User is drafting the paragraph; it has to replace that block before the PR is really
+finished.
+
+Also outstanding: the pointer comment on #1434 (bottom of this file) with `#NNNN`
+swapped for 1535.
+
+Predecessor: [#1434](https://github.com/ScrollPrize/villa/pull/1434), opened 2026-08-13,
+**closed by `erdpx` 2026-08-18 22:08 UTC** unmerged, **and not reopenable** — the button
+never appeared, even after the branch was rolled back to the exact commit the closed PR
+points at (`8515746`), which rules out head divergence as the cause. Its body was already
+replaced with the rewrite below and the reply comment was posted before that was
+discovered; both stay there.
 
 ## The review
 

@@ -4,19 +4,24 @@
 **Deadline:** 2026-08-31 23:59 PT
 **Status:** READY TO SUBMIT (2026-08-16 — field 5 gained a robustness paragraph: 30k
 extension holds the gap at 0.036, and the full pipeline replicated on w02 widens it to
-0.098; evidence table updated to match. PR [#1434](https://github.com/ScrollPrize/villa/pull/1434)
+0.098; evidence table updated to match. PR [#1535](https://github.com/ScrollPrize/villa/pull/1535)
 in fields 4 and 5 satisfies the required checkbox;
 [#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
-Not submitted yet. Remaining pre-submit check: relabel #1434 if it moves before submission
+Not submitted yet. Remaining pre-submit check: relabel #1535 if it moves before submission
 day (see notes).
 
 ---
 
 ## Step 1 — the pull request ✅ done
 
-**[#1434](https://github.com/ScrollPrize/villa/pull/1434) opened 2026-08-13** — *this
-round's* PR: `flat_depth_targets` (base `merge-ink-pipelines`, 3 files +129 −13, mergeable;
+**[#1535](https://github.com/ScrollPrize/villa/pull/1535) opened 2026-08-19** — *this
+round's* PR: `flat_depth_targets` (base `merge-ink-pipelines`, 3 files +112 −13, mergeable;
 title/body archive = [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md)).
+It replaces [#1434](https://github.com/ScrollPrize/villa/pull/1434), opened 2026-08-13 and
+closed by `erdpx` on 08-18 asking for `CONTRIBUTING.md` compliance and for evidence before
+shipping `--z-reduce mean`. Both were addressed — `mean` dropped, description rewritten
+with a before/after figure on real scroll data — and since the PR turned out not to be
+reopenable, the revision went up as a new one from the same branch.
 Vercel bot pending team authorization, same code-unrelated check as on #1234.
 Also: [#1234](https://github.com/ScrollPrize/villa/pull/1234) (July's PR, review addressed
 2026-08-09) **merged by erdpx on 2026-08-14** — second merged upstream PR after
@@ -49,7 +54,7 @@ Result writeup: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/12_
 How the depth was measured: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/10_depth_localization.md
 How the 3D label was built: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/11_measured_3d_labels.md
 Reported upstream on the issue it answers: https://github.com/ScrollPrize/villa/issues/192
-Upstream PR (this round, flat_depth_targets): https://github.com/ScrollPrize/villa/pull/1434
+Upstream PR (this round, flat_depth_targets): https://github.com/ScrollPrize/villa/pull/1535
 Upstream PR (merged 2026-08-14): https://github.com/ScrollPrize/villa/pull/1234
 Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
 Community projects listing (merged): https://github.com/ScrollPrize/villa/pull/1249
@@ -105,7 +110,7 @@ Everything is MIT and documented end to end (docs/10–12 in the repo). The resu
 upstream to #192 as soon as the matrix finished rather than waiting for this form, the
 harness it stands on has been on the scrollprize.org community tools list since #1249
 merged, and the villa-side change is one config-gated patch, submitted upstream as PR
-#1434, that leaves existing paths untouched.
+#1535, that leaves existing paths untouched.
 ```
 
 **6. Pull Request Submission** → check "Pull request submitted!" (see step 1)
@@ -143,15 +148,12 @@ reproduced in `docs/12_depth_training.md`.)
 * **Pre-submit swaps** — 1 and 2 done 2026-08-13 (PR #1434 in fields 4 and 5); 3 done
   2026-08-14 ([#1234](https://github.com/ScrollPrize/villa/pull/1234) merged by erdpx,
   field-4 label changed to "merged"). Remaining:
-  4. **#1434 was closed unmerged by erdpx on 2026-08-18** (asked for CONTRIBUTING.md
-     compliance, and for evidence before shipping `--z-reduce mean`). Revision ready
-     2026-08-19: `mean` dropped (`8922c5e`, +112 −13), body rewritten with a real-data
-     before/after figure — see
-     [`villa-pr-flat-depth-targets.md`](villa-pr-flat-depth-targets.md). **Step 1 above
-     and field 5 both still describe it as open and must be relabelled before the form
-     goes in**, to whatever it actually is that day: reopened-and-under-review, merged,
-     or closed-with-a-revision-pending. Do not leave "opened 2026-08-13 ... mergeable"
-     standing — it is no longer true.
+  4. **#1434 was closed unmerged by erdpx on 2026-08-18**; the revision went up as
+     **[#1535](https://github.com/ScrollPrize/villa/pull/1535)** on 08-19 and every
+     mention above now points there. If #1535 moves (reviewed, merged, closed) before
+     the form goes in, relabel it the same way — and check that the "Why this matters
+     to me" paragraph is in place, since a PR body that fails CONTRIBUTING.md is what
+     cost the first attempt.
   5. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
 * **Update if #192 gets a reply.** If a maintainer says the `flat_depth_targets` route is
