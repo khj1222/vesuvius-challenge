@@ -15,14 +15,16 @@ different scope that left out `w02` entirely. (`docs/12`'s "nine runs, 16 GPU-ho
 training-only and stays as is; the summaries' 18.6 h for those nine is wall clock and
 includes a fold slowed ~2x by GPU contention. The two are consistent.)
 
-📌 **The explicit pointer comment on #1434 was never posted, and no longer has to be.**
-Checked 2026-08-19: #1434 still carries only the vercel bot, `erdpx`'s close and our
-reply. What does link the threads is a **cross-referenced timeline event** at 11:18:08
-UTC, generated automatically by the `Reopening #1434` line in #1535's body — it renders
-as "khj1222 mentioned this pull request in #1535" and notifies the thread's subscribers,
-`erdpx` among them (assigned and commenting there). Easy to mistake for a comment when
-scanning the page. A one-line comment would still read more clearly to a human opening
-the closed thread later; the draft is kept at the bottom of this file.
+✅ **Pointer comment posted on #1434 (2026-08-19 11:33:58 UTC)**, verbatim as drafted at
+the bottom of this file. That thread now reads: vercel bot → `erdpx`'s close → our reply
+→ the pointer. Two things link the PRs, and they are easy to confuse: this comment, and
+a **cross-referenced timeline event** at 11:18:08 UTC that GitHub generated on its own
+from the `Reopening #1434` line in #1535's body ("khj1222 mentioned this pull request in
+#1535"). The timeline line is grey and quiet; the comment is the one a human scanning the
+closed thread will actually read.
+
+**Nothing is outstanding on either PR.** #1535 is open and complete; next signal is a
+review.
 
 Predecessor: [#1434](https://github.com/ScrollPrize/villa/pull/1434), opened 2026-08-13,
 **closed by `erdpx` 2026-08-18 22:08 UTC** unmerged, **and not reopenable** — the button
@@ -73,7 +75,7 @@ pipeline on real scroll data (15 training runs, ~22 GPU-hours, two PHercParis4 s
 there is a motivation section, and no claim rests on synthetic data (the unit tests are
 synthetic; every number is from `w00`/`w02`).
 
-## New-PR procedure — ✅ steps 1-4 done 2026-08-19, step 5 pending
+## New-PR procedure — ✅ all steps done 2026-08-19
 
 1. **Write the "Why this matters to me" paragraph first**, before opening anything. It is
    the one part that must not be model-written, and it is the requirement
@@ -216,9 +218,9 @@ description. Sorry for the noise.
 
 # ▲ END OF REPLY COMMENT
 
-# ▼ POINTER COMMENT (post on #1434 once the new PR has a number)
+# ▼ POINTER COMMENT — ✅ posted on #1434 (2026-08-19 11:33 UTC)
 
-Reopening was not available on this PR, so the revision is up as #NNNN — same branch,
+Reopening was not available on this PR, so the revision is up as #1535 — same branch,
 `mean` removed, description rewritten against CONTRIBUTING.md.
 
 # ▲ END OF POINTER COMMENT
