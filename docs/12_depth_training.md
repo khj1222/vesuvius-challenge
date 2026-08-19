@@ -40,8 +40,14 @@ volume:
   `supervision_mask` as the ignore mask — again matching what `full_3d` does;
 * previews take the annotated plane out of the volume, reusing the reduction the
   `full_3d` previews already used;
-* inference reduces a volume prediction back to a surface map with `--z-reduce`
-  (`max` by default, `mean` available) over the slices `--z-window` selects.
+* inference reduces a volume prediction back to a surface map with a `max` over
+  the slices `--z-window` selects, and warns when no window is given.
+
+  (A `--z-reduce max|mean` switch existed here until 2026-08-19. Upstream review
+  on [#1434](https://github.com/ScrollPrize/villa/pull/1434) pointed out that only
+  `max` over the supervised window was ever measured — `mean` rested on a single
+  ad-hoc checkpoint comparison and never entered the matrix — so it was dropped
+  rather than defended. Every number in this document is a `max` reduction.)
 
 That last one is what keeps the comparison honest. A model trained with
 `z_projection_mode: max` and a model trained on a depth-resolved target both end

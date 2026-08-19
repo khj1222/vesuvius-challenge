@@ -13,7 +13,9 @@
 - **왜 우리한테 맞나**: 롤링/월간이라 **하드마감이 파이프라인을 안 건드림**(9월 병목 회피) + CV·RTX5090·시각형 산출물(잉크 예측 이미지) 정합. trace-the-ace와 스택 겹침.
 - **진입 과제 1픽 = Ink Detection** ("다운로드→첫 예측까지 주말 하나"가 공식 표현). 잉크 라벨된 표면볼륨(surface volume, TIFF 레이어 스택) → 세그멘테이션 모델 → 잉크 확률맵.
 - **상금 티어(월간)**: Papyrus $1k / Sestertius $2.5k / Denarius $10k / Gold Aureus $20k. "이달의 최고 제출 $20k" 매월 보장.
-- **제출**: Google Form 1건. 마감 롤링. **7월 라운드 제출(7/26) → 수상(8/4 통보).** 다음 = **8/31 23:59 PT**.
+- **제출**: Google Form 1건. 마감 롤링. **7월 라운드 제출(7/26) → 🏆 수상($1,000 Papyrus 등급).**
+  공식 발표 ["$33.5k awarded in July"](https://scrollprize.substack.com/p/335k-awarded-in-july)에
+  *"an update to the ink tutorial that includes proper validation data"*로 등재. 다음 = **8/31 23:59 PT**.
 - **라이선스**: 수상 시 **permissive 라이선스로 오픈소스화 필수**(제출 시점엔 비공개 OK, 수상 수락 시 공개). MIT면 충분. → 우리는 원래 오픈소스라 부담 0.
 
 > ⚠️ **이건 metric 리더보드가 아님.** 심사 3축 = ①**조기 공개**(먼저 풀린 툴이 실제로 쓰임) ②**커뮤니티 채택**(질문·버그리포트·기능요청 등 사용 신호) ③**문서화**(워크스루·이미지·튜토리얼). Kaggle/DrivenData식 "점수만 높이면 됨"과 게임이 다름. `docs/05_strategy.md` 필독.
@@ -70,7 +72,7 @@
 6. **[깊이 라벨로 학습하기 + 3 arm 비교](docs/12_depth_training.md)** — 만든 3D 라벨을
    **쓸 수가 없었다**: flat 학습 루프가 손실 직전에 `amax(dim=2)`로 z를 접어, 3D 라벨과 평면
    라벨이 타깃 단계에서 바이트 동일해진다. #192가 15개월간 방치된 이유의 일부다.
-   `flat_depth_targets` 게이트로 볼륨 대 볼륨 손실을 넣고, 추론에 `--z-reduce`/`--z-window`를
+   `flat_depth_targets` 게이트로 볼륨 대 볼륨 손실을 넣고, 추론에 `--z-window`를
    더해 예측을 기존과 같은 2D 표면맵으로 환원한다 — 그래야 하네스 하나로 모든 arm을 같은 자로
    잰다. [`make_label_version.py`](tools/make_label_version.py)가 세 라벨을 villa가 이미 아는
    **label version**(`_vN`)으로 패키징한다: 평면 / 고정 밴드 / 측정된 밴드.
@@ -95,16 +97,40 @@
    접으면 무감독 구간(잉크·배경 모두 0.6~0.93으로 포화)이 딸려 올라와 같은 체크포인트가
    **F1 0.80 → 0.53**으로 무너진다. 증상은 best threshold가 254에 못박히는 것.
 
+   | 축약 범위 | held-out π (fold 1, step 17000) |
+   | :--: | :--: |
+   | 전체 z0–64 (기본값) → **F1 0.499** · z16–48 (`--z-window`) → **F1 0.814** | ![z-window](docs/images/w00_z_window_before_after.png) |
+
+   **견고성 확인 2종(2026-08-15~16, [docs/12](docs/12_depth_training.md) 말미):**
+   ① **"일찍 끊은 것 아니냐"** — 6런 전부 full-state resume로 30k까지 연장(+GPU 5.8h).
+   격차 0.038 → **0.036**, fold별 개선 최대 +0.008로 노이즈 안. 스케줄 아티팩트 아님.
+   ② **두 번째 세그먼트에서 복제** — `w02_20231031143852`에 파이프라인 전체를 그대로 반복.
+   2D 베이스라인이 **0.8235**로 w00(0.8232)과 0.001 차로 재현되고, 격차는 **+0.098로 2.5배**
+   벌어지며 **순서가 완전히 갈린다**(최고 v4 fold 0.7905 < 최저 v3 fold 0.8133).
+
 ### 업스트림(ScrollPrize/villa) 기여
 
+- **[PR #1249](https://github.com/ScrollPrize/villa/pull/1249)** — 커뮤니티 프로젝트 목록 등재.
+  **2026-07-31 머지됨** — 하네스가 scrollprize.org 커뮤니티 툴 목록에 올라감.
 - **[PR #1234](https://github.com/ScrollPrize/villa/pull/1234)** — `create_label_zarrs`가 striped
   TIFF를 스트리밍하도록 수정. 기존 코드는 피라미드를 메모리에 통째로 올려 25GiB를 할당하다
   죽는다(tiled TIFF만 스트리밍됨). 하네스용 마스크를 만들다 발견했고, 기존 tiled 경로와
-  6레벨 바이트 동일 + 실제 32249×51380 striped 이미지 83초 변환으로 검증.
+  6레벨 바이트 동일 + 실제 32249×51380 striped 이미지 변환으로 검증. **2026-08-14 머지됨**
+  (리뷰 반영: 2D 피라미드를 메모리에서 유도하도록 바꿔 114.5s → 66.5s).
+- **[PR #1535](https://github.com/ScrollPrize/villa/pull/1535)** — `flat_depth_targets`.
+  flat 학습 루프가 손실 직전에 z를 접어버려 라벨 깊이 실험이 원천 불가한 문제를 config
+  게이트로 열고, 추론에 `--z-window`를 더해 볼륨 예측을 기존과 같은 2D TIFF로 환원한다.
+  리뷰 대기. (선행 [#1434](https://github.com/ScrollPrize/villa/pull/1434)는 2026-08-18에
+  닫혔다 — `CONTRIBUTING.md` 준수와, 측정하지 않은 `mean` 축약을 빼라는 지적. 둘 다 반영해
+  같은 브랜치에서 재제출.)
 - **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — 배포 세그먼트에
-  `_validation_mask`가 없는 것이 의도인지 메인테이너 문의.
-- **[PR #1249](https://github.com/ScrollPrize/villa/pull/1249)** — 커뮤니티 프로젝트 목록 등재.
-  **2026-07-31 머지됨** — 하네스가 scrollprize.org 커뮤니티 툴 목록에 등재.
+  `_validation_mask`가 없는 것이 의도인지 메인테이너 문의. 담당자 배정(트리아지)까지 진행,
+  답변 대기.
+- **[Issue #192](https://github.com/ScrollPrize/villa/issues/192)** — 위 실험 결과를 원 이슈에
+  보고. [`export_depth_anchors.py`](tools/export_depth_anchors.py)로 측정된 밴드를 스크롤 좌표
+  앵커(7,005셀 + 법선, 미검증 가정은 sidecar에 명시)로 내보냈고, 제3자가 독립 1.129µm 스캔
+  대비 기하 채점을 제안해 수락 — 우리 음의 결과의 두 해석("추정기 기하가 틀렸다" vs
+  "기하가 맞는데도 진다")을 가르는 비순환 검사라서.
 
 ## 빠른 시작 (재현)
 
@@ -127,10 +153,10 @@ vesuvius-challenge/
 ├── todo.md              ← Week0 체크리스트
 ├── requirements.txt     ← 시스템 Python 3.10 + cu128
 ├── docs/                ← 01~07 오리엔테이션 + 08 재현 + 09 검증 하네스 + 10 깊이 국소화
-│                          + 11 3D 라벨 + 12 깊이 학습·3 arm 비교
+│                          + 11 3D 라벨 + 12 깊이 학습·3 arm 비교 + 13 9월 정찰
 │   └── images/          ← before/after 산출 이미지 + 검증 split 그림
 ├── configs/             ← 검증이 실제로 도는 학습 config
-├── tools/               ← ink_viz + 검증 하네스 3종 CLI + README
+├── tools/               ← ink_viz + 검증 하네스 4종 + 깊이 측정·3D 라벨·앵커 내보내기 CLI + README
 ├── src/                 ← ⚠️ 죽은 2023 Kaggle 포맷 스캐폴드 (참고용)
 └── submission/          ← 제출 산출물 패키지 (이미지 + writeup)
 ```
@@ -145,6 +171,10 @@ vesuvius-challenge/
 - [x] **기여 한 겹**: `ink_viz` 시각화 툴 + Windows 재현 워크스루
 - [x] **github khj1222/vesuvius-challenge 푸시 (public)** — 2026-07-21
 - [x] **held-out 검증 하네스** (2026-07-25) — 검증 패치 0 → 1,337개, DRD·pFM 최초 실행
-- [x] **7월 라운드 제출** (2026-07-26) → 🏆 **Progress Prize 수상** (2026-08-04 통보)
+- [x] **7월 라운드 제출** (2026-07-26) → 🏆 **Progress Prize 수상 $1,000 Papyrus** (통보 2026-08-04, 공개 발표 2026-08-18)
 - [x] **#192 3D 라벨 실험 완료** (2026-08-09) — 3 arm × 3 fold, 음의 결과
-- [ ] 8월 라운드 제출 (마감 8/31 23:59 PT)
+- [x] **견고성 확인** (2026-08-15~16) — 30k 연장(격차 0.036 유지) + `w02` 세그먼트 복제(격차 +0.098)
+- [x] **업스트림 PR 2건 머지** — #1249 (2026-07-31), #1234 (2026-08-14)
+- [ ] 8월 라운드 제출 (마감 8/31 23:59 PT) — 문안 완료, [PR #1535](https://github.com/ScrollPrize/villa/pull/1535) 리뷰 대기
+- [ ] 9월 라운드 — 신규 공식 데이터셋 `ink_9um`(4스크롤 29세그먼트, 검증 마스크는 3개뿐)으로
+      하네스 확장 + cross-scroll 일반화 측정 ([docs/13](docs/13_september_scouting.md))
