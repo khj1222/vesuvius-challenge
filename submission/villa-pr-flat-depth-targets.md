@@ -1,9 +1,14 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: ⛔ CLOSED by `erdpx` 2026-08-18 22:08 UTC, unmerged. Revision prepared
-2026-08-19 — needs a push + reopen by the user.**
-[#1434](https://github.com/ScrollPrize/villa/pull/1434) · branch
-`khj1222:feat/flat-depth-targets` · base `merge-ink-pipelines`.
+**Status: ⛔ [#1434](https://github.com/ScrollPrize/villa/pull/1434) CLOSED by `erdpx`
+2026-08-18 22:08 UTC, unmerged, and NOT reopenable — the button never appeared, even
+after the branch was rolled back to the exact commit the closed PR points at
+(`8515746`), which rules out head divergence as the cause. Decision 2026-08-19: open a
+**fresh PR** from the same branch.** The revision itself is done and pushed:
+`khj1222:feat/flat-depth-targets` = `8922c5e`, base `merge-ink-pipelines`, +112 −13.
+
+Already done on #1434 before that decision: the body was replaced with the rewrite below
+and the reply comment was posted. Both stay there; the new PR links back to them.
 
 ## The review
 
@@ -47,21 +52,27 @@ pipeline on real scroll data (15 training runs, ~22 GPU-hours, two PHercParis4 s
 there is a motivation section, and no claim rests on synthetic data (the unit tests are
 synthetic; every number is from `w00`/`w02`).
 
-## Reopen procedure
+## New-PR procedure
 
-1. `git -C D:/vw2 push fork feat/flat-depth-targets` — the branch already carries
-   `8922c5e`. (Claude can push; PR actions need the web UI.)
-2. Reopen #1434 (the head branch still exists, so the button is there) — keeps
-   `erdpx`'s comment in the thread. Opening a fresh PR loses it.
-3. Replace the body with the one below, then **drag
-   `docs/images/w00_z_window_before_after.png` into the GitHub editor** at the marked
-   spot so it uploads to `user-images.githubusercontent.com`. Fallback if you would
-   rather link it: `https://raw.githubusercontent.com/khj1222/vesuvius-challenge/main/docs/images/w00_z_window_before_after.png`
-   (needs `main` pushed first).
-4. Post the reply comment at the bottom of this file.
-5. Write the "why this matters to me" paragraph yourself — that is the one part of this
-   PR that must not be model-written, and it is the requirement `CONTRIBUTING.md` is
-   most explicit about.
+Branch is pushed already (`8922c5e`); everything below is web UI.
+
+1. **Write the "Why this matters to me" paragraph first**, before opening anything. It is
+   the one part that must not be model-written, and it is the requirement
+   `CONTRIBUTING.md` is most explicit about. ⚠️ On #1434 this section went up as a bare
+   heading with nothing under it, because the guidance was an HTML comment and GitHub
+   renders those invisibly. **Either fill it or delete the heading — never ship the
+   heading empty**, least of all in a PR that was just closed for not following
+   `CONTRIBUTING.md`.
+2. Open https://github.com/ScrollPrize/villa/compare/merge-ink-pipelines...khj1222:feat/flat-depth-targets
+   ⚠️ base must read **`merge-ink-pipelines`**, not `main` (wrong base = spurious
+   231-file diff, as #1234 briefly showed). It should say *2 commits*, +112 −13.
+3. Title and body below. Keep the `Reopening #1434` first line — it is what carries
+   `erdpx`'s review context across, since the thread itself does not follow.
+4. **Drag `docs/images/w00_z_window_before_after.png` into the GitHub editor** where the
+   IMAGE marker sits. Fallback link (verified 200):
+   `https://raw.githubusercontent.com/khj1222/vesuvius-challenge/main/docs/images/w00_z_window_before_after.png`
+5. Add the one-line pointer comment (bottom of this file) to #1434 so the closed thread
+   points at the new number and `erdpx`, who is assigned there, gets notified.
 
 ---
 
@@ -70,6 +81,10 @@ synthetic; every number is from `w00`/`w02`).
 train: keep label depth in the flat-mode loss behind an opt-in flat_depth_targets flag
 
 # ▼ PR BODY (copy from here to the END marker)
+
+Reopening #1434, which was closed by review — both asks are addressed here, and the
+reply is on that thread. `--z-reduce mean` is gone; the description now follows
+`CONTRIBUTING.md`.
 
 ## Motivation
 
@@ -146,7 +161,7 @@ window is what the runs actually validate.
 
 ---
 
-# ▼ REPLY COMMENT (post after reopening)
+# ▼ REPLY COMMENT — ✅ already posted on #1434 (2026-08-19), kept for the record
 
 Thanks — both points taken.
 
@@ -163,6 +178,13 @@ figure on real data and the human commentary, both of which are in the rewritten
 description. Sorry for the noise.
 
 # ▲ END OF REPLY COMMENT
+
+# ▼ POINTER COMMENT (post on #1434 once the new PR has a number)
+
+Reopening was not available on this PR, so the revision is up as #NNNN — same branch,
+`mean` removed, description rewritten against CONTRIBUTING.md.
+
+# ▲ END OF POINTER COMMENT
 
 ---
 
