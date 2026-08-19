@@ -7,19 +7,22 @@ code-unrelated check as #1234/#1434). Body below matches what was posted, includ
 "Why this matters to me" paragraph (added 11:23 UTC). Verified against the API after
 posting.**
 
-⚠️ **One correction outstanding in the live body: "15 training runs, ~22 GPU-hours"
-understates the time.** The five 3-fold summaries total 1,771 min = **29.5 h** wall clock
-(`ink_depth_v2` 334 + `ink_depth_v3` 462 + `ink_depth_v4` 320 + `ink_w02_v3` 328 +
-`ink_w02_v4` 328). The 22 came from adding the w00 matrix (16 h, `docs/12`) to the 30k
-extension (5.8 h) — a different scope that leaves out `w02` entirely. `~30 GPU-hours` is
-the honest figure; dropping the hours and keeping "15 training runs across two segments"
-is the safe alternative. (`docs/12`'s "nine runs, 16 GPU-hours" is training-only; the
-summaries' 18.6 h for those nine is wall clock and includes a fold slowed ~2x by GPU
-contention.)
+✅ **GPU-hours corrected in the live body (2026-08-19 11:27 UTC): `~22` → `~30`.** The
+five 3-fold summaries total 1,771 min = 29.5 h wall clock (`ink_depth_v2` 334 +
+`ink_depth_v3` 462 + `ink_depth_v4` 320 + `ink_w02_v3` 328 + `ink_w02_v4` 328). The old
+22 came from adding the w00 matrix (16 h, `docs/12`) to the 30k extension (5.8 h) — a
+different scope that left out `w02` entirely. (`docs/12`'s "nine runs, 16 GPU-hours" is
+training-only and stays as is; the summaries' 18.6 h for those nine is wall clock and
+includes a fold slowed ~2x by GPU contention. The two are consistent.)
 
-⚠️ **Also outstanding: the pointer comment on #1434** (bottom of this file, `#NNNN` →
-`#1535`). Confirmed 2026-08-19 that #1434 still carries only the vercel bot, `erdpx`'s
-close, and our reply — nothing points at the new PR yet.
+📌 **The explicit pointer comment on #1434 was never posted, and no longer has to be.**
+Checked 2026-08-19: #1434 still carries only the vercel bot, `erdpx`'s close and our
+reply. What does link the threads is a **cross-referenced timeline event** at 11:18:08
+UTC, generated automatically by the `Reopening #1434` line in #1535's body — it renders
+as "khj1222 mentioned this pull request in #1535" and notifies the thread's subscribers,
+`erdpx` among them (assigned and commenting there). Easy to mistake for a comment when
+scanning the page. A one-line comment would still read more clearly to a human opening
+the closed thread later; the draft is kept at the bottom of this file.
 
 Predecessor: [#1434](https://github.com/ScrollPrize/villa/pull/1434), opened 2026-08-13,
 **closed by `erdpx` 2026-08-18 22:08 UTC** unmerged, **and not reopenable** — the button
