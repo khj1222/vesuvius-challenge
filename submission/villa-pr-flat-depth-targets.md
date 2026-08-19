@@ -1,19 +1,25 @@
 # PR to ScrollPrize/villa — flat_depth_targets
 
-**Status: ✅ [#1535](https://github.com/ScrollPrize/villa/pull/1535) OPEN — opened
-2026-08-19 11:18 UTC from the same branch, base `merge-ink-pipelines`, 2 commits,
+**Status: ✅ [#1535](https://github.com/ScrollPrize/villa/pull/1535) OPEN and complete —
+opened 2026-08-19 11:18 UTC from the same branch, base `merge-ink-pipelines`, 2 commits,
 3 files +112 −13, mergeable (`unstable` = the Vercel team-authorization bot, the same
-code-unrelated check as #1234/#1434). Verified against the API after opening: head
-`8922c5e`, figure renders from the raw link, `Reopening #1434` first line present.**
+code-unrelated check as #1234/#1434). Body below matches what was posted, including the
+"Why this matters to me" paragraph (added 11:23 UTC). Verified against the API after
+posting.**
 
-⚠️ **Outstanding: the "Why this matters to me" section still holds the placeholder HTML
-comment.** It renders as a bare heading, and the raw markdown reads "USER: replace this
-block with your own words" — visible to anyone who opens the editor or quote-replies.
-User is drafting the paragraph; it has to replace that block before the PR is really
-finished.
+⚠️ **One correction outstanding in the live body: "15 training runs, ~22 GPU-hours"
+understates the time.** The five 3-fold summaries total 1,771 min = **29.5 h** wall clock
+(`ink_depth_v2` 334 + `ink_depth_v3` 462 + `ink_depth_v4` 320 + `ink_w02_v3` 328 +
+`ink_w02_v4` 328). The 22 came from adding the w00 matrix (16 h, `docs/12`) to the 30k
+extension (5.8 h) — a different scope that leaves out `w02` entirely. `~30 GPU-hours` is
+the honest figure; dropping the hours and keeping "15 training runs across two segments"
+is the safe alternative. (`docs/12`'s "nine runs, 16 GPU-hours" is training-only; the
+summaries' 18.6 h for those nine is wall clock and includes a fold slowed ~2x by GPU
+contention.)
 
-Also outstanding: the pointer comment on #1434 (bottom of this file) with `#NNNN`
-swapped for 1535.
+⚠️ **Also outstanding: the pointer comment on #1434** (bottom of this file, `#NNNN` →
+`#1535`). Confirmed 2026-08-19 that #1434 still carries only the vercel bot, `erdpx`'s
+close, and our reply — nothing points at the new PR yet.
 
 Predecessor: [#1434](https://github.com/ScrollPrize/villa/pull/1434), opened 2026-08-13,
 **closed by `erdpx` 2026-08-18 22:08 UTC** unmerged, **and not reopenable** — the button
@@ -64,9 +70,7 @@ pipeline on real scroll data (15 training runs, ~22 GPU-hours, two PHercParis4 s
 there is a motivation section, and no claim rests on synthetic data (the unit tests are
 synthetic; every number is from `w00`/`w02`).
 
-## New-PR procedure
-
-Branch is pushed already (`8922c5e`); everything below is web UI.
+## New-PR procedure — ✅ steps 1-4 done 2026-08-19, step 5 pending
 
 1. **Write the "Why this matters to me" paragraph first**, before opening anything. It is
    the one part that must not be model-written, and it is the requirement
@@ -161,13 +165,31 @@ window is what the runs actually validate.
 
 ## Why this matters to me
 
-<!-- USER: replace this block with your own words, ~3-5 sentences. Worth covering:
-     - what you were actually trying to do when you hit this (the #192 experiment)
-     - that the answer came out negative and you are still submitting the gate, because
-       the next person testing a label-depth idea hits the same wall
-     - your own read on whether this belongs in villa
-     - a line disclosing that the code was written with an LLM assistant and that you
-       ran, read and verified it — CONTRIBUTING asks for exactly this. -->
+I did not set out to add a flag. I wanted an answer to #192 — whether more accurate
+3D ink labels actually train better models — and found that in `flat` mode the question
+cannot be asked at all: the label is max-pooled into a plane before the loss, so a
+depth-resolved label and the published one produce identical targets. Nothing errors and
+nothing warns; the experiment just quietly measures nothing, which is a bad way for a
+codebase to say "not supported".
+
+My own answer came out negative — the measured band lost to a constant one, on two
+segments — and I am still submitting the gate, because the wall is not about my band.
+Anyone who tries a label-depth idea here hits it, and they hit it silently. The
+`--z-window` half is the same lesson: the first time I scored a depth-target run I got
+F1 0.53 and assumed the labels had failed, when the actual fault was reducing the
+prediction over slices the loss never constrained. That cost me a scoring round, and it
+belongs in the tool rather than in my notes.
+
+Whether it belongs in villa is your call. It is config-gated and default-off, so my
+argument is only that the flat path should be able to express the experiment the issue
+asks for. If you would rather keep flat mode simple, I would find that a reasonable
+answer — I would just ask that it be said on #192, so the next person does not spend a
+month rediscovering it.
+
+On process, per CONTRIBUTING: the code was written with an LLM assistant. I read the
+diff, ran the tests, and every number above comes from runs on my own hardware —
+15 training runs on PHercParis4 `w00` and `w02`, scored with a held-out split I built
+for the July round.
 
 # ▲ END OF PR BODY
 
