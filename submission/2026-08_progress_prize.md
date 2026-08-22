@@ -61,6 +61,7 @@ Upstream PR (this round, flat_depth_targets): https://github.com/ScrollPrize/vil
 Upstream PR (merged 2026-08-14): https://github.com/ScrollPrize/villa/pull/1234
 Upstream issue: https://github.com/ScrollPrize/villa/issues/1231
 Community projects listing (merged): https://github.com/ScrollPrize/villa/pull/1249
+First scorecard of the released ink_9um models: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 ```
 
 **5. Short description of how your contributions substantially increase the probability of reading complete scrolls**
@@ -114,6 +115,15 @@ upstream to #192 as soon as the matrix finished rather than waiting for this for
 harness it stands on has been on the scrollprize.org community tools list since #1249
 merged, and the villa-side change is one config-gated patch, submitted upstream as PR
 #1535, that leaves existing paths untouched.
+
+The same harness also produced this month's first numbers for the official ink_9um
+release (2026-08-14): scoring all 14 released hybrid_3d2d checkpoints on the three
+segments that ship validation masks shows honest held-out F1 tops out at 0.74–0.77
+while the same checkpoints reach 0.98+ on their training pixels — a 0.22–0.45
+memorisation gap at the final step, no step that is best everywhere, and two released
+seeds that disagree by 0.22 F1 at step 75k on the same held-out region. The model card
+ships no numbers, so this is the first measured baseline anyone can compare against
+(docs/14 in the repo).
 ```
 
 **6. Pull Request Submission** → check "Pull request submitted!" (see step 1)
@@ -159,6 +169,13 @@ reproduced in `docs/12_depth_training.md`.)
      cost the first attempt.
   5. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
+  6. **ink_9um scorecard paragraph (added 2026-08-22, user decision pending final
+     keep/cut)**: the last paragraph of field 5 and the docs/14 link in field 4. It is
+     deliberately one paragraph — the headline stays #192. Before submitting, push the
+     repo so the docs/14 link resolves publicly. **Do NOT fold the LOSO / cross-scroll
+     results into this form even if they finish before the deadline** — they are the
+     September submission's centerpiece (docs/13 A안, judged monthly; splitting wins
+     two rounds).
 * **Update if #192 gets a reply.** If a maintainer says the `flat_depth_targets` route is
   wanted, say so in field 5 and open the PR. If they say internal 3D labels already exist,
   the framing in the first paragraph has to change.
