@@ -75,9 +75,18 @@ def open_pyramid(segment_dir: Path, kind: str):
 
 
 def find_regions(validation_group, *, level: int = 3) -> tuple[list[dict], int]:
-    """Locate each held-out region, in full-resolution pixel boxes."""
+    """Locate each held-out region, in full-resolution pixel boxes.
+
+    Region finding only needs a coarse plane, but not every label set ships a
+    pyramid -- the ink_9um aligned labels are single-level -- so fall back to
+    the coarsest level that exists.
+    """
     from scipy import ndimage
 
+    available = sorted(int(key) for key in validation_group.array_keys())
+    if not available:
+        sys.exit("error: the mask pyramid has no arrays")
+    level = min(level, max(available))
     coarse = validation_group[str(level)]
     plane = np.asarray(coarse[coarse.shape[0] // 2]) > 0
     if not plane.any():
@@ -242,6 +251,11 @@ def main(argv=None) -> int:
     parser.add_argument("--no-image-metrics", dest="image_metrics", action="store_false",
                         help="Skip DRD / pseudo-F-measure (they are the slow part).")
     parser.add_argument("--label", default=None, help="Free-form tag stored in the JSON report.")
+    parser.add_argument("--region-kind", default="validation_mask",
+                        choices=("validation_mask", "supervision_mask"),
+                        help="Which mask pyramid delimits the scored regions. Use "
+                             "supervision_mask when the whole segment was held out of "
+                             "training and every annotated pixel is fair game.")
     args = parser.parse_args(argv)
 
     segment_dir = args.segment_dir.resolve()
@@ -250,13 +264,13 @@ def main(argv=None) -> int:
     if not args.prediction.exists():
         sys.exit(f"error: no such prediction: {args.prediction}")
 
-    validation = open_pyramid(segment_dir, "validation_mask")
+    validation = open_pyramid(segment_dir, args.region_kind)
     inklabels = open_pyramid(segment_dir, "inklabels")
     regions, count = find_regions(validation)
 
     print(f"segment      : {segment_dir.name}")
     print(f"prediction   : {args.prediction.name}")
-    print(f"held-out     : {count} region(s)")
+    print(f"scored region: {count} region(s) from {args.region_kind}")
 
     prediction = read_prediction(args.prediction)
 
