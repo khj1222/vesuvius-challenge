@@ -93,3 +93,43 @@
    전부 0139/0814/1667). 모델 카드에 성능 수치 자체가 전무 → 첫 채점표가 우리 것.
 7. 남은 것: sync 완료 후 나머지 공식 마스크 2개(0814, 1667-w029) 분석 → 26세그먼트 held-out 생성 설계
    (세그먼트 단위 유보가 자연스러움 — 감독영역이 세그먼트당 2~3개 큰 패치) → 14 ckpt × 스크롤별 채점.
+
+## 6. B안 렌더 경로 정찰 (2026-08-22, LOSO 학습 대기 중 조사)
+
+**결론: 경로가 실존하고, 막는 건 환경 하나(WSL2/Docker 부재)뿐이다.**
+
+- **렌더러 = `vc_render_tifxyz`** (villa `volume-cartographer/apps/src/vc_render_tifxyz.cpp`).
+  OME-Zarr 볼륨 + tifxyz 세그먼트 폴더를 받아 법선 방향 `--num-slices`장을 샘플링,
+  `--zarr-output`이 **L0–L5 XY 피라미드 zarr**를 냄. `--remote-url` 스트리밍 +
+  `--prefetch-remote` + `--cache-gb` + `--resume`까지 있어 **풀볼륨 다운로드 불필요**.
+- **출력 계약 확인됨**: 로컬 native9 w040 표면볼륨(우리가 스모크 추론까지 돌린 그 파일)이
+  정확히 이 렌더러 시그니처 — 28슬라이스, 청크 (28,128,128), z 고정 XY-전용 피라미드.
+  즉 렌더만 되면 우리 추론·채점 파이프라인에 무수정으로 꽂힌다.
+- **입력 실측**:
+  - 풀볼륨(masked, RAW 무압축 청크 128³): 0800 = 24298×9867×9867 u1,
+    1447 = 24297×8343×8343. 밀집 기준 ~2.4TB라 통짜 다운로드는 불가하지만
+    masked+세그먼트 bbox 한정이면 **세그먼트당 ~5–15GB 스트리밍**으로 충분.
+  - 세그먼트 mesh = **초소형**: `mesh/intermediate/tifxyz_original/`에 x/y/z.tif
+    (0.1MB급, 격자 scale 0.05 = ×20 그리드) + meta.json(bbox·area_cm2) + obj 1개.
+- **면적 인벤토리 (22세그먼트 전수)**: **1447이 본명당** — 13개가 2cm² 이상,
+  최대 **7.4cm² > First Letters 창(4cm²)**, 전부 max_gen=200(성숙 성장).
+  0800은 0.38–2.28cm²로 작음(6개, gen 20–101). 합계 67.5cm².
+  상위: 7.40 / 6.57 / 4.92 / 4.74 / 4.51 / 4.46 (전부 1447).
+- **환경 함정(유일한 블로커)**: VC는 네이티브 Windows 빌드 불가(*nix atomic rename 요구,
+  README 명시). 공식 경로 = Docker 이미지
+  `ghcr.io/scrollprize/villa/volume-cartographer:edge` 또는 WSL. **이 머신엔 둘 다 없음**
+  (`docker` 없음, WSL 배포판 미설치) → **사용자 1회 설치 필요(관리자)**: WSL2
+  (`wsl --install`, 재부팅 1회) 후 그 안에서 Docker 없이 직접 빌드하거나, Docker Desktop.
+  추론·채점은 지금처럼 Windows 쪽에서 하면 되므로 렌더 단계만 컨테이너/WSL로 우회.
+  - 폴백: tifxyz가 단순 포맷(좌표 격자 3장 + scale)이라 파이썬 미니 렌더러 자작도
+    가능(2–3일). 단 공식 렌더러와의 계약 동일성(채택 축)이 약해져 차선.
+- **모델 정합**: 8.640µm 네이티브는 모델 카드가 "native ~9µm renders work directly"로
+  축복한 범위(9.362 대비 −8%). 반응 약하면 z 오프셋부터 의심(`--layer-start/--layer-end`
+  스윕 — 카드 팁 + 우리 z-window 교훈과 동일 계열).
+- **명령 스케치(실행일에 컨테이너 안에서 검증)**:
+  `vc_render_tifxyz -v <volume.zarr(or remote cache)> -g 0 --scale 1 -s <tifxyz_dir>
+  --num-slices 28 --slice-step 1 --zarr-output <seg_surface.zarr> --remote-url <S3 URL>
+  --prefetch-remote --cache-gb 24` (28슬라이스 = native9 계약 재현).
+- **LOSO와의 연결**: 지금 돌리는 cross-scroll 수치가 이 경로의 go/no-go —
+  Paris4 held-out F1이 ~0.7대면 미지 스크롤(0800/1447)에서도 글자 기대 가능,
+  ~0.5대면 렌더 후 도메인 적응부터. 어느 쪽이든 "왜"의 진단이 #7/#10 제출감.
