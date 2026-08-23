@@ -86,7 +86,7 @@ python tools/eval_validation.py <pred.tif> <labels>/phercparis4-w00 \
 
 ---
 
-# 2탄: leave-1667-out (2026-08-24) — 격차는 보편, 크기는 스크롤 의존
+# 2탄: leave-1667-out (2026-08-23) — 격차는 보편, 크기는 스크롤 의존
 
 같은 설계의 두 번째 arm: Scroll 1667의 6개 표현만 제거(23 rep 유지, 쿼터
 {0139:44, Paris4:17, 0814:3}), seed 42/43 재학습(각 ~2h46m/~3h20m) 후 1667
