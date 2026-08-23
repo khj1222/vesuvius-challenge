@@ -1,0 +1,160 @@
+{
+ "floors": {
+  "pherc0139-w016": 0.3527,
+  "pherc0139-w017": 0.474,
+  "pherc0139-w028": 0.3993,
+  "pherc0139-w029": 0.3989,
+  "pherc0139-w035": 0.4797,
+  "pherc0139-w039": 0.4852,
+  "pherc0139-w040": 0.6151,
+  "pherc0139-w041": 0.589,
+  "pherc0139-w043": 0.618,
+  "w035": 0.4755,
+  "w039": 0.4817,
+  "w040": 0.6115,
+  "w041": 0.5859,
+  "w044": 0.5501
+ },
+ "per_segment": {
+  "pherc0139-w016": {
+   "loso_best": 0.5725,
+   "margin_over_floor": 0.2198,
+   "ref_best": 0.9848,
+   "ref_minus_loso": 0.4123
+  },
+  "pherc0139-w017": {
+   "loso_best": 0.6386,
+   "margin_over_floor": 0.1646,
+   "ref_best": 0.9842,
+   "ref_minus_loso": 0.3456
+  },
+  "pherc0139-w028": {
+   "loso_best": 0.682,
+   "margin_over_floor": 0.2827,
+   "ref_best": 0.9849,
+   "ref_minus_loso": 0.3029
+  },
+  "pherc0139-w029": {
+   "loso_best": 0.7362,
+   "margin_over_floor": 0.3373,
+   "ref_best": 0.9871,
+   "ref_minus_loso": 0.2509
+  },
+  "pherc0139-w035": {
+   "loso_best": 0.7399,
+   "margin_over_floor": 0.2602,
+   "ref_best": 0.9764,
+   "ref_minus_loso": 0.2365
+  },
+  "pherc0139-w039": {
+   "loso_best": 0.6544,
+   "margin_over_floor": 0.1692,
+   "ref_best": 0.9802,
+   "ref_minus_loso": 0.3258
+  },
+  "pherc0139-w040": {
+   "loso_best": 0.7033,
+   "margin_over_floor": 0.0882,
+   "ref_best": 0.9641,
+   "ref_minus_loso": 0.2608
+  },
+  "pherc0139-w041": {
+   "loso_best": 0.734,
+   "margin_over_floor": 0.145,
+   "ref_best": 0.9857,
+   "ref_minus_loso": 0.2517
+  },
+  "pherc0139-w043": {
+   "loso_best": 0.7617,
+   "margin_over_floor": 0.1437,
+   "ref_best": 0.9888,
+   "ref_minus_loso": 0.2271
+  },
+  "w035": {
+   "loso_best": 0.6789,
+   "margin_over_floor": 0.2034,
+   "ref_best": 0.9785,
+   "ref_minus_loso": 0.2996
+  },
+  "w039": {
+   "loso_best": 0.5848,
+   "margin_over_floor": 0.1031,
+   "ref_best": 0.9836,
+   "ref_minus_loso": 0.3988
+  },
+  "w040": {
+   "loso_best": 0.6519,
+   "margin_over_floor": 0.0404,
+   "ref_best": 0.966,
+   "ref_minus_loso": 0.3141
+  },
+  "w041": {
+   "loso_best": 0.7025,
+   "margin_over_floor": 0.1166,
+   "ref_best": 0.9862,
+   "ref_minus_loso": 0.2837
+  },
+  "w044": {
+   "loso_best": 0.6458,
+   "margin_over_floor": 0.0957,
+   "ref_best": 0.9852,
+   "ref_minus_loso": 0.3394
+  }
+ },
+ "aggregate": {
+  "aligned": {
+   "mean_loso_best": 0.6914,
+   "mean_ref_best": 0.9818,
+   "mean_margin": 0.2012,
+   "mean_gap": 0.2904
+  },
+  "native": {
+   "mean_loso_best": 0.6528,
+   "mean_ref_best": 0.9799,
+   "mean_margin": 0.1119,
+   "mean_gap": 0.3271
+  },
+  "all14": {
+   "mean_loso_best": 0.6776,
+   "mean_ref_best": 0.9811,
+   "mean_margin": 0.1693,
+   "mean_gap": 0.3035
+  }
+ },
+ "representation_pairs": {
+  "pherc0139-w035": {
+   "aligned_best": 0.7399,
+   "aligned_margin": 0.2602,
+   "native_best": 0.6789,
+   "native_margin": 0.2034
+  },
+  "pherc0139-w039": {
+   "aligned_best": 0.6544,
+   "aligned_margin": 0.1692,
+   "native_best": 0.5848,
+   "native_margin": 0.1031
+  },
+  "pherc0139-w040": {
+   "aligned_best": 0.7033,
+   "aligned_margin": 0.0882,
+   "native_best": 0.6519,
+   "native_margin": 0.0404
+  },
+  "pherc0139-w041": {
+   "aligned_best": 0.734,
+   "aligned_margin": 0.145,
+   "native_best": 0.7025,
+   "native_margin": 0.1166
+  }
+ },
+ "stepwise_mean_loso": {
+  "010000": 0.6274,
+  "020000": 0.6542,
+  "030000": 0.6373,
+  "040000": 0.6262,
+  "050000": 0.6213,
+  "060000": 0.6245,
+  "075000": 0.6236
+ },
+ "loso_seed_abs_diff_mean": 0.0315
+}
