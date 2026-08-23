@@ -1,0 +1,56 @@
+{
+ "pherc0139-w016/s42": {
+  "best_heldout": {
+   "step": "020000",
+   "f1": 0.7425
+  },
+  "final_heldout": 0.5313,
+  "final_train": 0.9842,
+  "final_gap": 0.4529
+ },
+ "pherc0139-w016/s43": {
+  "best_heldout": {
+   "step": "075000",
+   "f1": 0.7547
+  },
+  "final_heldout": 0.7547,
+  "final_train": 0.9848,
+  "final_gap": 0.2301
+ },
+ "pherc0814-46527/s42": {
+  "best_heldout": {
+   "step": "010000",
+   "f1": 0.7653
+  },
+  "final_heldout": 0.7528,
+  "final_train": 0.9891,
+  "final_gap": 0.2363
+ },
+ "pherc0814-46527/s43": {
+  "best_heldout": {
+   "step": "010000",
+   "f1": 0.7616
+  },
+  "final_heldout": 0.7399,
+  "final_train": 0.988,
+  "final_gap": 0.2481
+ },
+ "pherc1667-w029/s42": {
+  "best_heldout": {
+   "step": "030000",
+   "f1": 0.7159
+  },
+  "final_heldout": 0.6581,
+  "final_train": 0.9859,
+  "final_gap": 0.3278
+ },
+ "pherc1667-w029/s43": {
+  "best_heldout": {
+   "step": "075000",
+   "f1": 0.7582
+  },
+  "final_heldout": 0.7582,
+  "final_train": 0.9829,
+  "final_gap": 0.2247
+ }
+}

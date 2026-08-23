@@ -1,0 +1,97 @@
+{
+ "floors": {
+  "phercparis4-w00": 0.3743,
+  "phercparis4-w01": 0.4148,
+  "phercparis4-w02": 0.3791,
+  "phercparis4-w03": 0.5124,
+  "phercparis4-w05": 0.3485,
+  "phercparis4-w06": 0.4743,
+  "phercparis4-w07": 0.4778,
+  "phercparis4-w09": 0.4424
+ },
+ "per_segment": {
+  "phercparis4-w00": {
+   "loso42_best": 0.4196,
+   "loso43_best": 0.4263,
+   "loso_best": 0.4263,
+   "margin_over_floor": 0.052,
+   "ref_best": 0.918,
+   "ref_minus_loso": 0.4917
+  },
+  "phercparis4-w01": {
+   "loso42_best": 0.4678,
+   "loso43_best": 0.4621,
+   "loso_best": 0.4678,
+   "margin_over_floor": 0.053,
+   "ref_best": 0.9144,
+   "ref_minus_loso": 0.4466
+  },
+  "phercparis4-w02": {
+   "loso42_best": 0.4181,
+   "loso43_best": 0.4174,
+   "loso_best": 0.4181,
+   "margin_over_floor": 0.039,
+   "ref_best": 0.9161,
+   "ref_minus_loso": 0.498
+  },
+  "phercparis4-w03": {
+   "loso42_best": 0.5281,
+   "loso43_best": 0.5358,
+   "loso_best": 0.5358,
+   "margin_over_floor": 0.0234,
+   "ref_best": 0.9051,
+   "ref_minus_loso": 0.3693
+  },
+  "phercparis4-w05": {
+   "loso42_best": 0.3861,
+   "loso43_best": 0.3971,
+   "loso_best": 0.3971,
+   "margin_over_floor": 0.0486,
+   "ref_best": 0.8576,
+   "ref_minus_loso": 0.4605
+  },
+  "phercparis4-w06": {
+   "loso42_best": 0.5013,
+   "loso43_best": 0.4985,
+   "loso_best": 0.5013,
+   "margin_over_floor": 0.027,
+   "ref_best": 0.874,
+   "ref_minus_loso": 0.3727
+  },
+  "phercparis4-w07": {
+   "loso42_best": 0.5542,
+   "loso43_best": 0.5551,
+   "loso_best": 0.5551,
+   "margin_over_floor": 0.0773,
+   "ref_best": 0.8677,
+   "ref_minus_loso": 0.3126
+  },
+  "phercparis4-w09": {
+   "loso42_best": 0.5875,
+   "loso43_best": 0.5981,
+   "loso_best": 0.5981,
+   "margin_over_floor": 0.1557,
+   "ref_best": 0.889,
+   "ref_minus_loso": 0.2909
+  }
+ },
+ "aggregate": {
+  "mean_loso_best": 0.4874,
+  "mean_ref_best": 0.8927,
+  "mean_margin_over_floor": 0.0595,
+  "mean_ref_minus_loso": 0.4053,
+  "min_margin": 0.0234,
+  "max_margin": 0.1557
+ },
+ "stepwise_mean_loso": {
+  "010000": 0.4641,
+  "020000": 0.4824,
+  "030000": 0.4631,
+  "040000": 0.4508,
+  "050000": 0.4574,
+  "060000": 0.4509,
+  "075000": 0.4458
+ },
+ "loso_seed_abs_diff_mean": 0.0107,
+ "loso_seed_abs_diff_max": 0.057
+}

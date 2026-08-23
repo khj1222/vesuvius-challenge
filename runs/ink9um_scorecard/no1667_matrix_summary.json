@@ -1,0 +1,80 @@
+{
+ "floors": {
+  "pherc1667-w013": 0.4631,
+  "pherc1667-w018": 0.371,
+  "pherc1667-w023": 0.3868,
+  "pherc1667-w028": 0.4288,
+  "pherc1667-w029": 0.454,
+  "pherc1667-w031": 0.3845
+ },
+ "per_segment": {
+  "pherc1667-w013": {
+   "loso42_best": 0.5997,
+   "loso43_best": 0.6074,
+   "loso_best": 0.6074,
+   "margin_over_floor": 0.1443,
+   "ref_best": 0.9805,
+   "ref_minus_loso": 0.3731
+  },
+  "pherc1667-w018": {
+   "loso42_best": 0.479,
+   "loso43_best": 0.4795,
+   "loso_best": 0.4795,
+   "margin_over_floor": 0.1085,
+   "ref_best": 0.9407,
+   "ref_minus_loso": 0.4612
+  },
+  "pherc1667-w023": {
+   "loso42_best": 0.4672,
+   "loso43_best": 0.4789,
+   "loso_best": 0.4789,
+   "margin_over_floor": 0.0921,
+   "ref_best": 0.9714,
+   "ref_minus_loso": 0.4925
+  },
+  "pherc1667-w028": {
+   "loso42_best": 0.5326,
+   "loso43_best": 0.552,
+   "loso_best": 0.552,
+   "margin_over_floor": 0.1232,
+   "ref_best": 0.99,
+   "ref_minus_loso": 0.438
+  },
+  "pherc1667-w029": {
+   "loso42_best": 0.5889,
+   "loso43_best": 0.5851,
+   "loso_best": 0.5889,
+   "margin_over_floor": 0.1349,
+   "ref_best": 0.9859,
+   "ref_minus_loso": 0.397
+  },
+  "pherc1667-w031": {
+   "loso42_best": 0.5559,
+   "loso43_best": 0.5686,
+   "loso_best": 0.5686,
+   "margin_over_floor": 0.1841,
+   "ref_best": 0.9813,
+   "ref_minus_loso": 0.4127
+  }
+ },
+ "aggregate": {
+  "mean_loso_best": 0.5459,
+  "mean_ref_best": 0.975,
+  "mean_margin_over_floor": 0.1312,
+  "mean_ref_minus_loso": 0.4291,
+  "min_margin": 0.0921,
+  "max_margin": 0.1841
+ },
+ "stepwise_mean_loso": {
+  "010000": 0.5359,
+  "020000": 0.5359,
+  "030000": 0.5073,
+  "040000": 0.5102,
+  "050000": 0.5091,
+  "060000": 0.4947,
+  "075000": 0.4991
+ },
+ "loso_seed_abs_diff_mean": 0.0145,
+ "loso_seed_abs_diff_max": 0.0692,
+ "w029_released_heldout_best": 0.7582
+}
