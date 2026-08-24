@@ -1,0 +1,26 @@
+{
+ "noParis4": {
+  "single_mean": 0.4874,
+  "seed_ens_mean": 0.4926,
+  "seed_gain_mean": 0.0051,
+  "seed_gain_min": -0.0014,
+  "seed_gain_max": 0.014,
+  "step_gain_mean": -0.0044
+ },
+ "no1667": {
+  "single_mean": 0.5459,
+  "seed_ens_mean": 0.5545,
+  "seed_gain_mean": 0.0086,
+  "seed_gain_min": -0.0038,
+  "seed_gain_max": 0.0151,
+  "step_gain_mean": 0.0072
+ },
+ "no0139": {
+  "single_mean": 0.6776,
+  "seed_ens_mean": 0.685,
+  "seed_gain_mean": 0.0074,
+  "seed_gain_min": -0.0079,
+  "seed_gain_max": 0.0214,
+  "step_gain_mean": 0.0007
+ }
+}

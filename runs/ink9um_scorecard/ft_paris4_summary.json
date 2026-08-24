@@ -1,0 +1,66 @@
+{
+ "per_segment": {
+  "phercparis4-w01": {
+   "loso_best": 0.4678,
+   "ft_best": 0.8678,
+   "ft_2500": 0.8678,
+   "ref_best": 0.9144,
+   "gap_closure": 0.8957
+  },
+  "phercparis4-w02": {
+   "loso_best": 0.4181,
+   "ft_best": 0.828,
+   "ft_2500": 0.828,
+   "ref_best": 0.9161,
+   "gap_closure": 0.8231
+  },
+  "phercparis4-w03": {
+   "loso_best": 0.5358,
+   "ft_best": 0.8303,
+   "ft_2500": 0.8303,
+   "ref_best": 0.9051,
+   "gap_closure": 0.7975
+  },
+  "phercparis4-w05": {
+   "loso_best": 0.3971,
+   "ft_best": 0.7898,
+   "ft_2500": 0.7898,
+   "ref_best": 0.8576,
+   "gap_closure": 0.8528
+  },
+  "phercparis4-w06": {
+   "loso_best": 0.5013,
+   "ft_best": 0.8066,
+   "ft_2500": 0.8066,
+   "ref_best": 0.874,
+   "gap_closure": 0.8192
+  },
+  "phercparis4-w07": {
+   "loso_best": 0.5551,
+   "ft_best": 0.8037,
+   "ft_2500": 0.8037,
+   "ref_best": 0.8677,
+   "gap_closure": 0.7953
+  },
+  "phercparis4-w09": {
+   "loso_best": 0.5981,
+   "ft_best": 0.8258,
+   "ft_2500": 0.8258,
+   "ref_best": 0.889,
+   "gap_closure": 0.7827
+  }
+ },
+ "aggregate": {
+  "mean_loso": 0.4962,
+  "mean_ft_best": 0.8217,
+  "mean_ft_2500": 0.8217,
+  "mean_ref": 0.8891,
+  "mean_gap_closure": 0.8237
+ },
+ "stepwise_mean_ft": {
+  "002500": 0.8217,
+  "005000": 0.8146,
+  "007500": 0.8128,
+  "010000": 0.8124
+ }
+}
