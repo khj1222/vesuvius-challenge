@@ -2,12 +2,13 @@
 
 **Form:** https://forms.gle/xoF5C3QsYutKP97x7
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT (2026-08-23) — the centerpiece (LOSO cross-scroll study, docs/15) is
-finished and committed; this file is ready except for the open items in the notes:
-①a September-specific PR for the field-6 checkbox ②fold in whatever lands during
-September (0139-out arm, render-path work, upstream replies) ③push before submitting.
-August's own submission (2026-08 file) must go in first and stays separate — its
-scorecard paragraph is groundwork here, cited as such, not re-claimed.
+**Status:** DRAFT v2 (2026-08-24) — rewritten after the study grew to its full four parts:
+①three LOSO arms (Paris4 / 1667 / 0139, the last with the aligned-vs-native
+representation control) ②nature-of-the-gap (ensembles ≈ no recovery → bias)
+③label-efficiency repair (one segment closes 82%). Open items in the notes:
+a September-specific PR for field 6, September events to fold in, push before submit.
+August's own submission goes in first and stays separate — its scorecard paragraph is
+groundwork here, cited as such, not re-claimed.
 
 ---
 
@@ -46,10 +47,10 @@ Individual submission — no team.
 **4. URL to your open source / publicly available contribution**
 ```
 https://github.com/khj1222/vesuvius-challenge
-Result writeup (cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
+Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
-Raw numbers (392 scored cells): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
+Raw numbers (1,000+ scored cells, 9 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
@@ -60,46 +61,50 @@ Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-sc
 Reading a complete scroll means running an ink model on a scroll nobody has labeled.
 Open problem #7 asks how well today's models survive that jump; until now there was no
 systematic number — the official 9 µm models released on 2026-08-14 ship with no
-evaluation at all. I measured both halves of the question on that release, with the
-held-out methodology that won July's Progress Prize and settled villa #192 in August.
+evaluation at all. I measured the jump, diagnosed why it fails, and priced what it costs
+to fix — all on that release, with the held-out methodology that won July's Progress
+Prize and settled villa #192 in August.
 
-First, a scorecard of what the released checkpoints actually do (docs/14): scoring all
-14 hybrid_3d2d checkpoints on the three segments that ship validation masks puts the
-honest within-scroll ceiling at F1 0.74–0.77, while the same checkpoints reach 0.98+ on
-their training pixels — a 0.22–0.45 memorisation gap at the final step, no step that is
-best everywhere, and two released seeds that disagree by 0.22 F1 at step 75k on the same
-held-out region.
+Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on the three
+segments that ship validation masks puts the honest within-scroll ceiling at F1
+0.74–0.77 against 0.98+ on training pixels — a 0.22–0.45 memorisation gap, no step that
+is best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
 
-Then the September centerpiece (docs/15): leave-one-scroll-out. I retrained the exact
-released recipe four times — the only change being one scroll removed and the per-batch
-scroll quotas renormalised — and scored each pair of runs on every annotated pixel of
+Then the measurement (docs/15, parts 1–2): leave-one-scroll-out, three times. I retrained
+the exact released recipe six times — the only change being one scroll removed and the
+per-batch quotas renormalised — and scored each pair of seeds on every annotated pixel of
 the held-out scroll, against the released checkpoints for which those same pixels are
-training data. Two arms: leave-Paris4-out (2 seeds × 78,125 steps, scored on 8 segments)
-and leave-1667-out (2 seeds, 6 segments). 392 scored cells, every inference reduced by a
-full threshold sweep, and every segment reported against its all-positive F1 floor
-(2p/(1+p)) so ink-fraction artifacts cannot masquerade as transfer.
+training data. Every segment is reported against its all-positive F1 floor (2p/(1+p)) so
+ink-fraction artifacts cannot masquerade as transfer. The spectrum: margin over the
+trivial classifier averages +0.06 toward Paris4, +0.13 toward 1667, +0.17 toward 0139 —
+and the 0139 arm, trained on HALF the corpus, transfers best, so target-scroll identity
+dominates source size. On the four physical segments that exist in both representation
+families, transfer to the aligned representation beats the native render 4 out of 4:
+part of the "scroll gap" is really a preprocessing-domain gap, and unseen scrolls should
+be rendered in the training family.
 
-The numbers: models that never saw the target scroll reach best-of-grid F1 0.487
-(Paris4) and 0.546 (1667) where the released models reach 0.89–0.98 on the same pixels —
-and the margin over the trivial all-positive classifier averages just +0.06 toward
-Paris4 and +0.13 toward 1667. The gap is universal but its size is scroll-dependent
-(Paris4, with transferred labels, is the hardest target by 2×). It is structural, not
-seed luck: the two independent seeds agree to |ΔF1| ≈ 0.01 on held-out scrolls, versus
-the 0.22 seed spread within scrolls. And cross-scroll performance peaks at 10–20k steps
-in all four runs — no held-out axis, within-scroll or across, justifies the released
-75k schedule.
+The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
+on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
+their predictions recovers only +0.005–0.009 F1. Independent runs fail the same way on
+the same pixels — no amount of free ensembling closes this.
+
+The repair price (part 4): one labeled segment. Fine-tuning the leave-Paris4-out model
+on a single Paris4 segment (w00) lifts the seven segments it still has never seen from
+mean F1 0.496 to 0.822 — 82% of the distance to the train-pixel reference — and the
+adaptation saturates at 2,500 steps, about seven minutes on one consumer GPU. Cross-
+scroll performance peaks at 10–20k steps in all six LOSO runs and fine-tuning peaks at
+2.5k: no held-out axis anywhere justifies the released 75k schedule.
 
 Why this raises the probability of reading complete scrolls: the First Letters targets
-have no labels, so cross-scroll transfer is the deployment condition, and +0.06..+0.13
-over a trivial baseline is now the measured starting point — the number domain
-adaptation has to beat, on an apparatus where anyone can test a proposed fix in a day
-(one config line generates an arm; training is ~3 h on one consumer GPU; the scorer and
-floors are in the repo). The same measurements yield immediate practical guidance:
-checkpoint selection at 10–20k rather than 75k, per-seed disagreement as a cheap
-uncertainty signal, and per-segment floors as the honest yardstick for any published
-score. Everything is MIT, documented end to end (docs/14–15), and continuous with the
-July harness and the August #192 verdict — one apparatus, three months of answered
-questions.
+have no labels, so cross-scroll transfer is the deployment condition — and it now has a
+measured playbook instead of a hope. Render the target in the training representation
+family; use direct inference (floor +0.06–0.17) only to scout for promising surface;
+annotate one segment; fine-tune for minutes; re-infer everything. Every stage of that
+recipe carries an expected value measured here, and the apparatus to re-verify any
+proposed improvement is one config line and ~3 hours of training on a consumer GPU.
+Everything is MIT, documented end to end (docs/14–15 plus nine committed evidence
+files), and continuous with the July harness and the August #192 verdict — one
+apparatus, three months of answered questions.
 ```
 
 **6. Pull Request Submission** → check "Pull request submitted!" (see step 1 — OPEN)
@@ -114,33 +119,41 @@ questions.
 | claim | source |
 |---|---|
 | within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
-| LOSO→Paris4 per-segment bests, mean 0.487, floor margin +0.060 | `runs/ink9um_scorecard/paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
-| LOSO→1667 per-segment bests, mean 0.546, floor margin +0.131 | `runs/ink9um_scorecard/no1667_matrix.csv` (+`no1667_matrix_summary.json`) |
-| ref arms 0.89–0.98 on the same pixels | same two matrix CSVs, `ref42`/`ref43` rows |
+| LOSO→Paris4 mean 0.487, floor margin +0.060 | `paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
+| LOSO→1667 mean 0.546, floor margin +0.131 | `no1667_matrix.csv` (+`no1667_matrix_summary.json`) |
+| LOSO→0139 mean 0.678, floor margin +0.169; aligned>native 4/4 (+0.03..0.07) | `no0139_matrix.csv` (+`no0139_matrix_summary.json`, `representation_pairs`) |
+| ref arms 0.86–0.99 on the same pixels | `ref42`/`ref43` rows of the three matrix CSVs |
 | honest-to-honest drops −0.26 (Paris4) / −0.17 (w029 0.758→0.589) | `docs/14` ceiling vs matrix CSVs |
-| seed agreement \|ΔF1\| mean 0.011 / 0.015 | `*_matrix_summary.json`, `loso_seed_abs_diff_*` |
-| LOSO peak at 10–20k, decline to 75k | `stepwise_mean_loso` in both summary JSONs |
-| all-positive floor 2p/(1+p) per segment | `floors` in both summary JSONs |
-| recipe fidelity (quota renormalisation, 21/23 reps) | `configs/ink9um_loso_*.json`, generated by `tools/make_ink9um_config.py` |
-| reproduction validity (online val 0.69–0.77 on official masks) | `runs/ink9um_loso_*/validation_metrics.jsonl` |
+| seed agreement \|ΔF1\| 0.011 / 0.015 / 0.032 | `loso_seed_abs_diff_*` in the three summary JSONs |
+| ensembling recovers +0.005..+0.009 (seed) / ±0.007 (step) | `loso_ensembles.csv` (+`loso_ensembles_summary.json`) |
+| one-segment fine-tune: 0.496→0.822 mean, 78–90% closure, saturates @2.5k steps | `ft_paris4_matrix.csv` (+`ft_paris4_summary.json`) |
+| LOSO peak at 10–20k, decline to 75k | `stepwise_mean_loso` in the three summary JSONs |
+| all-positive floor 2p/(1+p) per segment | `floors` in the summary JSONs |
+| recipe fidelity (quota renormalisation, 15/21/23 reps; FT = w00-only + weights-only load) | `configs/ink9um_loso_*.json`, `configs/ink9um_ft_w00_*.json`, generated by `tools/make_ink9um_config.py` |
+| reproduction validity (online val 0.69–0.78 on official masks across arms) | `runs/ink9um_loso_*/validation_metrics.jsonl` |
 
-(Checkpoints and prediction TIFFs stay untracked; the six committed CSV/JSON files
-reproduce every quoted figure.)
+(Checkpoints and prediction TIFFs stay untracked; the committed CSV/JSON files reproduce
+every quoted figure.)
 
 ---
 
 ## Notes for whoever finalises this
 
 * **Do not re-claim the scorecard as September work if August's form went in with its
-  scorecard paragraph** — here it is framed as groundwork ("August" sentence in field 5).
+  scorecard paragraph** — here it is framed as groundwork (second paragraph of field 5).
   If August was submitted WITHOUT that paragraph, promote docs/14 freely.
 * **Field-6 PR is the one genuinely open item** — see step 1. Whichever lands, add its
   URL to field 4 and a half-sentence to field 5's last paragraph.
-* **Fold in September events before submitting**: ①leave-0139-out arm if run (separates
-  target difficulty from source composition) ②render-path/domain-adaptation work if the
-  WSL2/Docker install happened (docs/13 §6) ③any upstream replies (#1231, #192
-  stantheman scoring, #1535 review) that touch the framing.
-* **Push before submitting** — docs/14, docs/15, tools, configs, and the six evidence
-  files are local-only until pushed; every field-4 link must resolve publicly.
+* **Fold in September events before submitting**: ①render-path/First-Letters work if the
+  WSL2/Docker install happened (docs/13 §6 — the field-5 "playbook" paragraph gets real
+  PHerc0800/1447 results if so) ②any upstream replies (#1231, #192 stantheman scoring,
+  #1535 review) that touch the framing ③a smaller-annotation label-efficiency point
+  (does half a segment still close the gap?) if measured.
+* **Honesty guardrails already embedded in the text** — keep them through edits: closure
+  percentages use the train-pixel ref as denominator (generous baseline, said as such);
+  "one segment" is w00, one of the larger Paris4 annotations; best-of-grid comparisons
+  are oracle-selected on both sides.
+* **Push before submitting** — docs/14–15, tools, configs, and the nine evidence files
+  are local-only until pushed; every field-4 link must resolve publicly.
 * Timing: judging is monthly after the round closes, so early submission buys nothing;
   same submit-when-something-moves logic as August, backstop the last weekend (09-26/27).
