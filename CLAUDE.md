@@ -96,7 +96,7 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
   - **[#1471](https://github.com/ScrollPrize/villa/pull/1471)**(jaideepsaipadhi, 우리 #1231 인용): **파이프라인 사본이 둘**이라는 게 핵심 — `main`은 `vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py`(아직 `is_tiled` 게이트 + `build_pyramid_with_mode` = 레벨마다 (65,H,W) 임베딩), `merge-ink-pipelines`는 우리 #1234로 수정됨. **저쪽 strip 스트리밍이 level-0 읽기에선 우리보다 나음**(우리는 이미지를 통째로 읽어 피크 RSS 1.99GiB). 저쪽 멀티페이지 버그가 우리 머지 사본에도 있음을 재현((5,40,60)→(5,40)). 게시 시점에 리뷰어 `jrudolph`·`bruniss` 배정돼 있음.
 - 🟢 **우리 코퍼스 무결성 2건 확인 — 둘 다 무영향**:
   - [#1547](https://github.com/ScrollPrize/villa/issues/1547) PHerc0139 **w045/w046 중복**(정점 81.5% 동일) → 우리 0139는 w016/17/28/29/35/39/40/41/43(+native w044)이라 **미포함**. w044는 인접 대조군 <5%로 깨끗.
-  - [#1551](https://github.com/ScrollPrize/villa/issues/1551) `ink/1667/*` 메타의 `scroll_source: P.Herc. 0009b` → Bullo27이 **6개 전부 잘못된 템플릿이고 실제론 1667**임을 검증(volume 필드 + Scroll 4 레지스트리). 우리는 `PHerc1667/segments/...` 경로에서 받았으므로 **no1667 arm 라벨링 정상**. docs/15 각주 후보.
+  - [#1551](https://github.com/ScrollPrize/villa/issues/1551) `ink/1667/*` 메타의 `scroll_source: P.Herc. 0009b` → Bullo27이 **6개 전부 잘못된 템플릿이고 실제론 1667**임을 검증(volume 필드 + Scroll 4 레지스트리). 우리는 `PHerc1667/segments/...` 경로에서 받았으므로 **no1667 arm 라벨링 정상**. → 둔 건 모두 **docs/15 말미 "부록: 코퍼스 무결성 확인" 절에 기록함**(2026-08-24).
 - ⚪ [#1231](https://github.com/ScrollPrize/villa/issues/1231) 여전히 코멘트 0(erdpx 배정 유지). 우리 저장소: 이슈 0·포크 0·스타 1.
 
 0. 🔬 **추가 기여 3종 완료(2026-08-15~16)** — 상세는 memory `ink-pipeline-status` + `docs/12` 말미 2개 절:
