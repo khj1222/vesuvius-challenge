@@ -9,9 +9,12 @@ in fields 4 and 5 satisfies the required checkbox;
 [#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
 Not submitted yet — **submit the day [#1535](https://github.com/ScrollPrize/villa/pull/1535)
 moves (merge or review), backstop 2026-08-29/30 regardless** (decided 08-21, replacing the
-08-22/23 weekend plan; deadline is 08-31 23:59 PT). Checked 08-21: #1535 open, no review;
-no stantheman0128 reply on #192. Remaining pre-submit check: relabel #1535 if it moves
-before submission day (see notes).
+08-22/23 weekend plan; deadline is 08-31 23:59 PT). Checked 08-24: #1535 still open, no
+review, no reviewer assigned, nothing since 08-19; no stantheman0128 result on #192 (they
+committed to running D/FWHM on our anchors on 08-23, repo unpushed since 08-13). All four
+doc links in field 4 verified to resolve publicly on 08-24, so the "push before submitting"
+condition is met. Remaining pre-submit check: relabel #1535 if it moves before submission
+day (see notes).
 
 ---
 
@@ -169,10 +172,11 @@ reproduced in `docs/12_depth_training.md`.)
      cost the first attempt.
   5. Tick the checkbox, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
-  6. **ink_9um scorecard paragraph (added 2026-08-22, user decision pending final
-     keep/cut)**: the last paragraph of field 5 and the docs/14 link in field 4. It is
-     deliberately one paragraph — the headline stays #192. Before submitting, push the
-     repo so the docs/14 link resolves publicly. **Do NOT fold the LOSO / cross-scroll
+  6. **ink_9um scorecard paragraph — KEEP (decided 2026-08-24)**: the last paragraph of
+     field 5 and the docs/14 link in field 4 both stay in. It is deliberately one
+     paragraph — the headline stays #192 — and September cites docs/14 only as already
+     submitted groundwork, so this is not double-claiming. Repo is pushed; docs/10, 11,
+     12 and 14 all verified reachable 2026-08-24. **Do NOT fold the LOSO / cross-scroll
      results into this form even if they finish before the deadline** — they are the
      September submission's centerpiece (docs/13 A안, judged monthly; splitting wins
      two rounds).
