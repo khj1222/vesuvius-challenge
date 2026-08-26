@@ -5,7 +5,8 @@
 **Status:** DRAFT v2 (2026-08-24) — rewritten after the study grew to its full four parts:
 ①three LOSO arms (Paris4 / 1667 / 0139, the last with the aligned-vs-native
 representation control) ②nature-of-the-gap (ensembles ≈ no recovery → bias)
-③label-efficiency repair (one segment closes 82%). Open items in the notes:
+③label-efficiency repair (one segment closes 82%), plus a pre-registered follow-up that
+refuted our own reading of ① and is reported as such. Open items in the notes:
 a September-specific PR for field 6, September events to fold in, push before submit.
 August's own submission goes in first and stays separate — its scorecard paragraph is
 groundwork here, cited as such, not re-claimed.
@@ -79,9 +80,17 @@ ink-fraction artifacts cannot masquerade as transfer. The spectrum: margin over 
 trivial classifier averages +0.06 toward Paris4, +0.13 toward 1667, +0.17 toward 0139 —
 and the 0139 arm, trained on HALF the corpus, transfers best, so target-scroll identity
 dominates source size. On the four physical segments that exist in both representation
-families, transfer to the aligned representation beats the native render 4 out of 4:
-part of the "scroll gap" is really a preprocessing-domain gap, and unseen scrolls should
-be rendered in the training family.
+families, transfer to the aligned representation beats the native render 4 out of 4. I
+first published that as domain match — models transfer best into the family they trained
+on. A reviewer on villa #1580 pointed out the grid contained a control for that reading,
+so I pre-registered the test it could not settle (the same segments held out in BOTH
+families, so the model has seen the native one), pushed the design and the reading
+committed to each outcome before the runs finished, and it refuted me: the gap came back
+unchanged, +0.058 against +0.061, with native exposure raised from 0% to 16.4% of
+training batches. The mechanism is not familiarity but quality — aligned renders are
+2.399 µm acquisitions pooled 4x in z, against a single 9.362 µm one. Render aligned,
+whatever the model trained on. The retraction is in docs/15 appendix 2 and on the
+upstream thread.
 
 The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
 on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
@@ -122,6 +131,7 @@ apparatus, three months of answered questions.
 | LOSO→Paris4 mean 0.487, floor margin +0.060 | `paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
 | LOSO→1667 mean 0.546, floor margin +0.131 | `no1667_matrix.csv` (+`no1667_matrix_summary.json`) |
 | LOSO→0139 mean 0.678, floor margin +0.169; aligned>native 4/4 (+0.03..0.07) | `no0139_matrix.csv` (+`no0139_matrix_summary.json`, `representation_pairs`) |
+| domain match refuted: gap +0.058 with native at 16.4% of batches vs +0.061 at 0%; 2/2 at every checkpoint | `segloso_matrix.csv` (+`segloso_matrix_summary.json`), design pre-registered in commit `fb37974` |
 | ref arms 0.86–0.99 on the same pixels | `ref42`/`ref43` rows of the three matrix CSVs |
 | honest-to-honest drops −0.26 (Paris4) / −0.17 (w029 0.758→0.589) | `docs/14` ceiling vs matrix CSVs |
 | seed agreement \|ΔF1\| 0.011 / 0.015 / 0.032 | `loso_seed_abs_diff_*` in the three summary JSONs |
@@ -153,7 +163,13 @@ every quoted figure.)
   percentages use the train-pixel ref as denominator (generous baseline, said as such);
   "one segment" is w00, one of the larger Paris4 annotations; best-of-grid comparisons
   are oracle-selected on both sides.
-* **Push before submitting** — docs/14–15, tools, configs, and the nine evidence files
-  are local-only until pushed; every field-4 link must resolve publicly.
+* **Push before submitting** — docs/14–15, tools, configs and the evidence files must
+  resolve publicly; every field-4 link is checked. (As of 2026-08-26 all of it is pushed,
+  including the segloso arm.)
+* **Do not soften the refutation** — the pre-registered arm that broke our own domain-match
+  reading is an asset, not a wound: claim published → outside reviewer presses → falsifiable
+  test registered in public before the run → claim dies → retraction posted upstream and in
+  docs/15. That chain is the documentation axis. If space is tight elsewhere, cut something
+  else.
 * Timing: judging is monthly after the round closes, so early submission buys nothing;
   same submit-when-something-moves logic as August, backstop the last weekend (09-26/27).
