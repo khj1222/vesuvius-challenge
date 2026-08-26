@@ -1,8 +1,8 @@
 # villa issue draft — `vc_render_tifxyz` remote streaming stalls forever
 
-**Where:** https://github.com/ScrollPrize/villa/issues/new (Problem or request template)
-**Before posting:** tick the checkbox only if you are content that the reproduction below is
-yours — it is, you ran every command in this session, but the box is a personal statement.
+**Posted:** https://github.com/ScrollPrize/villa/issues/1611 (2026-08-26, checkbox ticked)
+**Status at posting:** open, no labels, no assignee, 0 comments.
+The body below is what the issue carries.
 
 ---
 
