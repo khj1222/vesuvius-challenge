@@ -106,11 +106,26 @@ scroll performance peaks at 10–20k steps in all six LOSO runs and fine-tuning 
 
 Why this raises the probability of reading complete scrolls: the First Letters targets
 have no labels, so cross-scroll transfer is the deployment condition — and it now has a
-measured playbook instead of a hope. Render the target in the training representation
-family; use direct inference (floor +0.06–0.17) only to scout for promising surface;
-annotate one segment; fine-tune for minutes; re-infer everything. Every stage of that
-recipe carries an expected value measured here, and the apparatus to re-verify any
-proposed improvement is one config line and ~3 hours of training on a consumer GPU.
+measured playbook instead of a hope. Render the target aligned; use direct inference
+(floor +0.06–0.17) only to scout for promising surface; annotate one segment; fine-tune
+for minutes; re-infer everything. Every stage of that recipe carries an expected value
+measured here, and the apparatus to re-verify any proposed improvement is one config line
+and ~3 hours of training on a consumer GPU.
+
+I then ran that playbook on a scroll that has never been read, to see where it breaks.
+PHerc1447 ships fifteen segments and no rendered surface volume for any of them, so I
+rendered the largest (7.40 cm²) from its mesh — 0.6 MB of coordinates from the public
+bucket, twenty-five minutes of streamed rendering, a 389 MB volume whose pyramid fed the
+released checkpoints with no changes at all. The ink predictions are not readable, and
+they fail in the way the margins above say they should: the four checkpoints disagree
+threefold on how much of the surface is strong ink, none of them reaches full confidence
+anywhere on it, and at full resolution the output is rounded patches rather than connected
+strokes — the checkpoints agree on coarse layout while differing in detail, which is what
+responding to surface geometry looks like. The honest reading is that step two of the
+playbook works as scouting only in the weak sense: it tells you the model has nothing,
+not where to annotate next. Unsupervised domain adaptation has to come before step three
+on a scroll with no labels. I would rather submit that than a paragraph implying the
+recipe is ready to point at PHerc0800 tomorrow (docs/16).
 Everything is MIT, documented end to end (docs/14–15 plus nine committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
@@ -154,9 +169,9 @@ every quoted figure.)
   If August was submitted WITHOUT that paragraph, promote docs/14 freely.
 * **Field-6 PR is the one genuinely open item** — see step 1. Whichever lands, add its
   URL to field 4 and a half-sentence to field 5's last paragraph.
-* **Fold in September events before submitting**: ①render-path/First-Letters work if the
-  WSL2/Docker install happened (docs/13 §6 — the field-5 "playbook" paragraph gets real
-  PHerc0800/1447 results if so) ②any upstream replies (#1231, #192 stantheman scoring,
+* **Fold in September events before submitting**: ①✅ done — the render path ran on
+  2026-08-26 and its negative result is now the field-5 paragraph after the playbook
+  (docs/16); if more segments get rendered before submitting, update the count there ②any upstream replies (#1231, #192 stantheman scoring,
   #1535 review) that touch the framing ③a smaller-annotation label-efficiency point
   (does half a segment still close the gap?) if measured.
 * **Honesty guardrails already embedded in the text** — keep them through edits: closure
