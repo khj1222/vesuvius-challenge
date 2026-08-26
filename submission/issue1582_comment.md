@@ -1,9 +1,11 @@
 <!-- Draft comment for https://github.com/ScrollPrize/villa/issues/1582 -->
-<!-- Answers the caveat nerln carried over from #1580, qualifies the control, and pre-registers
-     the segment-holdout arm running tonight. Results comment follows tomorrow. -->
+<!-- Answers the caveat nerln carried over from #1580, qualifies the control, and reports the
+     pre-registered segment-holdout arm -- which came out against our own reading. -->
 
-Thanks for splitting this out — and the caveat you carried over from the #1580 thread is
-answerable, so here it is, along with a correction to how much weight the control deserves.
+Thanks for splitting this out. Three things: the caveat you carried over from #1580 is
+answerable, the control it concerns deserves less weight than the issue body gives it, and I
+ran the arm that settles what the control cannot. The last one came out against the reading I
+offered you.
 
 ## What the reference arms trained on: both families
 
@@ -70,47 +72,63 @@ nothing, because they never went through the preparer. Right now *absence* of pr
 the only thing that identifies the native family. That works until something else is
 published without provenance for a different reason.
 
-## What I am running tonight
+## I ran it, and it went against me
 
-Rather than ask which design you would want and wait, I am running one and stating it
-before I see the result.
+The arm is the one described in commit
+[`fb37974`](https://github.com/khj1222/vesuvius-challenge/commit/fb37974), pushed before
+the runs finished, so the design and the reading committed to each outcome are on the record
+ahead of the numbers. Both seeds completed 78,125 steps; all 56 cells scored.
 
-**Arm.** Hold out two physical 0139 segments in *both* families — `pherc0139-w035` with
-`w035`, and `pherc0139-w039` with `w039`. That leaves 25 of the 29 representations in
-training, native `w040`, `w041` and `w044` among them, so the model has seen the native
-family and has not seen these two segments in either rendering. Seeds 42 and 43, the same
-recipe and the same 78,125 steps as the three LOSO arms, scored with the same best-of-grid
-rule over 7 checkpoints × 2 seeds. Configs are `configs/ink9um_segloso_w035w039_s{42,43}.json`
-in the repo linked below; they are generated, not hand-edited.
+**Arm.** w035 and w039 held out in *both* families, 25 representations left in training with
+native w040 / w041 / w044 retained. That put the native family at 36.3% of the 0139 patch
+pool and **16.4% of training batches**, against 0% in the published LOSO arm.
 
-**Why two segments and not one or four.** How many I hold out decides how much of the native
-family survives in training, because there are only five native representations in existence.
-Hold out one and four native rows remain, but there is a single paired comparison to report.
-Hold out all four and the comparison matches the published table exactly, but native exposure
-collapses to `w044` alone — the model stays effectively aligned-only, and an aligned win
-would mean very little. Two is the balance: three native rows retained, two paired
-comparisons. I chose w035 and w039 because they carry the largest gaps in the published
-table (+0.057 and +0.066), so this is the version of the test with the most to lose.
+| seg | aligned F1 (margin) | native F1 (margin) | Δ margin |
+|---|---|---|---|
+| w035 | 0.791 (+0.311) | 0.757 (+0.281) | **+0.030** |
+| w039 | 0.725 (+0.240) | 0.635 (+0.153) | **+0.086** |
 
-**What each outcome will mean, committed in advance.**
+Aligned wins 2/2, mean Δ margin **+0.058**. On the same two segments the LOSO arm gave
+**+0.061**. Native exposure went from nothing to a sixth of every batch and the gap moved by
+**−0.003**.
 
-- *Aligned still wins, by a gap comparable to the LOSO arm* — the advantage survives native
-  exposure, which favours the dull reading that aligned renders are simply easier to score
-  and weakens the domain-match reading I offered.
-- *The gap attenuates or flips* — corpus composition drives it, which is domain match.
+It is not a selection artifact. Max, mean and median over the grid give +0.058 / +0.055 /
++0.064; seed 42 alone gives +0.048, seed 43 alone +0.058; and aligned wins 2/2 at every one
+of the seven checkpoints taken separately, Δ from +0.050 to +0.081.
 
-Either way, segment familiarity stops being available as an explanation for the paired gap,
-which is the part the reference arms could not settle.
+**By the reading I committed in advance, this is the outcome that argues against me.** A gap
+that survives exposure to the native family is better explained by aligned renders simply
+being easier to score than by domain match. That is not a surprising thing for them to be —
+they are 2.399 µm acquisitions pooled 4× in z, so more of the scan survives into the input
+than a single native 9.362 µm acquisition carries. I would not now defend the domain-match
+reading on this data, and I will amend the write-up that offered it.
 
-**One confound I want on the record before the numbers exist.** This arm also gains scroll
-exposure, which for the reason in the section above cannot be separated from family
-exposure in this corpus. Scroll
-exposure should help both renderings of the same physical sheet about equally, so I will
-read the *direction* as the result and treat any change in *magnitude* against the LOSO arm
-as suggestive only. If that is the wrong call, I would rather be told now than after I post
-a number.
+Scroll exposure did what I said it would, symmetrically, which is why it does not rescue the
+other reading: every absolute number rose (w035 aligned 0.740 → 0.791, native 0.679 → 0.757;
+w039 aligned 0.654 → 0.725, native 0.585 → 0.635) while the difference between families
+stayed put.
 
-Results tomorrow, win or lose.
+**What I think this means for your third bullet.** If the aligned family is better rather
+than merely familiar, then "does this input match the family the recipe trained on" is the
+wrong question to enforce. A model trained mostly on native renders would still, on this
+evidence, do better fed an aligned one. Reporting *which* family an input belongs to stays
+useful — arguably more useful — but as provenance a reader can act on, not as a mismatch to
+refuse. I would be careful about writing a rule that pushes anyone toward the weaker
+representation because it happens to be the one a recipe was trained on.
+
+**Limits, stated the same way I stated them before the run.** 16.4% is not balance, and by
+the section above this corpus cannot give balance — so "the gap survives native exposure" is
+established at that exposure level, not at parity. Two segments, not four. And the arm gains
+scroll exposure inseparably from family exposure; it moved both families alike, but I cannot
+prove that from two segments alone. What would settle the remaining doubt is a native render
+of a segment on some other scroll, which is a data question rather than an analysis one.
+
+One infrastructure note for anyone rerunning this: both seeds first died at step 5000 with a
+Windows DataLoader shared-memory failure (error 1455, commitment limit) and were resumed from
+that checkpoint with `dataloader_workers` cut from 12 to 6. Nothing else changed; the recipe,
+seeds, step count and scoring rule are the published ones.
+
+Grid: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/segloso_matrix.csv
 
 Raw grid, one row per arm × representation × step, if anyone wants to recompute either
 table: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/no0139_matrix.csv

@@ -1,0 +1,128 @@
+{
+ "arm": "segloso_w035w039",
+ "description": "w035 and w039 held out in both representation families; 25 of 29 representations trained, native w040/w041/w044 retained. Tests whether the aligned advantage needs the native family to be unseen.",
+ "design_committed_in": "fb37974",
+ "seeds": [
+  42,
+  43
+ ],
+ "steps": [
+  "010000",
+  "020000",
+  "030000",
+  "040000",
+  "050000",
+  "060000",
+  "075000"
+ ],
+ "cells": 56,
+ "native_share_of_training_batches": 0.164,
+ "dataloader_workers": 6,
+ "floors": {
+  "pherc0139-w035": 0.4797,
+  "w035": 0.4755,
+  "pherc0139-w039": 0.4852,
+  "w039": 0.4817
+ },
+ "per_segment": {
+  "pherc0139-w035": {
+   "best_f1": 0.7909,
+   "margin_over_floor": 0.3112,
+   "arm": "segloso43",
+   "step": "030000"
+  },
+  "w035": {
+   "best_f1": 0.7568,
+   "margin_over_floor": 0.2813,
+   "arm": "segloso43",
+   "step": "030000"
+  },
+  "pherc0139-w039": {
+   "best_f1": 0.7247,
+   "margin_over_floor": 0.2395,
+   "arm": "segloso43",
+   "step": "040000"
+  },
+  "w039": {
+   "best_f1": 0.635,
+   "margin_over_floor": 0.1533,
+   "arm": "segloso43",
+   "step": "030000"
+  }
+ },
+ "selection_robustness": {
+  "max_both_seeds": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.058
+  },
+  "mean_both_seeds": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.055
+  },
+  "median_both_seeds": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0641
+  },
+  "max_seed42": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0477
+  },
+  "max_seed43": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.058
+  }
+ },
+ "per_checkpoint": {
+  "010000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0655
+  },
+  "020000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0743
+  },
+  "030000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.05
+  },
+  "040000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0698
+  },
+  "050000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0806
+  },
+  "060000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0601
+  },
+  "075000": {
+   "aligned_wins": 2,
+   "of": 2,
+   "mean_delta_margin": 0.0793
+  }
+ },
+ "comparison_with_no0139_loso": {
+  "w035": {
+   "loso_delta_margin": 0.0568,
+   "segloso_delta_margin": 0.0299
+  },
+  "w039": {
+   "loso_delta_margin": 0.0661,
+   "segloso_delta_margin": 0.0862
+  }
+ },
+ "verdict": "Aligned wins 2/2 at mean delta margin +0.0580, against +0.0614 for the same two segments in the family-unseen LOSO arm. Native exposure rose from 0% to 16.4% of training batches and the gap moved -0.003, so the pre-registered branch that fired is the one arguing against the domain-match reading."
+}
