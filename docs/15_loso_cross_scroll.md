@@ -77,8 +77,10 @@ step별 LOSO 평균(16곡선): 10k 0.464 · **20k 0.482(정점)** · 30k 0.463 �
 # 1) arm config (짝 seed는 --seed 43)
 python tools/make_ink9um_config.py --exclude-scroll Paris4 \
   --out configs/ink9um_loso_noParis4_s42.json --run-dir runs/ink9um_loso_noParis4_s42
-# 2) 학습 (villa tip 트리 + ink-detection venv, cwd = villa/ink-detection)
-python -m koine_machines.training.train configs/ink9um_loso_noParis4_s42.json
+# 2) 학습 — cwd는 villa **tip** 트리, venv는 external/villa 것.
+#    ⚠️ external/villa 체크아웃에서 돌리면 ink_9um config 스키마를 몰라 세그먼트 0개로 죽는다.
+cd D:/vw2/ink-detection
+uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.training.train D:/vesuvius-challenge/configs/ink9um_loso_noParis4_s42.json
 # 3) 채점 (세그먼트 통째 held-out이므로 supervision_mask 영역으로)
 python tools/eval_validation.py <pred.tif> <labels>/phercparis4-w00 \
   --region-kind supervision_mask --no-image-metrics
@@ -167,10 +169,17 @@ native 5)을 제거(15 rep 유지, 쿼터 {1667:40, Paris4:20, 0814:4}). 0139는
 | w040 | 0.703 (+0.088) | 0.652 (+0.040) | +0.048 |
 | w041 | 0.734 (+0.145) | 0.703 (+0.117) | +0.028 |
 
-no0139 모델의 학습 코퍼스는 전부 aligned 계열(2.4µm 전사+풀링) — **같은 전처리
-계열로의 전이가 네이티브 렌더로의 전이보다 일관되게 낫다**(+0.03~0.07). 스크롤
-간 격차의 일부는 스캔/전처리 도메인 차이라는 직접 증거이자, 미지 스크롤 추론 시
-"학습과 같은 표현 계열로 렌더하라"는 실무 지침.
+측정 사실은 **aligned 표현이 native 표현보다 일관되게 잘 채점된다**(+0.03~0.07)까지다.
+
+⚠️ **초판의 해석은 틀렸다.** no0139의 학습 코퍼스가 전부 aligned 계열(2.4µm
+전사+풀링)이라 이걸 **domain match**(학습한 계열로의 전이가 낫다)로 읽고 "미지
+스크롤 추론 시 학습과 같은 표현 계열로 렌더하라"는 지침을 냈는데, **2026-08-26의
+후속 arm이 그 해석을 기각했다**(부록 2). native 계열을 학습에서 본 모델에서도
+격차가 그대로였으므로, 원인은 계열 *일치*가 아니라 **aligned 표현 자체의 우위**로
+읽어야 한다.
+
+지침은 살아남되 형태가 바뀐다 — "학습과 같은 계열로 렌더하라"가 아니라
+**"aligned 계열(고해상 전사 + z 풀링)로 렌더하라"**. 학습 코퍼스가 무엇이든.
 
 ## 3-arm 최종 스펙트럼 (오픈 문제 #7 요약표)
 
@@ -241,12 +250,14 @@ fine-tune(공식 레시피 그대로 10k step, ~27분/seed) → **fine-tune이 �
 ## 종합 서사 (9월 제출의 뼈대)
 
 1. **측정**: cross-scroll 픽셀 신호는 자명 기준선 +0.06~+0.17 (3 스크롤 스펙트럼).
-2. **성질**: 구조적 편향 — seed 무관, 앙상블 무효, 표현 계열이 일부 설명.
+2. **성질**: 구조적 편향 — seed 무관, 앙상블 무효, 표현 품질이 일부 설명
+   (계열 *일치*가 아니라 aligned 표현의 우위 — 부록 2).
 3. **수리 비용**: 타깃 스크롤 주석 **1세그먼트 + GPU 7분**이면 격차의 ~82% 봉합
    (0.50 → 0.82; in-scroll 정직 상한 0.74–0.77을 상회).
-4. **First Letters 함의**: 미지 스크롤(0800/1447) 전략 = 렌더(학습과 같은 표현
-   계열로) → 직행 추론은 스카우팅용 → 가장 유망한 세그먼트 하나에 주석 →
-   fine-tune → 전 세그먼트 재추론. 이 문서가 각 단계의 기대값을 제공한다.
+4. **First Letters 함의**: 미지 스크롤(0800/1447) 전략 = 렌더(**aligned 계열로** —
+   학습 코퍼스와의 일치가 아니라 표현 품질이 이유, 부록 2) → 직행 추론은 스카우팅용
+   → 가장 유망한 세그먼트 하나에 주석 → fine-tune → 전 세그먼트 재추론.
+   이 문서가 각 단계의 기대값을 제공한다.
 
 *(카베앗: 봉합률의 분모인 ref는 train-픽셀 상한이라 관대한 기준이고, w00
 1세그먼트는 Paris4 주석 중 가장 큰 축에 속한다. "세그먼트 하나"의 면적
@@ -254,7 +265,7 @@ fine-tune(공식 레시피 그대로 10k step, ~27분/seed) → **fine-tune이 �
 
 ---
 
-# 부록: 코퍼스 무결성 확인 (2026-08-24)
+# 부록 1: 코퍼스 무결성 확인 (2026-08-24)
 
 LOSO의 전제는 "held-out 스크롤이 학습에 없다"이므로, 공개 카탈로그에 제기된
 데이터 QA 보고 2건을 우리 코퍼스에 대조했다. **둘 다 이 문서의 수치에 영향 없음.**
@@ -269,3 +280,79 @@ LOSO의 전제는 "held-out 스크롤이 학습에 없다"이므로, 공개 카�
 경로가 스크롤 정체를 결정하고, 문제의 `scroll_source` 필드는 우리 파이프라인이
 읽지 않는다.
 
+
+---
+
+# 부록 2: 표현 효과의 원인 — domain match 가설 기각 (2026-08-26)
+
+3탄의 aligned 4/4 우세를 초판은 domain match로 읽었다. villa
+[#1580](https://github.com/ScrollPrize/villa/pull/1580) 스레드에서 Bullo27이 "공개
+그리드는 그 해석의 통제군을 이미 갖고 있다"고 짚었고(ref arm에서는 aligned 0/4,
+Δ −0.006), nerln이 그 질문만 떼어
+[#1582](https://github.com/ScrollPrize/villa/issues/1582)를 열었다. 두 단계로 답했다.
+
+## ref arm은 통제군으로 약하다
+
+ref = 공개 체크포인트이고 그 학습 계약(`aligned21_fixed_scroll_prior.json`)은
+aligned 24 + native 5, **native 5개가 정확히 0139의 w035/w039/w040/w041/w044**다.
+즉 ref는 비교 대상 4세그먼트를 두 계열 모두에서 봤으니 계열 노출을 직접 분리하는
+통제군이 맞다. 그러나 ref는 **자기 학습 픽셀에서** 채점되므로 가용 헤드룸의
+**90.7~96.8%**를 이미 쓴 상태다(F1 0.964~0.986, 남은 여유 0.014~0.036).
++0.05짜리 격차가 나타날 자리가 없어, 어느 해석이 참이든 같은 결과가 나온다.
+**통제군으로서 두 해석을 가르지 못한다.**
+
+## 그래서 arm을 하나 더 (사전등록)
+
+설계와 각 결과에 대한 해석을 **결과가 나오기 전에** 커밋(`fb37974`)해 공개 푸시한 뒤 실행.
+
+- **arm**: w035·w039를 **두 계열 모두**에서 제외, 25 rep 학습(native w040/w041/w044
+  잔류), seed 42/43, 78,125 step, 채점 규칙 동일 → **계열은 봤고 세그먼트는 못 본 모델.**
+- native 노출: 0139 패치 풀의 36.3%, **학습 배치의 16.4%**(3탄 arm은 0%).
+- **왜 2개만 빼나**: native가 5개뿐이라 제외 수가 곧 노출량이다. 1개면 비교쌍이
+  하나뿐이고, 4개면 native가 w044만 남아 사실상 aligned 전용 모델이 된다.
+
+| seg | aligned (마진) | native (마진) | Δ마진 | 3탄 Δ마진 |
+|---|---|---|---|---|
+| w035 | 0.791 (+0.311) | 0.757 (+0.281) | +0.030 | +0.057 |
+| w039 | 0.725 (+0.240) | 0.635 (+0.153) | +0.086 | +0.066 |
+| **평균** | | | **+0.058** | **+0.061** |
+
+**native 노출을 0 → 16.4%로 올렸는데 격차는 −0.003 움직였다.** 선택 규칙 artifact도
+아니다: max/mean/median = +0.058 / +0.055 / +0.064, 시드별 +0.048 · +0.058,
+**7개 체크포인트 각각에서도 2/2**(Δ +0.050~+0.081).
+
+## 판정 — domain match 기각
+
+계열 노출과 무관하게 유지되는 격차는 **"aligned 렌더가 더 나은 입력"**으로 설명된다.
+aligned는 2.399µm 취득을 z 4배 풀링한 것이고 native는 9.362µm 단일 취득이라,
+입력에 살아남는 정보량 자체가 다르다.
+
+절대 점수는 전부 올랐다(스크롤 노출 효과 — w035 aligned 0.740→0.791, native
+0.679→0.757; w039 0.654→0.725, 0.585→0.635). **계열 간 차이만 그대로**라는 것은
+스크롤 노출이 두 계열을 대칭적으로 밀어올렸다는 뜻이라, 그것으로 격차를 설명할 수 없다.
+
+**유보**: 16.4%는 균형이 아니고, native 5개가 전부 한 스크롤에 있어 **이 코퍼스에서
+계열 균형 arm은 원천적으로 만들 수 없다**. 세그먼트도 2개(4개 아님). 남은 의심을
+없애려면 다른 스크롤의 native 렌더가 필요한데, 이건 분석이 아니라 데이터 문제다.
+
+⚠️ **함정**: 두 시드 모두 step 5000에서 Windows DataLoader 공유메모리 실패
+(`error 1455`, ERROR_COMMITMENT_LIMIT)로 죽는다. `dataloader_workers` 12→6으로
+낮추고 체크포인트에서 full-state resume하면 완주한다(각 ~3h55m). 레시피·시드·
+step 수·채점 규칙은 그대로다. 워커 수는 I/O 파라미터라 결과에 영향이 없지만
+재현 시 명시할 것.
+
+## 재현
+
+```bash
+python tools/make_ink9um_config.py \
+  --exclude-segment pherc0139-w035 --exclude-segment w035 \
+  --exclude-segment pherc0139-w039 --exclude-segment w039 \
+  --seed 42 --out configs/ink9um_segloso_w035w039_s42.json \
+  --run-dir runs/ink9um_segloso_w035w039_s42
+```
+(학습·채점은 3탄과 동일. **cwd는 villa tip 트리 `D:/vw2/ink-detection`** — `external/villa`
+체크아웃은 ink_9um config 스키마를 모르는 구버전이라 세그먼트 0개로 죽는다.)
+
+원자료 = `runs/ink9um_scorecard/segloso_matrix.csv`(56칸) ·
+`segloso_matrix_summary.json`, 게시본 = `submission/issue1582_comment.md`
+([#1582 코멘트](https://github.com/ScrollPrize/villa/issues/1582), 2026-08-26 게시).
