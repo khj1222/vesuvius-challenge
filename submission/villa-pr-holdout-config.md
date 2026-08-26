@@ -4,13 +4,13 @@
 **Base:** `merge-ink-pipelines` ⚠ **not `main`** — `ink-detection/scripts/` only exists on
 this branch; `main` keeps the pipeline at `vesuvius/src/vesuvius/ink_detection/` with no
 `scripts/` directory. Opening against `main` produces a nonsense diff.
-**Open at:** https://github.com/khj1222/villa/pull/new/feat/holdout-config-generator
-**Files:** 1 added, `ink-detection/scripts/make_holdout_config.py` (+207)
+**PR:** https://github.com/ScrollPrize/villa/pull/1608 (opened 2026-08-26)
+**Files:** 1 added, `ink-detection/scripts/make_holdout_config.py` (+211)
 
-⚠ **Before opening:** the "Why this matters to me" paragraph at the bottom is a placeholder —
-`CONTRIBUTING.md` requires human-written commentary on LLM-assisted PRs, and #1434 was closed
-once for missing it. Also tick the verification checkbox only once you are happy the numbers
-below are yours.
+The body below is what the PR carries. It did not land with the PR — GitHub pre-filled the
+commit message plus an unfilled template, so the body was pasted over afterwards. The
+"Why this matters to me" paragraph is the author's own, as `CONTRIBUTING.md` requires for
+LLM-assisted PRs; #1434 was closed once for its absence.
 
 ---
 
@@ -101,11 +101,9 @@ them without reconstructing the config by hand.
   there rather than here.
 - No changes to any existing file.
 
-**Why this matters to me:** ⚠ TODO — human commentary, required by `CONTRIBUTING.md`.
-True substance you can put in your own words, all of it from what actually happened: you wanted
-to know whether the released ink_9um model transfers to a scroll it has never seen; the recipe
-is published but not runnable as shipped, so the first thing between you and that question was
-writing out 29 dataset entries; you ended up doing that join once per arm across three
-leave-one-scroll-out runs and a two-segment holdout, each with its own quota arithmetic; and at
-that point it seemed better in the repo than in your notes. Say only what you did — do not
-claim a bug you did not hit.
+**Why this matters to me:** I wanted to see whether the publicly released ink_9um model could
+generalize to scrolls it had never seen before. The recipe was available, but it did not run
+as-is, so before I could even get to that question, I had to manually define 29 dataset
+entries. I then repeated the joins and quota calculations for each arm across three
+leave-one-scroll-out splits and one two-segment holdout. At that point, it made more sense to
+keep the setup in the repository than in my notes.

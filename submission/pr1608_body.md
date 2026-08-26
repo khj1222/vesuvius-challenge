@@ -77,12 +77,9 @@ them without reconstructing the config by hand.
   there rather than here.
 - No changes to any existing file.
 
-**Why this matters to me:**
-
-<<< 이 문단만 직접 쓰세요. 아래는 실제로 있었던 일이니 본인 말로 바꾸면 됩니다. >>>
-- 공개된 ink_9um 모델이 한 번도 못 본 스크롤로 전이되는지 알고 싶었다
-- 레시피는 공개돼 있지만 그대로는 안 돌아가서, 질문에 닿기 전에 29개 dataset 항목을
-  먼저 손으로 써야 했다
-- leave-one-scroll-out 3개 + 2세그먼트 holdout 1개, arm마다 그 조인과 쿼터 산수를 반복했다
-- 그쯤 되니 내 노트보다 저장소에 있는 편이 낫겠다고 판단했다
-<<< 겪지 않은 버그는 쓰지 마세요. >>>
+**Why this matters to me:** I wanted to see whether the publicly released ink_9um model could
+generalize to scrolls it had never seen before. The recipe was available, but it did not run
+as-is, so before I could even get to that question, I had to manually define 29 dataset
+entries. I then repeated the joins and quota calculations for each arm across three
+leave-one-scroll-out splits and one two-segment holdout. At that point, it made more sense to
+keep the setup in the repository than in my notes.
