@@ -128,8 +128,8 @@ Windows DataLoader shared-memory failure (error 1455, commitment limit) and were
 that checkpoint with `dataloader_workers` cut from 12 to 6. Nothing else changed; the recipe,
 seeds, step count and scoring rule are the published ones.
 
-Grid: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/segloso_matrix.csv
+Both grids, one row per arm × representation × step, if anyone wants to recompute any table
+here — `pherc0139-wNNN` rows are aligned, bare `wNNN` are native:
 
-Raw grid, one row per arm × representation × step, if anyone wants to recompute either
-table: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/no0139_matrix.csv
-(`pherc0139-wNNN` rows are aligned, bare `wNNN` are native.)
+- this arm: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/segloso_matrix.csv
+- the published LOSO arm: https://github.com/khj1222/vesuvius-challenge/blob/main/runs/ink9um_scorecard/no0139_matrix.csv
