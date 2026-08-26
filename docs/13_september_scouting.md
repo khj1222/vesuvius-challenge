@@ -115,7 +115,10 @@
   최대 **7.4cm² > First Letters 창(4cm²)**, 전부 max_gen=200(성숙 성장).
   0800은 0.38–2.28cm²로 작음(6개, gen 20–101). 합계 67.5cm².
   상위: 7.40 / 6.57 / 4.92 / 4.74 / 4.51 / 4.46 (전부 1447).
-- **환경 함정(유일한 블로커)**: VC는 네이티브 Windows 빌드 불가(*nix atomic rename 요구,
+✅ **실행 완료 2026-08-26 — 전 구간 작동 확인, 결과는 판독 불가. 상세는 [docs/16](16_first_letters_render.md).**
+  아래 블로커는 WSL2 + Docker Desktop 설치로 해소됐다.
+
+- **환경 함정(당시 유일한 블로커, 해소됨)**: VC는 네이티브 Windows 빌드 불가(*nix atomic rename 요구,
   README 명시). 공식 경로 = Docker 이미지
   `ghcr.io/scrollprize/villa/volume-cartographer:edge` 또는 WSL. **이 머신엔 둘 다 없음**
   (`docker` 없음, WSL 배포판 미설치) → **사용자 1회 설치 필요(관리자)**: WSL2
