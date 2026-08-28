@@ -109,10 +109,10 @@ every constant fold, while the constant band again lands on that segment's own 2
 
 A third check came from outside the project. stantheman0128 offered on #192 to score the
 exported band against an independently acquired 1.129 um scan of the same segment, and
-posted the result on 2026-08-25: over the 157 annotation cells that scan reaches (all of
-them inside one of the 15 annotated regions, which is the only region it covers), the
+posted the result on 2026-08-25: of the 164 annotation cells that scan reaches, 157 could
+be scored — all inside one of the 15 annotated regions, the only one it covers — and the
 band's per-pixel centre sits a median 2.0 voxels from the independently observed surface,
-118 of 157 within 3 voxels. That is geometry only and certifies nothing about ink, as they
+118 of the 157 within 3 voxels. That is geometry only and certifies nothing about ink, as they
 say themselves — but it points the verdict the harder way: the per-pixel band is not
 obviously misplaced, and it still loses to one held flat.
 

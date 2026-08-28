@@ -2,7 +2,8 @@
 
 **Form:** https://forms.gle/xoF5C3QsYutKP97x7
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v2 (2026-08-24) — rewritten after the study grew to its full four parts:
+**Status:** DRAFT v3 (2026-08-28 — field-6 PR resolved to #1608 and its review round folded
+into field 5; was v2 of 2026-08-24) — rewritten after the study grew to its full four parts:
 ①three LOSO arms (Paris4 / 1667 / 0139, the last with the aligned-vs-native
 representation control) ②nature-of-the-gap (ensembles ≈ no recovery → bias)
 ③label-efficiency repair (one segment closes 82%), plus a pre-registered follow-up that
@@ -13,18 +14,24 @@ groundwork here, cited as such, not re-claimed.
 
 ---
 
-## Step 1 — the pull request ⚠ OPEN ITEM
+## Step 1 — the pull request ✅ done
 
-Candidates, in preference order (decide when one actually exists):
-1. **Harness/eval upstreaming to villa** — e.g. a cross-scroll evaluation script or a
-   measured-baselines table for `ink-detection/configs/README.md` (the model card and
-   configs README ship no numbers; ours are the first). Read `villa/CONTRIBUTING.md` on
-   `main` first (the #1434 lesson), include the human "why this matters to me" paragraph.
+**[#1608](https://github.com/ScrollPrize/villa/pull/1608)** — `ink-detection/scripts/make_holdout_config.py`,
+opened 2026-08-26 against `merge-ink-pipelines`, 1 file. It is candidate 1 below: the join
+that makes the released recipe runnable, plus the `--exclude-scroll` / `--exclude-segment`
+flags that turn it into the cross-scroll probe this submission is about. Body follows
+`villa/CONTRIBUTING.md` including the human "why this matters to me" paragraph
+(`submission/pr1608_body.md`). One round of outside review already closed: Bullo27
+reproduced the quota arithmetic, found a crash when `batch_size` is below the surviving
+scroll count, and the fix went up as `dc9edb6` two days later
+(`submission/pr1608_reply_bullo27.md`).
+
+Kept in reserve if a second PR is wanted:
 2. **scrollprize.org community-projects entry update** on top of merged
    [#1249](https://github.com/ScrollPrize/villa/pull/1249) — add the cross-scroll study
    line next to the harness entry (small, safe, same pattern as July).
-3. Fallback: if [#1535](https://github.com/ScrollPrize/villa/pull/1535) is still open and
-   unreviewed it technically satisfies "submitted", but it is August's story — prefer 1/2.
+3. Not [#1535](https://github.com/ScrollPrize/villa/pull/1535) — it technically satisfies
+   "submitted", but it is August's story and August already cites it.
 
 ---
 
@@ -53,6 +60,7 @@ Groundwork (first scorecard of the released ink_9um models): https://github.com/
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
 Raw numbers (1,000+ scored cells, 9 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
+Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
 
@@ -126,12 +134,23 @@ playbook works as scouting only in the weak sense: it tells you the model has no
 not where to annotate next. Unsupervised domain adaptation has to come before step three
 on a scroll with no labels. I would rather submit that than a paragraph implying the
 recipe is ready to point at PHerc0800 tomorrow (docs/16).
+The apparatus went upstream as well as the numbers. The released recipe does not run as
+published — its `datasets` block is a single `/path/to/` placeholder while the 29
+representations live in a separate contract file — so the join, and the holdout flags that
+turn it into this probe, are villa PR #1608; it regenerates my three arm configs
+byte-for-byte. Both have already survived outside hands: one contributor pulled the raw
+0139 matrix and recomputed every published figure from it, confirming the margins hold
+under four different checkpoint-selection rules, and the same person then reviewed the
+generator and found a crash on a batch smaller than the surviving scroll count, fixed two
+days later. Being reproduced and being corrected are the two things a measurement of an
+open problem needs.
+
 Everything is MIT, documented end to end (docs/14–15 plus nine committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
 
-**6. Pull Request Submission** → check "Pull request submitted!" (see step 1 — OPEN)
+**6. Pull Request Submission** → check "Pull request submitted!" (see step 1 — #1608)
 
 **7. Terms and conditions** → "Yes, I agree"
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)
@@ -156,6 +175,8 @@ apparatus, three months of answered questions.
 | all-positive floor 2p/(1+p) per segment | `floors` in the summary JSONs |
 | recipe fidelity (quota renormalisation, 15/21/23 reps; FT = w00-only + weights-only load) | `configs/ink9um_loso_*.json`, `configs/ink9um_ft_w00_*.json`, generated by `tools/make_ink9um_config.py` |
 | reproduction validity (online val 0.69–0.78 on official masks across arms) | `runs/ink9um_loso_*/validation_metrics.jsonl` |
+| independent recomputation of the 0139 table, margins hold under 4 selection rules | Bullo27 on villa #1580, 2026-08-24 |
+| generator upstreamed, reviewed, crash fixed | villa #1608 (`dc9edb6`), `submission/pr1608_body.md` + `pr1608_reply_bullo27.md` |
 
 (Checkpoints and prediction TIFFs stay untracked; the committed CSV/JSON files reproduce
 every quoted figure.)
@@ -167,12 +188,16 @@ every quoted figure.)
 * **Do not re-claim the scorecard as September work if August's form went in with its
   scorecard paragraph** — here it is framed as groundwork (second paragraph of field 5).
   If August was submitted WITHOUT that paragraph, promote docs/14 freely.
-* **Field-6 PR is the one genuinely open item** — see step 1. Whichever lands, add its
-  URL to field 4 and a half-sentence to field 5's last paragraph.
+* ~~**Field-6 PR is the one genuinely open item**~~ — **resolved 2026-08-28**: #1608 is the
+  field-6 PR, its URL is in field 4 and field 5's second-to-last paragraph carries the
+  review round. If it merges before submitting, relabel it "merged" the way August did
+  with #1234.
 * **Fold in September events before submitting**: ①✅ done — the render path ran on
   2026-08-26 and its negative result is now the field-5 paragraph after the playbook
-  (docs/16); if more segments get rendered before submitting, update the count there ②any upstream replies (#1231, #192 stantheman scoring,
-  #1535 review) that touch the framing ③a smaller-annotation label-efficiency point
+  (docs/16); if more segments get rendered before submitting, update the count there ②upstream replies that touch the framing — #1231
+  still silent; **stantheman0128's scoring of our depth band landed 2026-08-25 and belongs
+  to August, not here** (it is folded into the August form's field 5; do not repeat it);
+  #1535 still unreviewed ③a smaller-annotation label-efficiency point
   (does half a segment still close the gap?) if measured.
 * **Honesty guardrails already embedded in the text** — keep them through edits: closure
   percentages use the train-pixel ref as denominator (generous baseline, said as such);
