@@ -90,8 +90,9 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
 **남은 것 = 8월 폼 제출 하나. 마감 8/31 23:59 PT(= KST 9/1 15:59), 제출 = 이번 주말 08-29~30 확정.**
 그날 순서 = ①[#1535](https://github.com/ScrollPrize/villa/pull/1535) 상태 확인 후 라벨 갱신 ~~②stantheman0128 채점 회신~~(✅ 08-28 반영 완료) ③문안 링크 4개(docs/10·11·12·14) 재검증 ④사용자 폼 복붙 제출 ⑤`submission/2026-08_progress_prize.md`를 제출본과 동기화.
 
-📮 **사용자가 게시할 코멘트 2건 대기 중**(둘 다 Bullo27 앞, 원본은 `submission/`):
-`pr1608_reply_bullo27.md` → [#1608](https://github.com/ScrollPrize/villa/pull/1608) · `issue1611_reply_bullo27.md` → [#1611](https://github.com/ScrollPrize/villa/issues/1611).
+✅ **코멘트 2건 게시 완료(08-28 03:25/03:26 UTC, 사용자 직접, 게시본 = 로컬 초안과 바이트 동일 확인)** — [#1608](https://github.com/ScrollPrize/villa/pull/1608#issuecomment-5448016030) · [#1611](https://github.com/ScrollPrize/villa/issues/1611#issuecomment-5448022908). 원본 = `submission/pr1608_reply_bullo27.md`, `submission/issue1611_reply_bullo27.md`.
+
+✅ **8월 제출 사전점검 완료(08-28)** — field 4 링크 **10개 전부 200**, field 5 수치를 원 아티팩트(`external/villa/ink-detection/runs/*.json`)에서 **전건 대조 일치**(v2/v3/v4 0.844091/0.847853/0.809759, 격차 0.038094, 7월 2D 0.847243, 30k 0.038263→0.036076, w02 0.82625/0.728672 + 완전 순서). #1535·#1434 확인 결과 **우리가 답할 것 없음**(#1535는 사람 코멘트 0건, #1434엔 포인터 코멘트가 08-19에 이미 게시됨). **판정 = 주말에 그대로 제출.**
 
 **8월 문안 내용 수정은 불필요 — 08-26에 점검 완료.** 오늘 철회한 domain match 주장은 8월엔 애초에 안 들어가 있었고(ink_9um 문단은 docs/14 스코어카드만 인용), #1434 인용도 "닫히고 #1535로 갔다"는 의도된 서술이라 그대로 두면 됨.
 
@@ -107,8 +108,11 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
   → **8월 문안 notes에 사전등록해둔 두 분기 중 "geometry-valid" 쪽**이므로 더 강한 읽기(정확한 픽셀별 밴드조차 고정 밴드를 못 이김)를 지지. field 5에 세 번째 검사 문단 + 증거표 1행 추가(카베앗 2개 포함), notes의 해당 항목은 resolved로 갱신.
 - 🟠 **[#1608](https://github.com/ScrollPrize/villa/pull/1608) 첫 리뷰 = Bullo27(08-26)** — 쿼터 재현·재정규화는 검증 통과, 그러나 **진짜 버그 1건**: `renormalise`가 `batch_size < 생존 스크롤 수`면 전 항목이 `max(1,…)`로 1이 돼 트림 루프의 `max()`가 빈 시퀀스 → `ValueError`. **수정 푸시 완료(`dc9edb6`, +13 −3)**: 가드 + 저쪽 제안 문구(클래스명은 실제 이름 `FixedScrollPriorStratifiedBatchSampler`로). 이유 = `samplers.py:84`가 0 쿼터를 거부하므로 바닥 1은 못 걷어냄 → 쓸 수 있는 config가 없고 거절이 정답.
   - 저쪽이 "미검증"이라 한 브랜치를 **실데이터로 전부 실행**: `--exclude-segment` 4개 = 25 rep·쿼터 동일·`dataloader_workers` 빼고 바이트 동일 / zarr 탐색 **두 분기 모두 실코퍼스에서 발동**(aligned9는 `<seg>.zarr`, native9는 `<seg>/<one>.zarr`) / `--allow-missing`에서 **두 번째 워트 발견** — 아무것도 못 찾으면 `error: every scroll was excluded`(거짓)를 뱉던 걸 루트 2개를 지목하도록 수정. LOSO 3개 config는 수정 후에도 **바이트 동일 재생성**.
-  - 템플릿 지적("체크박스 미체크")은 **오해** — 저쪽이 본 건 GitHub 프리필이고 본문은 개설 직후 덮어썼음(현재 body에 `- [x]` 확인). 회신 초안에 사과 한 줄로 처리.
-- 🟠 **[#1611](https://github.com/ScrollPrize/villa/issues/1611)에도 Bullo27 답**(08-26): 청크 fetch는 이미 3회 재시도·60초 타임아웃이 있고 진짜 원인은 `ChunkCache.cpp`의 무기한 `cv.wait` 4곳(weak_ptr 만료 시 아무것도 스케줄 안 되고 `completed`가 false로 남음)이라는 진단. **그런데 우리 체크아웃엔 그 파일이 없다** — `merge-ink-pipelines`의 캐시는 `core/src/cache/`(`TieredChunkCache.cpp` 등)이고 `CURLOPT_TIMEOUT`은 **30**, 재시도 루프는 없으며(`TieredChunkCache.cpp:320` = "Fetch failed — remember so we don't retry"), 조건변수는 캐시에 아예 없음(`wait(lock`은 트리 전체에서 `utils/priority_queue.hpp` 하나). `main`엔 `core/src/cache/` 디렉터리 자체가 없음. → **ref 핀 요청**을 회신 초안의 본체로 삼음(우리가 돈 건 소스빌드가 아니라 `:edge` 이미지라 그쪽 ref도 미상). 캐시 클수록 악화(24GB 100–130청크 vs 8GB 361·540청크, 실 RSS 1.2GiB)는 **동기화 버그 쪽을 지지**한다고 확인해 줌.
+  - 템플릿 지적("체크박스 미체크")은 **오해** — 저쪽이 본 건 GitHub 프리필이고 본문은 개설 직후 덮어썼음(현재 body에 `- [x]` 확인). 회신에 사과 한 줄로 처리.
+- 📄 **9월 문안 v3(커밋 `5ef99ee`)**: Step 1(6번 칸 PR)이 **#1608로 해소**(OPEN 아님), field 4에 링크 추가, field 5에 문단 1개 추가 — *레시피는 그대로 안 돌아가고 그 조인이 #1608이며, 같은 기여자가 원 매트릭스로 공개 수치를 재계산한 뒤 생성기를 리뷰해 크래시를 찾았다*(⚠️ Bullo27 **동일인**임을 명시, 두 사람인 척 금지). 증거표 2행 + notes(“stantheman 채점은 8월 것, 9월에 반복 금지”).
+- ⚠️ **과거 게시 코멘트에 초안 머리말이 HTML 주석으로 딸려 들어가 있음**(#1580·#1582). 렌더링엔 안 보이나 raw엔 남음 — 수정할 필요는 없고, **앞으로는 오늘 방식(`---` 아래만 붙여넣기)** 유지. 오늘 2건은 바이트 동일 확인됨.
+- 🔭 **남은 선택지(9월용, 미착수)**: **라벨 효율 곡선** — `make_validation_mask.py`가 떼어낸 영역을 학습 supervision에서 0으로 만드는 성질을 이용해 w00 주석의 50%/25%만으로 FT(2,500 step 포화, arm당 ~7분) → 미학습 7세그 채점(인퍼런스 회당 ~2분). **총 1.5~2h 무인.** 어느 쪽으로 나와도 씀(절반이면 충분 / 1세그가 하한). 리스크 = ink_9um 마스크 피라미드 레벨 차이로 `--level` 조정 필요할 수 있음 + 패치 캐시 때문에 **새 out_dir 필수**.
+- 🟠 **[#1611](https://github.com/ScrollPrize/villa/issues/1611)에도 Bullo27 답**(08-26, 우리 회신 08-28 게시): 청크 fetch는 이미 3회 재시도·60초 타임아웃이 있고 진짜 원인은 `ChunkCache.cpp`의 무기한 `cv.wait` 4곳(weak_ptr 만료 시 아무것도 스케줄 안 되고 `completed`가 false로 남음)이라는 진단. **그런데 우리 체크아웃엔 그 파일이 없다** — `merge-ink-pipelines`의 캐시는 `core/src/cache/`(`TieredChunkCache.cpp` 등)이고 `CURLOPT_TIMEOUT`은 **30**, 재시도 루프는 없으며(`TieredChunkCache.cpp:320` = "Fetch failed — remember so we don't retry"), 조건변수는 캐시에 아예 없음(`wait(lock`은 트리 전체에서 `utils/priority_queue.hpp` 하나). `main`엔 `core/src/cache/` 디렉터리 자체가 없음. → **ref 핀 요청**을 회신의 본체로 삼음(우리가 돈 건 소스빌드가 아니라 `:edge` 이미지라 그쪽 ref도 미상). 캐시 클수록 악화(24GB 100–130청크 vs 8GB 361·540청크, 실 RSS 1.2GiB)는 **동기화 버그 쪽을 지지**한다고 확인해 줌.
 - ⚠️ **함정**: `cp -r`로 라벨 트리 사본을 만들려다 2분 타임아웃 — ink_9um 라벨 루트는 통째 복사 금지. 부분 코퍼스 테스트는 **`--volumes-root`를 `aligned9`로만 겨누면** 복사 없이 5개 native rep이 미탐지가 됨. (그때 남은 잔해 `scratchpad/h/partial`은 rm/PowerShell 둘 다 "not empty"로 못 지움 — 세션 임시 디렉터리라 방치.)
 
 #### 2026-08-26 (밤) — First Letters 렌더 경로 실행: 경로는 뚫렸고 글자는 없다
