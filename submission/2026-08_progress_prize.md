@@ -13,8 +13,11 @@ moves (merge or review), backstop 2026-08-29/30 regardless** (decided 08-21, rep
 review, no reviewer assigned, nothing since 08-19; no stantheman0128 result on #192 (they
 committed to running D/FWHM on our anchors on 08-23, repo unpushed since 08-13). All four
 doc links in field 4 verified to resolve publicly on 08-24, so the "push before submitting"
-condition is met. Remaining pre-submit check: relabel #1535 if it moves before submission
-day (see notes).
+condition is met. **Checked 08-28: #1535 still open, mergeable, no review since 08-19; the
+"Why this matters to me" paragraph is in the body. stantheman0128 posted their scoring of our
+band on 08-25, so field 5 gained the third-check paragraph the notes pre-registered for the
+geometry-valid branch, plus an evidence row.** Remaining pre-submit check: relabel #1535 if it
+moves before submission day (see notes).
 
 ---
 
@@ -104,6 +107,15 @@ with a wider margin: 0.8263 constant against 0.7287 measured, every measured fol
 every constant fold, while the constant band again lands on that segment's own 2D baseline
 (0.8263 vs 0.8235 — itself within 0.001 of w00's, on a segment the harness had never seen).
 
+A third check came from outside the project. stantheman0128 offered on #192 to score the
+exported band against an independently acquired 1.129 um scan of the same segment, and
+posted the result on 2026-08-25: over the 157 annotation cells that scan reaches (all of
+them inside one of the 15 annotated regions, which is the only region it covers), the
+band's per-pixel centre sits a median 2.0 voxels from the independently observed surface,
+118 of 157 within 3 voxels. That is geometry only and certifies nothing about ink, as they
+say themselves — but it points the verdict the harder way: the per-pixel band is not
+obviously misplaced, and it still loses to one held flat.
+
 A negative result, but a load-bearing one: the obvious route to #192 — read depth out of a
 2D-trained model and follow the sheet per pixel — loses to simply fixing the band at one
 depth, and anyone with a better route can now test it in a day on the same apparatus. I
@@ -153,6 +165,7 @@ ships no numbers, so this is the first measured baseline anyone can compare agai
 | late-training gain +0.0075 (v3) / +0.0068 (v4) | step 17000 vs 20000 rows of the summaries above |
 | 30k extension: gap 0.038 → 0.036 | `runs/ink_depth_ext30k_summary.json`, `docs/12` |
 | w02 replication: 0.8263 vs 0.7287 (+0.098), w02 2D baseline 0.8235 | `runs/ink_w02_{v3,v4}_fold_cv_summary.json`, `runs/ink_w02_holdout_20k/validation/summary.csv`, `docs/12` |
+| independent band check: median D 2.0 voxels, 118/157 within 3 (region 15 only) | stantheman0128 on villa #192, 2026-08-25; anchors from `submission/depth_anchors/` |
 
 (Run artifacts live under the gitignored `external/villa/ink-detection/`; every number is
 reproduced in `docs/12_depth_training.md`.)
@@ -190,6 +203,12 @@ reproduced in `docs/12_depth_training.md`.)
     before submission day, consider one sentence in field 5 — geometry-invalid band
     supports "the estimator was wrong", geometry-valid supports the stronger reading
     that even accurate per-pixel bands don't help this training setup.
+    **Resolved 2026-08-28: they posted on 08-25 and the band is geometry-valid** (157
+    evaluable cells, median distance to the independent surface 2.0 voxels, 118 within 3,
+    median FWHM 2.71; coverage is region 15 alone, and they state plainly that this is
+    geometry and not ink identity, and that it does not explain why v4 loses). Field 5 now
+    carries it as the third check, worded to keep both caveats. If they post more before
+    submission day, the numbers to update are in that paragraph and in the evidence table.
 * **Do not quote a single `v2` fold.** Its spread is 0.0308; fold 0 alone reads as "the plane
   wins outright", which fold 1 contradicts.
 * **Keep the headline claim v4-vs-v3.** The 08-09 draft said the measured band is "worse
