@@ -1,12 +1,31 @@
 # villa issue draft — the three shipped ink_9um validation masks are cut through annotated regions
 
-**To post:** https://github.com/ScrollPrize/villa/issues/new (tick the checkbox)
-**Related:** our [#1231](https://github.com/ScrollPrize/villa/issues/1231) (missing
-`_validation_mask` on published segments; triaged to `erdpx`, no reply yet). Post a one-line
-pointer comment there afterwards.
+**To post:** https://github.com/ScrollPrize/villa/issues/new — **as a new issue** (decided
+2026-08-29). It is a different claim from [#1231](https://github.com/ScrollPrize/villa/issues/1231):
+that one says the masks are *missing*, this one says the masks that *exist* are cut through
+annotated regions. Different evidence, different fix.
 **Backing document:** [docs/17](https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md)
+**Checked before posting (2026-08-29):** every figure re-derived from the artifacts, all five
+links 200, and a villa issue search turned up no duplicate — #1231 is the only related thread.
 
-Paste everything below the `---` only.
+## After posting: a pointer comment for #1231
+
+```
+Splitting a follow-up out of this thread rather than growing it, since it is a different claim:
+the three ink_9um segments that *do* ship a `_validation_mask` turn out to split their annotation
+within connected regions rather than by whole ones, and on pherc0139-w016 there is no leak-free
+held-out subset available at all — 99.1% of its held-out pixels sit within two training patches
+and the rest contains no ink. Numbers and a tool are in #NNNN.
+
+This issue's question stands unchanged: whether the 26 segments that ship no mask are intended to
+ship none.
+```
+
+(Replace `#NNNN` with the new issue's number.)
+
+Paste everything below the first `---` only, and tick the template checkbox. Do not paste this
+header: a draft preamble left in a posted body survives in the raw markdown even when it renders
+invisibly (it happened on #1580 and #1582).
 
 ---
 
