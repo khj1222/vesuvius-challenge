@@ -85,10 +85,16 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
    - ✅ **1단계 깊이 국소화(2026-07-27)** → ✅ **2단계 측정된 3D 라벨(2026-07-27)** → ✅ **3단계 학습 소비 경로 + 3 arm 자산(2026-07-31)** → ✅ **4단계 9런 매트릭스(2026-08-09)**. 각각 `docs/10` · `docs/11` · `docs/12`. **실험은 끝났고 결과는 음의 결과** — 아래 "매트릭스 완료" 절.
 3. 수상 시 permissive 라이선스 필수 → 저장소는 이미 MIT라 조건 충족.
 
-### ▶ 다음 세션 재개 지점 (2026-08-28 갱신)
+### ▶ 🏁 8월 라운드 제출 완료 (2026-08-29)
 
-**남은 것 = 8월 폼 제출 하나. 마감 8/31 23:59 PT(= KST 9/1 15:59), 제출 = 이번 주말 08-29~30 확정.**
-그날 순서 = ①[#1535](https://github.com/ScrollPrize/villa/pull/1535) 상태 확인 후 라벨 갱신 ~~②stantheman0128 채점 회신~~(✅ 08-28 반영 완료) ③문안 링크 4개(docs/10·11·12·14) 재검증 ④사용자 폼 복붙 제출 ⑤`submission/2026-08_progress_prize.md`를 제출본과 동기화.
+✅ **8월 폼 제출 완료(2026-08-29, 사용자 직접, 마감 8/31 23:59 PT 대비 2일 여유).** 접수 확인 메일로 6칸 전부·Terms 체크까지 확인. 제출본 = `submission/2026-08_progress_prize.md`(**field 4·5가 제출본과 바이트 동일**, field 5 sha256 `b2910b90c6a573c767a07d49b9b4138daffe87f265e4a43cd72ac27d34d117d0` / 70줄 5,101자 — 7월 파일처럼 이 상태로 동결). 타깃 = villa #192 측정 3D 라벨의 음의 결과.
+
+⚠️ **폼 URL은 라운드마다 새로 발급되고 지난 폼은 닫힌다** — 08-29에 7월 폼(`forms.gle/xoF5C3QsYutKP97x7`)이 "응답 받지 않음"으로 막힌 걸 제출 직전에 발견했다. 8월분 = `docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform`, 출처는 https://scrollprize.org/prizes. **9월분은 거기서 새로 받을 것.** 8월 폼은 **6문항**(7월의 "Pull request submitted!" 체크박스가 사라짐 → PR은 4번 칸으로만 증빙). 상금 등급도 **6단계로 확장**($500·$1k·$2.5k·$5k·$10k·$20k).
+
+**제출 당일(08-29) 최종 점검 결과**: #1535 open·mergeable·사람 코멘트 0·리뷰어 0(08-19 이후 무변화, 유일한 코멘트는 Vercel 봇) / #1231 무변화(코멘트 0, erdpx 배정) / #192는 stantheman 08-25 이후 새 코멘트 없음 / field 4 링크 10개 전부 200 / field 5 수치 전건 원 아티팩트 재산출 일치. **당일 수정 4건**: ①독립 밴드 채점을 `docs/12`에 기록(field 4가 가리키는 문서에 없어서 심사자가 근거를 못 찾는 상태였음) ②그 채점의 평활성 카베앗을 field 5에 반영 ③w02 비교의 "within 0.001 of w00's"가 두 문장 앞의 0.8472(3-fold)로 오독될 수 있어 0.8232(단일 split) 명시 ④증거표 3행이 30k 재스윕에 덮인 CSV를 가리켜 fold-CV JSON으로 재지정. 커밋 `d38aed8`·`b37c12d`·`24db100`.
+
+**남은 것 = 9월 라운드.**
+그날 순서(전부 완료) = ①#1535 상태 확인 → 무변화라 라벨 갱신 불필요 ②stantheman0128 채점 반영(08-28) ③문안 링크 재검증 → 10개 전부 200 ④사용자 폼 복붙 제출 ⑤`submission/2026-08_progress_prize.md`를 제출본과 동기화(완료, 동결).
 
 ✅ **코멘트 2건 게시 완료(08-28 03:25/03:26 UTC, 사용자 직접, 게시본 = 로컬 초안과 바이트 동일 확인)** — [#1608](https://github.com/ScrollPrize/villa/pull/1608#issuecomment-5448016030) · [#1611](https://github.com/ScrollPrize/villa/issues/1611#issuecomment-5448022908). 원본 = `submission/pr1608_reply_bullo27.md`, `submission/issue1611_reply_bullo27.md`.
 
@@ -168,7 +174,7 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
    - ✅ **수락 답장 게시 완료(2026-08-14, 사용자 직접)** — 본문 원본 = `submission/issue192_reply_stantheman.md`. 논리: 채점 결과가 우리 음의 결과의 두 해석(①추정기 기하가 틀렸다 → #192 전제 생존 ②기하가 맞는데도 진다 → 더 강한 주장)을 가르는 유일한 비순환 검사. pmh47 카베앗은 "잉크 인증이 아니라 기하 일관성 확인 용도"로 수용. 실무 질문 1개 포함(앵커 좌표 포맷 — 표면볼륨 z를 `x/y/z.tif`로 스크롤 좌표 변환 필요). **다음 = 회신 대기, 포맷 정해지면 v4 밴드 데이터(CSV/zarr) 준비는 Claude 몫.**
 2. ✅ **PR #1234 머지됨(2026-08-14 01:18 UTC, erdpx, 추가 코멘트 없이)** — 회신(08-09, `submission/pr1234_reply.md`)에 무응답이다가 그대로 머지. 제목·본문이 구버전 구현을 설명하는 문제는 머지로 소멸. **8월 문안의 #1234 라벨은 "merged 2026-08-14"로 갱신 완료(2026-08-14).**
 3. ✅ **`flat_depth_targets` PR = [#1535](https://github.com/ScrollPrize/villa/pull/1535)(2026-08-19 오픈, 사용자 직접)** — base `merge-ink-pipelines`, 2커밋 3파일 **+112 −13**, mergeable. **선행 [#1434](https://github.com/ScrollPrize/villa/pull/1434)는 erdpx가 2026-08-18 머지 없이 닫음**(①`villa/CONTRIBUTING.md`를 따를 것 ②`mean` 축약 미검증이니 증거 없으면 빼라) → 둘 다 반영: `--z-reduce`·`_Z_REDUCTIONS` 삭제(항상 `max`) + 전체깊이 축약 시 경고 추가(커밋 `8922c5e`, 유닛테스트 7 passed), 본문은 실데이터 before/after 도판(`docs/images/w00_z_window_before_after.png` = held-out π, 같은 v4 fold1 step 17000을 z0–64 vs z16–48로 축약, F1 0.499 vs 0.814 — 디스크의 기존 예측 TIFF로 만들어 GPU 재실행 없음)과 함께 재작성. ⚠️ **#1434는 reopen이 불가능했음**(브랜치를 닫힐 당시 커밋으로 되돌려도 버튼 없음) → 같은 브랜치에서 새 PR로 감. ⚠️ **남은 것 = 본문의 "Why this matters to me" 문단**(CONTRIBUTING이 LLM 보조 PR에 사람 코멘터리를 명시 요구 — 사용자가 직접 작성 중) + #1434에 새 번호 알리는 포인터 코멘트. 절차·문안 전문 = `submission/villa-pr-flat-depth-targets.md`. ⚠️ **CONTRIBUTING.md는 upstream `main` 루트에만 있고 우리 체크아웃(`merge-ink-pipelines` 계열)엔 없어서 못 봤던 것** — 앞으로 villa PR 전에 `main`의 CONTRIBUTING을 먼저 읽을 것. 브랜치 `khj1222:feat/flat-depth-targets`(`8922c5e`) = 업스트림 tip `33c463e` 리베이스 + 충돌 3곳 해소 + 유닛테스트 7 passed + CPU 기능검증(z-window가 창 밖 노이즈 무시하는 것까지 더미로 실행 확인). **리뷰 수정은 워크트리 `D:/vw2`에서 커밋 → `git -C D:/vw2 push fork`** — PR 해소 전까지 D:/vw2 유지. 선택 사항이던 GPU 스모크는 CPU 검증으로 대체됨(남은 GPU 전용 = zarr 읽기·ckpt 로딩·CUDA, 충돌과 무관). ⚠️ vw2에서 테스트 돌릴 땐 `cd D:/vw2/ink-detection && uv run --project <external env> --no-sync ...` (`--directory`는 cwd를 옮겨 엉뚱한 트리 import).
-4. 🟢 **8월 제출 = 폼 제출만 남음**: 문안의 #1434 인용은 전부 **#1535로 갱신 완료(2026-08-19)**. 체크박스 요건은 #1249 머지로 이미 충족. 제출 직전 확인 = ①#1535 상태가 움직였으면 라벨 갱신 + "Why this matters to me" 문단이 실제로 채워져 있는지 ②stantheman0128의 v4 밴드 채점 결과가 나왔으면 5번 칸에 1문장 고려(파일 하단 notes). **제출 시점 = #1535 움직이면 그날 / 백스톱 08-29~30(2026-08-21 사용자 확정)** — 백스톱까지 반응 없어도 그대로 제출.
+4. ✅ **8월 제출 완료(2026-08-29)** — 아래는 제출 전 기록: 문안의 #1434 인용은 전부 **#1535로 갱신 완료(2026-08-19)**. 체크박스 요건은 #1249 머지로 이미 충족. 제출 직전 확인 = ①#1535 상태가 움직였으면 라벨 갱신 + "Why this matters to me" 문단이 실제로 채워져 있는지 ②stantheman0128의 v4 밴드 채점 결과가 나왔으면 5번 칸에 1문장 고려(파일 하단 notes). **제출 시점 = #1535 움직이면 그날 / 백스톱 08-29~30(2026-08-21 사용자 확정)** — 백스톱까지 반응 없어도 그대로 제출.
 
 **#192 니치 상황(2026-08-09 조사)**: 선행 시도 2건 모두 닫힘 — [#923](https://github.com/ScrollPrize/villa/pull/923)(jonmarrs, 5월, 자칭 sketch, 하류 평가 없음) · [#1295](https://github.com/ScrollPrize/villa/pull/1295)(williamshermer-pixel, **2026-08-06 erdpx가 닫음** — 28쌍 중 2쌍만 제출 + 깊이 독립 검증 없음, CT 밝기로 밴드 배치). **둘 다 라벨 생성법만 냈고 학습해서 재보진 않음** → 우리 기여의 차별점이 "검증"이라는 게 확인됨. erdpx가 #1295에 요구한 게 정확히 "독립 검증된 깊이".
 

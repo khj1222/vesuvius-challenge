@@ -5,35 +5,32 @@
 the form URL is round-specific and is re-published each month on
 https://scrollprize.org/prizes, so re-fetch it there rather than reusing last month's.)
 **Deadline:** 2026-08-31 23:59 PT
-**Status:** READY TO SUBMIT (2026-08-16 — field 5 gained a robustness paragraph: 30k
-extension holds the gap at 0.036, and the full pipeline replicated on w02 widens it to
-0.098; evidence table updated to match. PR [#1535](https://github.com/ScrollPrize/villa/pull/1535)
-in fields 4 and 5 carries the PR evidence (August's form dropped July's separate
-PR checkbox, see below);
-[#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
-Not submitted yet — **submit the day [#1535](https://github.com/ScrollPrize/villa/pull/1535)
-moves (merge or review), backstop 2026-08-29/30 regardless** (decided 08-21, replacing the
-08-22/23 weekend plan; deadline is 08-31 23:59 PT). Checked 08-24: #1535 still open, no
-review, no reviewer assigned, nothing since 08-19; no stantheman0128 result on #192 (they
-committed to running D/FWHM on our anchors on 08-23, repo unpushed since 08-13). All four
-doc links in field 4 verified to resolve publicly on 08-24, so the "push before submitting"
-condition is met. **Checked 08-28: #1535 still open, mergeable, no review since 08-19; the
-"Why this matters to me" paragraph is in the body. stantheman0128 posted their scoring of our
-band on 08-25, so field 5 gained the third-check paragraph the notes pre-registered for the
-geometry-valid branch, plus an evidence row.** **Final check 2026-08-29 — SUBMIT AS IS.**
-#1535 is still open and mergeable with zero human comments and no reviewer, unchanged since
-08-19 (its only comment is the Vercel authorization bot); #1231 unchanged (0 comments, erdpx
-still assigned); #192 has nothing after stantheman0128's 08-25 scoring; #1434 stays closed
-with our pointer comment on it. All ten field-4 links return HTTP 200 today, and every
-field-5 number was re-derived from the run artifacts. Three fixes were made on 08-29: the
-independent band check is now recorded in `docs/12` (field 4's result writeup, where a judge
-following the link would otherwise not find it), the w02 baseline comparison now names which
-w00 baseline it means (0.8232, the single split — not the 0.8472 three-fold mean quoted two
-sentences earlier), and three evidence rows were repointed to the fold-CV JSONs because the
-30k extension re-swept those CSVs onto odd-thousand steps. **Also on 08-29: the form URL
-above was stale.** The July form has stopped accepting responses; August's is a different
-form, and it dropped the separate "Pull request submitted!" checkbox, so this round has six
-questions instead of seven and the PR is evidenced through field 4 alone.
+**Status:** ✅ **SUBMITTED 2026-08-29** (deadline was 08-31 23:59 PT). Sent by the user
+through the August form, https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform,
+as Hyojun Kwon / bluekgssk@gmail.com, individually. **Fields 4 and 5 below are byte-identical
+to what was sent** (field 5 sha256 `b2910b90c6a573c767a07d49b9b4138daffe87f265e4a43cd72ac27d34d117d0`,
+70 lines / 5,101 chars, dashes and en-dashes intact) — keep this file that way, as the July
+one is kept, so it stays the record if the judges ask.
+
+Final pre-submit check, 2026-08-29: [#1535](https://github.com/ScrollPrize/villa/pull/1535)
+still open and mergeable with zero human comments and no reviewer, unchanged since 08-19 (its
+only comment is the Vercel authorization bot), so no label to update;
+[#1231](https://github.com/ScrollPrize/villa/issues/1231) unchanged (0 comments, erdpx still
+assigned); [#192](https://github.com/ScrollPrize/villa/issues/192) had nothing after
+stantheman0128's 08-25 scoring; all ten field-4 links returned HTTP 200 on the day; every
+field-5 number was re-derived from the run artifacts. Four things were fixed that morning:
+the independent band check was written into `docs/12` (field 4's result writeup, where a
+judge following the link would otherwise not have found it); the smoothness caveat from that
+scoring was carried into field 5; the w02 comparison now names which w00 baseline it means
+(0.8232, the single split — not the 0.8472 three-fold mean quoted two sentences earlier); and
+three evidence rows were repointed to the fold-CV JSONs because the 30k extension re-swept
+those CSVs onto odd-thousand steps.
+
+⚠️ **The form URL is round-specific.** July's form (`forms.gle/xoF5C3QsYutKP97x7`) had stopped
+accepting responses by 08-29; August's is the separate one linked above, published on
+https://scrollprize.org/prizes. It also has **six questions, not seven** — the standalone
+"Pull request submitted!" checkbox is gone, so the PR is evidenced through field 4 alone. Get
+September's link from the prizes page rather than reusing this one.
 
 ---
 
@@ -201,8 +198,8 @@ reproduced in `docs/12_depth_training.md`.)
      the form goes in, relabel it the same way — and check that the "Why this matters
      to me" paragraph is in place, since a PR body that fails CONTRIBUTING.md is what
      cost the first attempt.
-  5. Agree to the terms, submit, then sync this file to match what was actually sent
-     (the July file is kept submission-identical; do the same here).
+  5. ✅ Done 2026-08-29 — agreed to the terms, submitted, and this file now matches what
+     was actually sent (verified by diff and sha256 before sending, not after).
   6. **ink_9um scorecard paragraph — KEEP (decided 2026-08-24)**: the last paragraph of
      field 5 and the docs/14 link in field 4 both stay in. It is deliberately one
      paragraph — the headline stays #192 — and September cites docs/14 only as already
