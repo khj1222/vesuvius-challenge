@@ -4,15 +4,15 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v3 (2026-08-28 — field-6 PR resolved to #1608 and its review round folded
-into field 5; was v2 of 2026-08-24) — rewritten after the study grew to its full four parts:
-①three LOSO arms (Paris4 / 1667 / 0139, the last with the aligned-vs-native
-representation control) ②nature-of-the-gap (ensembles ≈ no recovery → bias)
-③label-efficiency repair (one segment closes 82%), plus a pre-registered follow-up that
-refuted our own reading of ① and is reported as such. Open items in the notes:
-a September-specific PR for field 6, September events to fold in, push before submit.
-August's own submission goes in first and stays separate — its scorecard paragraph is
-groundwork here, cited as such, not re-claimed.
+**Status:** DRAFT v4 (2026-08-29). Adds the held-out mask audit: field 4 gains docs/17, the
+audit tool and villa [#1638](https://github.com/ScrollPrize/villa/issues/1638); field 5 gains
+one paragraph placed right after the groundwork it qualifies, since the audit is about whether
+the three masks docs/14's honest ceiling rests on hold out what they appear to; and the evidence
+table gains two rows. All eleven field-4 links verified 200 on 2026-08-29.
+
+⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
+https://scrollprize.org/prizes, not from the August link. August's form also dropped the
+standalone PR checkbox, leaving six questions.
 
 ---
 
@@ -62,7 +62,10 @@ Groundwork (first scorecard of the released ink_9um models): https://github.com/
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
 Raw numbers (1,000+ scored cells, 9 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
+Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
+Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
+Upstream issue (this round, the held-out audit): https://github.com/ScrollPrize/villa/issues/1638
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
 
@@ -80,6 +83,19 @@ Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on t
 segments that ship validation masks puts the honest within-scroll ceiling at F1
 0.74–0.77 against 0.98+ on training pixels — a 0.22–0.45 memorisation gap, no step that
 is best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
+
+That yardstick then had to be checked itself, because everything honest on this corpus rests
+on three masks. All three split their annotation *within* connected regions rather than by
+whole ones, so 23% to 59% of their held-out pixels sit inside one 128px training patch of
+pixels the model trained on — and on pherc0139-w016 no leak-free held-out exists at all, since
+99.1% of its held-out pixels lie within two patches and the rest contains no ink. Whether that
+adjacency pays needed no new training: the released checkpoints trained on those segments and
+my leave-one-scroll-out arms never saw the scrolls, so scoring both over the same distance
+strata separates leakage from how hard a stratum is. The control comes out nearly flat while
+the trained model gains +0.14 and +0.07 F1 more on the held-out pixels nearest its training
+pixels — clear in the mean, noisy per checkpoint at 20 of 28, so the claim stays directional:
+0.74–0.77 reads optimistic rather than conservative. That is villa issue #1638, with the tool
+and the raw per-stratum scores (docs/17).
 
 Then the measurement (docs/15, parts 1–2): leave-one-scroll-out, three times. I retrained
 the exact released recipe six times — the only change being one scroll removed and the
@@ -152,9 +168,11 @@ files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
 
-**6. Pull Request Submission** → check "Pull request submitted!" (see step 1 — #1608)
+**6. Terms and Conditions** → check "Yes, I agree"
 
-**7. Terms and conditions** → "Yes, I agree"
+⚠️ **August's form had six questions, not seven** — the standalone "Pull request submitted!"
+checkbox is gone, so the PR is evidenced through field 4 alone. Check September's form when it
+opens; the layout above assumes August's.
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)
 
 ---
@@ -163,6 +181,8 @@ apparatus, three months of answered questions.
 
 | claim | source |
 |---|---|
+| held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`, villa #1638 |
+| adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
 | within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
 | LOSO→Paris4 mean 0.487, floor margin +0.060 | `paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
 | LOSO→1667 mean 0.546, floor margin +0.131 | `no1667_matrix.csv` (+`no1667_matrix_summary.json`) |
