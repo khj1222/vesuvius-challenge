@@ -175,11 +175,29 @@ ones scored in [docs/14](14_ink9um_scorecard.md).
 
 ## Reported upstream
 
-Filed as [villa #1638](https://github.com/ScrollPrize/villa/issues/1638) on 2026-08-29, with an
-offer to send either the audit script or generated masks for the 26 segments that ship none. It
-is deliberately a separate thread from
-[#1231](https://github.com/ScrollPrize/villa/issues/1231), which asks whether the missing masks
-are intended: that question is about masks that do not exist, this one about the ones that do.
+Filed as [villa #1638](https://github.com/ScrollPrize/villa/issues/1638) on 2026-08-29, and
+**closed the same day by `pmh47` (Research Team Lead)**:
+
+> "validation mask is disjoint from the supervision mask" — indeed, so there is no actual
+> issue. Provided one interprets results carefully in terms of what is intra-segment /
+> inter-segment / inter-scroll results (which one always should!), and does not make overly
+> broad claims, there is no problem.
+
+**He is right, and the framing was the problem.** Disjoint means those pixels were never
+trained on, so there is no label leakage, and an intra-segment held-out number is a
+legitimate thing to report — provided it is named that. The issue title said "leak-free",
+which presupposes a leak; this document's body already said the corpus is not wrong and kept
+the claim directional, but the title outran it.
+
+What the close does not touch is the measured part. His own advice is that intra-segment,
+inter-segment and inter-scroll results must be read differently; the strata above put a size
+on that difference for this corpus — +0.14 F1 on w016 between adjacent and distant held-out
+pixels, against a flat control. So the right reading of docs/14's 0.74–0.77 is **an
+intra-segment ceiling**, not a statement about what the released models generalise to. That
+distinction is what this document is for, and it survives the close.
+
+It was filed separately from [#1231](https://github.com/ScrollPrize/villa/issues/1231), which
+asks whether the *missing* masks are intended and remains open.
 
 ---
 

@@ -4,12 +4,21 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v5 (2026-08-29, evening). Both overnight experiments landed and are folded
-in. Field 5 gains the label-efficiency curve after the repair-price paragraph (docs/15 part 5)
-and arm A's negative result at the end of the PHerc1447 paragraph (docs/18); field 4 gains
-docs/18; the evidence table gains two rows. Field 5 is now ~8,400 characters — long. If it has
-to shrink, the domain-match refutation in the measurement paragraph is the next candidate: it
-is the longest passage and its detail lives in docs/15 appendix 2.
+**Status:** DRAFT v6 (2026-08-29, late). Both overnight experiments are folded in — the
+label-efficiency curve after the repair-price paragraph (docs/15 part 5) and arm A's negative
+result at the end of the PHerc1447 paragraph (docs/18) — and field 4 gains docs/18.
+
+⚠️ **villa [#1638](https://github.com/ScrollPrize/villa/issues/1638) was closed the same day it
+was filed**, by `pmh47` (Research Team Lead): a disjoint mask is not a leak, and an
+intra-segment held-out number is fine provided it is named that. He is right, and the audit
+paragraph now says so rather than presenting the issue as a live contribution — a judge will
+open the link. What is kept is the measurement, reframed as what it always was: the size of
+the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
+[`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
+
+Field 5 is ~8,800 characters, which is long. If it has to shrink, the domain-match refutation
+in the measurement paragraph is the first candidate — it is the longest passage and its detail
+lives in docs/15 appendix 2.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
@@ -87,17 +96,21 @@ segments that ship validation masks puts the honest within-scroll ceiling at F1
 is best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
 
 That yardstick then had to be checked itself, because everything honest on this corpus rests
-on three masks. All three split their annotation *within* connected regions rather than by
-whole ones, so 23% to 59% of their held-out pixels sit inside one 128px training patch of
-pixels the model trained on — and on pherc0139-w016 no leak-free held-out exists at all, since
-99.1% of its held-out pixels lie within two patches and the rest contains no ink. Whether that
-adjacency pays needed no new training: the released checkpoints trained on those segments and
-my leave-one-scroll-out arms never saw the scrolls, so scoring both over the same distance
-strata separates leakage from how hard a stratum is. The control comes out nearly flat while
-the trained model gains +0.14 and +0.07 F1 more on the held-out pixels nearest its training
-pixels — clear in the mean, noisy per checkpoint at 20 of 28, so the claim stays directional:
-0.74–0.77 reads optimistic rather than conservative. That is villa issue #1638, with the tool
-and the raw per-stratum scores (docs/17).
+on three masks — and all three split their annotation *within* connected regions, so 23% to
+59% of their held-out pixels sit inside one 128px training patch of pixels the model trained
+on. Whether that adjacency pays needed no new training: the released checkpoints trained on
+those segments and my leave-one-scroll-out arms never saw the scrolls, so scoring both over
+the same distance strata separates proximity from how hard a stratum is. The control comes
+out nearly flat while the trained model gains +0.14 and +0.07 F1 more on the held-out pixels
+nearest its training pixels.
+
+I filed that upstream as villa #1638 and the research lead closed it the same day: the masks
+are disjoint from supervision, so nothing was trained on, and an intra-segment held-out number
+is legitimate provided it is named that and not read as inter-segment or inter-scroll. He is
+right, and the framing was mine to fix. What survives the correction is the size — his own
+advice is that those three kinds of result must be read differently, and this measures what
+that difference is worth here, which is why the 0.74–0.77 above is an intra-segment ceiling
+and not a statement about what these models generalise to (docs/17).
 
 Then the measurement (docs/15, parts 1–2): leave-one-scroll-out, three times. I retrained
 the exact released recipe six times — the only change being one scroll removed and the
@@ -203,7 +216,7 @@ opens; the layout above assumes August's.
 |---|---|
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
 | arm A: spectrum matching gains +0.005 F1, median 8.4% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
-| held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`, villa #1638 |
+| held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
 | within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
 | LOSO→Paris4 mean 0.487, floor margin +0.060 | `paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
