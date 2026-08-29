@@ -129,7 +129,7 @@ A안(docs/13)을 끝까지 실행. **9월 제출감 완성** — 상세는 docs/
 
 **3. 🏃 라벨효율 곡선 — 실행 중(10:20 시작)**
 
-`tools/make_label_budget.py`로 w00 주석의 **중첩 부분집합** 3개(achieved 50.3%/20.7%/13.5%, 잉크밀도 0.2284/0.2462/0.1956 vs 전체 0.2303). 100% arm(`ink9um_ft_w00_s{42,43}`)과 **config 차이가 `datasets`·`out_dir`·`description` 셋뿐** → LR 스케줄·베이스 ckpt·샘플러 동일, step 단위 직접 비교 가능. **검증 = 패치 수 6,308 → 3,174(=50.3%, 정확히 일치).** 6런 10k step + 7개 미학습 세그 × step 2500·5000 채점. 드라이버 = 스크래치패드 `labelbudget_run.py`(재개 가능), 로그 `runs/ink9um_lb_logs/_driver.log`, 결과 `runs/ink9um_scorecard/labelbudget_matrix.csv`.
+`tools/make_label_budget.py`로 w00 주석의 **중첩 부분집합** 3개(achieved 50.3%/20.7%/13.5%, 잉크밀도 0.2284/0.2462/0.1956 vs 전체 0.2303). 100% arm(`ink9um_ft_w00_s{42,43}`)과 **config 차이가 `datasets`·`out_dir`·`description` 셋뿐** → LR 스케줄·베이스 ckpt·샘플러 동일, step 단위 직접 비교 가능. **검증 = 패치 수 6,308 → 3,174(=50.3%, 정확히 일치).** 6런 10k step + 7개 미학습 세그 × step 2500·5000 채점. 드라이버 = 스크래치패드 `labelbudget_run.py`(재개 가능), 로그 `runs/ink9um_lb_logs/_driver.log`, 결과 `runs/ink9um_scorecard/labelbudget_matrix.csv`. ⚠️ **런당 시간이 38~52분으로 흔들린다**(실측 3.3~8.8 it/s) — 같은 config인데 GPU를 나눠 쓰는 다른 프로그램 유무에 좌우된다. 100% arm의 기준선은 6.85 it/s(≈25분). **결과엔 무영향, 일정만 2배 차이**나므로 무인 실행 계획 시 감안할 것.
 
 **4. 🔭 UDA 사전등록 = [docs/18](docs/18_uda_design.md)** (`ecd6a41`, **arm 실행 전** 커밋)
 
