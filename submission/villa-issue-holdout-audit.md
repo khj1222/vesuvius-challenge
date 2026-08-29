@@ -1,7 +1,7 @@
 # villa issue draft — the three shipped ink_9um validation masks are cut through annotated regions
 
-**To post:** https://github.com/ScrollPrize/villa/issues/new — **as a new issue** (decided
-2026-08-29). It is a different claim from [#1231](https://github.com/ScrollPrize/villa/issues/1231):
+**Posted:** https://github.com/ScrollPrize/villa/issues/1638 (2026-08-29, by the user).
+Opened **as a new issue** rather than a comment (decided 2026-08-29). It is a different claim from [#1231](https://github.com/ScrollPrize/villa/issues/1231):
 that one says the masks are *missing*, this one says the masks that *exist* are cut through
 annotated regions. Different evidence, different fix.
 **Backing document:** [docs/17](https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md)
@@ -15,17 +15,21 @@ Splitting a follow-up out of this thread rather than growing it, since it is a d
 the three ink_9um segments that *do* ship a `_validation_mask` turn out to split their annotation
 within connected regions rather than by whole ones, and on pherc0139-w016 there is no leak-free
 held-out subset available at all — 99.1% of its held-out pixels sit within two training patches
-and the rest contains no ink. Numbers and a tool are in #NNNN.
+and the rest contains no ink. Numbers and a tool are in #1638.
 
 This issue's question stands unchanged: whether the 26 segments that ship no mask are intended to
 ship none.
 ```
 
-(Replace `#NNNN` with the new issue's number.)
 
-Paste everything below the first `---` only, and tick the template checkbox. Do not paste this
-header: a draft preamble left in a posted body survives in the raw markdown even when it renders
-invisibly (it happened on #1580 and #1582).
+⚠️ **The template's attestation checkbox was missing from this draft when it was posted**, and
+had to be added by editing the issue afterwards. `.github/ISSUE_TEMPLATE/issue.md` on `main`
+ends with `- [x] I personally encountered or reproduced this using the version and data stated
+above.` — it is now included below, before section 4. Overwriting the prefilled body drops the
+whole template, so any heading or checkbox that matters has to be carried in the draft.
+
+Paste everything below the first `---` only. Do not paste this header: a draft preamble left in a
+posted body survives in the raw markdown even when it renders invisibly (#1580, #1582).
 
 ---
 
@@ -137,6 +141,8 @@ materially more on held-out pixels adjacent to its training pixels than on dista
 density and size, and the released and control families differ in more than segment exposure
 (different corpora, different training lengths). What I would claim is only directional — that
 held-out scores on these masks read optimistic rather than conservative.
+
+- [x] I personally encountered or reproduced this using the version and data stated above.
 
 ### 4. What would help, cheapest first
 

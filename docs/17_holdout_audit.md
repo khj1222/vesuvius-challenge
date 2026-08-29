@@ -173,6 +173,14 @@ predictions come from the LOSO arms described in
 [docs/15](15_loso_cross_scroll.md); the released-checkpoint predictions are the
 ones scored in [docs/14](14_ink9um_scorecard.md).
 
+## Reported upstream
+
+Filed as [villa #1638](https://github.com/ScrollPrize/villa/issues/1638) on 2026-08-29, with an
+offer to send either the audit script or generated masks for the 26 segments that ship none. It
+is deliberately a separate thread from
+[#1231](https://github.com/ScrollPrize/villa/issues/1231), which asks whether the missing masks
+are intended: that question is about masks that do not exist, this one about the ones that do.
+
 ---
 
 MIT-licensed.
