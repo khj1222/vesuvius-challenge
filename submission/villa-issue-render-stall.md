@@ -4,6 +4,37 @@
 **Status at posting:** open, no labels, no assignee, 0 comments.
 The body below is what the issue carries.
 
+## Correction (2026-08-30) — the code-level "no retry" claim is wrong
+
+`Bullo27` traced the tree the binary was actually built from, and I verified it against my
+own image on 2026-08-30:
+
+```
+org.opencontainers.image.revision = 1e3f4c021f4e53bea3867772ed05f51a7e586a9c
+org.opencontainers.image.created  = 2026-05-13T18:26:28.356Z
+digest                            = sha256:bad516f66001abca759454cc43e4fd11e5b19aa55d36bdc2043817291c8083c4
+```
+
+Two things follow.
+
+1. **`:edge` is three and a half months stale**, and it is the only published runtime tag.
+   Anyone reproducing this pulls the same May binary, which is worth stating where the
+   reproduction steps are.
+2. **The fetch layer at that revision already retries** — three attempts, a 30 s transfer
+   cap that `ZarrChunkFetcher` raises to 60 s. My "no retry" wording came from reading
+   `merge-ink-pipelines`, whose cache subsystem this binary does not contain, and it should
+   be struck from the title and from the "what I expected" paragraph.
+
+What survives is the observation and the mechanism it points at: a chunk that parks never
+produces a retry *attempt*, because the wait it is parked in is untimed
+(`1e3f4c021:core/src/render/ChunkCache.cpp:218` and `:749`, no attempt cap). The four
+stalls, the flat chunk/cache counters, and the fact that a *smaller* cache finished the
+render twice all fit that and not the network story.
+
+The reply that carries this upstream is `submission/issue1611_reply_bullo27_round2.md`; the
+posted issue body still needs the same edit.
+
+
 ---
 
 ## Title
