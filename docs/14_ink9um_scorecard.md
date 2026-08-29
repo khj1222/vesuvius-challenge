@@ -1,24 +1,37 @@
-# ink_9um 공개 체크포인트 채점표 (2026-08-22)
+# A scorecard for the released ink_9um checkpoints (2026-08-22)
 
-9월 A안 1단계. 공개 모델 `scrollprize/ink_9um`(hybrid_3d2d, seed 42/43 × 7 step)을
-공식 검증 마스크가 있는 3개 세그먼트에서 **처음으로 정량 채점**한 결과.
-모델 카드에는 성능 수치가 전무했다 — 이 표가 첫 채점표다.
+Step 1 of the September track: the **first quantitative scoring** of the public
+`scrollprize/ink_9um` models (hybrid_3d2d, seeds 42 and 43 x 7 steps) on the
+three segments that ship an official validation mask. The model card carries no
+performance numbers at all — this table is the first.
 
-## 방법
+> Read together with [docs/17](17_holdout_audit.md), which audits those three
+> official masks and finds that a large share of their held-out pixels sit
+> within one training patch of pixels the model trained on. The honest ceiling
+> below is therefore an optimistic reading, not a conservative one.
 
-- 입력: 공개 2.399µm 표면볼륨을 villa `scripts/prepare_9um_isotropic_input.py`로
-  ~9.6µm 21슬라이스로 풀링(레벨-2 XY + z 4x 평균). **S3 URL을 직접 스트리밍**하므로
-  2.4µm 원본(세그먼트당 수십 GB)을 받을 필요 없음 — 산출물만 세그먼트당 1~2GB.
-- 추론: villa `koine_machines.inference.infer`, `--overlap 0.5 --blend-mode hann`
-  (README 명시 계약), `--no-compile`(Windows/Triton).
-- 채점: `tools/eval_validation.py`(7월 하네스)를 두 번 —
-  - `_validation_mask` 영역 = **heldout**(공개 학습에서 제외된 픽셀, 정직한 수치)
-  - `--region-kind supervision_mask` = **train**(모델이 학습한 픽셀)
-  - 같은 예측 이미지·같은 임계값 스윕이므로 두 수치의 차 = **암기 격차**.
-- 42회 추론(14 ckpt × 3 세그먼트, 세그당 ~1–2.5분) + 84회 채점.
-  원자료 = `runs/ink9um_scorecard/scorecard.csv`, 요약 = `summary.json`.
+## Method
 
-## 결과 (best-F1, 임계값은 각자 최적)
+- Input: the public 2.399 um surface volumes, pooled to ~9.6 um in 21 slices by
+  villa's `scripts/prepare_9um_isotropic_input.py` (level-2 XY plus a 4x mean in
+  z). It **streams straight from the S3 URLs**, so the 2.4 um originals (tens of
+  GB per segment) never have to be downloaded — only the 1-2 GB output per
+  segment.
+- Inference: villa `koine_machines.inference.infer` with
+  `--overlap 0.5 --blend-mode hann` (the contract stated in the README) and
+  `--no-compile` (Windows/Triton).
+- Scoring: `tools/eval_validation.py` — July's harness — run twice:
+  - over the `_validation_mask` regions = **held**, the pixels excluded from the
+    public training, i.e. the honest number;
+  - with `--region-kind supervision_mask` = **train**, the pixels the model
+    trained on.
+  - Same prediction image and same threshold sweep both times, so the difference
+    between the two is the **memorisation gap**.
+- 42 inference runs (14 checkpoints x 3 segments, ~1-2.5 min each) and 84
+  scorings. Raw numbers in `runs/ink9um_scorecard/scorecard.csv`, summary in
+  `summary.json`.
+
+## Results (best F1, each at its own optimal threshold)
 
 | segment | seed | | 10k | 20k | 30k | 40k | 50k | 60k | 75k |
 |---|---|---|---|---|---|---|---|---|---|
@@ -35,39 +48,47 @@
 | 1667-w029 | 43 | held | 0.612 | 0.730 | 0.755 | 0.743 | 0.741 | 0.755 | **0.758** |
 | | | train | 0.683 | 0.850 | 0.921 | 0.954 | 0.963 | 0.976 | 0.983 |
 
-## 판정
+## What it says
 
-1. **정직한 상한은 F1 ≈ 0.74–0.77.** 세그먼트·seed·step을 통틀어 heldout 최고가
-   0.765(0814/s42/10k)·0.758(w029/s43/75k)·0.755(w016/s43/75k). 같은 체크포인트가
-   train 픽셀에서는 0.98+ — **최종 체크포인트의 암기 격차 0.22–0.45**.
-2. **보편적 최적 step은 없다.** (segment, seed)별 best heldout step =
-   20k / 75k / 10k / 10k / 30k / 75k. 모델 카드의 "step 몇 개 시도해보라"가
-   실측으로 확인됨 — 그리고 그 선택이 최대 0.21 F1을 좌우한다(w016/s42:
-   20k 0.743 vs 75k 0.531).
-3. **seed가 step만큼 크다.** 같은 레시피·같은 데이터에서 w016의 75k가
-   s42=0.531 vs s43=0.755 — **seed 간 0.22 격차**. s42는 후반 붕괴, s43은 후반
-   정점으로 곡선의 모양 자체가 다르다. 단일 시드 궤적만 보고 step을 고르는 건
-   복권이다.
-4. **train 곡선은 6/6 전부 단조 상승**(0.98+까지) — 학습이 진행될수록 주석 픽셀을
-   암기하는 것은 확실하고, heldout이 그걸 따라가지 않는 것.
-5. 0814는 heldout이 0.71–0.77로 안정(작은 세그먼트, 검증영역 1개), w016·w029는
-   요동 — 세그먼트별 검증영역 구성이 분산의 큰 몫(7월 fold 분석과 같은 결론).
+1. **The honest ceiling is F1 ~0.74-0.77.** Across every segment, seed and step,
+   the best held-out values are 0.765 (0814 / s42 / 10k), 0.758 (w029 / s43 /
+   75k) and 0.755 (w016 / s43 / 75k). The same checkpoints reach 0.98+ on
+   training pixels — a **memorisation gap of 0.22 to 0.45 at the final step**.
+2. **No step is best everywhere.** The best held-out step per (segment, seed) is
+   20k / 75k / 10k / 10k / 30k / 75k. The model card's "try a few steps" is
+   confirmed by measurement — and the choice is worth up to 0.21 F1
+   (w016 / s42: 20k 0.743 against 75k 0.531).
+3. **The seed matters as much as the step.** On the same recipe and the same
+   data, w016 at 75k gives s42 = 0.531 against s43 = 0.755 — a **0.22 gap
+   between seeds**. The curves are not merely offset: s42 collapses late while
+   s43 peaks late. Picking a step from a single seed's trajectory is a lottery.
+4. **All 6 training curves rise monotonically** to 0.98+. That training
+   memorises the annotated pixels is not in doubt; what does not follow is the
+   held-out score.
+5. 0814 is stable on held-out (0.71-0.77; a small segment with a single
+   validation region) while w016 and w029 swing — so how a segment's validation
+   regions are composed accounts for much of the variance, which is the same
+   conclusion July's fold analysis reached.
 
-## 함정 기록
+## Traps worth recording
 
-- `prepare_9um_isotropic_input.py`는 Windows에서 마지막 rename(`.partial`→최종)이
-  `PermissionError`로 죽는다(디렉터리 rename + 열린 핸들). **타일 로그가
-  `tiles=N/N`이면 데이터는 완전** — rename만 대신 해주면 된다(드라이버가 처리).
-- S3 스트리밍 24커넥션(3병렬×8워커)은 `ServerDisconnectedError`가 잦다.
-  재시도 패스는 2병렬×6워커+3회로 낮춰서 돌 것.
-- ink_9um 정렬 라벨 zarr는 **피라미드가 아니라 단일 레벨**(`0`만) —
-  `eval_validation.py`의 영역 탐색이 level 3을 가정하다 실패했고, 존재하는
-  최심 레벨로 폴백하도록 수정함(native9 라벨은 6레벨이라 기존 경로 그대로).
+- `prepare_9um_isotropic_input.py` dies on Windows at the final rename
+  (`.partial` to the final name) with a `PermissionError`: a directory rename
+  with open handles. **If the tile log says `tiles=N/N` the data is complete** —
+  only the rename needs doing by hand, and the driver does it.
+- S3 streaming at 24 connections (3 parallel x 8 workers) throws
+  `ServerDisconnectedError` often. Run the retry pass at 2 x 6 with three
+  attempts.
+- The ink_9um aligned label zarrs are **a single level, not a pyramid** (only
+  `0`). `eval_validation.py`'s region search assumed level 3 and failed; it now
+  falls back to the deepest level present. (The native9 labels have six levels,
+  so they take the original path.)
 
-## Paris4 참조군 (2026-08-22, w00·w02 × 14 ckpt)
+## The Paris4 reference arm (2026-08-22, w00 and w02 x 14 checkpoints)
 
-Paris4에는 검증 마스크가 없어 train 픽셀(supervision 전체)만 채점.
-이것이 LOSO 비교의 "Paris4를 **본** 모델" 축이 된다.
+Paris4 ships no validation mask, so only training pixels (the whole supervision)
+can be scored. This becomes the "model that **did** see Paris4" axis of the LOSO
+comparison.
 
 | segment | seed | 10k | 20k | 30k | 40k | 50k | 60k | 75k |
 |---|---|---|---|---|---|---|---|---|
@@ -76,15 +97,24 @@ Paris4에는 검증 마스크가 없어 train 픽셀(supervision 전체)만 채�
 | w02 | 42 | 0.762 | 0.846 | 0.859 | 0.878 | 0.893 | 0.903 | 0.916 |
 | w02 | 43 | 0.754 | 0.823 | 0.860 | 0.881 | 0.889 | 0.902 | 0.911 |
 
-관찰: **train 픽셀인데도 Paris4는 0.91~0.92에서 멈춘다**(다른 스크롤은 0.98+).
-4곡선이 seed 간 거의 겹치고(차이 ≤0.012) 단조 상승 — 배치 쿼터 11/64 +
-세그먼트가 커서(w00 다른 세그먼트의 3~4배 면적) 픽셀당 노출이 낮고,
-정렬-전사 라벨이라 라벨 노이즈도 더 클 것. Paris4의 "암기조차 덜 된" 상태는
-LOSO 격차 해석 시 감안할 것(참조군 상한 자체가 0.92).
+Observation: **even on training pixels Paris4 stops at 0.91-0.92**, where other
+scrolls reach 0.98+. The four curves nearly coincide across seeds (differences
+below 0.012) and rise monotonically. A batch quota of 11/64 and segments three
+to four times the area of others give Paris4 low per-pixel exposure, and its
+transferred aligned labels are probably noisier as well. That Paris4 is not even
+fully memorised has to be kept in mind when reading the LOSO gap — the reference
+ceiling is itself only 0.92.
 
-## 다음 (진행 중)
-- **LOSO arm**: `configs/ink9um_loso_noParis4_s42.json` — 공식 레시피에서 Paris4
-  8개 표현만 제거(쿼터 재정규화 {0139:35, 1667:27, 0814:2}), 78,125 iter.
-  학습 후 Paris4 8세그먼트의 supervision 전체가 정직한 held-out이 됨 →
-  "본 모델 vs 안 본 모델"의 같은 픽셀 비교 = 오픈 문제 #7(cross-scroll
-  generalization)의 첫 체계적 수치.
+## Next (in progress at the time of writing)
+
+- **LOSO arm**: `configs/ink9um_loso_noParis4_s42.json` — the official recipe
+  with only Paris4's eight representations removed (quota renormalised to
+  {0139: 35, 1667: 27, 0814: 2}), 78,125 iterations. After training, the whole
+  supervision of all eight Paris4 segments becomes honest held-out, giving a
+  same-pixel comparison between a model that saw the scroll and one that did
+  not — the first systematic numbers for open problem #7, cross-scroll
+  generalization. That study is [docs/15](15_loso_cross_scroll.md).
+
+---
+
+MIT-licensed.
