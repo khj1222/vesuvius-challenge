@@ -188,5 +188,86 @@ loop docs/16 opened.
 
 ---
 
+# Addendum: how arm A's testbed was chosen (same day, after the design was committed)
+
+The design above was committed at `ecd6a41`, 2026-08-29 11:05. Everything in
+this section happened after that and before any F1 was computed, and it is
+recorded here because the arm-A testbed described below is **better than the one
+the design specified**, and a reader is entitled to know that it was picked with
+some measurements already in hand.
+
+## What was measured in between
+
+`tools/spectrum_match.py` was written and committed (`02f8e98`, 11:09), and used
+to measure radial power profiles. Two things came out of it.
+
+**The two representations separate cleanly.** Every `aligned` volume measured
+sits at a spectral centroid of 0.0278 or above; every `native` one at 0.0262 or
+below. Averaged over the LOSO-no0139 arm's six training volumes the source sits
+at 0.0318, against 0.0254 for the four native targets, with no overlap between
+the groups. That is a property of the representation rather than of any segment
+or scroll — which is what makes one corpus-level filter the right shape.
+
+**The PHerc1447 render is spectrally a native-class input.** It measures 0.0248,
+with 1.8% of its power in the 0.1-0.25 band and 0.0% above 0.25 — indistinguishable
+from native (0.0244, 1.7%, 0.0%) and below every aligned volume. So the unseen
+scroll that read nothing in [docs/16](16_first_letters_render.md) is, in input
+terms, the class that docs/15 appendix 2 already measured as the worse of the
+two. And the guidance appendix 2 issued — *render in the aligned family* —
+**cannot be followed on PHerc1447**, because that scroll has only an 8.640 um
+acquisition and there is no higher-resolution scan to pool from. The deficit is
+in the data, not in the render settings.
+
+That is what makes arm A worth running properly rather than as a formality: if a
+filter can make a native-class input behave like an aligned-class one, the
+guidance becomes followable on scrolls that have no high-resolution scan.
+
+## What changed, and what did not
+
+**Changed — the testbed.** The design said "estimate the source spectrum,
+estimate the target spectrum, apply the matching filter, re-infer". It did not
+say where. The obvious reading was to run it on the Paris4 LOSO arm like
+everything else. Instead arm A runs on **0139's w035, w039, w040 and w041**, the
+only segments in this corpus that exist in *both* representations, because there
+the thing being corrected has a measured size: docs/15 part 3 puts the aligned
+margin ahead of the native one by +0.057, +0.066, +0.048 and +0.028 F1
+respectively. The filter's job is to recover part of a gap that was measured
+before this study existed, on segments with ground truth on both sides.
+
+**Not changed — the prediction.** Arm A's committed interval is **0 to 20% of
+the gap**, and it stays. Nothing measured in between says anything about F1: the
+spectral distance closed by the filter (38% at the patch level) is a statement
+about inputs, not about what the model does with them.
+
+**Added — one honesty constraint the design implied but did not spell out.** The
+source profile is estimated from the no0139 arm's *training* corpus only — six
+aligned volumes across 1667, Paris4 and 0814. **0139's own aligned volumes are
+excluded from the filter entirely**, even though they sit on the same disk,
+because a real target scroll would not have an aligned twin and using one would
+hand the arm the answer it is supposed to reach without labels. The target
+profile comes from the native volumes' images alone.
+
+## Why this is a strengthening rather than a degree of freedom
+
+The risk in choosing a testbed after seeing data is that the choice quietly
+selects for a result. Three things bound that here:
+
+1. **The comparison target predates the choice.** The +0.028 to +0.066 margins
+   were measured on 2026-08-24 and published in docs/15 and on villa #1582.
+   Arm A cannot move them.
+2. **The prediction interval was fixed first**, and it was fixed before any
+   inference on a filtered volume existed.
+3. **The scoring rules come from the design** — fixed step, both seeds, all four
+   segments, the ~0.03 F1 noise floor, and "consistent on fewer than 5 of 7" (here
+   3 of 4) reported as inconsistent whatever the mean.
+
+What this testbed cannot do is stand in for the Paris4 arm. It measures whether
+a filter recovers a **representation** gap between two renders of the same
+sheet, not whether it recovers a **scroll** gap. Those are different quantities,
+and if arm A works here it still has to be run on the Paris4 arm before any
+claim about cross-scroll adaptation.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.
