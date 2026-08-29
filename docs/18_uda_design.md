@@ -331,13 +331,14 @@ been scored** — the adaptation runs themselves produce no F1, only an entropy
 curve, so nothing below was chosen with a result in view.
 
 Exact ordering, since it is the only thing that makes a pre-registration worth
-anything: the two adaptation runs finished at 07:53 (they take two minutes each),
-this section was committed at 07:57, and the first prediction was scored at 08:04.
-So the entropy curve existed when this was written and no F1 did. The headline
-step below is the round middle of section 3B's "a few hundred steps" and was not
-read off that curve; a reader who wants to check that has the full trajectory in
-`runs/ink9um_tent_s{42,43}/tent_trajectory.json` and can see what it would have
-suggested instead.
+anything. This section is commit `3bff82f`, **07:43:18**. The adaptation driver
+was still building its patch pool then; its first optimisation step ran at
+07:50:06, the last checkpoint was written at 07:53, scoring started at 07:54 and
+the first F1 landed at 07:56:45. So neither the entropy curve nor any score
+existed when the knobs below were fixed. The headline step is the round middle of
+section 3B's "a few hundred steps"; the full trajectory is in
+`runs/ink9um_tent_s{42,43}/tent_trajectory.json` for anyone who wants to see what
+it would have suggested instead.
 
 **Base.** The leave-Paris4-out arm at `ckpt_020000`, both seeds — the same
 checkpoint the docs/15 part 4 fine-tune started from. Direct transfer, one
