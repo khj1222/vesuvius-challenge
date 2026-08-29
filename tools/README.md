@@ -313,6 +313,47 @@ Training on these needs `"flat_depth_targets": true`, which stops the flat loss
 from collapsing z. Write-up:
 [`docs/12_depth_training.md`](../docs/12_depth_training.md).
 
+## `audit_holdout_masks.py` — is this held-out split actually held out?
+
+A held-out split measures generalisation only if its pixels sit far enough from
+the training pixels that the model cannot have learned them. At a 128 px
+training patch, held-out pixels a few tens of pixels away were inside patches
+the model saw. This tool reports, for a segment that already ships a
+`_validation_mask`, how many annotated regions contain both held-out and
+training pixels and how the distance from held-out pixels to the nearest
+supervised pixel is distributed.
+
+Pass `--prediction` and `--control` to measure whether that adjacency pays: the
+first from a model trained on the segment, the second from one that never saw
+it. Raw per-stratum scores are not comparable — strata differ in ink density —
+so what the tool reports is how much the trained model's advantage over the
+control grows as held-out pixels get closer to training ones.
+
+```bash
+python tools/audit_holdout_masks.py <segment_dir>     --prediction preds/<seg>_trained.tif --control preds/<seg>_never_saw_it.tif
+```
+
+`--patch 128` · `--edges 0 64 128 256` · `--json <report>`
+
+## `make_label_budget.py` — how much of this segment do you have to annotate?
+
+Fine-tuning on one annotated segment closes most of the cross-scroll gap, which
+raises the question of how much of that segment's annotation is doing the work.
+This writes label trees holding a *nested* subset of the annotated regions —
+25% of the annotation is a subset of the 50% — so a curve across them reads as
+"what does the next region buy me" rather than as a comparison of unrelated
+annotation sets. Regions are kept whole and near neighbours stay together, for
+the same reason `make_validation_mask.py` does it.
+
+Both the supervision mask and the ink labels are zeroed outside the kept
+regions, so no downstream reader can pick up ink the arm is not entitled to see.
+
+```bash
+python tools/make_label_budget.py <segment_dir>     --out-root data/ink_9um/labels/labelbudget --keep 0.5 0.25 0.125 --level 0
+```
+
+`--level 0` · `--min-gap 256` · `--dry-run`
+
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).

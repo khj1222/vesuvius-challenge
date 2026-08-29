@@ -1,0 +1,193 @@
+{
+  "segment": "phercparis4-w00",
+  "source": "D:\\vesuvius-challenge\\data\\ink_9um\\labels\\aligned-scrollprizeorg-21slices\\phercparis4-w00",
+  "level": 0,
+  "min_gap_px": 256,
+  "regions": 15,
+  "groups": [
+    {
+      "group": 0,
+      "regions": [
+        1
+      ],
+      "area": 319351,
+      "ink": 86323,
+      "ink_density": 0.2703075925862139
+    },
+    {
+      "group": 1,
+      "regions": [
+        2,
+        7,
+        9,
+        10
+      ],
+      "area": 1581265,
+      "ink": 307479,
+      "ink_density": 0.19445127793254136
+    },
+    {
+      "group": 2,
+      "regions": [
+        3
+      ],
+      "area": 373861,
+      "ink": 112637,
+      "ink_density": 0.30128042240297864
+    },
+    {
+      "group": 3,
+      "regions": [
+        4
+      ],
+      "area": 90704,
+      "ink": 27576,
+      "ink_density": 0.3040218733462692
+    },
+    {
+      "group": 4,
+      "regions": [
+        5
+      ],
+      "area": 213356,
+      "ink": 95039,
+      "ink_density": 0.445447983651737
+    },
+    {
+      "group": 5,
+      "regions": [
+        6
+      ],
+      "area": 116098,
+      "ink": 20359,
+      "ink_density": 0.17536047132594876
+    },
+    {
+      "group": 6,
+      "regions": [
+        8,
+        12
+      ],
+      "area": 1714830,
+      "ink": 370359,
+      "ink_density": 0.215974178198422
+    },
+    {
+      "group": 7,
+      "regions": [
+        11,
+        13
+      ],
+      "area": 608170,
+      "ink": 162854,
+      "ink_density": 0.2677771017971949
+    },
+    {
+      "group": 8,
+      "regions": [
+        14,
+        15
+      ],
+      "area": 781267,
+      "ink": 152782,
+      "ink_density": 0.19555670468610603
+    }
+  ],
+  "total_area": 5798902,
+  "global_ink_density": 0.2302863542098142,
+  "arms": [
+    {
+      "target_keep": 0.5,
+      "groups": [
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "regions": [
+        4,
+        5,
+        6,
+        8,
+        12,
+        14,
+        15
+      ],
+      "area": 2916255,
+      "ink": 666115,
+      "achieved_keep": 0.502897789960927,
+      "ink_density": 0.22841452479292793,
+      "name": "keep0500",
+      "path": "D:\\vesuvius-challenge\\data\\ink_9um\\labels\\labelbudget\\keep0500\\phercparis4-w00",
+      "voxels": {
+        "supervision_mask": {
+          "kept_voxels": 2916255,
+          "dropped_voxels": 2882647
+        },
+        "inklabels": {
+          "kept_voxels": 666115,
+          "dropped_voxels": 669293
+        }
+      }
+    },
+    {
+      "target_keep": 0.25,
+      "groups": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "regions": [
+        4,
+        5,
+        6,
+        14,
+        15
+      ],
+      "area": 1201425,
+      "ink": 295756,
+      "achieved_keep": 0.20718146297350773,
+      "ink_density": 0.24617100526458163,
+      "name": "keep0250",
+      "path": "D:\\vesuvius-challenge\\data\\ink_9um\\labels\\labelbudget\\keep0250\\phercparis4-w00",
+      "voxels": {
+        "supervision_mask": {
+          "kept_voxels": 1201425,
+          "dropped_voxels": 4597477
+        },
+        "inklabels": {
+          "kept_voxels": 295756,
+          "dropped_voxels": 1039652
+        }
+      }
+    },
+    {
+      "target_keep": 0.125,
+      "groups": [
+        8
+      ],
+      "regions": [
+        14,
+        15
+      ],
+      "area": 781267,
+      "ink": 152782,
+      "achieved_keep": 0.1347267120568687,
+      "ink_density": 0.19555670468610603,
+      "name": "keep0125",
+      "path": "D:\\vesuvius-challenge\\data\\ink_9um\\labels\\labelbudget\\keep0125\\phercparis4-w00",
+      "voxels": {
+        "supervision_mask": {
+          "kept_voxels": 781267,
+          "dropped_voxels": 5017635
+        },
+        "inklabels": {
+          "kept_voxels": 152782,
+          "dropped_voxels": 1182626
+        }
+      }
+    }
+  ]
+}

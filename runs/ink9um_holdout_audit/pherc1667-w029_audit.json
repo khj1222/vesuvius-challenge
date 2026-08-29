@@ -1,0 +1,18 @@
+{
+  "segment": "pherc1667-w029",
+  "annotated_px": 1595268,
+  "supervised_px": 1212915,
+  "held_out_px": 382353,
+  "held_out_share": 0.23967947705338538,
+  "annotated_regions": 8,
+  "regions_mixing_held_out_and_training": 1,
+  "distance_to_training": {
+    "min": 1.0,
+    "p25": 138.0,
+    "median": 283.0,
+    "p75": 690.4201619304001,
+    "max": 985.7124327104736,
+    "within_patch": 0.23161581052064453,
+    "within_two_patches": 0.4544857762329575
+  }
+}
