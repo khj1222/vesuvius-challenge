@@ -1,138 +1,222 @@
-# 9월 라운드 정찰 (2026-08-18)
+# Scouting the September round (2026-08-18)
 
-8월 제출(폼만 남음, ~08-24) 이후의 타깃 후보 조사. 사용자 질문 = "50k나 $1M짜리 도전은 안 되나?"
-→ 결론: **$1M 직행은 체급 밖, First Letters $50k는 '최근접 경로'가 존재하지만 입력이 미완성,
-진짜 기회는 08-14에 공개된 신규 공식 데이터셋 `ink_9um`** (아래).
+Target hunting after the August submission (only the form was left at the time,
+around 08-24). The question that started it: "is a $50k or $1M prize really out
+of reach?" The answer: **the $1M is out of our weight class, First Letters at
+$50k has a nearest path that exists but whose input is unfinished, and the real
+opportunity is `ink_9um`, an official dataset released on 08-14** (section 3).
 
-## 1. 현재 상금판 (scrollprize.org/prizes, 2026-08-18 확인, 마감 전부 2027-06-25)
+## 1. The prize board (scrollprize.org/prizes, checked 2026-08-18; all deadlines 2027-06-25)
 
-| 상금 | 금액 | 조건 |
+| prize | amount | condition |
 |---|---|---|
-| 2027 Grand Prize | $1M (1등 $800k) | 대상 13개 스크롤 중 하나를 완전 자동 100% 언롤 + 70% 판독성 |
-| First Letters | 스크롤당 $50k (최대 $500k) | 대상 스크롤의 4cm² 안에서 판독 가능한 글자 10개 |
-| PHerc. Paris 4 Title | $50k | Scroll 1의 제목 발견 (2.4µm 볼륨 포함 아무 스캔) |
-| Progress Prizes | 월간, 최고 $20k 보장 | 오픈 문제 기여 (현행 트랙) |
+| 2027 Grand Prize | $1M ($800k for first place) | one of 13 target scrolls, fully automatically unrolled to 100% with 70% readability |
+| First Letters | $50k per scroll (up to $500k) | 10 readable letters within 4 cm2 of a target scroll |
+| PHerc. Paris 4 Title | $50k | find Scroll 1's title (any scan, including the 2.4 um volume) |
+| Progress Prizes | monthly, $20k guaranteed for the best | contributions to open problems (our current track) |
 
-7월 수상 분포로 본 시세: 측정·검증·툴링 니치 = $1k~2.5k, 코어 파이프라인(메싱·언래핑) = $20k.
+Going rate, read off July's distribution of awards: the measurement, validation
+and tooling niche pays $1k-$2.5k; core pipeline work (meshing, unwrapping) pays
+$20k.
 
-## 2. First Letters 대상 13개 스크롤 데이터 인벤토리 (S3 `vesuvius-challenge-open-data`, 2026-08-18 실측)
+## 2. Data inventory for the 13 First Letters scrolls (S3 `vesuvius-challenge-open-data`, measured 2026-08-18)
 
-| 스크롤 | 전체 볼륨 | 세그먼트 | 비고 |
+| scroll | full volume | segments | note |
 |---|---|---|---|
-| PHerc0125·0191·0211·0257·0358·0813·0826·1545 | 9.362µm masked | **0개** | 언래핑 자체가 미착수 |
-| PHerc0268·1218 | 8.640µm masked | **0개** | 〃 |
-| PHerc1203 | 9.362µm **+ 2.403µm** | raw만 | 고해상 스캔은 있으나 세그먼트 없음 |
-| **PHerc0800** | 8.640µm | **6개** auto-grown (2025-10-28) | **mesh만, 표면볼륨 미렌더링** |
-| **PHerc1447** | 8.640µm | **15개** auto-grown (2025-05~07) | 〃 |
+| PHerc0125, 0191, 0211, 0257, 0358, 0813, 0826, 1545 | 9.362 um masked | **0** | unwrapping not started |
+| PHerc0268, 1218 | 8.640 um masked | **0** | same |
+| PHerc1203 | 9.362 um **plus 2.403 um** | raw only | a high-resolution scan exists, but no segments |
+| **PHerc0800** | 8.640 um | **6** auto-grown (2025-10-28) | **mesh only, no rendered surface volume** |
+| **PHerc1447** | 8.640 um | **15** auto-grown (2025-05 to 07) | same |
 
-- 13개 전부 전체 CT 볼륨은 공개돼 있으나, **11개는 세그먼트 0** → 잉크 검출 이전에 언래핑이 필요(우리 레인 아님).
-- 0800·1447의 auto-grown 세그먼트는 `mesh/`만 있음 → **mesh→표면볼륨 렌더링**(villa/VC `tifxyz` 계열)을
-  거쳐야 우리 파이프라인이 먹는 입력이 됨. 이 단계는 우리가 아직 안 해봄.
-- S3 카탈로그(`metadata.json`)는 실제 버킷보다 뒤처져 있음(13개 스크롤이 photo만 있는 걸로 나옴) — 믿지 말고 직접 리스팅.
+- All 13 have their full CT volumes published, but **11 have zero segments**, so
+  they need unwrapping before ink detection is even a question — not our lane.
+- 0800's and 1447's auto-grown segments have only `mesh/`, so a
+  **mesh-to-surface-volume render** (villa/VC's `tifxyz` family) has to happen
+  before our pipeline has an input it can eat. We had not tried that step.
+- The S3 catalogue (`metadata.json`) lags the actual bucket — it lists all 13
+  scrolls as having only photos. Do not trust it; list the bucket directly.
 
-## 3. ⭐ 핵심 발견: `ink_9um` 신규 공식 데이터셋 (2026-08-14 공개, 정찰 시점 나흘 됨)
+## 3. The key find: the `ink_9um` dataset (released 2026-08-14, four days old at the time)
 
-`hf://buckets/scrollprize/datasets/ink_9um/` — README 요지:
+`hf://buckets/scrollprize/datasets/ink_9um/`. From its README:
 
-- **4개 스크롤 29세그먼트의 9µm급 잉크 라벨** (라벨만, CT는 open-data S3에서):
-  - `aligned-scrollprizeorg-21slices/` 24세그먼트 = PHerc0139×9 + PHerc1667×6 + **PHercParis4×8(w00~w09 = 우리가 쓰던 그 세그먼트들)** + PHerc0814×1. 공개 2.399µm 표면볼륨을 level-2 XY + z 4x 평균풀링해 ~9.6µm로 쓰는 구조. 21슬라이스, Z=10만 주석.
-  - `native9-scrollprizeorg-21slices/` 5세그먼트 = PHerc0139 네이티브 9.362µm. 28슬라이스, Z=14만 주석.
-- **`_validation_mask.zarr`가 29개 중 3개에만 있음** (pherc0139-w016, pherc0814-46527, pherc1667-w029)
-  → 7월 하네스가 메우던 바로 그 빈틈이 신규 데이터셋에서 재현됨. 동시에 공식 데이터셋이
-  `_validation_mask` 관행을 채택했다는 것 자체가 이슈 #1231 전제의 사후 인정.
-- 소비 코드 = **villa `merge-ink-pipelines`** (우리가 머지된 PR 2개를 가진 바로 그 브랜치/파이프라인).
-- 학습된 모델도 공개: HF `scrollprize/ink_9um` → 하네스로 **공개 체크포인트를 평가**하는 것부터 가능(학습 없이 시작).
-- **용량 실측: 네이티브 9µm 표면볼륨 1개 = 1.7GB**(PHerc0139 w040, 3,763파일). 29세그먼트 전부 받아도
-  수십 GB 수준으로 추정(2.4µm aligned 쪽은 level-2만 부분 sync 가능) → **디스크 증설 불필요한 레인**.
+- **9 um-scale ink labels for 29 segments across 4 scrolls** (labels only; the CT
+  lives in the open-data S3 bucket):
+  - `aligned-scrollprizeorg-21slices/`, 24 segments = PHerc0139 x9, PHerc1667 x6,
+    **PHercParis4 x8 (w00 to w09 — the segments we had been working on)**, and
+    PHerc0814 x1. Built by taking the public 2.399 um surface volumes at level-2
+    XY with a 4x mean pool in z, giving ~9.6 um. 21 slices, annotated on z=10
+    only.
+  - `native9-scrollprizeorg-21slices/`, 5 segments = PHerc0139 at its native
+    9.362 um. 28 slices, annotated on z=14 only.
+- **Only 3 of the 29 carry a `_validation_mask.zarr`** (pherc0139-w016,
+  pherc0814-46527, pherc1667-w029) — the exact gap July's harness was built to
+  fill, reproduced in a brand-new dataset. At the same time, an official dataset
+  adopting the `_validation_mask` convention at all is de facto acknowledgement
+  of the premise behind issue #1231.
+- The consuming code is **villa `merge-ink-pipelines`** — the same branch and
+  pipeline our two merged PRs landed in.
+- Trained models are published too: HF `scrollprize/ink_9um`. So the harness can
+  start by **scoring the released checkpoints**, with no training at all.
+- **Measured size: one native 9 um surface volume is 1.7 GB** (PHerc0139 w040,
+  3,763 files). All 29 segments should come to tens of GB (the 2.4 um aligned
+  side can be partially synced at level 2 only) — **a lane that needs no new
+  disk**.
 
-## 4. 9월 후보안
+## 4. Candidate plans for September
 
-- **A안(본명당, 추천): 하네스를 ink_9um으로 확장 + cross-scroll 일반화 측정.**
-  - 검증 마스크 없는 26세그먼트에 held-out 생성 → 스크롤별 베이스라인 + 노이즈 플로어 산출
-  - leave-one-scroll-out CV로 **오픈 문제 #7 "cross-scroll ink generalization"에 최초의 체계적 수치**
-    (+#10 진단 능력). 공개 체크포인트 평가부터 시작하면 GPU 예산도 가벼움.
-  - 스토리 연속성: 7월(하네스 제작) → 8월(하네스로 #192 검증) → 9월(하네스를 신규 공식 데이터셋 +
-    1순위 미해결 문제로 확장). 데이터셋이 나온 지 나흘이라 니치 선점 상태.
-- **B안(복권): First Letters 최근접 경로** = PHerc0800/1447 mesh → 표면볼륨 렌더 → 9µm 모델 추론.
-  - A안의 부산물(검증된 9µm 모델 + 스크롤별 일반화 수치)이 그대로 무기가 됨.
-  - 잉크가 안 보일 확률이 높지만, "왜 안 보이는가"의 진단도 오픈 문제 #7/#10 제출감(이중 활용).
-  - 선행 요건: mesh→렌더 단계 습득(villa `tifxyz_label_transfer`·렌더 스크립트 조사 필요).
-- **C안(안전판): 하네스 업스트림화 대형 PR** — #1434 리뷰 신호 후. $1k급.
-- 순서 제안: **A 먼저**(9/30까지 확실한 제출물 확보) → 남는 시간·GPU로 B → C는 신호 대기.
+- **Plan A (the main bet, recommended): extend the harness to ink_9um and measure
+  cross-scroll generalisation.**
+  - Generate held-out splits for the 26 segments without a mask, giving a
+    per-scroll baseline and noise floor.
+  - Leave-one-scroll-out CV produces **the first systematic numbers for open
+    problem #7, "cross-scroll ink generalization"** (and touches #10,
+    diagnostics). Starting from scoring the released checkpoints keeps the GPU
+    budget light.
+  - The story is continuous: July built the harness, August used it to test
+    #192, September extends it to a new official dataset and the top unsolved
+    problem. The dataset being four days old means the niche is unclaimed.
+- **Plan B (the lottery ticket): the nearest path to First Letters** —
+  PHerc0800/1447 mesh, render to a surface volume, infer with the 9 um models.
+  - Plan A's by-products (a validated 9 um model and per-scroll generalisation
+    numbers) are exactly the equipment for it.
+  - Ink probably will not show, but diagnosing *why* is itself a submission for
+    open problems #7 and #10 — so the work is dual-use.
+  - Prerequisite: learning the mesh-to-render step (villa's
+    `tifxyz_label_transfer` and render scripts need investigating).
+- **Plan C (the safety net): a large PR upstreaming the harness**, once #1434
+  gives a review signal. A $1k-class contribution.
+- Suggested order: **A first**, to secure a definite submission by 9/30, then B
+  with whatever time and GPU remain; C waits for a signal.
 
-## 5. 착수 상태 (2026-08-18 밤 갱신)
+## 5. Where the work stood (updated the night of 2026-08-18)
 
-1. ✅ **`ink_9um` 라벨 sync 완료(2026-08-19 확인)** — 380,991파일 + README(453MB). 바이트는 작은데
-   잔파일이 병목이라 단일 프로세스는 ~23h 페이스 → **세그먼트 단위 병렬 sync(9워커)로 재시작**해 하룻밤에 완료.
-   sync는 멱등이라 중단·재개 자유.
-   ⚠️ **함정: 파일 개수가 원격과 일치해도 무결성은 보장되지 않는다.** 중간에 죽인 sync가 남긴 잘린 청크는
-   `hf`의 크기·mtime 비교를 통과해버리고, 읽을 때 비로소 blosc 에러가 난다(실제로 `native9/w040`의
-   inklabels가 파일 수 8,496 일치인데 손상). → **대용량 sync 후엔 zarr를 실제로 압축해제해보는 검사 필수**
-   (`scratchpad/check_zarrs.py` 패턴: 모든 `*.zarr`의 배열을 `a[:]`로 전량 읽기, 61스토어 ~4분).
-   손상 발견 시 해당 zarr 폴더만 삭제 후 재sync → **재검증 결과 61/61 정상.**
-2. ✅ 네이티브 9µm 표면볼륨 5개 다운로드 완료(7.77GB, S3 직접, `data/ink_9um/surface-volumes/native9/`).
-   ⚠️ S3 리스팅은 **볼륨 폴더를 delimiter로 먼저 발견** 후 그 안만 열거할 것 — `surface-volumes/` 전체를
-   열거하면 1.129µm 초고해상 볼륨(수십만 키)까지 페이징하느라 몇 분씩 멈춤.
-3. ✅ 공개 체크포인트 14개 전부 다운로드(`data/ink_9um/models/hybrid_3d2d-seed{42,43}/`, 138MB×14).
-4. ✅ **스모크 추론 성공(w040 + seed42/step-075000)**: 2,770블록 45초(~61 block/s), 출력 6400×7980,
-   강잉크 11%, **프리뷰에서 그리스 글자 또렷**(`runs/ink9um_smoke/`). 명령 = vw2 트리 + external 환경:
-   `cd D:/vw2/ink-detection && uv run --project <repo>/external/villa/ink-detection --no-sync python -m
-   koine_machines.inference.infer <volume.zarr> <ckpt> <out.tif> --batch-size 4 --no-compile`.
-5. ✅ **공식 검증 마스크 3개 전부 분석(2026-08-18 밤)** — 설계 원칙이 3세그먼트에서 일관:
-   | 세그먼트 | val 영역 | 주석면적 중 val 비중 | 잉크밀도 val vs sup |
+1. **`ink_9um` labels synced** (confirmed 2026-08-19) — 380,991 files plus the
+   README, 453 MB. The bytes are small but the file count is the bottleneck, so
+   a single process ran at a ~23h pace; restarting as **a per-segment parallel
+   sync with 9 workers** finished it overnight. Sync is idempotent, so
+   interrupting and resuming is free.
+   WARNING — **a matching file count does not mean the data is intact.** A sync
+   killed midway leaves truncated chunks that pass `hf`'s size and mtime
+   comparison and only fail at read time with a blosc error — `native9/w040`'s
+   inklabels had 8,496 files, matching, and was corrupt. **After any large sync,
+   actually decompress the zarrs to check** (the `scratchpad/check_zarrs.py`
+   pattern: read every array of every `*.zarr` with `a[:]`; 61 stores took about
+   4 minutes). Deleting and re-syncing the affected zarr folder fixed it, and
+   re-verification gave **61 of 61 clean**.
+2. Five native 9 um surface volumes downloaded (7.77 GB, straight from S3, into
+   `data/ink_9um/surface-volumes/native9/`).
+   WARNING — when listing S3, **find the volume folders with a delimiter first**
+   and enumerate only inside them. Enumerating all of `surface-volumes/` pages
+   through the 1.129 um ultra-high-resolution volumes (hundreds of thousands of
+   keys) and stalls for minutes.
+3. All 14 public checkpoints downloaded
+   (`data/ink_9um/models/hybrid_3d2d-seed{42,43}/`, 138 MB each).
+4. **Smoke inference succeeded** (w040 with seed42 / step-075000): 2,770 blocks
+   in 45 s (~61 blocks/s), output 6400x7980, 11% strong ink, and **Greek letters
+   clearly legible in the preview** (`runs/ink9um_smoke/`). The command is the
+   vw2 tree with the external environment:
+   `cd D:/vw2/ink-detection && uv run --project <repo>/external/villa/ink-detection --no-sync python -m koine_machines.inference.infer <volume.zarr> <ckpt> <out.tif> --batch-size 4 --no-compile`.
+5. **All three official validation masks analysed** (night of 2026-08-18) — one
+   design principle, consistent across the three:
+
+   | segment | val regions | val share of annotated area | ink density, val vs sup |
    |---|---|---|---|
-   | pherc0139-w016 | 2개(88k+87k px) | 29.5% | 0.235 vs 0.214 |
-   | pherc0814-46527 | 1개(161k px) | 27.3% | 0.373 vs 0.296 |
-   | pherc1667-w029 | 2개(236k+147k px) | 24.0% | 0.230 vs 0.294 |
-   공통: **supervision과 겹침 0인 별도 주석 영역**(주석 시점에 분리해 그림), 주석 면적의 ~1/4~
-   1/3을 검증에 배정, 큰 연속 패치 1~2개 단위, 잉크밀도는 대략 비슷(정확히 매칭은 안 함).
-   = 우리 7월 하네스의 "영역 통째 유보" 철학과 동일 의미론(우리는 사후 파생, 공식은 주석 시점 분리).
-   트레이너 소비 코드는 7월과 동일 구조(검증 픽셀을 학습 패치에서 차감) → 하네스 이식 유효.
-   라벨은 21슬라이스 중 z=10 한 장(w00 패턴 동일).
-6. ⭐ **핵심 갭 확정: 공개 체크포인트는 PHercParis4에서 한 번도 검증된 적 없음**(온라인 검증 3케이스가
-   전부 0139/0814/1667). 모델 카드에 성능 수치 자체가 전무 → 첫 채점표가 우리 것.
-7. 남은 것: sync 완료 후 나머지 공식 마스크 2개(0814, 1667-w029) 분석 → 26세그먼트 held-out 생성 설계
-   (세그먼트 단위 유보가 자연스러움 — 감독영역이 세그먼트당 2~3개 큰 패치) → 14 ckpt × 스크롤별 채점.
+   | pherc0139-w016 | 2 (88k + 87k px) | 29.5% | 0.235 vs 0.214 |
+   | pherc0814-46527 | 1 (161k px) | 27.3% | 0.373 vs 0.296 |
+   | pherc1667-w029 | 2 (236k + 147k px) | 24.0% | 0.230 vs 0.294 |
 
-## 6. B안 렌더 경로 정찰 (2026-08-22, LOSO 학습 대기 중 조사)
+   In common: **separate annotated regions with zero overlap with supervision**
+   (drawn apart at annotation time), roughly a quarter to a third of the
+   annotated area assigned to validation, in one or two large contiguous
+   patches, with ink density roughly but not exactly matched. That reads as the
+   same semantics as July's harness — hold out whole regions — reached from the
+   other direction (ours derives them after the fact, the official ones separate
+   them at annotation time). The trainer-side consumption is structurally what
+   July's was (validation pixels subtracted from training patches), so the
+   harness ports over. Labels sit on one slice of 21, z=10, the same pattern as
+   w00.
 
-**결론: 경로가 실존하고, 막는 건 환경 하나(WSL2/Docker 부재)뿐이다.**
+   *(Later correction, 2026-08-29: "hold out whole regions" turned out to be
+   wrong as a description of the official masks. All three split their
+   annotation **within** connected regions, and on two of them a leak-free
+   held-out subset cannot be constructed at all — see
+   [docs/17](17_holdout_audit.md). The zero overlap with supervision is real;
+   what does not follow from it is separation in space.)*
+6. **The key gap, confirmed: the public checkpoints have never been validated on
+   PHercParis4** — all three online-validation cases are 0139, 0814 and 1667.
+   The model card carries no performance numbers at all, so the first scorecard
+   would be ours.
+7. Remaining at the time: analyse the other two official masks (0814 and
+   1667-w029) after the sync,
+   design held-out generation for the 26 segments (segment-level holdout looks
+   natural, since supervision comes in 2-3 large patches per segment), then
+   score 14 checkpoints per scroll.
 
-- **렌더러 = `vc_render_tifxyz`** (villa `volume-cartographer/apps/src/vc_render_tifxyz.cpp`).
-  OME-Zarr 볼륨 + tifxyz 세그먼트 폴더를 받아 법선 방향 `--num-slices`장을 샘플링,
-  `--zarr-output`이 **L0–L5 XY 피라미드 zarr**를 냄. `--remote-url` 스트리밍 +
-  `--prefetch-remote` + `--cache-gb` + `--resume`까지 있어 **풀볼륨 다운로드 불필요**.
-- **출력 계약 확인됨**: 로컬 native9 w040 표면볼륨(우리가 스모크 추론까지 돌린 그 파일)이
-  정확히 이 렌더러 시그니처 — 28슬라이스, 청크 (28,128,128), z 고정 XY-전용 피라미드.
-  즉 렌더만 되면 우리 추론·채점 파이프라인에 무수정으로 꽂힌다.
-- **입력 실측**:
-  - 풀볼륨(masked, RAW 무압축 청크 128³): 0800 = 24298×9867×9867 u1,
-    1447 = 24297×8343×8343. 밀집 기준 ~2.4TB라 통짜 다운로드는 불가하지만
-    masked+세그먼트 bbox 한정이면 **세그먼트당 ~5–15GB 스트리밍**으로 충분.
-  - 세그먼트 mesh = **초소형**: `mesh/intermediate/tifxyz_original/`에 x/y/z.tif
-    (0.1MB급, 격자 scale 0.05 = ×20 그리드) + meta.json(bbox·area_cm2) + obj 1개.
-- **면적 인벤토리 (22세그먼트 전수)**: **1447이 본명당** — 13개가 2cm² 이상,
-  최대 **7.4cm² > First Letters 창(4cm²)**, 전부 max_gen=200(성숙 성장).
-  0800은 0.38–2.28cm²로 작음(6개, gen 20–101). 합계 67.5cm².
-  상위: 7.40 / 6.57 / 4.92 / 4.74 / 4.51 / 4.46 (전부 1447).
-✅ **실행 완료 2026-08-26 — 전 구간 작동 확인, 결과는 판독 불가. 상세는 [docs/16](16_first_letters_render.md).**
-  아래 블로커는 WSL2 + Docker Desktop 설치로 해소됐다.
+## 6. Scouting the Plan B render path (2026-08-22, while the LOSO training ran)
 
-- **환경 함정(당시 유일한 블로커, 해소됨)**: VC는 네이티브 Windows 빌드 불가(*nix atomic rename 요구,
-  README 명시). 공식 경로 = Docker 이미지
-  `ghcr.io/scrollprize/villa/volume-cartographer:edge` 또는 WSL. **이 머신엔 둘 다 없음**
-  (`docker` 없음, WSL 배포판 미설치) → **사용자 1회 설치 필요(관리자)**: WSL2
-  (`wsl --install`, 재부팅 1회) 후 그 안에서 Docker 없이 직접 빌드하거나, Docker Desktop.
-  추론·채점은 지금처럼 Windows 쪽에서 하면 되므로 렌더 단계만 컨테이너/WSL로 우회.
-  - 폴백: tifxyz가 단순 포맷(좌표 격자 3장 + scale)이라 파이썬 미니 렌더러 자작도
-    가능(2–3일). 단 공식 렌더러와의 계약 동일성(채택 축)이 약해져 차선.
-- **모델 정합**: 8.640µm 네이티브는 모델 카드가 "native ~9µm renders work directly"로
-  축복한 범위(9.362 대비 −8%). 반응 약하면 z 오프셋부터 의심(`--layer-start/--layer-end`
-  스윕 — 카드 팁 + 우리 z-window 교훈과 동일 계열).
-- **명령 스케치(실행일에 컨테이너 안에서 검증)**:
-  `vc_render_tifxyz -v <volume.zarr(or remote cache)> -g 0 --scale 1 -s <tifxyz_dir>
+**Conclusion at the time: the path exists, and the only thing blocking it is one
+environment (no WSL2, no Docker).**
+
+- **The renderer is `vc_render_tifxyz`**
+  (villa `volume-cartographer/apps/src/vc_render_tifxyz.cpp`). It takes an
+  OME-Zarr volume plus a tifxyz segment folder, samples `--num-slices` along the
+  normal, and `--zarr-output` writes **an L0-L5 XY pyramid zarr**. It has
+  `--remote-url` streaming, `--prefetch-remote`, `--cache-gb` and `--resume`, so
+  **the full volume never has to be downloaded**.
+- **The output contract checks out**: our local native9 w040 surface volume — the
+  one we ran smoke inference on — has exactly this renderer's signature: 28
+  slices, chunks (28,128,128), a z-fixed XY-only pyramid. So if the render works
+  at all, it drops into our inference and scoring pipeline unmodified.
+- **Inputs, measured**:
+  - full volumes (masked, RAW uncompressed 128^3 chunks): 0800 is
+    24298x9867x9867 u1, 1447 is 24297x8343x8343. Dense that is ~2.4 TB, so no
+    wholesale download — but masked and limited to a segment's bounding box,
+    **5-15 GB of streaming per segment** is enough.
+  - segment meshes are **tiny**: `mesh/intermediate/tifxyz_original/` holds
+    x/y/z.tif (~0.1 MB, grid scale 0.05 = a 20x grid) plus meta.json (bbox,
+    area_cm2) and one obj.
+- **Area inventory (all 22 segments)**: **1447 is the main bet** — 13 of its
+  segments are over 2 cm2, the largest is **7.4 cm2, above the First Letters
+  4 cm2 window**, and all are max_gen=200 (mature growth). 0800's six are small,
+  0.38-2.28 cm2 at gen 20-101. Total 67.5 cm2. The top six: 7.40 / 6.57 / 4.92 /
+  4.74 / 4.51 / 4.46, all on 1447.
+
+**Executed 2026-08-26 — every stage works, and the result is unreadable. Details
+in [docs/16](16_first_letters_render.md).** The blocker below was cleared by
+installing WSL2 and Docker Desktop.
+
+- **Environment trap (the only blocker at the time, now cleared)**: VC cannot be
+  built on native Windows (it needs \*nix atomic rename, as the README states).
+  The official path is the Docker image
+  `ghcr.io/scrollprize/villa/volume-cartographer:edge`, or WSL. **This machine
+  had neither** — no `docker`, no WSL distribution — so it needed **a one-time
+  install by the user, as administrator**: WSL2 (`wsl --install`, one reboot)
+  and then either building inside it or using Docker Desktop. Inference and
+  scoring can stay on the Windows side, so only the render step needs the
+  container.
+  - Fallback: tifxyz is a simple format (three coordinate grids plus a scale), so
+    writing a small Python renderer was feasible in 2-3 days. But losing
+    contract-identity with the official renderer weakens the adoption axis, so
+    it was second choice.
+- **Model fit**: 8.640 um native sits inside the range the model card blesses
+  ("native ~9 um renders work directly"), 8% off 9.362. If the response is weak,
+  suspect the z offset first (sweep `--layer-start`/`--layer-end` — the card's
+  own tip, and the same family of problem as our z-window lesson).
+- **Command sketch** (verified inside the container on the day it ran):
+  `vc_render_tifxyz -v <volume.zarr (or remote cache)> -g 0 --scale 1 -s <tifxyz_dir>
   --num-slices 28 --slice-step 1 --zarr-output <seg_surface.zarr> --remote-url <S3 URL>
-  --prefetch-remote --cache-gb 24` (28슬라이스 = native9 계약 재현).
-- **LOSO와의 연결**: 지금 돌리는 cross-scroll 수치가 이 경로의 go/no-go —
-  Paris4 held-out F1이 ~0.7대면 미지 스크롤(0800/1447)에서도 글자 기대 가능,
-  ~0.5대면 렌더 후 도메인 적응부터. 어느 쪽이든 "왜"의 진단이 #7/#10 제출감.
+  --prefetch-remote --cache-gb 24` (28 slices reproduces the native9 contract).
+  *(What actually worked used a smaller `--cache-gb` and a `--timeout` chain; see
+  docs/16.)*
+- **How this connects to LOSO**: the cross-scroll numbers being measured at the
+  time were the go/no-go for this path. Paris4 held-out F1 around 0.7 would mean
+  letters could be expected on an unseen scroll (0800/1447); around 0.5 would mean domain
+  adaptation has to come first. Either way, diagnosing why is a submission for
+  #7 and #10. *(It came out around 0.49 — see [docs/15](15_loso_cross_scroll.md)
+  — and the render duly read nothing.)*
+
+---
+
+MIT-licensed.
