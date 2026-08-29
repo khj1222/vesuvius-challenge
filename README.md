@@ -1,180 +1,307 @@
 # Vesuvius Challenge — Progress Prizes
 
-> 헤르쿨라네움 탄화 파피루스 두루마리를 CT 스캔 + ML/CV로 판독하는 오픈 챌린지.
-> **우리 진입 트랙 = Progress Prizes (월간 롤링, $1k~$20k).** 리더보드 대회 아님 — **오픈소스 기여물의 유용성·채택·문서화**로 심사.
+> An open challenge to read the carbonised Herculaneum papyrus scrolls from CT
+> scans using ML and CV.
+> **Our track is the Progress Prizes** — monthly, rolling, $500 to $20,000. Not
+> a leaderboard: submissions are judged on how **useful, adopted and documented**
+> the open-source contribution is.
 
-**검증일: 2026-07-19** (scrollprize.org 공식 페이지 실측). 상세 근거는 `docs/` 참조.
+This repository is one contributor's working record: a full local reproduction
+of the official ink-detection pipeline, plus the tools, measurements and
+upstream patches built on top of it. Everything here is MIT-licensed.
 
----
-
-## 30초 오리엔테이션
-
-- **주최**: Vesuvius Challenge (Nat Friedman 등). 사이트 https://scrollprize.org
-- **왜 우리한테 맞나**: 롤링/월간이라 **하드마감이 파이프라인을 안 건드림**(9월 병목 회피) + CV·RTX5090·시각형 산출물(잉크 예측 이미지) 정합. trace-the-ace와 스택 겹침.
-- **진입 과제 1픽 = Ink Detection** ("다운로드→첫 예측까지 주말 하나"가 공식 표현). 잉크 라벨된 표면볼륨(surface volume, TIFF 레이어 스택) → 세그멘테이션 모델 → 잉크 확률맵.
-- **상금 티어(월간)**: Papyrus $1k / Sestertius $2.5k / Denarius $10k / Gold Aureus $20k. "이달의 최고 제출 $20k" 매월 보장.
-- **제출**: Google Form 1건. 마감 롤링. **7월 라운드 제출(7/26) → 🏆 수상($1,000 Papyrus 등급).**
-  공식 발표 ["$33.5k awarded in July"](https://scrollprize.substack.com/p/335k-awarded-in-july)에
-  *"an update to the ink tutorial that includes proper validation data"*로 등재. 다음 = **8/31 23:59 PT**.
-- **라이선스**: 수상 시 **permissive 라이선스로 오픈소스화 필수**(제출 시점엔 비공개 OK, 수상 수락 시 공개). MIT면 충분. → 우리는 원래 오픈소스라 부담 0.
-
-> ⚠️ **이건 metric 리더보드가 아님.** 심사 3축 = ①**조기 공개**(먼저 풀린 툴이 실제로 쓰임) ②**커뮤니티 채택**(질문·버그리포트·기능요청 등 사용 신호) ③**문서화**(워크스루·이미지·튜토리얼). Kaggle/DrivenData식 "점수만 높이면 됨"과 게임이 다름. `docs/05_strategy.md` 필독.
+**A July 2026 Progress Prize was awarded to the held-out validation harness in
+this repository.**
 
 ---
 
-## 결과 (2026-07-21) — 파이프라인 로컬 완주 ✅
+## 30-second orientation
 
-네이티브 Windows + RTX 5090에서 공식 `ScrollPrize/villa` 잉크 검출 파이프라인을
-**다운로드 → 학습(20k iter, ~1h31m) → 추론**까지 완주. 첫 예측물에 **그리스 대문자가
-또렷이 판독**됨.
+- **Organiser**: Vesuvius Challenge, https://scrollprize.org
+- **Entry task**: ink detection — an ink-labelled surface volume goes in, a
+  segmentation model comes out, and the output is an ink probability map. The
+  official framing is "one weekend from download to first prediction".
+- **Prize tiers (monthly)**: $500 / $1,000 (Papyrus) / $2,500 (Sestertius) /
+  $5,000 / $10,000 (Denarius) / $20,000 (Gold Aureus), with "best submission of
+  the month, $20,000" guaranteed every month.
+- **Submission**: one Google Form per round, linked from
+  https://scrollprize.org/prizes. Note that **the form URL is specific to the
+  round and the previous one closes**, so fetch it fresh each month.
+- **Licence**: winning requires the method to be open-sourced permissively. This
+  repository already is.
 
-| 원본 CT 표면 (입력) | 잉크 검출 (출력) |
+> This is **not a metric leaderboard**. The stated judging criteria are: released
+> early, actually gets used, improves results on real data, fixes bugs in tools
+> people rely on, reveals actionable information, and is well documented. See
+> `docs/05_strategy.md`.
+
+---
+
+## Reproduction (2026-07-21)
+
+The official `ScrollPrize/villa` ink-detection pipeline runs end to end on
+native Windows with an RTX 5090 — download, training (20k iterations, ~1h31m),
+inference. Greek capitals are legible in the first prediction.
+
+| raw CT surface (input) | ink detection (output) |
 | :--: | :--: |
 | ![raw CT](docs/images/w00_surface.png) | ![overlay](docs/images/w00_overlay.png) |
 
-세그먼트 `w00_20231016151002` (PHercParis4). 재현·함정·명령 전부:
+Segment `w00_20231016151002` (PHercParis4). Every command, and the seven traps
+that are not in the official tutorial:
 **[docs/08_windows_reproduction.md](docs/08_windows_reproduction.md)**.
 
-## 우리가 얹은 "한 겹" (제출 대상)
+---
 
-점수 리더보드가 아니라 **유용성·채택·문서화**로 심사되는 트랙이라, 재현 위에 남이 바로
-쓸 기여를 얹음:
+## What this repository adds
 
-1. **[held-out 검증 하네스](docs/09_validation_harness.md)** — 공식 튜토리얼대로 학습하면
-   **검증 세트가 0개**다(배포 세그먼트에 `_validation_mask`가 없음). `val_every`는 빈 루프를
-   돌고, 저장소에 구현된 DRD·pseudo-F-measure는 한 번도 실행되지 않는다. 즉 "이 변경이
-   나아졌나?"에 아무도 수치로 답할 수 없는 상태. 이걸 메우는 툴 4종:
-   [`make_validation_mask.py`](tools/make_validation_mask.py) (주석 영역 단위 결정론적 held-out) ·
-   [`eval_validation.py`](tools/eval_validation.py) (임계값 스윕 + DRD/pFM + 영역별 분해) ·
-   [`sweep_checkpoints.py`](tools/sweep_checkpoints.py) (체크포인트별 곡선) ·
-   [`run_cv_folds.py`](tools/run_cv_folds.py) (k-fold 무인 실행).
-   → 우리 세그먼트에서 **검증 패치 0 → 1,337개**. 3-fold 교차검증까지 돌려
-   **"~0.03 F1 미만 개선은 노이즈"**라는 기준선과 **"마지막 체크포인트가 최적이 아니다"**(3런 중 2런이 17k에서 정점)를 실측.
-2. **[`tools/ink_viz.py`](tools/ink_viz.py)** — 예측 TIFF(700MB, 뷰어로 열면 새까맣게 보임)를
-   판독 가능한 이미지로 바꾸는 재사용 CLI: `stats` / `preview` / `surface` / `overlay`
-   (원본 CT 위 잉크 오버레이). 사용법 [tools/README.md](tools/README.md).
-3. **[Windows 재현 워크스루](docs/08_windows_reproduction.md)** — 공식 튜토리얼에 없는
-   실측 함정 7종을 문서화(실 데이터 ~86GB, 추론 `--no-compile`/Triton, 5090 cu128,
-   `merge-ink-pipelines` 브랜치 등).
-4. **[깊이 국소화 측정](docs/10_depth_localization.md)** — 잉크 주석은 65층 중 한 장에만
-   있고, 깊이는 학습 직전에 만들어진다([villa #192](https://github.com/ScrollPrize/villa/issues/192)).
-   그럼 모델은 z축 어디에서 잉크 근거를 얻는가? [`depth_profile.py`](tools/depth_profile.py)는 z밴드를
-   지우거나(필요성) 그것만 남겨(충분성) 모델에 직접 묻고,
-   [`depth_contrast.py`](tools/depth_contrast.py)는 **모델 없이** 원본 CT의 z별 잉크-배경
-   AUC를 잰다 — 학습된 모델로만 물으면 순환논증이 되기 때문. 두 측정이 독립적으로
-   **z≈16–36**(64층 중)을 가리켰고, 단일 복셀 밝기로는 잉크가 거의 구분되지 않는다(AUC ≤ 0.55).
-5. **[측정된 3D 잉크 라벨](docs/11_measured_3d_labels.md)** — 배포된 주석은 65층 중
-   **z=32 한 장**뿐이고, 깊이는 하류에서 **고정 반두께 1.0복셀** 투영으로 만들어진다.
-   [`make_3d_labels.py`](tools/make_3d_labels.py)는 그 두께와 중심을 측정값으로 바꾼다:
-   64px 셀별 occlusion 프로파일의 무게중심 → 셀 격자 중앙값 필터 → 전해상도 보간.
-   결과는 라벨 피라미드와 같은 그리드·청크의 `_inklabels3d.zarr`(8복셀 두께, 영역별
-   중심 z 29.3–40.3). 픽셀 단위·argmax 추정은 QC에서 탈락했고 그 기록도 문서에 남겼다.
-6. **[깊이 라벨로 학습하기 + 3 arm 비교](docs/12_depth_training.md)** — 만든 3D 라벨을
-   **쓸 수가 없었다**: flat 학습 루프가 손실 직전에 `amax(dim=2)`로 z를 접어, 3D 라벨과 평면
-   라벨이 타깃 단계에서 바이트 동일해진다. #192가 15개월간 방치된 이유의 일부다.
-   `flat_depth_targets` 게이트로 볼륨 대 볼륨 손실을 넣고, 추론에 `--z-window`를
-   더해 예측을 기존과 같은 2D 표면맵으로 환원한다 — 그래야 하네스 하나로 모든 arm을 같은 자로
-   잰다. [`make_label_version.py`](tools/make_label_version.py)가 세 라벨을 villa가 이미 아는
-   **label version**(`_vN`)으로 패키징한다: 평면 / 고정 밴드 / 측정된 밴드.
+### 1. A held-out validation harness — [docs/09](docs/09_validation_harness.md)
 
-   **결과 (3 arm × 3 fold, GPU 16h):** 라벨만 다르고 fold·시드·config·스케줄은 전부 동일.
+Following the official tutorial trains with **zero validation data**: the
+published segments carry no `_validation_mask`, so `val_every` iterates an empty
+loop and the DRD and pseudo-F-measure metrics implemented in the repository
+never run. Nobody could answer "did this change help?" with a number.
 
-   | arm | 밴드 | 3-fold 평균 F1 | spread |
-   |---|---|---|---|
-   | v3 constant | 8복셀 고정 | **0.8478** | 0.0076 |
-   | v2 plane | 1복셀 | 0.8441 | 0.0308 |
-   | v4 measured | 8복셀, 픽셀마다 이동 | **0.8098** | 0.0195 |
+Four tools close that:
+[`make_validation_mask.py`](tools/make_validation_mask.py) (deterministic
+held-out splits taken by whole annotated region) ·
+[`eval_validation.py`](tools/eval_validation.py) (threshold sweep, DRD/pFM, and
+a per-region breakdown) · [`sweep_checkpoints.py`](tools/sweep_checkpoints.py)
+(a curve over checkpoints) · [`run_cv_folds.py`](tools/run_cv_folds.py)
+(unattended k-fold).
 
-   **측정된 밴드가 3 fold 전부 꼴찌**다(고정 밴드 대비 −0.038 > 노이즈 기준선 0.03).
-   그런데 **v2 ≈ v3**이므로 **두께는 변수가 아니다** — 1복셀이든 8복셀이든 같은 점수고,
-   손해는 밴드를 **픽셀마다 움직일 때** 생긴다. 고정 밴드는 7월 2D 베이스라인(0.8472)을
-   그대로 재현하므로 깊이 타깃 자체도 무해하다. 순환성 우려는 오히려 측정 밴드에 유리하게
-   작용했어야 하는데(측정값을 깊이 없는 라벨로 학습한 모델에서 뽑았다) 그래도 졌다.
-   → **#192의 전제가 이 세그먼트에서 지지되지 않는다.** "#192가 틀렸다"가 아니라
-   "이 경로로 만든 밴드가 고정 밴드를 못 이긴다"까지가 주장 범위.
+On our segment this took validation patches from **0 to 1,337**. Three-fold
+cross-validation then established the two numbers everything else here is
+measured against: **improvements below ~0.03 F1 are noise**, and **the last
+checkpoint is not the best one** (two of three runs peak at 17k of 20k).
 
-   ⚠️ 부수 발견: 깊이 타깃 모델은 **감독한 z 기둥으로만 환원해야 한다.** 볼륨 전체를 max로
-   접으면 무감독 구간(잉크·배경 모두 0.6~0.93으로 포화)이 딸려 올라와 같은 체크포인트가
-   **F1 0.80 → 0.53**으로 무너진다. 증상은 best threshold가 254에 못박히는 것.
+*This is the contribution that won the July 2026 Progress Prize, announced as
+["an update to the ink tutorial that includes proper validation
+data"](https://scrollprize.substack.com/p/335k-awarded-in-july).*
 
-   | 축약 범위 | held-out π (fold 1, step 17000) |
-   | :--: | :--: |
-   | 전체 z0–64 (기본값) → **F1 0.499** · z16–48 (`--z-window`) → **F1 0.814** | ![z-window](docs/images/w00_z_window_before_after.png) |
+### 2. [`tools/ink_viz.py`](tools/ink_viz.py)
 
-   **견고성 확인 2종(2026-08-15~16, [docs/12](docs/12_depth_training.md) 말미):**
-   ① **"일찍 끊은 것 아니냐"** — 6런 전부 full-state resume로 30k까지 연장(+GPU 5.8h).
-   격차 0.038 → **0.036**, fold별 개선 최대 +0.008로 노이즈 안. 스케줄 아티팩트 아님.
-   ② **두 번째 세그먼트에서 복제** — `w02_20231031143852`에 파이프라인 전체를 그대로 반복.
-   2D 베이스라인이 **0.8235**로 w00(0.8232)과 0.001 차로 재현되고, 격차는 **+0.098로 2.5배**
-   벌어지며 **순서가 완전히 갈린다**(최고 v4 fold 0.7905 < 최저 v3 fold 0.8133).
+A prediction TIFF is 700 MB and looks black in a normal viewer. This turns one
+into something legible: `stats` / `preview` / `surface` / `overlay` (ink drawn
+over the raw CT). Usage in [tools/README.md](tools/README.md).
 
-### 업스트림(ScrollPrize/villa) 기여
+### 3. Where in z does the model find ink? — [docs/10](docs/10_depth_localization.md)
 
-- **[PR #1249](https://github.com/ScrollPrize/villa/pull/1249)** — 커뮤니티 프로젝트 목록 등재.
-  **2026-07-31 머지됨** — 하네스가 scrollprize.org 커뮤니티 툴 목록에 올라감.
-- **[PR #1234](https://github.com/ScrollPrize/villa/pull/1234)** — `create_label_zarrs`가 striped
-  TIFF를 스트리밍하도록 수정. 기존 코드는 피라미드를 메모리에 통째로 올려 25GiB를 할당하다
-  죽는다(tiled TIFF만 스트리밍됨). 하네스용 마스크를 만들다 발견했고, 기존 tiled 경로와
-  6레벨 바이트 동일 + 실제 32249×51380 striped 이미지 변환으로 검증. **2026-08-14 머지됨**
-  (리뷰 반영: 2D 피라미드를 메모리에서 유도하도록 바꿔 114.5s → 66.5s).
-- **[PR #1535](https://github.com/ScrollPrize/villa/pull/1535)** — `flat_depth_targets`.
-  flat 학습 루프가 손실 직전에 z를 접어버려 라벨 깊이 실험이 원천 불가한 문제를 config
-  게이트로 열고, 추론에 `--z-window`를 더해 볼륨 예측을 기존과 같은 2D TIFF로 환원한다.
-  리뷰 대기. (선행 [#1434](https://github.com/ScrollPrize/villa/pull/1434)는 2026-08-18에
-  닫혔다 — `CONTRIBUTING.md` 준수와, 측정하지 않은 `mean` 축약을 빼라는 지적. 둘 다 반영해
-  같은 브랜치에서 재제출.)
-- **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — 배포 세그먼트에
-  `_validation_mask`가 없는 것이 의도인지 메인테이너 문의. 담당자 배정(트리아지)까지 진행,
-  답변 대기.
-- **[Issue #192](https://github.com/ScrollPrize/villa/issues/192)** — 위 실험 결과를 원 이슈에
-  보고. [`export_depth_anchors.py`](tools/export_depth_anchors.py)로 측정된 밴드를 스크롤 좌표
-  앵커(7,005셀 + 법선, 미검증 가정은 sidecar에 명시)로 내보냈고, 제3자가 독립 1.129µm 스캔
-  대비 기하 채점을 제안해 수락 — 우리 음의 결과의 두 해석("추정기 기하가 틀렸다" vs
-  "기하가 맞는데도 진다")을 가르는 비순환 검사라서.
+Ink annotation exists on **one slice of 65**, and depth is manufactured just
+before training ([villa #192](https://github.com/ScrollPrize/villa/issues/192)).
+So where does the evidence actually come from?
+[`depth_profile.py`](tools/depth_profile.py) asks the model directly, by erasing
+z bands (necessity) and by keeping only one (sufficiency);
+[`depth_contrast.py`](tools/depth_contrast.py) asks the **raw CT with no model
+involved**, measuring per-z ink-versus-background AUC — because asking only a
+trained model is circular. The two independent measurements agree on
+**z ~16-36 of 64**, and single-voxel intensity barely separates ink at all
+(AUC <= 0.55).
 
-## 빠른 시작 (재현)
+### 4. Measured 3D ink labels — [docs/11](docs/11_measured_3d_labels.md)
+
+The published annotation is **one slice at z=32**, and downstream it is
+projected to a **fixed half-thickness of 1.0 voxel**.
+[`make_3d_labels.py`](tools/make_3d_labels.py) replaces that constant with a
+measurement: the centroid of each 64 px cell's occlusion profile, a median
+filter over the cell grid, then interpolation to full resolution. The result is
+`_inklabels3d.zarr` on the same grid and chunking as the label pyramid — 8
+voxels thick, per-region centres from z 29.3 to 40.3. Per-pixel and argmax
+estimators failed QC, and that record is in the document too.
+
+### 5. Training on depth labels, and a three-arm comparison — [docs/12](docs/12_depth_training.md)
+
+The 3D labels **could not be used**: the flat training loop folds z with
+`amax(dim=2)` immediately before the loss, so a depth-resolved label and a plane
+label are byte-identical as targets. That is part of why #192 sat open for 15
+months. A `flat_depth_targets` gate computes the loss volume-to-volume, and a
+`--z-window` inference flag reduces the prediction back to the usual 2D surface
+map — so one harness measures every arm with the same ruler.
+[`make_label_version.py`](tools/make_label_version.py) packages the three labels
+as villa **label versions** (`_vN`): plane, constant band, measured band.
+
+**Result (3 arms x 3 folds, 16 GPU hours).** Only the label differs; folds,
+seed, config and schedule are identical.
+
+| arm | band | 3-fold mean F1 | spread |
+|---|---|---|---|
+| v3 constant | 8 voxels, fixed | **0.8478** | 0.0076 |
+| v2 plane | 1 voxel | 0.8441 | 0.0308 |
+| v4 measured | 8 voxels, moving per pixel | **0.8098** | 0.0195 |
+
+**The measured band comes last on all three folds** (-0.038 against the constant
+band, above the 0.03 noise floor). But **v2 ~ v3**, so **thickness is not the
+variable** — one voxel or eight scores the same, and the loss comes from moving
+the band *per pixel*. The constant band reproduces the July 2D baseline
+(0.8472), so depth-resolved targets are harmless in themselves. Circularity ran
+in the measured band's favour — it was read out of a model trained on the
+depthless annotation — and it still lost.
+
+**So #192's premise is not supported on this segment.** The claim stops at "a
+band built this way does not beat a fixed one", not "#192 is wrong".
+
+A trap worth knowing: a depth-target model **must be reduced over the supervised
+z column only**. Folding the whole volume with max drags in the unsupervised
+range, where ink and background both saturate at 0.6-0.93, and the same
+checkpoint collapses from **F1 0.80 to 0.53**. The symptom is a best threshold
+pinned at 254.
+
+| reduction | held-out pi (fold 1, step 17000) |
+| :--: | :--: |
+| whole z0-64 (the default) -> **F1 0.499** · z16-48 (`--z-window`) -> **F1 0.814** | ![z-window](docs/images/w00_z_window_before_after.png) |
+
+**Two robustness checks** ([docs/12](docs/12_depth_training.md), final
+sections): all six runs extended to 30k steps by full-state resume held the gap
+at **0.036**, so the schedule was not cut short; and repeating the entire
+pipeline on a second segment, `w02_20231031143852`, reproduced the 2D baseline
+to within 0.001 (0.8235 against w00's 0.8232) while the gap **widened to +0.098
+with a total ordering** — the best measured fold (0.7905) below the worst
+constant fold (0.8133).
+
+### 6. First numbers for the released ink_9um models — [docs/14](docs/14_ink9um_scorecard.md)
+
+The August 2026 `ink_9um` release ships checkpoints with **no performance
+numbers on the model card**. Scoring all 14 of them on the three segments that
+ship a validation mask gives an honest ceiling of **F1 0.74-0.77**, against
+0.98+ on their own training pixels — a memorisation gap of 0.22 to 0.45. No step
+is best everywhere, and two released seeds differ by 0.22 F1 at step 75k on the
+same held-out region.
+
+### 7. Cross-scroll generalisation, measured — [docs/15](docs/15_loso_cross_scroll.md)
+
+The first systematic numbers for open problem #7. The public recipe was
+retrained three times, each with one scroll fully removed, and scored on that
+scroll's entire annotation. Four parts:
+
+- **Measurement** — the signal that survives a scroll boundary is **+0.06 to
+  +0.17 F1 over the trivial "everything is ink" baseline**, across three
+  scrolls. Honest-to-honest, that is a drop of 0.17 to 0.26 from a model's
+  performance on its own scroll.
+- **Nature** — it is **bias, not variance**: seeds differ by 0.01-0.03 where
+  in-scroll seeds differ by 0.22, and ensembling two seeds recovers only
+  +0.005 to +0.009.
+- **Cost to repair** — **one annotated segment on the target scroll plus about 7
+  GPU minutes** closes 82% of the gap (0.496 to 0.822 on seven segments the
+  fine-tune never saw), saturating at 2,500 steps.
+- **A First Letters playbook**, with a measured expected value for each step.
+
+An appendix records a hypothesis of ours that a **pre-registered** follow-up arm
+then **rejected** — the aligned representation's advantage is not domain match
+but representation quality — and the retraction was posted upstream.
+
+### 8. Running the render path on an unseen scroll — [docs/16](docs/16_first_letters_render.md)
+
+The full path from an S3 mesh to a prediction on PHerc1447, with every stage
+timed. **It works, and it reads nothing**, exactly as docs/15 predicted. The
+negative result matters because it shows the playbook's scouting step does not
+achieve its purpose: the prediction cannot say where to annotate, so
+unsupervised domain adaptation has to come first.
+
+### 9. Auditing the corpus's own held-out masks — [docs/17](docs/17_holdout_audit.md)
+
+Three of ink_9um's 29 segments ship a validation mask, and every honest number
+on this corpus rests on them. All three are **cut through annotated regions**
+rather than taken whole; on `pherc0139-w016` no leak-free held-out subset exists
+at all, because 99.1% of its held-out pixels sit within two training patches and
+the remainder contains no ink.
+
+Whether that adjacency pays needed no new training — the released checkpoints
+trained on those segments and our leave-one-scroll-out arms never saw them, so
+scoring both over the same distance strata separates leakage from difficulty.
+The control is nearly flat while the trained model gains **+0.14 and +0.07 F1
+more** on the held-out pixels nearest its training pixels.
+[`audit_holdout_masks.py`](tools/audit_holdout_masks.py) does this for any
+segment.
+
+---
+
+## Upstream contributions to ScrollPrize/villa
+
+- **[PR #1249](https://github.com/ScrollPrize/villa/pull/1249)** — community
+  projects listing. **Merged 2026-07-31**, putting the harness on
+  scrollprize.org's community tools list.
+- **[PR #1234](https://github.com/ScrollPrize/villa/pull/1234)** — make
+  `create_label_zarrs` stream striped TIFFs. The existing code builds the whole
+  pyramid in memory and dies allocating 25 GiB (only tiled TIFFs streamed).
+  Found while building masks for the harness; verified byte-identical to the
+  tiled path across six levels and on a real 32249x51380 image. **Merged
+  2026-08-14** (review round: derive the 2D pyramid in memory, 114.5s -> 66.5s).
+- **[PR #1535](https://github.com/ScrollPrize/villa/pull/1535)** —
+  `flat_depth_targets`, opening up label-depth experiments that the flat loop
+  otherwise makes impossible, plus `--z-window` at inference. Awaiting review.
+  (Its predecessor [#1434](https://github.com/ScrollPrize/villa/pull/1434) was
+  closed on 2026-08-18 asking for `CONTRIBUTING.md` compliance and for the
+  never-measured `mean` reduction to be dropped; both were addressed.)
+- **[PR #1608](https://github.com/ScrollPrize/villa/pull/1608)** —
+  `make_holdout_config.py`. The published ink_9um recipe does not run as
+  shipped: its `datasets` field holds a single `/path/to/` placeholder while the
+  29 representations live in a separate contract file. This joins the two and
+  adds `--exclude-scroll` / `--exclude-segment`. Under review, and the review
+  found a real crash, since fixed.
+- **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — asking
+  whether the missing `_validation_mask` on published segments is intended.
+  Triaged and assigned; no reply yet.
+- **[Issue #192](https://github.com/ScrollPrize/villa/issues/192)** — the
+  three-arm result reported on the original issue.
+  [`export_depth_anchors.py`](tools/export_depth_anchors.py) exported the
+  measured band as scroll-coordinate anchors (7,005 cells with normals, with the
+  unverified assumptions spelled out in a sidecar), and a third party scored
+  them against an independent 1.129 um scan: the band's centre sits a median 2.0
+  voxels from the independently observed surface.
+- **[Issue #1611](https://github.com/ScrollPrize/villa/issues/1611)** — the
+  renderer waits forever when remote streaming stalls, with a workaround and the
+  evidence that it finishes the job.
+
+---
+
+## Quick start
 
 ```
-1. docs/08_windows_reproduction.md 를 따라간다 (자기완결 워크스루).
-   요약: villa 클론 → uv sync(cu128) → hf buckets sync(~86GB)
-        → train(20k) → infer(--no-compile) → tools/ink_viz.py 로 시각화
-2. 그 위에 개선/툴/문서 한 겹 → Progress Prize 제출 (docs/03_submission.md)
+1. Follow docs/08_windows_reproduction.md (a self-contained walkthrough).
+   In short: clone villa -> uv sync (cu128) -> hf buckets sync (~86 GB)
+             -> train (20k) -> infer (--no-compile) -> visualise with tools/ink_viz.py
+2. Add your own layer on top, then submit (docs/03_submission.md).
 ```
 
-> ⚠️ 옛 `src/`(InkUNet·`inklabels.png`·번호 TIFF)는 **죽은 2023 Kaggle 포맷** 스캐폴드다.
-> 현재 파이프라인은 zarr + villa `koine_machines`(위 워크스루). `src/`는 참고용으로만 남겨둠.
+> The old `src/` tree (InkUNet, `inklabels.png`, numbered TIFFs) targets the
+> **dead 2023 Kaggle format**. The current pipeline is zarr plus villa
+> `koine_machines`, as in the walkthrough above; `src/` is kept for reference
+> only.
 
-## 폴더 구조
+## Repository layout
 
 ```
 vesuvius-challenge/
-├── README.md            ← 지금 이 파일
-├── CLAUDE.md            ← 새 세션 부팅용 (상태·컨벤션·다음 액션)
-├── todo.md              ← Week0 체크리스트
-├── requirements.txt     ← 시스템 Python 3.10 + cu128
-├── docs/                ← 01~07 오리엔테이션 + 08 재현 + 09 검증 하네스 + 10 깊이 국소화
-│                          + 11 3D 라벨 + 12 깊이 학습·3 arm 비교 + 13 9월 정찰
-│   └── images/          ← before/after 산출 이미지 + 검증 split 그림
-├── configs/             ← 검증이 실제로 도는 학습 config
-├── tools/               ← ink_viz + 검증 하네스 4종 + 깊이 측정·3D 라벨·앵커 내보내기 CLI + README
-├── src/                 ← ⚠️ 죽은 2023 Kaggle 포맷 스캐폴드 (참고용)
-└── submission/          ← 제출 산출물 패키지 (이미지 + writeup)
+├── README.md            <- this file
+├── CLAUDE.md            <- session bootstrap (state, conventions, next actions)
+├── requirements.txt     <- system Python 3.10 + cu128
+├── docs/                <- 01-07 orientation · 08 reproduction · 09 validation harness
+│                           10 depth localisation · 11 3D labels · 12 depth training
+│                           13 September scouting · 14 ink_9um scorecard
+│                           15 cross-scroll LOSO · 16 First Letters render
+│                           17 held-out mask audit
+│   └── images/          <- before/after figures
+├── configs/             <- training configs where validation actually runs
+├── tools/               <- ink_viz, the validation harness, depth measurement,
+│                           3D labels, anchor export, held-out audit, label budgets
+├── src/                 <- dead 2023 Kaggle-format scaffold (reference only)
+└── submission/          <- submission packages and upstream drafts
 ```
 
-> 실제 학습/추론 코드는 `external/villa`(gitignore, 공식 파이프라인)에서 돈다.
-> 데이터·체크포인트·TIFF는 커밋 안 함(.gitignore).
+> Training and inference themselves run in `external/villa` (gitignored, the
+> official pipeline). Data, checkpoints and TIFFs are not committed.
 
-## 상태
+## Status
 
-- [x] docs 오리엔테이션 (공식 검증 2026-07-19)
-- [x] **데이터 다운로드 + 파이프라인 재현 완주** (2026-07-21, 첫 예측물 그리스어 판독)
-- [x] **기여 한 겹**: `ink_viz` 시각화 툴 + Windows 재현 워크스루
-- [x] **github khj1222/vesuvius-challenge 푸시 (public)** — 2026-07-21
-- [x] **held-out 검증 하네스** (2026-07-25) — 검증 패치 0 → 1,337개, DRD·pFM 최초 실행
-- [x] **7월 라운드 제출** (2026-07-26) → 🏆 **Progress Prize 수상 $1,000 Papyrus** (통보 2026-08-04, 공개 발표 2026-08-18)
-- [x] **#192 3D 라벨 실험 완료** (2026-08-09) — 3 arm × 3 fold, 음의 결과
-- [x] **견고성 확인** (2026-08-15~16) — 30k 연장(격차 0.036 유지) + `w02` 세그먼트 복제(격차 +0.098)
-- [x] **업스트림 PR 2건 머지** — #1249 (2026-07-31), #1234 (2026-08-14)
-- [ ] 8월 라운드 제출 (마감 8/31 23:59 PT) — 문안 완료, [PR #1535](https://github.com/ScrollPrize/villa/pull/1535) 리뷰 대기
-- [ ] 9월 라운드 — 신규 공식 데이터셋 `ink_9um`(4스크롤 29세그먼트, 검증 마스크는 3개뿐)으로
-      하네스 확장 + cross-scroll 일반화 측정 ([docs/13](docs/13_september_scouting.md))
+- [x] Orientation docs (verified against scrollprize.org, 2026-07-19)
+- [x] **Pipeline reproduced end to end** (2026-07-21) — Greek legible in the first prediction
+- [x] **Held-out validation harness** (2026-07-25) — validation patches 0 -> 1,337
+- [x] **July round submitted** (2026-07-26) -> **Progress Prize, $1,000 Papyrus**
+- [x] **#192 3D-label experiment** (2026-08-09) — 3 arms x 3 folds, a negative result
+- [x] **Robustness** (2026-08-15/16) — 30k extension holds the gap; `w02` replicates it wider
+- [x] **Two upstream PRs merged** — #1249 (2026-07-31), #1234 (2026-08-14)
+- [x] **September track measured** (2026-08-22/26) — ink_9um scorecard, three LOSO arms,
+      fine-tune cost curve, the render path on an unseen scroll
+- [x] **August round submitted** (2026-08-29)
+- [ ] September round — held-out mask audit ([docs/17](docs/17_holdout_audit.md)),
+      label-efficiency curve, and unsupervised domain adaptation
