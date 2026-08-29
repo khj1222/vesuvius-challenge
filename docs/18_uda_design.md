@@ -505,8 +505,9 @@ is what the numbers are.
   within 0.002** (w03 at both seeds, w05 and w06 at seed 43), and the median cell
   clears its floor by only **+0.006**. After 200 steps of adaptation the model is
   worth almost exactly as much as answering "ink" everywhere.
-- The best threshold moves from the 80–100 range down to 30–64, which is the
-  signature of a prediction squashed downward, not of a sharper boundary.
+- The best threshold moves from **72–112 at the base to 30–66 after adaptation**,
+  which is the signature of a prediction squashed downward, not of a sharper
+  boundary.
 
 ## It is not the 8-bit write — the ranking is what degrades
 
