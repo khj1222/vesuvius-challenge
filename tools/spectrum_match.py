@@ -193,6 +193,92 @@ def compare(args) -> int:
     return 0
 
 
+
+def build_kernel(freq: np.ndarray, gain: np.ndarray, *, radius: int, grid: int):
+    """Turn a radial gain profile into a small spatial convolution kernel.
+
+    The filter is rotationally symmetric, so it is a convolution. Building the
+    kernel once and convolving beats a full-slice FFT: it needs no array the
+    size of the volume, and processing a slice in bands with a margin leaves no
+    block seams.
+    """
+    f = np.fft.fftfreq(grid)
+    fy, fx = np.meshgrid(f, f, indexing="ij")
+    r = np.sqrt(fy ** 2 + fx ** 2)
+    response = np.interp(r, freq, gain, left=gain[0], right=gain[-1])
+    response[0, 0] = 1.0  # DC: leave overall brightness alone
+    kernel = np.fft.fftshift(np.real(np.fft.ifft2(response)))
+
+    centre = grid // 2
+    size = 2 * radius + 1
+    cut = kernel[centre - radius:centre + radius + 1, centre - radius:centre + radius + 1]
+    taper = np.outer(np.hanning(size + 2)[1:-1], np.hanning(size + 2)[1:-1])
+    cut = cut * taper
+    retained = float(np.abs(cut).sum() / np.abs(kernel).sum())
+    cut = cut / cut.sum()  # keep DC gain at exactly 1
+    return cut, retained
+
+
+def apply_filter(args) -> int:
+    import zarr
+    from scipy.signal import fftconvolve
+
+    spec = json.loads(args.filter.read_text(encoding="utf-8"))
+    freq = np.asarray(spec["frequency"], dtype=np.float64)
+    gain = np.asarray(spec["gain"], dtype=np.float64)
+    kernel, retained = build_kernel(freq, gain, radius=args.radius, grid=args.kernel_grid)
+    print(f"filter    : {args.filter}")
+    print(f"kernel    : {kernel.shape[0]}x{kernel.shape[1]}, retains {retained:.1%} of the"
+          f" kernel's absolute mass")
+    print(f"            centre tap {kernel[args.radius, args.radius]:+.4f},"
+          f" sum {kernel.sum():.4f}")
+
+    source = open_volume(args.volume)
+    if args.out.exists():
+        sys.exit(f"error: {args.out} exists; remove it or choose another path")
+    root = zarr.open(str(args.out), mode="w")
+    destination = root.create_dataset(
+        "0", shape=source.shape, chunks=source.chunks, dtype=source.dtype,
+        compressor=source.compressor, overwrite=True,
+    )
+    try:
+        root.attrs.update(dict(source.attrs))
+    except Exception:
+        pass
+    root.attrs["spectrum_match"] = {
+        "filter": str(args.filter), "kernel_radius": args.radius,
+        "kernel_grid": args.kernel_grid, "source_volume": str(args.volume),
+    }
+
+    depth, height, width = source.shape[-3:]
+    margin = args.radius
+    band = max(args.band, 4 * margin)
+    clipped_total = written = 0
+    for z in range(depth):
+        for y0 in range(0, height, band):
+            y1 = min(y0 + band, height)
+            lo, hi = max(0, y0 - margin), min(height, y1 + margin)
+            block = np.asarray(source[z, lo:hi, :]).astype(np.float32)
+            valid = block > 0
+            if not valid.any():
+                continue
+            # Fill the off-sheet region with the block median first: convolving
+            # across a hard edge to zero would ring back into real pixels.
+            filled = np.where(valid, block, np.median(block[valid]))
+            out = fftconvolve(filled, kernel, mode="same")
+            clipped_total += int(np.count_nonzero((out < 0) | (out > 255)))
+            out = np.clip(np.rint(out), 0, 255).astype(source.dtype)
+            out[~valid] = 0  # off-sheet stays off-sheet
+            destination[z, y0:y1, :] = out[y0 - lo:y0 - lo + (y1 - y0), :]
+            written += (y1 - y0) * width
+        if (z + 1) % max(1, depth // 6) == 0:
+            print(f"  z {z + 1}/{depth}", flush=True)
+
+    print(f"wrote     : {args.out}  ({depth} slices, {written:,} pixels per slice-band pass)")
+    print(f"clipped   : {clipped_total:,} samples fell outside [0,255] before rounding")
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -221,6 +307,18 @@ def main(argv=None) -> int:
                    help="power floor, as a share of the peak, to stop dividing by noise")
     c.add_argument("--rows", type=int, default=16, help="rows to print. Default: 16")
     c.set_defaults(func=compare)
+
+    a = sub.add_parser("apply", help="apply a matching filter to a volume")
+    a.add_argument("volume", type=Path, help="surface volume zarr to correct")
+    a.add_argument("out", type=Path, help="output zarr (level 0 only; inference reads it)")
+    a.add_argument("--filter", type=Path, required=True, help="filter JSON from `compare`")
+    a.add_argument("--radius", type=int, default=15,
+                   help="kernel half-width in px. Default: 15 (a 31x31 kernel)")
+    a.add_argument("--kernel-grid", type=int, default=128,
+                   help="grid the kernel is derived on. Default: 128")
+    a.add_argument("--band", type=int, default=1024,
+                   help="rows processed at a time. Default: 1024")
+    a.set_defaults(func=apply_filter)
 
     args = ap.parse_args(argv)
     return args.func(args)
