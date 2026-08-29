@@ -375,6 +375,75 @@ python tools/spectrum_match.py compare <source.json> <target.json> --out filter.
 `--patches 256` · `--patch 128` · `--z` · `--min-valid 0.95` · `--seed`
 · `--max-gain 4` · `--floor 1e-4`
 
+## `tent_adapt.py` — adapt to a scroll you have no labels for
+
+Test-time entropy minimisation, the one adaptation the architecture leaves room
+for: it has 64 normalisation layers and **no running statistics**, so AdaBN has
+nothing to recompute and only the 27,712 affine parameters (0.080% of the model)
+can move. Everything else is frozen, and the objective is the mean binary
+entropy of the same z-reduced surface that gets scored.
+
+It opens the target's **images only**. Patches come from the non-overlapping
+128px grid wherever at least half the patch footprint is non-empty in one
+mid-depth plane; no supervision mask, label or annotated area is read. Output
+checkpoints are in the trainer's own format, so `infer` consumes them unchanged.
+
+```bash
+python tools/tent_adapt.py runs/<loso-arm>/ckpt_020000.pth runs/<out>   --volumes data/.../seg1.zarr data/.../seg2.zarr   --steps 1600 --save-at 50 100 200 400 800 1600 --lr 1e-4 --batch-size 16   --seed 42 --block-cache runs/<out>_blocks
+```
+
+Entropy minimisation degenerates if it runs to convergence, so the trajectory —
+entropy, mean probability, and the fraction of the batch above 0.5 — is written
+to `tent_trajectory.json` at every step. Watch the third column: when it pins at
+0 the model has stopped disagreeing with itself, which is the collapse, not a
+result.
+
+`--min-occupancy 0.5` · `--workers` · `--grad-clip` · `--code-root`
+
+## `make_pseudo_labels.py` — turn predictions into a label tree
+
+The other half of the same question: does training on the model's own confident
+pixels help? This writes `<seg>_inklabels.zarr` and `<seg>_supervision_mask.zarr`
+in the corpus's own contract — one filled channel at the reference tree's
+`annotation_center_channel`, same shape, chunking and compressor — so the
+released recipe trains on them with no code change.
+
+Positive where p >= centre+margin, negative where p <= centre-margin, the middle
+left unsupervised, all of it restricted to the render's valid area. The target's
+real annotation is never opened.
+
+```bash
+python tools/make_pseudo_labels.py <prediction.tif> data/.../pseudo_s42   --segment phercparis4-w01   --volume data/.../aligned9/phercparis4-w01.zarr   --reference data/.../labels/aligned.../phercparis4-w01
+```
+
+`--probe` reports the distribution and writes nothing — run it first. On an
+unseen scroll the answer can be that there is no confident set at all: the
+leave-Paris4-out model's whole output range over 1.3 billion sheet pixels is
+0.17 to 0.89, so a 0.9/0.1 rule selects zero pixels of either class.
+
+`--center 0.5` · `--margin 0.1`
+
+## `check_pyramid_pooling.py` — is this pyramid averaged or decimated?
+
+It matters whenever a recipe reads a pyramid level instead of level 0. If each
+level is a 2x2 mean, one pixel of level 2 is the average of 16 acquired pixels;
+if the levels are decimated, it is one acquired pixel with a different name.
+
+Reads a few small windows straight from the published zarr over anonymous https
+and compares each level against the level below it under both models. Also
+records whether the pyramid touches z, which decides whether a downstream z pool
+is an independent second averaging.
+
+```bash
+python tools/check_pyramid_pooling.py <volume.zarr or URL> --out report.json
+```
+
+`--windows 3` · `--size 64` · `--planes` · `--pairs 1 2`
+
+A mean-built pyramid shows a maximum absolute difference of 0.50 grey levels —
+the rounding bound — against tens of grey levels for decimation. S3 drops
+connections mid-read, so every read and every level open retries with backoff.
+
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
