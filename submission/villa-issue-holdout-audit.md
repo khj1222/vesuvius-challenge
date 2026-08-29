@@ -8,7 +8,7 @@ annotated regions. Different evidence, different fix.
 **Checked before posting (2026-08-29):** every figure re-derived from the artifacts, all five
 links 200, and a villa issue search turned up no duplicate — #1231 is the only related thread.
 
-## After posting: a pointer comment for #1231
+## After posting: a pointer comment for #1231 — ✅ posted 2026-08-29, byte-identical
 
 ```
 Splitting a follow-up out of this thread rather than growing it, since it is a different claim:
