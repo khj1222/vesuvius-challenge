@@ -1,0 +1,26 @@
+{
+  "keep0500": {
+    "annotation_kept": "50.3%",
+    "mean_f1_at_2500": -0.0333,
+    "mean_delta_vs_full": -0.0333,
+    "benefit_retained_pct": 89.3,
+    "segments_over_noise": 6,
+    "mean_abs_seed_diff": 0.0195
+  },
+  "keep0250": {
+    "annotation_kept": "20.7%",
+    "mean_f1_at_2500": -0.0902,
+    "mean_delta_vs_full": -0.0902,
+    "benefit_retained_pct": 70.8,
+    "segments_over_noise": 7,
+    "mean_abs_seed_diff": 0.0342
+  },
+  "keep0125": {
+    "annotation_kept": "13.5%",
+    "mean_f1_at_2500": -0.1386,
+    "mean_delta_vs_full": -0.1386,
+    "benefit_retained_pct": 55.8,
+    "segments_over_noise": 7,
+    "mean_abs_seed_diff": 0.0476
+  }
+}

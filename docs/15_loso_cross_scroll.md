@@ -311,6 +311,82 @@ would do — is the obvious follow-up.)*
 
 ---
 
+# Part 5: how much of that one segment has to be annotated? (2026-08-29)
+
+Part 4 left an obvious question in its own caveat: the fine-tune that closes 82% of the
+gap used **all** of w00's annotation, which is among the largest in Paris4. So how much of
+it is doing the work?
+
+`tools/make_label_budget.py` answers that by removing annotation rather than simulating
+its absence. It writes label trees holding a **nested** subset of w00's annotated regions
+— 25% of the annotation is a subset of the 50% — so the curve reads as "what does the next
+region buy me" rather than as a comparison between unrelated annotation sets. Regions are
+kept whole and near neighbours stay together, for the reason `make_validation_mask.py` does
+it, and both the supervision mask and the ink labels are zeroed outside the kept regions so
+no reader can pick up ink the arm is not entitled to see.
+
+Three arms, achieved at 50.3% / 20.7% / 13.5% of the annotated area, with ink densities of
+0.2284 / 0.2462 / 0.1956 against 0.2303 for the whole segment — so no arm is quietly
+collecting the sparsest or richest regions. Each config differs from part 4's 100% arm in
+exactly three keys (`datasets`, `out_dir`, `description`), leaving the LR schedule, the
+base checkpoint and the sampler identical, and the patch count falls from 6,308 to 3,174 on
+the 50.3% arm — exactly the annotation fraction. Six runs at two seeds, scored at step 2,500
+(part 4's saturation point) on the same seven segments the fine-tune never saw.
+
+## Results (step 2,500, mean of both seeds)
+
+| segment | floor | 100% | 50.3% | 20.7% | 13.5% | benefit retained |
+|---|---|---|---|---|---|---|
+| w01 | 0.468 | 0.8625 | 0.8318 | 0.7880 | 0.7395 | 92.2 / 81.1 / 68.8% |
+| w02 | 0.418 | 0.8201 | 0.7826 | 0.7094 | 0.6357 | 90.7 / 72.5 / 54.1% |
+| w03 | 0.536 | 0.8223 | 0.7883 | 0.7266 | 0.6824 | 88.1 / 66.6 / 51.1% |
+| w05 | 0.397 | 0.7759 | 0.7309 | 0.6663 | 0.6028 | 88.1 / 71.1 / 54.3% |
+| w06 | 0.501 | 0.7973 | 0.7667 | 0.7022 | 0.6543 | 89.7 / 67.9 / 51.7% |
+| w07 | 0.555 | 0.7941 | 0.7529 | 0.6905 | 0.6517 | **82.7 / 56.7 / 40.4%** |
+| w09 | 0.598 | 0.8102 | 0.7964 | 0.7678 | 0.7460 | **93.5 / 80.0 / 69.7%** |
+| **mean** | | | | | | **89.3 / 70.8 / 55.8%** |
+
+*Benefit retained = (arm − LOSO floor) / (100% arm − LOSO floor), so 0% is direct transfer
+and 100% is what the full annotation buys.*
+
+| arm | retained | ΔF1 vs 100% | range | over the 0.03 noise floor | mean abs. seed difference |
+|---|---|---|---|---|---|
+| 50.3% | **89.3%** | **−0.0333** | −0.045 … −0.014 | 6 of 7 | 0.020 |
+| 20.7% | **70.8%** | **−0.0902** | −0.111 … −0.042 | 7 of 7 | 0.034 |
+| 13.5% | **55.8%** | **−0.1386** | −0.184 … −0.064 | 7 of 7 | 0.048 |
+
+## What it says
+
+**Half the annotation is cheap, not free.** It costs 0.033 F1 and keeps 89% of what the
+full segment buys — over the noise floor on 6 of 7 segments, so the loss is real, but small
+against halving the annotation work. Below that the curve bends: a fifth of the annotation
+keeps 71%, an eighth keeps 56%, which throws away nearly half of what fine-tuning on one
+segment was worth.
+
+**The value of the annotation budget varies threefold by segment.** w09 is the least
+sensitive (93.5 / 80.0 / 69.7) and w07 the most (82.7 / 56.7 / 40.4), and the trivial floor
+does not explain it — w09's is the highest of the seven and w07's the third highest. What
+makes a segment tolerant of a thin annotation is not answered here.
+
+**Less annotation overfits sooner.** Comparing step 5,000 against 2,500, the 50.3% and
+20.7% arms are flat (−0.004 and +0.001) while the 13.5% arm loses 0.027. The saturation
+point part 4 found at 2,500 steps matters more, not less, as the annotation shrinks.
+
+For the First Letters playbook this sharpens step three. "Annotate one segment" now has a
+price attached: annotating half of a segment the size of w00 costs about 0.03 F1 against
+annotating all of it, and going much below that is a poor trade.
+
+Raw numbers: `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) and
+`labelbudget_summary.json`; the arm manifest, with the region membership of each nested
+subset, is `runs/ink9um_labelbudget/phercparis4-w00_label_budget.json`.
+
+⚠️ One run (20.7%, seed 43) died at step 1,455 with a `MemoryError` inside a DataLoader
+worker — the same exhaustion documented for `dataloader_workers: 12` in appendix 2 — and
+the driver's retry completed it from scratch with no other change. Run times varied 38-67
+minutes on an identical config depending on what else held the GPU.
+
+---
+
 # Appendix 1: corpus integrity checks (2026-08-24)
 
 LOSO assumes the held-out scroll is genuinely absent from training, so two data

@@ -1,0 +1,12 @@
+{
+  "mean_delta": 0.0052,
+  "cells_positive": 17,
+  "cells": 24,
+  "mean_share_recovered_pct": -19.2,
+  "per_segment_mean_delta": {
+    "w035": 0.0002,
+    "w039": 0.0193,
+    "w040": 0.0022,
+    "w041": -0.0009
+  }
+}

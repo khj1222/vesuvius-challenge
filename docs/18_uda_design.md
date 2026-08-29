@@ -269,5 +269,59 @@ claim about cross-scroll adaptation.
 
 ---
 
+# Result — arm A: spectrum matching does not buy F1 (2026-08-29, same day)
+
+Run on the testbed the addendum describes: 0139's w035, w039, w040 and w041, each present
+as both an `aligned` and a `native` render, with the LOSO-no0139 checkpoints at steps 10k,
+20k and 30k and both seeds. The filter comes from the training corpus's aligned profile and
+the targets' native images, with 0139's own aligned volumes excluded. 48 cells;
+`runs/ink9um_scorecard/armA_specmatch_matrix.csv` and `armA_specmatch_summary.json`.
+
+| quantity | value |
+|---|---|
+| mean Δ F1, filtered minus raw | **+0.0052** |
+| range | −0.0184 … +0.0398 |
+| cells where the filter wins | 17 of 24 |
+| share of the aligned-versus-native gap recovered | **median 8.4%** |
+| per-segment mean Δ | w035 +0.0002 · w039 **+0.0193** · w040 +0.0022 · w041 −0.0009 |
+
+## Verdict, by the rules fixed in section 4
+
+**No effect.** The mean gain of +0.0052 is a sixth of the ~0.03 noise floor, which section 4
+says is reported as no effect whatever its sign. Three of the four segments move by less
+than ±0.002; only w039 shifts materially (+0.019), and one segment in four does not meet the
+consistency requirement. The direction is right — 17 of 24 cells improve — but the size is
+not there.
+
+The pre-registered prediction was **0 to 20% of the gap**, and the median recovery is 8.4%.
+The prediction holds.
+
+⚠️ Do not quote the *mean* recovery share. On w041 seed 42 at 10k the aligned-native gap is
+only 0.0015, so a −0.010 change divides to −673% and drags the mean to −19.2%. The median,
+8.4%, is the usable statistic.
+
+## What it means
+
+The spectral difference is real and measurable — aligned and native separate with no
+overlap, and `spectrum_match.py` closes 38% of that distance at the patch level. Closing it
+moves F1 by nothing. **So the aligned representation's advantage is not carried by the
+radial power spectrum we measured.** Matching second-order statistics is not enough; whatever
+makes the aligned render better lives somewhere else — phase structure, information along z,
+or something the 4x z pooling produces that a radial profile does not see.
+
+For PHerc1447 that tightens docs/16 rather than loosening it. Its render really is a
+native-class input, and there is no higher-resolution scan to build an aligned-class one
+from — **and now we also know a filter will not stand in for one.** The conclusion that
+unsupervised adaptation has to come first survives, with one cheap alternative eliminated.
+
+## What is left of the ladder
+
+Arms B (entropy minimisation on the 27,712 normalisation affines, predicted 10–40%) and C
+(pseudo-label self-training, predicted to fail) are unrun. Arm A's result does not bear on
+either prediction: it says the input-space route is closed, not that the parameter-space
+route is.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.
