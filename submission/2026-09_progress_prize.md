@@ -76,7 +76,7 @@ Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-ch
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
 Pre-registered adaptation study and its first result: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
-Upstream issue (this round, the held-out audit): https://github.com/ScrollPrize/villa/issues/1638
+Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
 

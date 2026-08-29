@@ -196,6 +196,9 @@ pixels, against a flat control. So the right reading of docs/14's 0.74–0.77 is
 intra-segment ceiling**, not a statement about what the released models generalise to. That
 distinction is what this document is for, and it survives the close.
 
+The thread was also **locked**, and closed as *not planned*, so there is no reply and this
+document is where the concession is recorded instead.
+
 It was filed separately from [#1231](https://github.com/ScrollPrize/villa/issues/1231), which
 asks whether the *missing* masks are intended and remains open.
 

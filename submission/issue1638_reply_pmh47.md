@@ -1,4 +1,13 @@
-# Reply draft — villa #1638, after pmh47 closed it
+# Reply draft — villa #1638 — ⚠️ NOT POSTED, AND NOT TO BE
+
+**The thread is locked** (`locked: true`, `state_reason: not_planned`, checked 2026-08-29).
+Commenting is impossible, and the lock is a clearer signal than the close: the maintainer
+considers the matter settled. **Do not move this argument to another thread** — reposting it
+on #1231 or elsewhere right after a lock would be circumventing an answer we asked for and
+got.
+
+This draft stays as the record of what our position was, and as the reasoning behind how
+docs/17 and the September text were reframed. It is not a pending action.
 
 **Thread:** https://github.com/ScrollPrize/villa/issues/1638
 **Closed by:** `pmh47` (Paul Henderson, Research Team Lead), 2026-08-29 12:05 UTC, with:
