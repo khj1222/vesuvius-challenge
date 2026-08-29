@@ -4,11 +4,12 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v4 (2026-08-29). Adds the held-out mask audit: field 4 gains docs/17, the
-audit tool and villa [#1638](https://github.com/ScrollPrize/villa/issues/1638); field 5 gains
-one paragraph placed right after the groundwork it qualifies, since the audit is about whether
-the three masks docs/14's honest ceiling rests on hold out what they appear to; and the evidence
-table gains two rows. All eleven field-4 links verified 200 on 2026-08-29.
+**Status:** DRAFT v5 (2026-08-29, evening). Both overnight experiments landed and are folded
+in. Field 5 gains the label-efficiency curve after the repair-price paragraph (docs/15 part 5)
+and arm A's negative result at the end of the PHerc1447 paragraph (docs/18); field 4 gains
+docs/18; the evidence table gains two rows. Field 5 is now ~8,400 characters — long. If it has
+to shrink, the domain-match refutation in the measurement paragraph is the next candidate: it
+is the longest passage and its detail lives in docs/15 appendix 2.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
@@ -64,6 +65,7 @@ Raw numbers (1,000+ scored cells, 9 CSV/JSON evidence files): https://github.com
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
+Pre-registered adaptation study and its first result: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (this round, the held-out audit): https://github.com/ScrollPrize/villa/issues/1638
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
@@ -130,6 +132,17 @@ adaptation saturates at 2,500 steps, about seven minutes on one consumer GPU. Cr
 scroll performance peaks at 10–20k steps in all six LOSO runs and fine-tuning peaks at
 2.5k: no held-out axis anywhere justifies the released 75k schedule.
 
+And the price has a price curve (part 5). That fine-tune used all of w00's annotation, one
+of the largest in Paris4, so I rebuilt it on nested subsets — 50.3%, 20.7% and 13.5% of the
+annotated area, regions kept whole, configs differing from the full arm in three keys — and
+rescored the same seven segments. Half the annotation keeps 89% of the benefit for 0.033 F1,
+above the noise floor on six of seven segments: real, but cheap against halving the
+annotation work. Below that it bends — a fifth keeps 71%, an eighth 56% — and the smallest
+arm is also the only one that overfits by step 5,000. So "annotate one segment" now carries a
+number, and the number says annotate half of one. What it does not explain is why the budget
+is worth three times as much on one segment as another (w09 keeps 93.5% at half, w07 82.7%),
+which the trivial floor does not predict.
+
 Why this raises the probability of reading complete scrolls: the First Letters targets
 have no labels, so cross-scroll transfer is the deployment condition — and it now has a
 measured playbook instead of a hope. Render the target aligned; use direct inference
@@ -148,6 +161,16 @@ connected strokes. So step two scouts only in the weak sense — it says the mod
 nothing, not where to annotate — and unsupervised adaptation has to precede step three on
 an unlabeled scroll. I would rather report that than imply the recipe is ready to point at
 PHerc0800 tomorrow (docs/16).
+
+So I tested the cheapest way out, and it is closed. That render is spectrally a native-class
+input — every aligned volume measures a radial spectral centroid of 0.0278 or above, every
+native one 0.0262 or below, PHerc1447 sits at 0.0248 — and PHerc1447 has only an 8.640 µm
+scan, so the aligned recipe cannot be followed there at all. A matching filter closes 38% of
+that spectral distance, so I pre-registered the design, the rules and a prediction of 0–20%
+before running it, and scored it where both representations of the same segments exist.
+Median recovery 8.4%, mean gain +0.005 F1 — a sixth of the noise floor, no effect by the rule
+I had fixed. The spectral difference is real and is not what makes an aligned render better.
+Unsupervised adaptation stays the prerequisite, one cheap substitute lighter (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
@@ -178,6 +201,8 @@ opens; the layout above assumes August's.
 
 | claim | source |
 |---|---|
+| label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
+| arm A: spectrum matching gains +0.005 F1, median 8.4% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`, villa #1638 |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
 | within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
