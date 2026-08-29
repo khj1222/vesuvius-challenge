@@ -1,149 +1,215 @@
-# 05 — 전략
+# 05 — How this track is won
 
-**작성: 2026-07-19**
+**Written 2026-07-19, extended 2026-07-26.** A working note on what the Progress
+Prizes actually reward, and how the targets in this repository were chosen. Kept
+because the reasoning behind a negative result is worth as much as the result.
 
-## 이 대회의 게임 이론 (필독)
+## The shape of the competition
 
-Vesuvius Progress Prize는 **metric 리더보드가 아니다.** 심사 = ①조기공개 ②커뮤니티 채택 ③문서화(→ `docs/03_submission.md`). 즉 이기는 법이 다르다:
+The Vesuvius Progress Prizes are **not a metric leaderboard**. The stated
+criteria (see `docs/03_submission.md`) are: released or open-sourced early,
+actually gets used, improves results on real data, resolves outstanding bugs in
+tools people rely on, reveals actionable information, and is well documented.
 
-- ❌ 잉크 detection F1을 남보다 0.01 높이는 것 → 그 자체론 상 안 됨.
-- ✅ **남들이 실제로 갖다 쓰는 오픈소스 툴/개선/문서**를 내놓는 것 → 상.
+Which means the way to contribute usefully is different from a Kaggle-style
+contest:
 
-따라서 우리 무기는 순수 모델링 실력보다 **(a) 깔끔한 엔지니어링 (b) 재현성·문서화 (c) 조기 공개 습관**이다. 이건 사용자 강점(pcbviewer 배포·github 자체완결 문서화·ETRI 재현성 연구)과 정확히 맞는다.
+- Raising an ink-detection F1 by 0.01 is not, on its own, a contribution.
+- **An open-source tool, fix or document that other people pick up and use** is.
 
-## 승리 경로 (저위험 반복형)
+So the effort here goes into clean engineering, reproducibility and
+documentation, and into publishing early rather than at the end of a round.
 
-1. **주말에 튜토리얼 재현** → 잉크 예측 파이프라인 작동 확인(첫 시각 산출물).
-2. **위시리스트/Open Problems에서 "남이 쓸 개선" 1개** 선택(데이터로더·시각화·augment·good-first-issue). 프론티어 돌파 아니라 **유용성**을 노림 → Papyrus/Sestertius($1k~$2.5k) 현실권.
-3. **일찍 공개 + 문서화 + Discord 공유** → 채택 신호 확보 → 상위 티어(Denarius $10k) 가능성.
-4. **매월 반복** — 롤링이라 한 번 셋업하면 재사용. 파이프라인 틈날 때마다 재진입.
+## The working loop
 
-## 스케줄 원칙 (★ 이 대회를 고른 이유)
+1. **Reproduce the tutorial** end to end, so there is a working pipeline and a
+   first visual output to reason about.
+2. **Pick one improvement other people would use** from the wishlist or the open
+   problems — a data loader, a visualisation, an augmentation, a good-first-issue.
+   Aim at usefulness rather than at a frontier result.
+3. **Publish early, document it, and share it**, so adoption has time to happen
+   within the round.
+4. **Repeat monthly.** The rolling schedule means the setup is reusable.
 
-- **하드마감 없음.** 9월 병목(finance 9/7·pokemon 9/14·trace 9/15·arc 9/19·biohub 9/29·agi-3 9/30)과 **절대 충돌 안 시킴** — 그게 이 대회를 고른 유일한 이유.
-- 타깃 = **8월 라운드(8/31)**. 8월 슬롯 여유 있을 때 Week0 관통. 안 되면 9월 걸러 10월 라운드로. **급할 것 없음이 강점.**
-- jump-ai 결선(진출 시 9/7~10/2)과 겹치면 **Vesuvius를 미룬다** — 우선순위 하위. 이건 "보너스 트랙"이지 주력 아님.
+## Survey (2026-07-25)
 
-## 타깃 조사 결과 (2026-07-25)
+### What has actually been awarded
 
-### 무엇이 실제로 상을 받았나 (scrollprize.org/winners, 라운드 목표 = "Improve the tools and training methods needed to read the scrolls")
+From scrollprize.org/winners. The round's stated goal is "improve the tools and
+training methods needed to read the scrolls".
 
-| 라운드 | 수상자 | 금액 | 기여 |
+| round | recipient | amount | contribution |
 |---|---|---|---|
-| 2026-06 | Paulo Sergio Camillo | $2,000 | CT 스캔 아티팩트 기반 3D 세그멘테이션 augmentation 추가 + ScrollFiesta 성능 개선 |
-| 2026-06 | Joseph Balmaceda | $1,000 | 파이버 포맷 변환기 (NML→CSV/JSON/SWC + 길이·분기·방향 분석) |
-| 2026-05 | Ben Kyles | $10,000 | ScrollFiesta — 표면 예측 자동 메싱 + 토폴로지 오류 보정 |
-| 2026-05 | Paulo Sergio Camillo | $2,000 | Scroll Decohesion / Realistic Warp / Squeeze 변환 |
+| 2026-06 | Paulo Sergio Camillo | $2,000 | CT-artifact-based augmentation for 3D segmentation, plus a ScrollFiesta improvement |
+| 2026-06 | Joseph Balmaceda | $1,000 | fibre format converter (NML to CSV/JSON/SWC, with length, branching and orientation analysis) |
+| 2026-05 | Ben Kyles | $10,000 | ScrollFiesta — automatic meshing of surface predictions with topology error correction |
+| 2026-05 | Paulo Sergio Camillo | $2,000 | Scroll Decohesion / Realistic Warp / Squeeze transforms |
 
-**해석**: $1k~$2k 티어의 실제 눈금이 예상보다 낮다. 포맷 변환기 하나가 $1k. **연구 돌파가 아니라 "파이프라인 옆에 붙는 실용 도구"가 티어권.** $10k는 ScrollFiesta급 시스템이라 별개 리그.
+Reading it: **practical tools that attach to the existing pipeline are what the
+round rewards**, and the larger awards go to systems that change what the
+pipeline can do at all.
 
-### help-wanted 이슈 (ScrollPrize/villa, 전체 3개)
+### help-wanted issues on ScrollPrize/villa (all three, at the time)
 
-- **#192 Accurate 3d ink labels** — `good first issue` + `help wanted`. 2025-04-18 개설, **코멘트 0 · 담당자 없음 · 브랜치/PR 없음 (15개월 무주공산)**. 요구: 현재 "2D 라벨을 z축 복사"를 대체하는 **진짜 3D 잉크 라벨**, zarr/tif, 전처리 불필요한 ready-to-run 이미지/라벨 쌍.
-- **#191 Surface/Fiber Predictions in Compressed or Highly Curved areas** — 코멘트 7, 2026-07-23 갱신(활발). nnUNetv2 기반, 표면/파이버 트랙 = 우리 파이프라인 밖.
-- **#193 Methods for generating surface/fiber/ink labels** — #192의 상위 일반화 버전.
+- **#192 Accurate 3d ink labels** — `good first issue` plus `help wanted`, opened
+  2025-04-18, with **no comments, no assignee and no branch or PR for 15
+  months**. It asks for genuine 3D ink labels to replace the current practice of
+  manufacturing depth from a 2D annotation: zarr or tif, ready to run with no
+  preprocessing.
+- **#191 Surface/Fiber Predictions in Compressed or Highly Curved areas** — 7
+  comments, active. nnUNetv2-based, on the surface and fibre track, outside this
+  pipeline.
+- **#193 Methods for generating surface/fiber/ink labels** — the generalised
+  version of #192.
 
-### 2026 Open Problems 중 우리 사정권
+### Open problems within reach
 
-- **#7 Cross-Scroll Ink Generalization** — 데이터 다운로드 부담 큼(스크롤당 수십 GB).
-- **#8 Direct 3D Ink Segmentation** — #192와 같은 방향. self-distillation 언급.
-- (#2~#6은 표면/토폴로지/스파이럴 = 우리 파이프라인 밖)
+- **#7 Cross-Scroll Ink Generalization** — heavy download burden, tens of GB per
+  scroll.
+- **#8 Direct 3D Ink Segmentation** — the same direction as #192; mentions
+  self-distillation.
+- (#2 to #6 are surface, topology and spiral work, outside this pipeline.)
 
-### ★ 직접 발견한 갭: 튜토리얼 파이프라인에 held-out 검증이 없다
+### The gap we found: the tutorial pipeline has no held-out validation
 
-우리 20k iter 실측 런에서 확인(2026-07-21 산출물 기준):
+Confirmed on our own 20k-iteration run (2026-07-21 outputs):
 
-- 패치 캐시 `runs/ink_tutorial/flat_ink_patches_...json` → `is_validation: true` **0개** / false 2,710개.
-- `runs/ink_tutorial/val_previews/` **빈 디렉터리**.
-- 원인: 데이터셋 세그먼트 `w00_20231016151002`에 `_validation_mask` 자산이 **없음**(`_inklabels`·`_supervision_mask`만 배포됨).
-- 근거 보강: `preprocessing/create_label_zarrs.py`는 `_validation_mask.{tif,tiff,png}`를 **지원하지만**, 튜토리얼 문서(`scrollprize.org/docs/07_tutorial5.md`)엔 validation 언급이 **0회**이고, 마스크를 만들어주는 도구도 없음.
-- 결과: `evaluation/metrics/`에 구현된 Confusion·BalancedAccuracy·**DRD**·**pFM**이 튜토리얼 사용자에겐 **한 번도 실행되지 않는 죽은 코드**. `val_every: 500`은 빈 루프.
+- the patch cache `runs/ink_tutorial/flat_ink_patches_...json` has
+  **`is_validation: true` on 0 patches**, and false on 2,710;
+- `runs/ink_tutorial/val_previews/` is an **empty directory**;
+- the cause is that the dataset segment `w00_20231016151002` ships no
+  `_validation_mask` asset — only `_inklabels` and `_supervision_mask`;
+- `preprocessing/create_label_zarrs.py` **does support**
+  `_validation_mask.{tif,tiff,png}`, but the tutorial
+  (`scrollprize.org/docs/07_tutorial5.md`) never mentions validation, and no
+  tool exists to make the mask;
+- so Confusion, BalancedAccuracy, **DRD** and **pFM**, all implemented under
+  `evaluation/metrics/`, are **dead code for anyone following the tutorial**, and
+  `val_every: 500` iterates an empty loop.
 
-즉 이 파이프라인을 따라 한 사람은 **어떤 변경이 좋아졌는지 수치로 말할 수단이 없다.**
+Anyone who follows this pipeline has **no way to say in numbers whether a change
+helped**.
 
-### 후보 3개
+### Three candidates
 
-| | 후보 | 산출물 | 비용 | 근거/리스크 |
+| | candidate | deliverable | cost | rationale and risk |
 |---|---|---|---|---|
-| **A** | **잉크 파이프라인 held-out 검증 하네스** | ① 세그먼트에서 재현가능(시드 고정)하게 검증 영역을 떼어 `_validation_mask` 생성하는 CLI ② 그걸 쓰는 튜토리얼 config + 문서 ③ ckpt 스윕해 DRD/pFM/balanced-acc 뽑는 eval 스크립트 ④ 우리 20k 런의 실측 수치 공개 | 2~4일 (런당 5090 1.5h) | 라운드 목표 문구에 정확히 부합("training methods"). 이미 있는 metric 코드를 살리는 얇은 PR이라 머지 가능성 높음. **리스크: 메인테이너가 내부적으로 val mask를 갖고 있을 수 있음 → 착수 전 이슈/디스코드 확인 필수.** |
-| **B** | **잉크용 스크롤 특화 augmentation 이식 + ablation** | ink의 `create_training_transforms`가 안 쓰는 `sheet_compression`·`thick_slice`·`layer_mix_dropout`을 2.5D 잉크 학습에 적용하고 효과 측정 → "잉크 권장 augmentation set" PR | 3~5일 (ablation 런 수만큼) | Paulo가 정확히 이 카테고리로 **$2k 두 번** 수상 = 선례 확실. **단 A가 없으면 측정 불가(A 선행 필수)**, 그리고 Paulo와 직접 경합. |
-| **C** | **villa #192 정확한 3D 잉크 라벨** | 학습된 ckpt의 z별 응답으로 잉크 깊이를 국소화 → 3D 라벨 후보 생성 + 검수 툴 + 데이터셋 공개 | 2~4주 | 보상 잠재력 최대(메인테이너가 명시적으로 원함 + 데이터셋은 채택도 큼). **단 정답이 없어 "정확함"을 증명하기 어려움 — 15개월간 아무도 안 건드린 이유일 가능성.** 8/31도 빠듯. |
+| **A** | **a held-out validation harness for the ink pipeline** | (1) a CLI that carves a reproducible, seeded validation region out of a segment as `_validation_mask`; (2) a tutorial config and document that use it; (3) an eval script sweeping checkpoints for DRD, pFM and balanced accuracy; (4) our own 20k run's measured numbers | 2-4 days (1.5h per run on a 5090) | matches the round's stated goal exactly, and it is a thin PR that revives metric code already in the repository. **Risk: the maintainers may hold validation masks internally — ask before building.** |
+| **B** | **port the scroll-specific augmentations to ink, with an ablation** | apply `sheet_compression`, `thick_slice` and `layer_mix_dropout` — present in `create_training_transforms` but unused for ink — to 2.5D ink training, measure the effect, and PR a recommended augmentation set | 3-5 days (however many ablation runs) | this exact category has been awarded before, so the precedent is clear. **But it cannot be measured without A**, so A has to come first. |
+| **C** | **villa #192, accurate 3D ink labels** | localise ink depth from a trained checkpoint's per-z response, generate 3D label candidates, plus an inspection tool and a released dataset | 2-4 weeks | the maintainers explicitly want it and a dataset has real adoption value. **But there is no ground truth, so "accurate" is hard to demonstrate — probably why nobody has touched it in 15 months.** |
 
-**권장 순서 = A → B → C (사다리).** A가 만든 측정 기반이 B의 ablation을 가능하게 하고, B/C의 주장도 A 없이는 수치로 못 세운다. A는 7/31 라운드에 맞출 수 있는 유일한 후보.
+**Order: A, then B, then C.** A builds the measurement that makes B's ablation
+possible, and neither B nor C can state a claim in numbers without it.
 
-## 리스크 / 함정
+## Risks
 
-- ⚠️ **재현만 하고 끝내면 0상.** 반드시 "채택될 한 겹"을 얹어야 함.
-- ⚠️ 커뮤니티가 성숙(전용 Discord, 고수 다수)해서 "쉬운 개선"은 이미 먹혔을 수 있음 → 위시리스트에서 **아직 안 풀린 이슈** 확인 필수.
-- ⚠️ 데이터 볼륨이 큼(TIFF 레이어 스택) — 디스크·로딩 관리. 커밋 금지.
-- ⚠️ 오픈소스 의무: 수상 수락 = permissive 공개. 회사 IP·시간 사용 금지(집 5090·개인시간만). 사용자는 원래 오픈소스라 실질 무부담.
+- **Reproducing and stopping there earns nothing.** There has to be a layer on
+  top that someone else can adopt.
+- The community is mature, so easy improvements may already be taken — check the
+  wishlist for what is genuinely still open.
+- The data volumes are large. Manage disk, and never commit data.
+- Accepting an award requires permissive open-sourcing. This repository is MIT,
+  so there is nothing to change.
 
 ---
 
-# 8월 라운드 (마감 2026-08-31) — 타깃 결정
+# The August round (deadline 2026-08-31) — choosing a target
 
-**작성: 2026-07-26** (7월 라운드 제출 직후 재조사)
+**Written 2026-07-26**, right after the July submission went in.
 
-## 재조사 결과 — 니치가 붐빈다
+## Where to aim
 
-7월 마감 직전 며칠간 villa에 제출 스퍼트가 있었고, 겹치는 방향이 뚜렷하다:
+Measurement, validation and reproducibility tooling had become a well-populated
+area by late July, with several contributors working on audits and label-quality
+metrics. The harness we submitted in July is differentiated by being the only
+one covering **held-out validation for ink specifically** — so the way to avoid
+duplicating anyone's work is not to build another measurement tool, but to
+**use this one to adjudicate an open question**.
 
-| 참가자 | 활동 | 성격 |
-|---|---|---|
-| TAUIL-Abd-Elilah | 8건 (#1250 공개 산출물 재현불가 감사, #1248 `vesuvius-repro` 등재, #1244/#1242/#1240/#1239/#1238 이식성·재시도 수정) | **재현성 감사 + 포팅** |
-| Jinhojeong | #193 코멘트 — 라벨 불완전성 측정 툴(Dataset059 200패치, 평균 6.4% 미라벨, 성능과 Spearman −0.45) | **라벨 품질 측정(표면)** |
-| Bullo27 외 | remote voxel size 4건, macOS 크래시 등 | 코어 버그 |
+## Decision: villa #192, plus upstreaming the harness
 
-즉 "**측정·검증·재현**"은 이미 여러 명이 판다. 우리가 7월에 낸 하네스는 그중 **잉크 쪽 held-out**을 유일하게 갖고 있다는 게 차별점이므로, 8월은 *하네스를 하나 더 만드는* 게 아니라 **그 하네스로 무언가를 판정하는** 방향이어야 중복을 피한다.
+- **#192** (bruniss, 2025-04-18, `good first issue` + `help wanted`): ink labels
+  today are drawn in 2D and given depth downstream, which risks teaching the
+  model **surface texture rather than ink**. The requested deliverable is
+  genuine 3D ink label and image pairs, in zarr or tif slices, trainable with no
+  preprocessing.
+- **One comment and no assignee in 15 months.** The reason nobody has taken it
+  looks like the absence of any way to *demonstrate* accuracy — and that is
+  exactly what July built (held-out scoring plus a measured fold-variance
+  baseline).
 
-## 결정: villa #192 "Accurate 3d ink labels" + 하네스 업스트림화
+### Why this is a good fit
 
-- **#192**(bruniss, 2025-04-18, `good first issue`+`help wanted`): 현재 잉크 라벨은 사람이 2D로 그린 뒤 z축으로 복사된다 → 모델이 잉크가 아니라 **표면 특징**을 학습할 위험. 요구 산출물 = **진짜 3D 잉크 라벨/이미지 쌍**(zarr 또는 tif 슬라이스), 전처리 없이 바로 학습 가능한 형태.
-- **15개월간 코멘트 1개·담당자 없음.** 아무도 안 건드린 이유는 정확도를 **증명할 수단이 없어서**로 보이며, 우리는 7월에 그 수단(held-out + fold 분산 기준선)을 만들어 뒀다.
+Training on a z-copied label and on a 3D label, over the **same folds with the
+same seed**, and comparing held-out F1, states the label-quality claim in
+numbers for the first time. The decision threshold is already measured: four
+runs of one unchanged config gave 0.823 to 0.854, so **anything under ~0.03 F1
+is noise**.
 
-### 왜 우리가 유리한가
+### Approach (draft)
 
-"z복사 라벨로 학습" vs "3D 라벨로 학습"을 **같은 fold·같은 시드**로 돌려 held-out F1을 비교하면, 라벨 품질 주장을 처음으로 수치로 세울 수 있다. 판정 기준선도 이미 실측돼 있다(동일 config 4회 = 0.823~0.854 → **~0.03 F1 미만은 노이즈**).
+1. **Depth localisation**: extract per-z contribution from a trained 2.5D
+   checkpoint, two ways — sliding a z sub-window (8 slices, stride 4), and
+   occluding one z slice at a time and measuring the drop in ink logit. Running
+   inference over the supervised area only (166 blocks) takes ~30 s a pass, so
+   64 passes fit in half an hour.
+2. **3D label generation**: the 2D ink label intersected with a per-(x,y) depth
+   profile band. Deterministic, with the parameters documented.
+3. **An honest three-arm comparison** (3 folds each):
+   - `baseline`, the z-copied label (already held: 3-fold 0.8472);
+   - `3d`, the depth-localised label;
+   - `control`, self-distillation with no depth information — **the circularity
+     control**, which is what shows any gain is not simply a self-distillation
+     effect.
+4. **Physical consistency**: show, per region, whether the ink-depth histogram
+   concentrates in a coherent layer relative to the surface, against a flat
+   prior.
+5. **Packaging**: zarr and tif pairs, the generator CLI, documentation, and the
+   result posted as a comment on #192.
 
-### 접근 (초안)
+### Risks, declared up front
 
-1. **깊이 국소화**: 학습된 2.5D ckpt로 z별 기여도를 뽑는다. ①z 서브윈도우 슬라이딩(8슬라이스/stride 4) ②z 슬라이스 occlusion(k번 슬라이스를 지우고 잉크 로짓 감소량 측정). 감독 영역(166블록)만 추론하면 회당 ~30초라 64회도 30분권.
-2. **3D 라벨 생성**: 2D 잉크 라벨 ∩ (x,y)별 깊이 프로파일 밴드. 결정론적, 파라미터 문서화.
-3. **정직한 검증 3-arm**(각 3-fold):
-   - `baseline` z복사 라벨 (이미 보유: 3-fold 0.8472)
-   - `3d` 깊이 국소화 라벨
-   - `control` 깊이 정보 없는 self-distillation — **순환성 대조군**(3D 라벨의 이득이 단순 자기증류 효과가 아님을 보이는 장치)
-4. **물리적 정합성**: 잉크 깊이 히스토그램이 표면 대비 일관된 층에 모이는지(평평한 사전분포 대비) 영역별로 제시.
-5. **패키징**: zarr + tif 쌍, 생성 툴 CLI, 문서, #192에 결과 코멘트.
+- **Circularity**: the depth profile comes from a model trained on the z-copied
+  label. Only the control arm defends against that. If the defence fails, the
+  result gets published as "a 3D label generation pipeline plus an adjudication
+  protocol" instead.
+- **A single segment**: `w00_20231016151002` first. Extending to other scrolls
+  in the ink bucket is bounded by a ~86 GB download per segment.
+- **"Accurate" cannot be proven** — so the claim has to stay at "supervision
+  that is measurably better".
 
-### 리스크 (선언하고 시작)
+### Side track (2-3 days, in parallel)
 
-- **순환성**: 깊이 프로파일이 z복사 라벨로 학습된 모델에서 나온다 → 대조군(3)으로만 방어 가능. 방어 실패 시 "3D 라벨 생성 파이프라인 + 판정 프로토콜"로 축소 발표.
-- **단일 세그먼트**: 우선 `w00_20231016151002` 하나. 여유 있으면 ink 버킷의 다른 스크롤(8개, 세그먼트 다수)로 확장 — 세그먼트당 ~86GB 다운로드가 병목(D드라이브 여유 611GB).
-- **"정확함"은 증명 불가** → 주장은 "**측정 가능하게 더 나은 supervision**"으로 한정할 것.
+**Upstreaming the harness**: a PR folding `tools/make_validation_mask.py` into
+villa's preprocessing commands, plus a validation section for the tutorial
+document. It pushes issue #1231 forward in code rather than in a question. Base
+it on `merge-ink-pipelines`, since `koine_machines` is not on `main`.
 
-### 보조 트랙 (병행, 2~3일)
+### Milestones
 
-**하네스 업스트림화**: `tools/make_validation_mask.py`를 villa 전처리 커맨드로 편입하는 PR + 튜토리얼 문서의 검증 섹션. 이슈 #1231을 코드로 밀어붙이는 효과 + 채택 축 가산. base는 `merge-ink-pipelines`(koine_machines는 main에 없음).
-
-### 마일스톤
-
-| 주 | 내용 |
+| week | plan |
 |---|---|
-| 7/27~8/2 | 깊이 국소화 프로토타입(두 방식 비교·시각 검수) + 하네스 업스트림 PR |
-| 8/3~8/9 | 3D 라벨 생성 툴 + 전 영역 라벨 생성 + QC 시각화 |
-| 8/10~8/16 | 3-arm × 3-fold 학습·채점 (GPU ~14h) |
-| 8/17~8/23 | 결과 정리·데이터셋 패키징·#192 코멘트·문서 |
-| 8/24~8/31 | 제출 문안 + 버퍼 |
+| 7/27 - 8/2 | depth-localisation prototype (two methods, compared and visually inspected), plus the upstream harness PR |
+| 8/3 - 8/9 | 3D label generator, labels for every region, QC visualisation |
+| 8/10 - 8/16 | 3 arms x 3 folds, trained and scored (~14 GPU hours) |
+| 8/17 - 8/23 | results, dataset packaging, the #192 comment, documentation |
+| 8/24 - 8/31 | submission text plus buffer |
 
-**실제 진행(2026-07-31 기준) — 계획보다 ~10일 앞섬.** 깊이 국소화(7/27, `docs/10`), 3D 라벨
-생성·QC(7/27, `docs/11`), **학습 소비 경로 + 3 arm 자산(7/31, `docs/12`)**까지 완료. 즉
-8/10~8/16 몫인 학습 매트릭스만 남았고, 그 앞단(파이프라인이 3D 라벨을 못 먹는 문제)은
-계획에 없던 항목이었다 — `flat` 손실이 z를 접어버려 arm 비교 자체가 불가능했다.
+**Actual progress as of 2026-07-31 — about 10 days ahead.** Depth localisation
+(7/27, `docs/10`), 3D label generation and QC (7/27, `docs/11`), and the
+**training consumption path plus the three arms' assets (7/31, `docs/12`)** are
+done. Only the training matrix, budgeted for 8/10-8/16, remains — and the step
+in front of it was not in the plan at all: the pipeline could not consume 3D
+labels, because the `flat` loss folds z and makes the arm comparison impossible.
 
-남은 학습 매트릭스는 **~16.2h**(계획의 14h보다 김 — 7월 3-fold 실측 fold당 104~111분 기준)에
-디스크 ~198GB. 사용자 결정(7/31)으로 **arm 단위로 나눠 시간 날 때 하나씩** 돌린다: v4 →
-v3(여기까지면 위치만 다른 결정적 대조 완결) → v2. 명령은 CLAUDE.md "재개 지점" 절.
+The remaining matrix is **~16.2 hours** (longer than the 14 planned, going by
+July's measured 104-111 minutes per fold) and ~198 GB of disk. It runs one arm
+at a time as GPU time allows: v4, then v3 — which alone completes the
+position-only controlled comparison — then v2. Commands are in CLAUDE.md.
 
-보조 트랙(하네스 업스트림 PR)은 아직 미착수. #1231이 무응답이라 **코드로 미는 쪽**이 오히려
-답을 받는 길일 수 있다.
+The side track had not started; with #1231 unanswered, pushing in code may be
+the way to get a reply.
+
+---
+
+MIT-licensed.

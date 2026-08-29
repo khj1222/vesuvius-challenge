@@ -22,10 +22,10 @@
 - **Open Problems 페이지**: https://scrollprize.org/2026_open_problems
 - **VC3D 소프트웨어** 개선(good-first-issue 태그 포함)
 
-> Week0 Phase2에서 여기를 스캔해 "재현 위에 얹을 개선 1개"를 고른다. 후보 방향(우리 강점 기준):
-> - 데이터로더/전처리 개선(레이어 정규화, 정렬) — CV 실무 강점
-> - 도메인 특화 augmentation / 시각화 툴 — 시각형 산출물
-> - 학습 파이프라인 재현성·문서화 — trace-the-ace/ETRI 연구 정합(재현성)
+> Week0 Phase2에서 여기를 스캔해 "재현 위에 얹을 개선 1개"를 고른다. 후보 방향:
+> - 데이터로더/전처리 개선(레이어 정규화, 정렬)
+> - 도메인 특화 augmentation / 시각화 툴
+> - 학습 파이프라인 재현성·문서화
 > - VC3D good-first-issue 처리 — 채택 신호 확보 쉬움
 
 ## 데이터 규모 참고
