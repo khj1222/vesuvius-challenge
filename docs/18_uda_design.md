@@ -317,9 +317,10 @@ unsupervised adaptation has to come first survives, with one cheap alternative e
 ## What is left of the ladder
 
 Arms B (entropy minimisation on the 27,712 normalisation affines, predicted 10–40%) and C
-(pseudo-label self-training, predicted to fail) are unrun. Arm A's result does not bear on
-either prediction: it says the input-space route is closed, not that the parameter-space
-route is.
+(pseudo-label self-training, predicted to fail) were unrun when this was written, and arm A's
+result does not bear on either prediction: it says the input-space route is closed, not that
+the parameter-space route is. Both were run on 2026-08-30 and their results are the sections
+below.
 
 ---
 
