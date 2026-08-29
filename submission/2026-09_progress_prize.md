@@ -152,6 +152,7 @@ playbook works as scouting only in the weak sense: it tells you the model has no
 not where to annotate next. Unsupervised domain adaptation has to come before step three
 on a scroll with no labels. I would rather submit that than a paragraph implying the
 recipe is ready to point at PHerc0800 tomorrow (docs/16).
+
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
 representations live in a separate contract file — so the join, and the holdout flags that
@@ -163,7 +164,7 @@ generator and found a crash on a batch smaller than the surviving scroll count, 
 days later. Being reproduced and being corrected are the two things a measurement of an
 open problem needs.
 
-Everything is MIT, documented end to end (docs/14–15 plus nine committed evidence
+Everything is MIT, documented end to end (docs/14–17 plus 38 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
