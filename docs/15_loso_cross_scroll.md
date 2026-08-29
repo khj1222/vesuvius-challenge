@@ -458,7 +458,8 @@ checkpoints agrees 2 out of 2** (delta +0.050 to +0.081).
 A gap that survives regardless of family exposure is explained by **the aligned
 render simply being the better input**. Aligned is a 2.399 um acquisition pooled
 4x in z; native is a single 9.362 um acquisition. The amount of information that
-survives into the input is not the same.
+survives into the input is not the same. (That sentence undercounts the
+difference: appendix 3 measures it as 64 acquired voxels against 1.)
 
 Every absolute score rose (the scroll-exposure effect — w035 aligned 0.740 to
 0.791, native 0.679 to 0.757; w039 0.654 to 0.725 and 0.585 to 0.635). That
@@ -500,3 +501,83 @@ Raw numbers: `runs/ink9um_scorecard/segloso_matrix.csv` (56 cells) and
 ---
 
 MIT-licensed.
+
+---
+
+# Appendix 3: how much better, and why - the pooling, measured (2026-08-30)
+
+Appendix 2 rejected domain match and left a one-line mechanism: aligned inputs
+carry more of the scan. On [villa #1582](https://github.com/ScrollPrize/villa/issues/1582)
+`nerln` made that mechanism exact - each aligned pixel is an average of many
+acquired pixels while a native pixel is one - and then flagged the assumption it
+rests on:
+
+> the factor of four assumes the level-2 pyramid was built by plain averaging
+> [...] I have not verified how the published pyramids were downsampled. If they
+> were built by decimation rather than averaging the argument weakens.
+
+That is checkable from the published data, so it is now checked.
+
+## What was measured
+
+`tools/check_pyramid_pooling.py` reads small windows straight out of the
+published surface volumes over anonymous https and compares each pyramid level
+against the level below it, pooled two ways: as a 2x2 **mean**, and as a 2x2
+**decimation** (keep one pixel of four). Three scrolls, both level transitions,
+three windows of 64x64 coarse pixels at three z planes each.
+
+| source segment | levels | max abs diff, mean model | exact after rounding | max abs diff, decimation | verdict |
+|---|---|---|---|---|---|
+| phercparis4-w01 | 0 to 1 | 0.50 | 87.4% | 16 | **mean** |
+| phercparis4-w01 | 1 to 2 | 0.50 | 87.4% | 43 | **mean** |
+| pherc1667-w013 | 0 to 1 | 0.50 | 87.7% | 26 | **mean** |
+| pherc1667-w013 | 1 to 2 | 0.50 | 87.4% | 54 | **mean** |
+| pherc0139-w035 | 0 to 1 | 0.50 | 87.5% | 17 | **mean** |
+| pherc0139-w035 | 1 to 2 | 0.50 | 87.4% | 43 | **mean** |
+
+**Every level is a 2x2 mean.** The mean model is never off by more than 0.50
+grey levels - exactly the rounding bound for the mean of uint8 values - and
+matches exactly on ~87% of pixels, the share where the average lands on an
+integer. Decimation is off by 16 to 98 grey levels. There is no ambiguity to
+weigh here.
+
+**And the pyramid is XY-only**, which the volumes' own OME metadata states and
+this run records: the scale goes `[2.4, 2.4, 2.4]` to `[2.4, 4.8, 4.8]` to
+`[2.4, 9.6, 9.6]`. The z axis is never downsampled.
+
+## The count that follows
+
+`scripts/prepare_9um_isotropic_input.py` builds an aligned input by reading
+**level 2** and then mean-pooling **4 z planes** (`POOL_Z = 4`, and those planes
+are still 2.399 um apart because the pyramid never touched z). So:
+
+- one level-2 pixel = mean of a 4x4 block of acquired pixels = **16 samples**;
+- one output voxel = mean of 4 such planes = **64 acquired 2.399 um voxels**,
+  spanning 9.596 um on each axis;
+- a native voxel covering the same space is **one** 9.362 um acquisition.
+
+nerln's factor of 16 is the in-plane half of it. The z pool multiplies it a
+second time, independently, precisely because the pyramid is XY-only.
+
+## What this does and does not license
+
+It settles the assumption: the averaging is real, so "more of the scan survives
+into the input" is a statement about 64 samples against 1, not a figure of
+speech. It does **not** license a numerical SNR claim - that would need the
+acquisition noise to be independent between neighbouring 2.399 um voxels, which
+is not measured here. What is measured is that the field being averaged is not
+flat: across the twelve windows, the standard deviation inside the 2x2 blocks
+each level averages runs 2.0 to 5.8 grey levels, so the pooling is doing work
+rather than reproducing a constant.
+
+It also sits consistently with the negative result in
+[docs/18](18_uda_design.md): if the advantage is sample count, no filter applied
+to a single-sample input can restore it, and arm A found that matching the
+radial power spectrum recovers no F1 at all. A spectrum can be reshaped;
+measurements that were never taken cannot be.
+
+Raw reports: `runs/pyramid/*_pooling.json` (three segments, 12 windows).
+
+```bash
+python tools/check_pyramid_pooling.py   https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260317000000-w035_2026031718/surface-volumes/2.399um-0.22m-78keV-volume-20260102150214.zarr   --out runs/pyramid/pherc0139-w035_pooling.json
+```

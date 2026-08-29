@@ -1,0 +1,215 @@
+{
+  "source": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHercParis4/segments/20230702185753/surface-volumes/2.4um-0.22m-78keV-volume-20260411134726.zarr",
+  "levels": [
+    {
+      "path": "0",
+      "scale": [
+        2.4,
+        2.4,
+        2.4
+      ],
+      "shape": [
+        109,
+        50600,
+        36400
+      ]
+    },
+    {
+      "path": "1",
+      "scale": [
+        2.4,
+        4.8,
+        4.8
+      ],
+      "shape": [
+        109,
+        25300,
+        18200
+      ]
+    },
+    {
+      "path": "2",
+      "scale": [
+        2.4,
+        9.6,
+        9.6
+      ],
+      "shape": [
+        109,
+        12650,
+        9100
+      ]
+    },
+    {
+      "path": "3",
+      "scale": [
+        2.4,
+        19.2,
+        19.2
+      ],
+      "shape": [
+        109,
+        6325,
+        4550
+      ]
+    },
+    {
+      "path": "4",
+      "scale": [
+        2.4,
+        38.4,
+        38.4
+      ],
+      "shape": [
+        109,
+        3163,
+        2275
+      ]
+    },
+    {
+      "path": "5",
+      "scale": [
+        2.4,
+        76.8,
+        76.8
+      ],
+      "shape": [
+        109,
+        1582,
+        1138
+      ]
+    }
+  ],
+  "planes": [
+    27,
+    54,
+    81
+  ],
+  "window_size": 64,
+  "pairs": [
+    {
+      "coarse": "1",
+      "fine": "0",
+      "verdict": "mean",
+      "windows": [
+        {
+          "y": 6592,
+          "x": 8256,
+          "coarse_mean": 89.10709635416667,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.24912516276041666,
+            "exact_after_rounding": 0.875,
+            "correlation": 0.9999722926201389
+          },
+          "decimate": {
+            "max_abs": 49.0,
+            "mean_abs": 2.549560546875,
+            "exact_after_rounding": 0.15071614583333334,
+            "correlation": 0.9950932229400975
+          },
+          "fine_within_block_std": 2.888475922703558
+        },
+        {
+          "y": 12576,
+          "x": 14320,
+          "coarse_mean": 73.77571614583333,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.2515055338541667,
+            "exact_after_rounding": 0.8766276041666666,
+            "correlation": 0.9999698154643137
+          },
+          "decimate": {
+            "max_abs": 27.0,
+            "mean_abs": 1.791259765625,
+            "exact_after_rounding": 0.22412109375,
+            "correlation": 0.9970731078029021
+          },
+          "fine_within_block_std": 1.9969802472166822
+        },
+        {
+          "y": 18752,
+          "x": 6112,
+          "coarse_mean": 104.30533854166667,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.2517293294270833,
+            "exact_after_rounding": 0.8693033854166666,
+            "correlation": 0.9999482790541361
+          },
+          "decimate": {
+            "max_abs": 16.0,
+            "mean_abs": 2.5537923177083335,
+            "exact_after_rounding": 0.12923177083333334,
+            "correlation": 0.9928700147688785
+          },
+          "fine_within_block_std": 2.8663150065423957
+        }
+      ]
+    },
+    {
+      "coarse": "2",
+      "fine": "1",
+      "verdict": "mean",
+      "windows": [
+        {
+          "y": 3296,
+          "x": 4128,
+          "coarse_mean": 94.7421875,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.2486572265625,
+            "exact_after_rounding": 0.874267578125,
+            "correlation": 0.9999665799239446
+          },
+          "decimate": {
+            "max_abs": 77.0,
+            "mean_abs": 4.564778645833333,
+            "exact_after_rounding": 0.092041015625,
+            "correlation": 0.9822426643366791
+          },
+          "fine_within_block_std": 5.20745844983461
+        },
+        {
+          "y": 6288,
+          "x": 7160,
+          "coarse_mean": 78.95524088541667,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.2496337890625,
+            "exact_after_rounding": 0.8758138020833334,
+            "correlation": 0.9999675870522711
+          },
+          "decimate": {
+            "max_abs": 55.0,
+            "mean_abs": 3.6631673177083335,
+            "exact_after_rounding": 0.13102213541666666,
+            "correlation": 0.9874830450505947
+          },
+          "fine_within_block_std": 4.114180882531294
+        },
+        {
+          "y": 9376,
+          "x": 3056,
+          "coarse_mean": 104.19612630208333,
+          "mean": {
+            "max_abs": 0.5,
+            "mean_abs": 0.24916585286458334,
+            "exact_after_rounding": 0.8732096354166666,
+            "correlation": 0.9999447578102197
+          },
+          "decimate": {
+            "max_abs": 43.0,
+            "mean_abs": 4.629964192708333,
+            "exact_after_rounding": 0.07454427083333333,
+            "correlation": 0.9746058911120418
+          },
+          "fine_within_block_std": 5.195559788814451
+        }
+      ]
+    }
+  ],
+  "pyramid_is_xy_only": true,
+  "seconds": 55.386425495147705
+}
