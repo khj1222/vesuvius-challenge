@@ -354,6 +354,27 @@ python tools/make_label_budget.py <segment_dir>     --out-root data/ink_9um/labe
 
 `--level 0` · `--min-gap 256` · `--dry-run`
 
+## `spectrum_match.py` — what does this volume look like at each spatial frequency?
+
+Per-patch robust normalisation and InstanceNorm between them remove brightness
+and contrast, so those cannot explain a cross-scroll gap. What survives is how
+much of the signal sits at each spatial frequency — the blur and noise left by
+how a volume was acquired and rendered. `estimate` averages the radial power
+profile of windowed patches; `compare` puts two profiles side by side and
+derives the filter that would carry one onto the other.
+
+Profiles are shape-normalised (each patch divided by its own power, DC
+excluded), so the measurement is invariant to exactly what the model already
+removes.
+
+```bash
+python tools/spectrum_match.py estimate <volume.zarr> --out profile.json
+python tools/spectrum_match.py compare <source.json> <target.json> --out filter.json
+```
+
+`--patches 256` · `--patch 128` · `--z` · `--min-valid 0.95` · `--seed`
+· `--max-gain 4` · `--floor 1e-4`
+
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
