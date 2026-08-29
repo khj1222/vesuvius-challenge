@@ -122,9 +122,12 @@ exported band against an independently acquired 1.129 um scan of the same segmen
 posted the result on 2026-08-25: of the 164 annotation cells that scan reaches, 157 could
 be scored — all inside one of the 15 annotated regions, the only one it covers — and the
 band's per-pixel centre sits a median 2.0 voxels from the independently observed surface,
-118 of the 157 within 3 voxels. That is geometry only and certifies nothing about ink, as they
-say themselves — but it points the verdict the harder way: the per-pixel band is not
-obviously misplaced, and it still loses to one held flat.
+118 of the 157 within 3 voxels. They are careful about what that does not show: it is
+geometry and not ink identity, and the band's local smoothness comes out as weak evidence
+either way — neighbouring cells differ in distance about as much as random pairs do — so the
+check speaks to where the band sits, not to whether it follows the sheet. It still points the
+verdict the harder way: the per-pixel band is not obviously misplaced, and it loses anyway to
+one held flat.
 
 A negative result, but a load-bearing one: the obvious route to #192 — read depth out of a
 2D-trained model and follow the sheet per pixel — loses to simply fixing the band at one
