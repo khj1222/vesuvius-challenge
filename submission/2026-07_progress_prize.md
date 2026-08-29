@@ -1,6 +1,7 @@
 # July 2026 Progress Prize — submission package
 
-**Form:** https://forms.gle/xoF5C3QsYutKP97x7 ("July 2026 Progress Prizes")
+**Form:** https://forms.gle/xoF5C3QsYutKP97x7 ("July 2026 Progress Prizes") — **closed as of 2026-08-29**;
+each round gets its own form, published on https://scrollprize.org/prizes
 **Deadline:** 2026-07-31 23:59 PT
 **Order matters:** the form has a required "Pull request submitted!" checkbox, so do **step 1 first**.
 

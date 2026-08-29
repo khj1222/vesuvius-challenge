@@ -1,6 +1,8 @@
 # September 2026 Progress Prize — submission package (DRAFT)
 
-**Form:** https://forms.gle/xoF5C3QsYutKP97x7
+**Form:** TBD — each round has its own Google Form and the previous one closes.
+Fetch September's from https://scrollprize.org/prizes when the round opens
+(August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
 **Status:** DRAFT v3 (2026-08-28 — field-6 PR resolved to #1608 and its review round folded
 into field 5; was v2 of 2026-08-24) — rewritten after the study grew to its full four parts:

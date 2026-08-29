@@ -1,11 +1,15 @@
 # August 2026 Progress Prize — submission package
 
-**Form:** https://forms.gle/xoF5C3QsYutKP97x7
+**Form:** https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform
+("August 2026 Progress Prizes" — **the July form at https://forms.gle/xoF5C3QsYutKP97x7 is closed**;
+the form URL is round-specific and is re-published each month on
+https://scrollprize.org/prizes, so re-fetch it there rather than reusing last month's.)
 **Deadline:** 2026-08-31 23:59 PT
 **Status:** READY TO SUBMIT (2026-08-16 — field 5 gained a robustness paragraph: 30k
 extension holds the gap at 0.036, and the full pipeline replicated on w02 widens it to
 0.098; evidence table updated to match. PR [#1535](https://github.com/ScrollPrize/villa/pull/1535)
-in fields 4 and 5 satisfies the required checkbox;
+in fields 4 and 5 carries the PR evidence (August's form dropped July's separate
+PR checkbox, see below);
 [#1234](https://github.com/ScrollPrize/villa/pull/1234) merged 2026-08-14 and relabelled).
 Not submitted yet — **submit the day [#1535](https://github.com/ScrollPrize/villa/pull/1535)
 moves (merge or review), backstop 2026-08-29/30 regardless** (decided 08-21, replacing the
@@ -26,7 +30,10 @@ independent band check is now recorded in `docs/12` (field 4's result writeup, w
 following the link would otherwise not find it), the w02 baseline comparison now names which
 w00 baseline it means (0.8232, the single split — not the 0.8472 three-fold mean quoted two
 sentences earlier), and three evidence rows were repointed to the fold-CV JSONs because the
-30k extension re-swept those CSVs onto odd-thousand steps.
+30k extension re-swept those CSVs onto odd-thousand steps. **Also on 08-29: the form URL
+above was stale.** The July form has stopped accepting responses; August's is a different
+form, and it dropped the separate "Pull request submitted!" checkbox, so this round has six
+questions instead of seven and the PR is evidenced through field 4 alone.
 
 ---
 
@@ -154,9 +161,7 @@ ships no numbers, so this is the first measured baseline anyone can compare agai
 (docs/14 in the repo).
 ```
 
-**6. Pull Request Submission** → check "Pull request submitted!" (see step 1)
-
-**7. Terms and conditions** → "Yes, I agree"
+**6. Terms and Conditions** → check "Yes, I agree"
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)
 
 ---
@@ -196,7 +201,7 @@ reproduced in `docs/12_depth_training.md`.)
      the form goes in, relabel it the same way — and check that the "Why this matters
      to me" paragraph is in place, since a PR body that fails CONTRIBUTING.md is what
      cost the first attempt.
-  5. Tick the checkbox, submit, then sync this file to match what was actually sent
+  5. Agree to the terms, submit, then sync this file to match what was actually sent
      (the July file is kept submission-identical; do the same here).
   6. **ink_9um scorecard paragraph — KEEP (decided 2026-08-24)**: the last paragraph of
      field 5 and the docs/14 link in field 4 both stay in. It is deliberately one

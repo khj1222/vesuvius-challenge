@@ -9,9 +9,9 @@ Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라�
 ## 핵심 사실 (2026-07-19 공식 검증, 근거 docs/)
 
 - **트랙**: Progress Prizes = 월간 롤링. 리더보드 아님. 심사 3축 = 조기공개 / 커뮤니티 채택 / 문서화.
-- **상금**: Papyrus $1k · Sestertius $2.5k · Denarius $10k · Gold Aureus $20k. 월 "최고 제출 $20k" 보장.
+- **상금**: $500 · Papyrus $1k · Sestertius $2.5k · **$5k** · Denarius $10k · Gold Aureus $20k. 월 "최고 제출 $20k" 보장. (⚠️ 2026-08-29 확인: 등급표에 **$5,000과 $500이 추가**됨 — 7월 기준 4단계가 아니라 6단계.)
 - **마감**: 롤링(다음 라운드 = **7/31 23:59 PT** → 8/31 → …). **타깃 = 7/31 스트레치**(2026-07-19 결정, ~12일), 못 맞추면 8/31로 이월.
-- **제출**: Google Form https://forms.gle/xoF5C3QsYutKP97x7
+- **제출**: Google Form. ⚠️ **폼 URL은 라운드마다 새로 발급되고 지난 폼은 닫힌다**(2026-08-29에 7월 폼 `forms.gle/xoF5C3QsYutKP97x7`이 "응답 받지 않음"으로 막힌 걸 발견). 매달 https://scrollprize.org/prizes 에서 새 링크를 받을 것. 8월분 = https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform . **8월 폼은 6문항** — 7월에 있던 "Pull request submitted!" 체크박스가 사라져 PR은 4번 칸으로만 증빙한다.
 - **라이선스**: 수상 수락 시 permissive(MIT 등) 오픈소스 필수. 제출 시점 비공개 OK.
 - **위시리스트**: github.com/ScrollPrize/villa issues (label: "help wanted") + scrollprize.org/2026_open_problems
 - **진입 과제**: Ink Detection(주말 스코프) / Virtual Unwrapping / Surface Reconstruction.

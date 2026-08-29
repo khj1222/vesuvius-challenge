@@ -4,7 +4,9 @@
 
 ## 제출 메커니즘
 
-- **채널 = Google Form 1건**: https://forms.gle/xoF5C3QsYutKP97x7
+- **채널 = Google Form 1건**: 라운드마다 URL이 다르고 이전 폼은 닫힘. 매달 https://scrollprize.org/prizes 에서 받을 것.
+  - 7월분 https://forms.gle/xoF5C3QsYutKP97x7 (2026-08-29 확인 시점 마감)
+  - 8월분 https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform
   (Progress Prize 전용. Discord/이메일 제출 경로 별도 없음 — 폼이 지정 채널.)
 - **마감**: 롤링/월간. 다음 라운드 **7/31 23:59 PT**, 이후 매월 말. → **우리 타깃 8/31**.
 - 제출물 = 기여 결과물(코드 repo 링크 + 산출 이미지/데모 + 설명). `submission/` 폴더에 패키지 형태로 정리해두고 폼에 링크.

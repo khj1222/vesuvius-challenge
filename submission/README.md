@@ -1,7 +1,7 @@
 # Submission 패키지
 
 Progress Prize 제출 시 여기에 산출물을 모아 Google Form에 링크한다.
-제출 폼: https://forms.gle/xoF5C3QsYutKP97x7 · 타깃 라운드: **8/31**
+제출 폼: 라운드마다 새로 발급됨 — https://scrollprize.org/prizes 에서 확인 (8월분 = https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform) · 타깃 라운드: **8/31**
 
 ## 제출 체크리스트 (심사 3축 대응 → docs/03_submission.md)
 
