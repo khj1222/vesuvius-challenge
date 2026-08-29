@@ -450,5 +450,132 @@ annotation is opened only afterwards, to score.
 
 ---
 
+# Result — arm B: entropy minimisation makes it worse, and the objective never says so (2026-08-30)
+
+Run exactly as the addendum above fixed it: the leave-Paris4-out arm at
+`ckpt_020000`, both seeds, adapted on all eight Paris4 segments' **images only**,
+scored at the pre-registered step 200 on the seven segments the docs/15 part 4
+fine-tune never saw. 14 headline cells;
+`runs/ink9um_scorecard/armB_tent_matrix.csv` and `armB_tent_summary.json`.
+
+The adaptation touched what it was supposed to touch and nothing else: the
+adapted checkpoint differs from its base in 252 of 508 state-dict tensors, which
+are the 64 normalisation layers counted twice (the model exposes each norm module
+under two names), **27,712 unique parameters, maximum change 0.025**. Every
+convolution is byte-identical.
+
+## Headline
+
+| segment | trivial floor | LOSO base (s42 / s43) | TENT s42 | TENT s43 | mean delta | fine-tune bound |
+|---|---|---|---|---|---|---|
+| w01 | 0.4148 | 0.4607 / 0.4621 | 0.4318 | 0.4198 | **-0.0356** | 0.8573 |
+| w02 | 0.3791 | 0.4096 / 0.4174 | 0.3857 | 0.3819 | **-0.0297** | 0.8122 |
+| w03 | 0.5124 | 0.5233 / 0.5331 | 0.5124 | 0.5124 | **-0.0158** | 0.8143 |
+| w05 | 0.3485 | 0.3861 / 0.3971 | 0.3589 | 0.3488 | **-0.0377** | 0.7620 |
+| w06 | 0.4743 | 0.5013 / 0.4985 | 0.4771 | 0.4743 | **-0.0242** | 0.7880 |
+| w07 | 0.4778 | 0.5522 / 0.5551 | 0.4843 | 0.4893 | **-0.0668** | 0.7846 |
+| w09 | 0.4424 | 0.5875 / 0.5981 | 0.4959 | 0.5334 | **-0.0781** | 0.7947 |
+
+Mean over the 14 cells: **0.4916 to 0.4504, a change of -0.0412**, against a
+fine-tune bound of 0.8118. **Not one cell of fourteen improved**, and all seven
+segments are worse at both seeds.
+
+## Verdict, by the rules fixed in section 4
+
+**It harms, consistently.** -0.0412 is past the ~0.03 noise floor, so this is not
+the "no effect" arm A returned; it is a measured cost, and the consistency
+requirement is met in the wrong direction — 7 of 7 segments, 14 of 14 cells.
+
+**The pre-registered prediction was 10 to 40% of the gap, and the result is
+-12.9%.** The interval does not contain the outcome and the sign is wrong. I
+expected sharpening a displaced boundary to help less than usual; it does not
+help at all, it hurts. That is the prediction failing, and it is the reason the
+number was committed in advance.
+
+## What actually happens: the collapse the design said to watch for
+
+Section 3B named the signature — "if it collapses to a constant prediction, the
+best threshold pins at an extreme and the score falls to the trivial floor". That
+is what the numbers are.
+
+- **The fraction of the batch above 0.5 reaches zero by step 100–200** and stays
+  there, while the mean predicted probability falls from 0.39 to 0.20.
+- **Four of the fourteen cells land on their segment's all-positive floor to
+  within 0.002** (w03 at both seeds, w05 and w06 at seed 43), and the median cell
+  clears its floor by only **+0.006**. After 200 steps of adaptation the model is
+  worth almost exactly as much as answering "ink" everywhere.
+- The best threshold moves from the 80–100 range down to 30–64, which is the
+  signature of a prediction squashed downward, not of a sharper boundary.
+
+## It is not the 8-bit write — the ranking is what degrades
+
+The obvious alternative explanation is quantisation: every score in this project
+comes from `round(255 * p)`, and a squashed output loses grey levels, so F1 could
+fall while the model's ordering of pixels stayed intact.
+`tools/float_rank_check.py` re-runs the model in float over the annotated area and
+settles it.
+
+| segment / seed | checkpoint | AUC | best F1 float | best F1 uint8 | p25–p75 |
+|---|---|---|---|---|---|
+| w01 s42 | LOSO base | 0.6593 | 0.4544 | 0.4545 | 0.287–0.442 |
+| w01 s42 | TENT 200 | 0.5905 | 0.4226 | 0.4237 | 0.228–0.243 |
+| w01 s42 | TENT 1600 | 0.4787 | 0.4148 | 0.4148 | 0.192–0.216 |
+| w01 s43 | LOSO base | 0.6562 | 0.4541 | 0.4546 | 0.276–0.431 |
+| w01 s43 | TENT 200 | 0.5960 | 0.4171 | 0.4193 | 0.248–0.263 |
+| w01 s43 | TENT 1600 | 0.5494 | 0.4148 | 0.4148 | 0.206–0.223 |
+| w05 s42 | LOSO base | 0.6200 | 0.3764 | 0.3765 | 0.282–0.423 |
+| w05 s42 | TENT 200 | 0.5677 | 0.3529 | 0.3539 | 0.228–0.243 |
+| w05 s42 | TENT 1600 | 0.4881 | 0.3485 | 0.3485 | 0.192–0.216 |
+
+Float and uint8 agree to 0.001 everywhere, so the 8-bit write costs nothing. What
+moves is **AUC**, which is rank-only and immune to any rescaling: 0.66 at the
+base, 0.59 after 200 steps, **0.48 after 1,600** — below chance on w01 seed 42.
+The ordering itself is being destroyed, and at 1,600 steps the float best-F1 sits
+on the segment's all-positive floor to four decimals (0.4148, 0.3485).
+
+(Absolute numbers here run slightly below the matrix because this is a single
+non-overlapping pass rather than the blended inference `infer` performs. The
+comparison between checkpoints is under identical conditions.)
+
+## The objective is anti-correlated with the thing it stands in for
+
+This is the part worth carrying to anyone else who tries test-time adaptation on
+this corpus.
+
+| step | 1 | 50 | 100 | 200 | 400 | 800 | 1600 |
+|---|---|---|---|---|---|---|---|
+| entropy, seed 42 | 0.6244 | 0.5982 | 0.5786 | 0.5436 | 0.5303 | 0.5163 | 0.5001 |
+| mean p, seed 42 | 0.388 | 0.297 | 0.275 | 0.234 | 0.223 | 0.213 | 0.201 |
+| entropy, seed 43 | 0.6220 | 0.5958 | 0.5776 | 0.5696 | 0.5605 | 0.5486 | 0.5174 |
+| AUC, w01 s42 | 0.659 | | | 0.591 | | | 0.479 |
+
+**The objective improves monotonically the whole way down while the model gets
+monotonically worse.** So there is no label-free early stop that rescues this: the
+entropy curve has no minimum to stop at, and a practitioner watching the only
+thing an unlabelled scroll lets them watch would keep going and arrive at chance.
+The one step that would have been chosen correctly is step zero.
+
+## Why it fails here, offered as a reading rather than a measurement
+
+Entropy minimisation assumes the decision boundary is roughly right and needs
+sharpening. docs/15 part 4a measured the opposite: the cross-scroll gap is
+**bias**, a boundary in the wrong place. On this target most pixels sit below 0.5,
+so the cheapest way to lower mean entropy is to push everything down, and nothing
+in the objective objects. The architecture makes that easier rather than harder —
+the only trainable surface is the normalisation affines, which act as gains and
+offsets, so the manoeuvre most available to the optimiser is close to a global
+squash.
+
+## Limits
+
+One target scroll, one learning rate, one batch size. A smaller learning rate
+would move more slowly, but the trajectory degrades monotonically from the first
+scored checkpoint, so it postpones rather than avoids. Entropy minimisation with a
+diversity or class-balance regulariser is a different arm and is not tested here;
+anyone running it has these numbers as the baseline to beat, and the bar is
+0.4916, not zero.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.
