@@ -13,14 +13,14 @@ Paste everything below the `---` only.
 ## Title
 
 ```
-ink_9um: the three shipped _validation_mask splits cut through annotated regions, and the adjacency measurably inflates held-out scores
+ink_9um: all three shipped _validation_mask splits cut through annotated regions, and w016 admits no leak-free held-out at all
 ```
 
 ## Body
 
 **In one sentence:** All three `ink_9um` segments that ship a `_validation_mask` split their
-annotation *within* connected regions rather than by whole regions, so a large share of held-out
-pixels sit within one training patch of pixels the model trained on — and on the two segments
+annotation *within* connected regions rather than by whole regions, so 23% to 59% of their
+held-out pixels sit within one training patch of pixels the model trained on — and on the two segments
 where a control model exists, that adjacency is worth an extra +0.14 and +0.07 F1.
 
 **Why I looked:** I have been using these three masks as the only honest yardstick on this
@@ -28,9 +28,9 @@ corpus — they are what my scorecard of the released checkpoints is measured on
 "honest ceiling of F1 0.74–0.77" in that scorecard means. Before leaning on that number further
 I wanted to check that the masks hold out what they appear to.
 
-**Data:** `ink_9um` labels, `aligned-scrollprizeorg-21slices`. Of the 29 released segments,
-`pherc0139-w016`, `pherc0814-46527` and `pherc1667-w029` ship a `_validation_mask`; the other 26
-do not. In this corpus the validation mask is disjoint from the supervision mask, so the two
+**Data:** `ink_9um` labels — 24 segments in `aligned-scrollprizeorg-21slices` and 5 in
+`native9-scrollprizeorg-21slices`. Of those 29, exactly three ship a `_validation_mask`:
+`pherc0139-w016`, `pherc0814-46527` and `pherc1667-w029`. The other 26 do not. In this corpus the validation mask is disjoint from the supervision mask, so the two
 together are the segment's whole annotation.
 
 ### 1. Geometry — the splits are internal to regions
@@ -66,8 +66,9 @@ constraint is the annotation geometry, not the split.
 Two model families already exist for these segments:
 
 - **released** — the public `ink_9um` checkpoints, which trained on the segment's supervision;
-- **control** — leave-one-scroll-out arms I trained for a cross-scroll study, which never saw
-  the scroll at all.
+- **control** — leave-one-scroll-out arms I trained for a cross-scroll study
+  ([write-up](https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md)),
+  which never saw the scroll at all.
 
 Raw per-stratum F1 is not comparable across distance strata (they differ sharply in ink
 density), so the control is what makes the comparison mean something: it measures each stratum's
