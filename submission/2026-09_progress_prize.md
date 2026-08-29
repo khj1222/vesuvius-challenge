@@ -138,20 +138,16 @@ for minutes; re-infer everything. Every stage of that recipe carries an expected
 measured here, and the apparatus to re-verify any proposed improvement is one config line
 and ~3 hours of training on a consumer GPU.
 
-I then ran that playbook on a scroll that has never been read, to see where it breaks.
-PHerc1447 ships fifteen segments and no rendered surface volume for any of them, so I
-rendered the largest (7.40 cm²) from its mesh — 0.6 MB of coordinates from the public
-bucket, twenty-five minutes of streamed rendering, a 389 MB volume whose pyramid fed the
-released checkpoints with no changes at all. The ink predictions are not readable, and
-they fail in the way the margins above say they should: the four checkpoints disagree
-threefold on how much of the surface is strong ink, none of them reaches full confidence
-anywhere on it, and at full resolution the output is rounded patches rather than connected
-strokes — the checkpoints agree on coarse layout while differing in detail, which is what
-responding to surface geometry looks like. The honest reading is that step two of the
-playbook works as scouting only in the weak sense: it tells you the model has nothing,
-not where to annotate next. Unsupervised domain adaptation has to come before step three
-on a scroll with no labels. I would rather submit that than a paragraph implying the
-recipe is ready to point at PHerc0800 tomorrow (docs/16).
+I then ran that playbook on a scroll nobody has read. PHerc1447 ships no rendered surface
+volume for any of its fifteen segments, so I rendered the largest (7.40 cm²) from its mesh
+in twenty-five minutes of streaming, and the 389 MB result fed the released checkpoints
+unmodified. Nothing readable came out, and it fails the way the margins predict: the four
+checkpoints disagree threefold on how much surface is strong ink, none reaches full
+confidence anywhere, and at full resolution the output is rounded patches rather than
+connected strokes. So step two scouts only in the weak sense — it says the model has
+nothing, not where to annotate — and unsupervised adaptation has to precede step three on
+an unlabeled scroll. I would rather report that than imply the recipe is ready to point at
+PHerc0800 tomorrow (docs/16).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
