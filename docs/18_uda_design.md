@@ -380,5 +380,65 @@ Prediction unchanged: **10 to 40% of the gap**.
 
 ---
 
+# Arm C: the pre-registered rule turns out to be empty, and what replaces it (2026-08-30)
+
+Section 3C says to keep predictions "above and below symmetric confidence
+thresholds as positive and negative pseudo-labels". The obvious reading of
+"confident" is 0.9 and 0.1. **On this target that rule selects nothing at all**,
+and the measurement that says so uses no label, so it is reported here before any
+arm-C checkpoint exists.
+
+Running the base model (leave-Paris4-out, `ckpt_020000`, seed 42) over the valid
+render area of all eight Paris4 segments:
+
+| segment | sheet pixels | min p | max p | positives at p>=0.6 | share of supervised | supervised share of sheet |
+|---|---|---|---|---|---|---|
+| w00 | 85,866,396 | 0.19 | 0.89 | 4,510,179 | 6.4% | 81.8% |
+| w01 | 99,074,525 | 0.19 | 0.88 | 5,920,686 | 7.4% | 80.4% |
+| w02 | 78,909,235 | 0.19 | 0.86 | 3,506,138 | 5.4% | 82.1% |
+| w03 | 98,146,109 | 0.18 | 0.88 | 5,046,466 | 6.3% | 81.9% |
+| w05 | 213,085,492 | 0.18 | 0.89 | 12,446,899 | 7.2% | 80.7% |
+| w06 | 109,890,114 | 0.18 | 0.89 | 6,211,284 | 7.0% | 80.9% |
+| w07 | 305,671,435 | 0.17 | 0.89 | 15,917,346 | 6.1% | 84.8% |
+| w09 | 130,950,271 | 0.18 | 0.89 | 10,929,574 | 10.6% | 78.5% |
+
+**The model's entire output range on an unseen scroll is 0.17 to 0.89.** Not one
+pixel of 1.3 billion reaches 0.9, and not one falls to 0.1 — on any of the eight
+segments. That is worth stating on its own: cross-scroll failure is not the model
+being confidently wrong, it is the model never being confident.
+
+## The replacement rule, fixed before any training
+
+Symmetric about the model's **own** decision point rather than about the ends of
+the scale:
+
+- **positive** where p >= 0.6, **negative** where p <= 0.4, middle discarded;
+- restricted to the render's valid area, taken from one mid-depth plane of the
+  image — the same image-only criterion arm B uses;
+- built for **all eight** Paris4 segments, including the seven that get scored.
+  Self-training is transductive by nature and a deployment would do exactly this;
+  giving the arm the favourable condition is deliberate, because the prediction
+  is that it fails.
+
+That yields 78-85% of each sheet supervised with positives at 5.4-10.6% of it —
+both classes non-empty, and a positive rate in the range a real annotation has.
+
+Everything else is unchanged from section 3C and section 4: the same base
+checkpoint at both seeds, the released recipe, **2,500 steps** (where supervised
+fine-tuning saturates, docs/15 part 4), the same seven scored segments, the same
+inference and scoring flags, the same ~0.03 F1 noise floor and 5-of-7 consistency
+requirement.
+
+**Prediction unchanged: -10% to +15% of the gap.** The reason stands as written —
+docs/15 part 4a measured the gap as bias rather than variance, and a confident
+wrong pseudo-label trains the next model to be wrong in the same place. If it
+works anyway, that reading is what breaks, which is the more interesting outcome.
+
+The pseudo-labels are built by `tools/make_pseudo_labels.py` into the corpus's own
+label contract, so the released recipe consumes them unmodified. The target's real
+annotation is opened only afterwards, to score.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.
