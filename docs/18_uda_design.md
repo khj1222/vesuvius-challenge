@@ -323,5 +323,62 @@ route is.
 
 ---
 
+# Arm B operating parameters, fixed before any score exists (2026-08-30)
+
+Section 3B fixed the method and the prediction; it did not fix the knobs. These
+are written down here, and committed, **before a single adapted checkpoint has
+been scored** — the adaptation runs themselves produce no F1, only an entropy
+curve, so nothing below was chosen with a result in view.
+
+**Base.** The leave-Paris4-out arm at `ckpt_020000`, both seeds — the same
+checkpoint the docs/15 part 4 fine-tune started from. Direct transfer, one
+labelled segment, and entropy minimisation are then three treatments of one
+model, and the gap denominator is the one already published.
+
+**Adaptation surface.** The affine parameters of every normalisation layer:
+**27,712 in 64 layers, 0.080% of 34,546,498** — measured by the tool, and equal
+to the count section 2 derived. Every other parameter has `requires_grad`
+cleared. The model stays in `eval()`; InstanceNorm has no running statistics, so
+this changes nothing for it, and it keeps dropout out of the objective.
+
+**Target pool — images only.** All eight Paris4 aligned volumes, w00 included:
+adaptation is unsupervised, so the segment the fine-tune spent its labels on is
+just more unlabelled sheet here. Patches are the non-overlapping 128px grid,
+kept when at least **50% of the patch footprint is non-empty** in the volume's
+own mid-depth plane. That threshold is the render's valid area and is computed
+from the image alone — the supervision mask, the labels and the annotated area
+are not opened by `tools/tent_adapt.py` at any point.
+
+**Objective.** Mean binary entropy of the sigmoid of the z-max-reduced
+prediction — the same surface `infer` writes and `eval_validation` scores, not an
+internal one.
+
+**Schedule.** Adam, lr 1e-4, batch 16, gradient clipping 1.0, **1,600 steps**,
+checkpoints at **50, 100, 200, 400, 800, 1,600**. Section 3B says a few hundred
+steps and warns that the objective degenerates if run to convergence; the grid
+runs past that on purpose so the degeneration is measured rather than assumed.
+
+**What gets scored, and how it is labelled.**
+
+- **Headline: step 200**, chosen here and not from any score, on all seven
+  segments the docs/15 fine-tune never saw, both seeds. This is the number the
+  section 4 rules apply to.
+- **Trajectory probe:** every checkpoint on **w01 and w05**, both seeds — the
+  middle and the weakest of the seven under direct transfer. This shows the shape
+  and is where a collapse would first be visible.
+- If the probe's best step is not 200, that step is scored on the remaining five
+  segments and reported **as an oracle upper bound**, explicitly labelled: it is
+  chosen on target labels, which a real deployment does not have.
+- The entropy trajectory is recorded for every step, so a label-free stopping
+  rule can be evaluated after the fact and reported as what it is.
+
+**Collapse signature**, from section 3B: mean predicted probability drifts to 0
+or 1, the best threshold pins at an extreme, and F1 falls to the segment's
+all-positive floor. If that happens it is the result, not a tuning failure.
+
+Prediction unchanged: **10 to 40% of the gap**.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.
