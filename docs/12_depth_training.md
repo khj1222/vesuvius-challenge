@@ -356,6 +356,54 @@ arms are not as budget-matched as on `w00`. But `w00`'s `v2`≈`v3` tie already
 showed an 8× budget difference costs nothing, so a 12% one does not explain a
 0.098 gap. Raw numbers: `runs/ink_w02_{v3,v4}_fold_cv_summary.json`.
 
+## Independent check: is the band where it says it is?
+
+Every number above compares arms inside one apparatus. It cannot say whether
+the measured band is *geometrically* right — and that distinction decides how
+the negative result should be read. If the estimator simply misplaces the band,
+`v4`'s loss says nothing about #192's premise. If the band sits where an
+independent observation puts the sheet and *still* loses, the result is the
+stronger one.
+
+That check had to come from outside, so the band was exported as anchors in
+scroll coordinates (`tools/export_depth_anchors.py`, `submission/depth_anchors/`,
+7,005 cells with normals and the sidecar conventions spelled out). On #192,
+[stantheman0128](https://github.com/stantheman0128/vesuvius-ink3d-depth-validation)
+offered to score them against a separately acquired 1.129 um scan of the same
+segment, pre-registered the procedure, and posted the result on 2026-08-25.
+
+The independent scan only reaches a sliver of `w00`. Of 5,396 `center` cells,
+164 have at least one profile sample inside the 1.129 um array; 157 were
+evaluable (6 masked-zero, 1 with no qualifying surface). Every one of them
+falls inside annotated region 15 — the other 14 regions are outside the
+footprint, so this says nothing about them.
+
+| | |
+|---|---|
+| evaluable cells | 157 of 164 |
+| median D (band centre → observed surface) | **2.0 voxels** |
+| IQR / max D | p25 1, p75 3, max 11 |
+| D ≤ 3 | **118 / 157 (75.2%)** |
+| D ≤ 1 | 65 / 157 |
+| median FWHM of the CT gradient peak | 2.71 voxels (22 censored at 48) |
+
+Their caveats, kept as stated: this is distance to an independently observed
+surface, **not an ink-identity test** — it does not establish that the surface
+is recto, that ink sits on it, or why `v4` loses; local smoothness is weak
+evidence either way (|ΔD| between grid-adjacent cells has median 2.0, the same
+as random pairs, which neither shows a smooth sheet nor a random field); and
+`corr(offset_from_plane, D) ≈ 0`, so D is not merely echoing how far the band
+moved off z = 32. `pmh47`'s objection on #192 — that a gradient peak in a 1 um
+scan is not by itself ink localisation — stands unchanged.
+
+Within those limits it lands on the second branch. On the one region that can
+be seen, the per-pixel band is not obviously misplaced: its centre sits a
+median 2 voxels from an independently observed surface, and three quarters of
+the anchors are within 3. It still loses to a band held flat at the segment
+median. Per-anchor records, the pre-registration and file hashes are in their
+repository; the scoring comment is on
+[villa #192](https://github.com/ScrollPrize/villa/issues/192).
+
 ---
 
 MIT-licensed.

@@ -16,8 +16,17 @@ doc links in field 4 verified to resolve publicly on 08-24, so the "push before 
 condition is met. **Checked 08-28: #1535 still open, mergeable, no review since 08-19; the
 "Why this matters to me" paragraph is in the body. stantheman0128 posted their scoring of our
 band on 08-25, so field 5 gained the third-check paragraph the notes pre-registered for the
-geometry-valid branch, plus an evidence row.** Remaining pre-submit check: relabel #1535 if it
-moves before submission day (see notes).
+geometry-valid branch, plus an evidence row.** **Final check 2026-08-29 — SUBMIT AS IS.**
+#1535 is still open and mergeable with zero human comments and no reviewer, unchanged since
+08-19 (its only comment is the Vercel authorization bot); #1231 unchanged (0 comments, erdpx
+still assigned); #192 has nothing after stantheman0128's 08-25 scoring; #1434 stays closed
+with our pointer comment on it. All ten field-4 links return HTTP 200 today, and every
+field-5 number was re-derived from the run artifacts. Three fixes were made on 08-29: the
+independent band check is now recorded in `docs/12` (field 4's result writeup, where a judge
+following the link would otherwise not find it), the w02 baseline comparison now names which
+w00 baseline it means (0.8232, the single split — not the 0.8472 three-fold mean quoted two
+sentences earlier), and three evidence rows were repointed to the fold-CV JSONs because the
+30k extension re-swept those CSVs onto odd-thousand steps.
 
 ---
 
@@ -105,7 +114,8 @@ moves the gap from 0.038 to 0.036 — the measured band was not "stopped too ear
 rerunning the entire pipeline unchanged on a second segment (w02) replicates the ordering
 with a wider margin: 0.8263 constant against 0.7287 measured, every measured fold below
 every constant fold, while the constant band again lands on that segment's own 2D baseline
-(0.8263 vs 0.8235 — itself within 0.001 of w00's, on a segment the harness had never seen).
+(0.8263 vs 0.8235 — itself within 0.001 of w00's own single-split baseline, 0.8232, on a
+segment the harness had never seen).
 
 A third check came from outside the project. stantheman0128 offered on #192 to score the
 exported band against an independently acquired 1.129 um scan of the same segment, and
@@ -153,9 +163,9 @@ ships no numbers, so this is the first measured baseline anyone can compare agai
 | claim | source |
 |---|---|
 | 3-arm × 3-fold means 0.8441 / 0.8478 / 0.8098 | `runs/ink_depth_v{2,3,4}_fold_cv_summary*.json` |
-| per-fold v3 0.8455 / 0.8452 / 0.8528 | `runs/ink_depth_v3_fold{0,1,2}/validation/summary.csv` |
-| per-fold v4 0.7997 / 0.8192 / 0.8104 | `runs/ink_depth_v4_fold{0,1,2}/validation_z16_48/summary.csv` |
-| per-fold v2 0.8567 / 0.8259 / 0.8496 | `runs/ink_depth_v2_fold{0,1,2}/validation/summary.csv` |
+| per-fold v3 0.8455 / 0.8452 / 0.8528 | `runs/ink_depth_v3_fold_cv_summary.json` (the per-fold CSVs were re-swept by the 30k extension and no longer carry the even-thousand rows) |
+| per-fold v4 0.7997 / 0.8192 / 0.8104 | `runs/ink_depth_v4_fold_cv_summary_z16_48.json` (same re-sweep caveat) |
+| per-fold v2 0.8567 / 0.8259 / 0.8496 | `runs/ink_depth_v2_fold_cv_summary.json` |
 | July 2D baseline 0.8472 on the same folds | `runs/ink_fold_cv_summary.json` |
 | noise floor ~0.03 F1 | July: one unchanged config scored four times, 0.823–0.854 |
 | label voxels 1.00 / 8.00 / 8.01 per ink pixel | `make_label_version.py` output, `docs/12` |
@@ -165,7 +175,7 @@ ships no numbers, so this is the first measured baseline anyone can compare agai
 | late-training gain +0.0075 (v3) / +0.0068 (v4) | step 17000 vs 20000 rows of the summaries above |
 | 30k extension: gap 0.038 → 0.036 | `runs/ink_depth_ext30k_summary.json`, `docs/12` |
 | w02 replication: 0.8263 vs 0.7287 (+0.098), w02 2D baseline 0.8235 | `runs/ink_w02_{v3,v4}_fold_cv_summary.json`, `runs/ink_w02_holdout_20k/validation/summary.csv`, `docs/12` |
-| independent band check: median D 2.0 voxels, 118/157 within 3 (region 15 only) | stantheman0128 on villa #192, 2026-08-25; anchors from `submission/depth_anchors/` |
+| independent band check: median D 2.0 voxels, 118/157 within 3 (region 15 only) | stantheman0128 on villa #192, 2026-08-25; anchors from `submission/depth_anchors/`; recorded in `docs/12`, "Independent check" |
 
 (Run artifacts live under the gitignored `external/villa/ink-detection/`; every number is
 reproduced in `docs/12_depth_training.md`.)
