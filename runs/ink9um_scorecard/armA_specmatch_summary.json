@@ -1,12 +1,267 @@
 {
-  "mean_delta": 0.0052,
-  "cells_positive": 17,
+  "arm": "A: spectrum matching (docs/18)",
   "cells": 24,
-  "mean_share_recovered_pct": -19.2,
+  "mean_delta": 0.0052,
+  "delta_range": [
+    -0.0184,
+    0.0398
+  ],
+  "cells_positive": 17,
   "per_segment_mean_delta": {
     "w035": 0.0002,
     "w039": 0.0193,
     "w040": 0.0022,
     "w041": -0.0009
-  }
+  },
+  "share_definition": "per cell, (filtered - raw) / (aligned - raw), where aligned is the same LOSO-no0139 checkpoint scored on that segment's aligned representation at the same step",
+  "median_share_recovered_pct": 9.1,
+  "mean_share_recovered_pct": -8.4,
+  "share_range_pct": [
+    -673.3,
+    239.0
+  ],
+  "mean_share_warning": "do not quote the mean: w041 s42 010000 has a gap of 0.0015 and divides to -673%",
+  "recomputed": "2026-08-30 from armA_specmatch_matrix.csv and no0139_matrix.csv; the share statistics in the first version of this file could not be reproduced under any denominator and were replaced",
+  "per_cell": [
+    {
+      "segment": "w035",
+      "seed": "42",
+      "step": "010000",
+      "native_raw": 0.645,
+      "native_filtered": 0.6504,
+      "aligned": 0.7003,
+      "gap": 0.0553,
+      "share_recovered": 0.0976
+    },
+    {
+      "segment": "w035",
+      "seed": "42",
+      "step": "020000",
+      "native_raw": 0.6527,
+      "native_filtered": 0.6579,
+      "aligned": 0.7219,
+      "gap": 0.0692,
+      "share_recovered": 0.0751
+    },
+    {
+      "segment": "w035",
+      "seed": "42",
+      "step": "030000",
+      "native_raw": 0.6241,
+      "native_filtered": 0.6295,
+      "aligned": 0.6883,
+      "gap": 0.0642,
+      "share_recovered": 0.0841
+    },
+    {
+      "segment": "w035",
+      "seed": "43",
+      "step": "010000",
+      "native_raw": 0.6152,
+      "native_filtered": 0.6248,
+      "aligned": 0.6627,
+      "gap": 0.0475,
+      "share_recovered": 0.2021
+    },
+    {
+      "segment": "w035",
+      "seed": "43",
+      "step": "020000",
+      "native_raw": 0.6789,
+      "native_filtered": 0.6636,
+      "aligned": 0.7081,
+      "gap": 0.0292,
+      "share_recovered": -0.524
+    },
+    {
+      "segment": "w035",
+      "seed": "43",
+      "step": "030000",
+      "native_raw": 0.6523,
+      "native_filtered": 0.6429,
+      "aligned": 0.6796,
+      "gap": 0.0273,
+      "share_recovered": -0.3443
+    },
+    {
+      "segment": "w039",
+      "seed": "42",
+      "step": "010000",
+      "native_raw": 0.5451,
+      "native_filtered": 0.5561,
+      "aligned": 0.5855,
+      "gap": 0.0404,
+      "share_recovered": 0.2723
+    },
+    {
+      "segment": "w039",
+      "seed": "42",
+      "step": "020000",
+      "native_raw": 0.5032,
+      "native_filtered": 0.5236,
+      "aligned": 0.6157,
+      "gap": 0.1125,
+      "share_recovered": 0.1813
+    },
+    {
+      "segment": "w039",
+      "seed": "42",
+      "step": "030000",
+      "native_raw": 0.5303,
+      "native_filtered": 0.5198,
+      "aligned": 0.5673,
+      "gap": 0.037,
+      "share_recovered": -0.2838
+    },
+    {
+      "segment": "w039",
+      "seed": "43",
+      "step": "010000",
+      "native_raw": 0.5089,
+      "native_filtered": 0.5289,
+      "aligned": 0.583,
+      "gap": 0.0741,
+      "share_recovered": 0.2699
+    },
+    {
+      "segment": "w039",
+      "seed": "43",
+      "step": "020000",
+      "native_raw": 0.5751,
+      "native_filtered": 0.6103,
+      "aligned": 0.6544,
+      "gap": 0.0793,
+      "share_recovered": 0.4439
+    },
+    {
+      "segment": "w039",
+      "seed": "43",
+      "step": "030000",
+      "native_raw": 0.5613,
+      "native_filtered": 0.6011,
+      "aligned": 0.6096,
+      "gap": 0.0483,
+      "share_recovered": 0.824
+    },
+    {
+      "segment": "w040",
+      "seed": "42",
+      "step": "010000",
+      "native_raw": 0.6377,
+      "native_filtered": 0.6432,
+      "aligned": 0.6835,
+      "gap": 0.0458,
+      "share_recovered": 0.1201
+    },
+    {
+      "segment": "w040",
+      "seed": "42",
+      "step": "020000",
+      "native_raw": 0.6502,
+      "native_filtered": 0.6511,
+      "aligned": 0.6835,
+      "gap": 0.0333,
+      "share_recovered": 0.027
+    },
+    {
+      "segment": "w040",
+      "seed": "42",
+      "step": "030000",
+      "native_raw": 0.6265,
+      "native_filtered": 0.6258,
+      "aligned": 0.6796,
+      "gap": 0.0531,
+      "share_recovered": -0.0132
+    },
+    {
+      "segment": "w040",
+      "seed": "43",
+      "step": "010000",
+      "native_raw": 0.6211,
+      "native_filtered": 0.625,
+      "aligned": 0.6708,
+      "gap": 0.0497,
+      "share_recovered": 0.0785
+    },
+    {
+      "segment": "w040",
+      "seed": "43",
+      "step": "020000",
+      "native_raw": 0.6519,
+      "native_filtered": 0.6541,
+      "aligned": 0.7033,
+      "gap": 0.0514,
+      "share_recovered": 0.0428
+    },
+    {
+      "segment": "w040",
+      "seed": "43",
+      "step": "030000",
+      "native_raw": 0.6299,
+      "native_filtered": 0.6311,
+      "aligned": 0.6695,
+      "gap": 0.0396,
+      "share_recovered": 0.0303
+    },
+    {
+      "segment": "w041",
+      "seed": "42",
+      "step": "010000",
+      "native_raw": 0.6751,
+      "native_filtered": 0.665,
+      "aligned": 0.6766,
+      "gap": 0.0015,
+      "share_recovered": -6.7333
+    },
+    {
+      "segment": "w041",
+      "seed": "42",
+      "step": "020000",
+      "native_raw": 0.6576,
+      "native_filtered": 0.6585,
+      "aligned": 0.6651,
+      "gap": 0.0075,
+      "share_recovered": 0.12
+    },
+    {
+      "segment": "w041",
+      "seed": "42",
+      "step": "030000",
+      "native_raw": 0.6648,
+      "native_filtered": 0.6464,
+      "aligned": 0.6571,
+      "gap": -0.0077,
+      "share_recovered": 2.3896
+    },
+    {
+      "segment": "w041",
+      "seed": "43",
+      "step": "010000",
+      "native_raw": 0.6102,
+      "native_filtered": 0.6092,
+      "aligned": 0.6554,
+      "gap": 0.0452,
+      "share_recovered": -0.0221
+    },
+    {
+      "segment": "w041",
+      "seed": "43",
+      "step": "020000",
+      "native_raw": 0.7025,
+      "native_filtered": 0.7195,
+      "aligned": 0.734,
+      "gap": 0.0315,
+      "share_recovered": 0.5397
+    },
+    {
+      "segment": "w041",
+      "seed": "43",
+      "step": "030000",
+      "native_raw": 0.6663,
+      "native_filtered": 0.6725,
+      "aligned": 0.725,
+      "gap": 0.0587,
+      "share_recovered": 0.1056
+    }
+  ]
 }

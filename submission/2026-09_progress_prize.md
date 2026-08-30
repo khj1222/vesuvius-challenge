@@ -76,11 +76,12 @@ https://github.com/khj1222/vesuvius-challenge
 Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
-Raw numbers (1,000+ scored cells, 9 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
+Raw numbers (1,612 scored cells, 27 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
-Pre-registered adaptation study and its first result: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
+Pre-registered adaptation study, three arms, all run: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
+Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-challenge/tree/main/tools
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
@@ -97,9 +98,10 @@ to fix — all on that release, with the held-out methodology that won July's Pr
 Prize and settled villa #192 in August.
 
 Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on the three
-segments that ship validation masks puts the honest within-scroll ceiling at F1
-0.74–0.77 against 0.98+ on training pixels — a 0.22–0.45 memorisation gap, no step that
-is best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
+segments that ship validation masks puts the honest within-scroll ceiling at F1 0.74–0.77
+— the best value any released checkpoint reaches is 0.755, 0.758 and 0.765, one per
+segment — against 0.98+ on training pixels: a 0.22–0.45 memorisation gap, no step that is
+best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
 
 That yardstick then had to be checked itself, because everything honest on this corpus rests
 on three masks — and all three split their annotation *within* connected regions, so 23% to
@@ -189,21 +191,23 @@ So I pre-registered the three cheapest ways out — design, prediction and decis
 pushed publicly before each run — and ran all three. Input space: that render is
 spectrally a native-class input, and PHerc1447 has only an 8.640 µm scan, so the
 "render aligned" guidance cannot be followed there at all; a matching filter closes 38%
-of the spectral distance between the families and buys a median 8.4% of the transfer
+of the spectral distance between the families and buys a median 9.1% of the transfer
 gap, mean +0.005 F1 — no effect by the rule I had fixed, inside the 0–20% I predicted.
 Parameter space: test-time entropy minimisation on the only surface the architecture
 leaves — 27,712 normalisation affines, 0.08% of the model — costs 0.041 F1 across
-fourteen cells with not one improving, and by 400 steps every scored cell sits on its
-segment's all-positive floor. I predicted +10 to +40%; it is −13%, so that prediction is
-refuted with the sign wrong. A rank check in float shows the loss is the model and not
-the 8-bit output — AUC falls 0.66 to 0.48, below chance — and that the adaptation
+fourteen cells with not one improving, and every checkpoint I scored at 400 steps or
+beyond sits on its segment's all-positive floor. I predicted +10 to +40%; it is −13%, so
+that prediction is refuted with the sign wrong. A rank check in float shows the loss is the
+model and not the 8-bit output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below
+chance —
+and that the adaptation
 objective improves monotonically the whole way down, so no label-free stopping rule
 built on it could have caught this. Label space: self-training on the model's own
 confident pixels is the one rung that helps, +0.030 F1 with all fourteen cells
 improving, 9.5% of the gap. That last number is the useful one, because it prices the
 annotation: with the base checkpoint, the segment, the recipe and the step count held
-fixed, a human's labels on one segment buy +0.320 and the model's own confident guesses
-buy +0.030. Annotate something — and half a segment will do (docs/18).
+fixed, a human's labels on one segment buy +0.32 and the model's own confident guesses buy
++0.03. Annotate something — and half a segment will do (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
@@ -235,8 +239,8 @@ opens; the layout above assumes August's.
 | claim | source |
 |---|---|
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
-| arm A: spectrum matching gains +0.005 F1, median 8.4% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
-| arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48 while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
+| arm A: spectrum matching gains +0.005 F1, median 9.1% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
+| arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
 | arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
 | the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
@@ -286,9 +290,9 @@ every quoted figure.)
   percentages use the train-pixel ref as denominator (generous baseline, said as such);
   "one segment" is w00, one of the larger Paris4 annotations; best-of-grid comparisons
   are oracle-selected on both sides.
-* **Push before submitting** — docs/14–15, tools, configs and the evidence files must
-  resolve publicly; every field-4 link is checked. (As of 2026-08-26 all of it is pushed,
-  including the segloso arm.)
+* **Push before submitting** — docs/14–18, tools, configs and the evidence files must
+  resolve publicly; every field-4 link is checked. (As of 2026-08-30 everything is pushed,
+  including all three adaptation arms and the pooling reports; all 17 links verified 200.)
 * **Do not soften the refutation** — the pre-registered arm that broke our own domain-match
   reading is an asset, not a wound: claim published → outside reviewer presses → falsifiable
   test registered in public before the run → claim dies → retraction posted upstream and in

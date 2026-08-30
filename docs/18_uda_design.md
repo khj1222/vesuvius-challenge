@@ -282,7 +282,7 @@ the targets' native images, with 0139's own aligned volumes excluded. 48 cells;
 | mean Δ F1, filtered minus raw | **+0.0052** |
 | range | −0.0184 … +0.0398 |
 | cells where the filter wins | 17 of 24 |
-| share of the aligned-versus-native gap recovered | **median 8.4%** |
+| share of the aligned-versus-native gap recovered | **median 9.1%** |
 | per-segment mean Δ | w035 +0.0002 · w039 **+0.0193** · w040 +0.0022 · w041 −0.0009 |
 
 ## Verdict, by the rules fixed in section 4
@@ -293,12 +293,20 @@ than ±0.002; only w039 shifts materially (+0.019), and one segment in four does
 consistency requirement. The direction is right — 17 of 24 cells improve — but the size is
 not there.
 
-The pre-registered prediction was **0 to 20% of the gap**, and the median recovery is 8.4%.
+The pre-registered prediction was **0 to 20% of the gap**, and the median recovery is 9.1%.
 The prediction holds.
 
 ⚠️ Do not quote the *mean* recovery share. On w041 seed 42 at 10k the aligned-native gap is
-only 0.0015, so a −0.010 change divides to −673% and drags the mean to −19.2%. The median,
-8.4%, is the usable statistic.
+only 0.0015, so a −0.010 change divides to −673% and drags the mean to −8.4%. The median,
+9.1%, is the usable statistic.
+
+⚠️ **These two share statistics were recomputed on 2026-08-30.** The first version of
+`armA_specmatch_summary.json` recorded a median of 8.4% and a mean of −19.2%, and neither
+could be reproduced from the matrix under any denominator I could identify; the summary now
+stores the definition it uses — per cell, `(filtered − raw) / (aligned − raw)` at the same
+segment, seed and step — along with every cell it is computed from. Everything else in this
+section (mean Δ, the range, 17 of 24, the per-segment means) reproduces exactly, and the
+verdict does not move: 9.1% is inside the same pre-registered interval.
 
 ## What it means
 
@@ -751,7 +759,7 @@ comparable to the whole effect.
 
 | arm | what it does | predicted | measured | verdict |
 |---|---|---|---|---|
-| **A** — spectrum matching | reshape the target render's radial power spectrum to the source's, then re-infer | 0–20% of the gap | **+0.005 F1**, median 8.4% recovered, 17 of 24 cells | no effect |
+| **A** — spectrum matching | reshape the target render's radial power spectrum to the source's, then re-infer | 0–20% of the gap | **+0.005 F1**, median 9.1% recovered, 17 of 24 cells | no effect |
 | **B** — entropy minimisation | adapt the 27,712 normalisation affines to make the target's predictions confident | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
 | **C** — pseudo-label self-training | fine-tune on the model's own confident pixels for one target segment | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** of the gap | improves, at the noise floor |
 

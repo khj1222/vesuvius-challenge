@@ -230,7 +230,7 @@ committed publicly before the run**.
 
 | arm | predicted | measured | verdict |
 |---|---|---|---|
-| **A** spectrum matching | 0–20% of the gap | +0.005 F1, median 8.4% | no effect |
+| **A** spectrum matching | 0–20% of the gap | +0.005 F1, median 9.1% | no effect |
 | **B** entropy minimisation (TENT) | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
 | **C** pseudo-label self-training | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** | improves, at the noise floor |
 
