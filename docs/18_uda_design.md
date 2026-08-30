@@ -1240,6 +1240,97 @@ seeds, the same flags. 60 new cells on top of the 30 already measured.
 
 ---
 
+# Result — the 1667 replication: Paris4 does not generalise (2026-08-31)
+
+Six runs, three steps, 90 scored cells: `runs/ink9um_scorecard/r1667_matrix.csv` and
+`r1667_stepcurve_summary.json`. The base is the leave-1667-out arm at `ckpt_010000`, the
+annotated segment is w018, and the five scored segments are w013, w023, w028, w029 and w031,
+each on its full annotation.
+
+**Three of the four commitments made before the run are refuted.**
+
+## The headline table
+
+Mean over the ten cells (five segments, two seeds); base 0.5472, train-pixel reference 0.9799.
+
+| arm | 2,500 steps | 5,000 | 10,000 | peak |
+|---|---|---|---|---|
+| **FT** (w018's real annotation) | **0.6517 (+0.1044)** | 0.6392 (+0.0920) | 0.6195 (+0.0723) | **2,500** |
+| **C** (w018's pseudo-labels) | 0.5550 (+0.0078) | 0.5573 (+0.0101) | **0.5638 (+0.0166)** | 10,000 |
+| **D** (the scored sheets' own pseudo-labels) | 0.5315 (−0.0157) | 0.5330 (−0.0143) | **0.5419 (−0.0053)** | 10,000, still negative |
+
+## The confound is dead: it is the scroll, not the schedule
+
+The whole reason for the step curve was that every arm had been stopped at 2,500 because
+**Paris4's** fine-tune peaks there. The pre-registration said a climbing supervised bound
+would make the headline "how long adaptation takes is scroll-dependent".
+
+**It does not climb. It falls, monotonically: +0.1044 → +0.0920 → +0.0723.** 1667's
+fine-tune peaks at 2,500 exactly as Paris4's does. So the stopping point is exonerated, and
+by the rule fixed in advance, **the Paris4 numbers are scroll-specific**.
+
+Worth separating, because it is easy to blur: the *shape* generalises — peak at 2,500, decline
+after — on both scrolls. What does not generalise is the *magnitude*.
+
+## What an annotated segment is worth, on two scrolls
+
+Same recipe, same step count, same scoring rules, one annotated segment each:
+
+| | Paris4 | 1667 |
+|---|---|---|
+| one annotated segment buys | **+0.3202 F1** | **+0.1044 F1** |
+| as a share of the way to the train-pixel reference | **82%** | **24%** |
+
+That is a threefold difference in what the same amount of annotation buys, and it is the
+finding this replication produced. docs/15 part 4 reported the 82% without a scroll attached;
+it has one now.
+
+## Self-training does not survive the crossing
+
+- **arm C** is positive at every step but never leaves the noise: +0.008 / +0.010 / +0.017
+  against a ~0.03 floor. By the rules it is **no effect on 1667**, where on Paris4 it was
+  +0.030 and consistent.
+- **arm D is negative at every step** — −0.016 / −0.014 / −0.005, improving toward zero with
+  more training but never crossing it, and reaching only 3 of 10 cells and 1 of 5 segments at
+  10,000. On Paris4 arm D was +0.046 with **14 of 14 cells** and beat arm C in 11 of 14. Here
+  it is below arm C at every step and below its own starting point.
+- **More steps do not rescue either.** Both improve slightly with training, neither changes
+  category.
+
+⚠️ **Do not read arm C's "share of the gap" as improvement.** It goes 7.4% → 11.0% → 23.0%
+across the three steps, but two thirds of that rise is the **denominator shrinking** as the
+fine-tune bound decays from +0.104 to +0.072. The absolute delta, +0.008 → +0.017, is the
+honest number. Shares are only stable when the bound is.
+
+## What this does and does not say
+
+It says: **on this corpus, cross-scroll adaptation results do not transfer between scrolls.**
+A label-free method that recovers 14.3% of the gap on Paris4 costs F1 on 1667; an annotated
+segment that buys 82% on Paris4 buys 24% on 1667. Anyone quoting a single number for "what
+adaptation is worth" — including the earlier version of this document — is quoting a
+scroll.
+
+It does not say the Paris4 numbers were wrong. They are measured, reproducible and now
+labelled. Nor does it say self-training never helps: it helped on Paris4 by a margin that
+cleared the noise floor at 14 of 14 cells, and that remains the strongest label-free result
+here.
+
+**One thing does survive the crossing intact**: annotation beats guessing by a wide margin on
+both scrolls. Letting each scroll pick its own best label-free arm and step — an oracle
+choice, and labelled as one — the ratio is 7.0x on Paris4 (0.3202 / 0.0457) and 6.3x on 1667
+(0.1044 / 0.0166). At **matched** conditions, the pre-registered arm and step, 1667's ratio
+does not exist because the label-free arm is negative.
+
+## Limits
+
+- Two scrolls, not three. 0139 has a LOSO arm and would make a third; it was not run.
+- One annotated segment per scroll, and on 1667 that segment is w018, the largest. Whether a
+  different choice changes the 24% is untested.
+- The step curve has three points, not a fine grid; a peak between 2,500 and 5,000 would not
+  be visible.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
@@ -1249,10 +1340,23 @@ seeds, the same flags. 60 new cells on top of the 30 already measured.
 | **C** — pseudo-label self-training | fine-tune on the model's own confident pixels for one target segment | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** of the gap | improves, at the noise floor |
 | **D** — the same, transductive | pseudo-label the sheets to be read, rather than a different one | +5% to +30%, not above 50% | **+0.046 F1**, 14 of 14 cells, **+14.3%** of the gap | improves, past the floor |
 
+**Every number in that table is a Paris4 number.** The 2026-08-31 replication on 1667 —
+same recipe, same steps, its own base and annotated segment — found arm C inside the noise
+at every step and **arm D negative at every step**, while one annotated segment bought 24%
+of the way to the reference against Paris4's 82%. A step curve to 10,000 ruled out the
+schedule as the explanation. See the 1667 section above; read the table below with the
+scroll attached.
+
 Three cheap routes, each with its design, prediction and decision rule fixed in
 public before it ran. Section 7 asked what gets published either way, and the
 answer the ladder actually produced is more useful than either branch it
 anticipated:
+
+⚠️ **Read this section as Paris4.** The 1667 replication (2026-08-31) reproduces the
+*shape* — fine-tuning peaks at 2,500 steps on both scrolls — and not the magnitudes: an
+annotated segment buys 82% of the way to the reference on Paris4 and 24% on 1667, and the
+best label-free arm goes from +0.046 to negative. What generalises is the ordering
+(annotation ≫ guessing), not the numbers.
 
 **Unsupervised adaptation on this corpus is not free and is not enough.** The
 input-space route buys nothing. The classical test-time route is actively
