@@ -147,8 +147,9 @@ same segments held out in both families, native exposure raised from 0% to 16.4%
 training batches, the gap came back unchanged at +0.058 against +0.061. The mechanism is
 not familiarity but quality, and the reviewer who proposed why — aligned inputs are
 averages of many acquired samples — flagged the assumption it rested on: are the published
-pyramids averaged or decimated? Reading them says averaged, in all 18 window comparisons
-across three scrolls, to the 0.50 grey-level rounding bound; and they never touch z, so
+pyramids averaged or decimated? Reading them says averaged — byte-exact in all 18 window
+comparisons across three scrolls, and another contributor reached the same answer on the
+thread the same day; and they never touch z, so
 the recipe's 4x z pool multiplies the in-plane 16 again. One aligned voxel is the mean of
 64 acquired 2.399 µm voxels where the native voxel covering the same space is a single
 9.362 µm acquisition. Render aligned, whatever the model trained on. Retraction in docs/15

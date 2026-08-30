@@ -440,8 +440,12 @@ python tools/check_pyramid_pooling.py <volume.zarr or URL> --out report.json
 
 `--windows 3` · `--size 64` · `--planes` · `--pairs 1 2`
 
-A mean-built pyramid shows a maximum absolute difference of 0.50 grey levels —
-the rounding bound — against tens of grey levels for decimation. S3 drops
+A mean-built pyramid reproduces **byte-exactly** once the per-level rounding is
+modelled as round-half-up: max absolute difference 0, against tens of grey levels
+for decimation. The residual against the *unrounded* mean is reported alongside
+and is 0.50 by construction — reading only that number is what made the first
+version of this check look approximate when the pyramid is exact. The declared
+`multiscales[0].metadata.downsampling_method` is read and reported too. S3 drops
 connections mid-read, so every read and every level open retries with backoff.
 
 ## `float_rank_check.py` — did the model change, or only the scale it is written on?

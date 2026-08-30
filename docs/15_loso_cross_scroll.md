@@ -516,30 +516,44 @@ rests on:
 > [...] I have not verified how the published pyramids were downsampled. If they
 > were built by decimation rather than averaging the argument weakens.
 
-That is checkable from the published data, so it is now checked.
+That is checkable from the published data, so it is now checked - and
+**`Bullo27` checked it first**, posting the answer on the same thread on
+2026-08-30 before this was written up. Their result and this one agree, and
+theirs was the tighter measurement; what follows says so and then adds the part
+that is still missing from the thread.
 
 ## What was measured
 
 `tools/check_pyramid_pooling.py` reads small windows straight out of the
 published surface volumes over anonymous https and compares each pyramid level
-against the level below it, pooled two ways: as a 2x2 **mean**, and as a 2x2
-**decimation** (keep one pixel of four). Three scrolls, both level transitions,
-three windows of 64x64 coarse pixels at three z planes each.
+against the level below it: as a 2x2 **mean**, and as a 2x2 **decimation** (keep
+one pixel of four). Three scrolls, both level transitions, three windows of 64x64
+coarse pixels at three z planes each - 18 window comparisons.
 
-| source segment | levels | max abs diff, mean model | exact after rounding | max abs diff, decimation | verdict |
+| source segment | levels | max abs diff, round-half-up mean | exact | max abs diff, unrounded mean | max abs diff, decimation |
 |---|---|---|---|---|---|
-| phercparis4-w01 | 0 to 1 | 0.50 | 87.4% | 16 | **mean** |
-| phercparis4-w01 | 1 to 2 | 0.50 | 87.4% | 43 | **mean** |
-| pherc1667-w013 | 0 to 1 | 0.50 | 87.7% | 26 | **mean** |
-| pherc1667-w013 | 1 to 2 | 0.50 | 87.4% | 54 | **mean** |
-| pherc0139-w035 | 0 to 1 | 0.50 | 87.5% | 17 | **mean** |
-| pherc0139-w035 | 1 to 2 | 0.50 | 87.4% | 43 | **mean** |
+| phercparis4-w01 | 0 to 1 | **0** | 100% | 0.50 | 16 |
+| phercparis4-w01 | 1 to 2 | **0** | 100% | 0.50 | 43 |
+| pherc1667-w013 | 0 to 1 | **0** | 100% | 0.50 | 26 |
+| pherc1667-w013 | 1 to 2 | **0** | 100% | 0.50 | 54 |
+| pherc0139-w035 | 0 to 1 | **0** | 100% | 0.50 | 17 |
+| pherc0139-w035 | 1 to 2 | **0** | 100% | 0.50 | 43 |
 
-**Every level is a 2x2 mean.** The mean model is never off by more than 0.50
-grey levels - exactly the rounding bound for the mean of uint8 values - and
-matches exactly on ~87% of pixels, the share where the average lands on an
-integer. Decimation is off by 16 to 98 grey levels. There is no ambiguity to
-weigh here.
+**Every level is a 2x2 mean, byte-exact.** Model the per-level rounding as
+round-half-up and the coarse level reproduces to the last grey level in all 18
+windows. Decimation is off by 16 to 98.
+
+WARNING - **the first version of this appendix reported 0.50 and "~87% exact",
+and that was a defect in the measurement, not in the pyramid.** It compared
+against the *unrounded* mean, so the residual it saw was the rounding it had not
+modelled, and its "exact" column used numpy's round-half-to-even. Bullo27's
+comment made the right model obvious; the tool now applies round-half-up, reports
+the unrounded residual alongside, and gets 0.
+
+**The volumes also say so themselves.** `multiscales[0].metadata` carries
+`downsampling_method: "mean"` - which this tool did not read until Bullo27's
+comment pointed at it, and now does. A declaration and a measurement are
+different kinds of evidence; the volumes carry both and they agree.
 
 **And the pyramid is XY-only**, which the volumes' own OME metadata states and
 this run records: the scale goes `[2.4, 2.4, 2.4]` to `[2.4, 4.8, 4.8]` to
@@ -576,7 +590,7 @@ to a single-sample input can restore it, and arm A found that matching the
 radial power spectrum recovers no F1 at all. A spectrum can be reshaped;
 measurements that were never taken cannot be.
 
-Raw reports: `runs/pyramid/*_pooling.json` (three segments, 12 windows).
+Raw reports: `runs/pyramid/*_pooling.json` (three segments, 18 windows).
 
 ```bash
 python tools/check_pyramid_pooling.py   https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260317000000-w035_2026031718/surface-volumes/2.399um-0.22m-78keV-volume-20260102150214.zarr   --out runs/pyramid/pherc0139-w035_pooling.json

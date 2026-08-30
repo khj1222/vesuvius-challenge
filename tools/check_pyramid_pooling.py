@@ -13,8 +13,14 @@ the sample count would be one either way, and the mechanism would be wrong.
 So this reads a few small windows straight from the published zarr and compares
 each level against the level below it, pooled two ways:
 
-* `mean`  -- levelN[i, j] vs the mean of levelN-1[2i:2i+2, 2j:2j+2]
+* `mean`  -- levelN[i, j] vs round-half-up of the mean of levelN-1[2i:2i+2, 2j:2j+2],
+  which is byte-exact on the volumes checked so far; the residual against the
+  *unrounded* mean is reported too, and it is bounded by 0.5 by construction
 * `decim` -- levelN[i, j] vs levelN-1[2i, 2j]
+
+The pyramid may also *declare* how it was built, in
+`multiscales[0].metadata.downsampling_method`; that is read and reported, because a
+declaration and a measurement are different kinds of evidence and both are cheap.
 
 Windows are located from the coarsest level so the comparison lands on sheet
 rather than on padding, and no label or annotation is involved anywhere.
@@ -122,18 +128,19 @@ def locate_windows(group, levels, coarse_index: int, size: int, count: int) -> l
 def compare(coarse: np.ndarray, fine: np.ndarray) -> dict:
     z, h, w = fine.shape
     pooled = fine.reshape(z, h // 2, 2, w // 2, 2).mean(axis=(2, 4))
+    rounded = np.floor(pooled + 0.5)
     decimated = fine[:, ::2, ::2]
     def stats(reference):
         difference = coarse - reference
         return {
             "max_abs": float(np.abs(difference).max()),
             "mean_abs": float(np.abs(difference).mean()),
-            "exact_after_rounding": float(np.mean(np.round(reference) == coarse)),
+            "exact_match": float(np.mean(reference == coarse)),
             "correlation": float(np.corrcoef(reference.ravel(), coarse.ravel())[0, 1]),
         }
     within = fine.reshape(z, h // 2, 2, w // 2, 2).std(axis=(2, 4))
-    return {"mean": stats(pooled), "decimate": stats(decimated),
-            "fine_within_block_std": float(within.mean())}
+    return {"mean_round_half_up": stats(rounded), "mean_unrounded": stats(pooled),
+            "decimate": stats(decimated), "fine_within_block_std": float(within.mean())}
 
 
 def main(argv=None) -> int:
@@ -158,6 +165,12 @@ def main(argv=None) -> int:
         scale is not None and abs(scale[0] - levels[0][1][0]) < 1e-9 for _, scale in levels
     ) if levels[0][1] is not None else None
     report["pyramid_is_xy_only"] = xy_only
+    declared = None
+    multiscales = group.attrs.get("multiscales")
+    if multiscales:
+        declared = (multiscales[0].get("metadata") or {}).get("downsampling_method")
+    report["declared_downsampling_method"] = declared
+    print(f"declared downsampling_method: {declared!r}", flush=True)
 
     for coarse_index in args.pairs:
         if coarse_index >= len(levels):
@@ -177,13 +190,16 @@ def main(argv=None) -> int:
             entry.update(compare(coarse, fine))
             entries.append(entry)
             print(f"level {fine_path}->{coarse_path} window ({y},{x}): "
-                  f"mean max|d| {entry['mean']['max_abs']:.2f} "
-                  f"exact {100 * entry['mean']['exact_after_rounding']:.1f}%  |  "
-                  f"decimate max|d| {entry['decimate']['max_abs']:.1f} "
-                  f"exact {100 * entry['decimate']['exact_after_rounding']:.1f}%", flush=True)
+                  f"round-half-up max|d| {entry['mean_round_half_up']['max_abs']:.2f} "
+                  f"exact {100 * entry['mean_round_half_up']['exact_match']:.1f}%  |  "
+                  f"unrounded max|d| {entry['mean_unrounded']['max_abs']:.2f}  |  "
+                  f"decimate max|d| {entry['decimate']['max_abs']:.1f}", flush=True)
         verdict = "mean" if all(
-            e["mean"]["max_abs"] <= 1.0 and e["mean"]["max_abs"] < e["decimate"]["max_abs"]
-            for e in entries) else "inconclusive"
+            e["mean_round_half_up"]["max_abs"] == 0.0 for e in entries) else (
+            "mean (rounding model not exact)" if all(
+                e["mean_unrounded"]["max_abs"] <= 0.5
+                and e["mean_unrounded"]["max_abs"] < e["decimate"]["max_abs"]
+                for e in entries) else "inconclusive")
         report["pairs"].append({
             "coarse": coarse_path, "fine": fine_path, "verdict": verdict, "windows": entries,
         })
