@@ -132,11 +132,13 @@ nerln이 #1582에서 "aligned가 여러 취득의 평균이라 SNR이 높다"는
 
 🔴 **그런데 이 질문은 Bullo27이 먼저 답했다(2026-08-30 01:23 UTC, 우리가 쓰기 전).** 그쪽이 더 정확했고 두 가지를 짚었다: ①**per-level 반올림을 모델링해 max|diff| = 0**(우리 첫 판은 반올림을 안 넣어 0.50/87%를 "근사"처럼 적었다 — 데이터가 아니라 우리 측정의 결함) ②**zarr가 `multiscales[0].metadata.downsampling_method: "mean"`으로 스스로 선언**하는데 우리 툴은 그걸 안 읽고 있었다. 둘 다 툴에 반영해 재실행(18칸 전부 0) 하고 docs/15 부록 3에 정정·크레딧을 명시. **#1582 회신도 전면 재작성** — 남의 결과를 뉴스처럼 내는 대신 재현했다고 밝히고, 스레드에 아직 없는 것(XY 전용 → 64배, arm A의 F1 증거)만 남김. ⚠️ **교훈: 게시 전에 스레드를 다시 읽을 것.** 오늘 초안 그대로 냈으면 "스레드를 안 읽었다"로 읽혔다.
 
-**3. 🟠 업스트림 회신 2건 초안(사용자 게시 대기)**
+**3. ✅ 업스트림 회신 2건 게시 완료(2026-08-30 05:09/05:10 UTC, 사용자 직접)**
 
-- **[#1582](https://github.com/ScrollPrize/villa/issues/1582) → nerln**(`submission/issue1582_reply_nerln.md`): 위 풀링 실측 + 64배 정정 + arm A가 그 기제를 지지한다는 점(스펙트럼을 맞춰도 F1이 안 움직임 = 애초에 안 찍힌 측정을 필터로 복원할 수 없다) + 그쪽 bullet 3(계열 강제 금지)에 동의.
-- **[#1611](https://github.com/ScrollPrize/villa/issues/1611) → Bullo27**(`submission/issue1611_reply_bullo27_round2.md`): 저쪽이 레지스트리에서 읽은 리비전이 **우리 이미지와 정확히 일치**함을 `docker image inspect`로 확인(`1e3f4c021f4e53bea3867772ed05f51a7e586a9c`, 2026-05-13, digest `sha256:bad516f6…`). → **우리 "재시도 없음" 주장은 철회**(그 리비전엔 3회 재시도가 있음; 우리가 읽은 건 이 이미지에 없는 `merge-ink-pipelines`의 캐시). 살아남는 건 **무기한 `cv_.wait`**(`render/ChunkCache.cpp:218/:749`)와 "캐시가 클수록 악화"라는 관측. 현재 main 빌드 재시험은 **런타임 이미지가 없어서** 못 함(그쪽 #1619) — 나오면 같은 렌더를 다시 돌리겠다고 약속.
-- 로컬 사본 `submission/villa-issue-render-stall.md`에도 정정 절 추가(게시본 편집은 사용자 몫).
+게시본이 로컬 초안과 **블록·수치 전건 일치** 확인(#1582 10블록·수치 75개, #1611 8블록·수치 70개, 머리말 유출 없음 — 공백 정규화 비교, `scratchpad/compare_posted.py`).
+
+- **[#1582](https://github.com/ScrollPrize/villa/issues/1582) → nerln**(`submission/issue1582_reply_nerln.md`): 풀링 실측 + 64배 정정 + arm A의 F1 증거 + bullet 3 동의. ⚠️ **게시 직전에 전면 재작성함** — 아래 참조.
+- **[#1611](https://github.com/ScrollPrize/villa/issues/1611) → Bullo27**(`submission/issue1611_reply_bullo27_round2.md`): 우리 이미지가 그쪽이 지목한 리비전과 동일함을 `docker image inspect`로 확인(`1e3f4c021…`, 2026-05-13, `sha256:bad516f6…`) → **"재시도 없음" 주장 철회**. 살아남는 건 무기한 `cv_.wait`와 캐시 클수록 악화.
+- 🔴 **남은 사용자 액션 = #1611 이슈 본문·제목 수정.** 회신에서 "본문에서 빼겠다"고 공개 약속했는데 아직 그대로다. 붙여넣을 최종문안은 `submission/villa-issue-render-stall.md`에 반영해 뒀다(제목에서 `with no retry or error` → `with no error`, 한 문장 요약을 "parks forever … instead of failing"으로, "What I expected"를 **bounded wait** 요청으로, 그리고 본문 맨 위에 리비전·철회를 적은 Update 블록).
 
 **4. 🧹 공개 표면 정리**
 
