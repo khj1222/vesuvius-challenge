@@ -60,7 +60,7 @@ retry at the fetch layer; see the update block at the top of the body.)
 > parks the caller before any retry can be attempted. Also worth stating for anyone reproducing:
 > **`:edge` is the only published runtime tag and it has been the same May image since**, so a
 > fresh pull reproduces on the same three-and-a-half-month-old binary. Discussion:
-> https://github.com/ScrollPrize/villa/issues/1611#issuecomment-latest
+> https://github.com/ScrollPrize/villa/issues/1611#issuecomment-5466851805
 
 **In one sentence:** When `--remote-url` streaming stalls mid-render, `vc_render_tifxyz` parks
 forever on a chunk instead of failing, so a render that is 20% done simply stops with no error.
