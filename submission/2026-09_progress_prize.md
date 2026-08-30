@@ -36,10 +36,14 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-Field 5 is ~10,500 characters, which is long. The measurement paragraph was already tightened
-once (2026-08-30) to pay for the adaptation-ladder paragraph. If it has to shrink further, cut
-the spectral detail from the ladder paragraph next — arm A's numbers live in docs/18 — and then
-the audit paragraph, whose detail is in docs/17.
+⚠️ **Field 5 is now ~12,300 characters and that is too long — a trim is owed before
+submitting.** It grew by three results in one day (arm D, the PHerc1447 run, the 1667
+replication) and nothing was cut to pay for them. Suggested order, cheapest first: the
+spectral detail in the ladder paragraph (arm A's numbers live in docs/18); the PHerc1447
+adaptation sentences, keeping only that it was tried and met none of its criteria; and the
+audit paragraph, whose detail is in docs/17. Target ~9,000. Do not cut the 1667 replication —
+it is the strongest thing in the field, because it is our own headline being falsified by our
+own follow-up.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
