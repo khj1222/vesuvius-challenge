@@ -20,7 +20,7 @@ comparisons.
 
 | model | max abs difference | exact after rounding | correlation |
 |---|---|---|---|
-| 2×2 **mean** | **0.50 in every one of the 18** | 86.9–88.0% | 0.99996+ |
+| 2×2 **mean** | **0.50 in every one of the 18** | 86.9–88.0% | 0.99994+ |
 | 2×2 decimation | 16–98 | — | 0.975–0.998 |
 
 0.50 is exactly the rounding bound for the mean of uint8 values, and ~87% is the share of
@@ -50,9 +50,12 @@ think of.** Before your comment I ran a pre-registered arm on the input-space ve
 question: estimate the source corpus's mean radial power spectrum and the target's, apply the
 matching filter to the native render, re-infer. Aligned and native separate cleanly in that
 statistic (every aligned volume at spectral centroid ≥ 0.0278, every native ≤ 0.0262) and the
-filter closes 38% of the distance at the patch level. The F1 effect was **+0.005 mean, median
-8.4% of the aligned-native gap, 17 of 24 cells improving** — no effect by the noise floor I
-had fixed in advance. That is what a sample-count account predicts: a filter can reshape a
+filter closes 38% of the distance at the patch level — mean over the four filtered volumes of
+the drop in total variation against the source profile. The F1 effect was **+0.005 mean,
+median 9.1% of the aligned-native gap, 17 of 24 cells improving** — no effect by the noise
+floor I had fixed in advance. (That median is per cell, `(filtered − raw) / (aligned − raw)`
+at the same segment, seed and step; the mean of that ratio is useless here because one cell
+has an aligned-native gap of 0.0015.) That is what a sample-count account predicts: a filter can reshape a
 spectrum, but it cannot restore measurements that were never taken. It is not what a
 "different but equivalent representation" account predicts.
 
