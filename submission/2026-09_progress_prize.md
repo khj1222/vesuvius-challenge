@@ -4,11 +4,20 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v7 (2026-08-30). The adaptation ladder is finished: arms B and C were
-pre-registered and run, so the PHerc1447 paragraph now reports three closed routes rather
-than one. Also folded in: the pyramid-pooling measurement that settles the mechanism behind
-the domain-match retraction (docs/15 appendix 3), prompted by a reviewer's question on
-villa #1582.
+**Status:** DRAFT v8 (2026-08-30, after a full pre-submission audit). The adaptation ladder
+is finished: arms B and C were pre-registered and run, so the PHerc1447 paragraph reports
+three closed routes rather than one. Also folded in: the pyramid-pooling measurement that
+settles the mechanism behind the domain-match retraction (docs/15 appendix 3), prompted by a
+reviewer's question on villa #1582.
+
+**Audit, 2026-08-30 — every artifact-backed number in field 5 was re-derived from the
+committed CSV/JSON.** All reproduce except two, both now fixed at source rather than in the
+prose: arm A's recovery share (the old summary's median 8.4% / mean −19.2% could not be
+reproduced under any denominator; recomputed to **9.1% / −8.4%** with the definition and all
+24 cells written into `armA_specmatch_summary.json`), and the "38% of the spectral distance"
+figure (had no artifact; re-derived and stored as `runs/spectra/filter_effect_native0139.json`
+— 37.7% mean per volume, so the text stands). The docs/14 ceiling is now given exactly
+(0.755 / 0.758 / 0.765) as well as as a band.
 
 **Form checked 2026-08-30:** scrollprize.org/prizes still carries August's form and the
 08-31 deadline, as expected — September's link should appear once the round turns over.
@@ -21,7 +30,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-Field 5 is ~9,900 characters, which is long. The measurement paragraph was already tightened
+Field 5 is ~10,000 characters, which is long. The measurement paragraph was already tightened
 once (2026-08-30) to pay for the adaptation-ladder paragraph. If it has to shrink further, cut
 the spectral detail from the ladder paragraph next — arm A's numbers live in docs/18 — and then
 the audit paragraph, whose detail is in docs/17.
@@ -220,7 +229,7 @@ generator and found a crash on a batch smaller than the surviving scroll count, 
 days later. Being reproduced and being corrected are the two things a measurement of an
 open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 plus 55 committed evidence
+Everything is MIT, documented end to end (docs/14–18 plus 60 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
@@ -231,6 +240,39 @@ apparatus, three months of answered questions.
 checkbox is gone, so the PR is evidenced through field 4 alone. Check September's form when it
 opens; the layout above assumes August's.
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)
+
+---
+
+## Step 3 — on submission day
+
+Everything below the fold is already done and verified; this is the short list to run
+before pasting.
+
+1. **Get September's form** from https://scrollprize.org/prizes. Do not reuse August's
+   link — each round issues a new form and closes the previous one. Check the question
+   count: August had six (email, name, team, URL, description, terms). If September adds
+   back the "Pull request submitted!" checkbox, #1608 is the answer.
+2. **Check the four upstream links still say what field 4 says they say** — #1608 (open,
+   one review round), #1638 (closed and locked, and field 4 labels it as such), #1249
+   (merged), #1535 (open, August's story). If **#1608 merges**, relabel it "merged" in
+   field 4 and in field 5's second-to-last paragraph.
+3. **`git push`** and confirm `git status` is clean. Every field-4 link must resolve for a
+   judge who is not logged in.
+4. **Re-run the two verifiers** if anything in `runs/` changed since 2026-08-30:
+   they re-derive every artifact-backed number in field 5 from the committed CSV/JSON.
+5. **Paste fields 1–5 from the fenced blocks above, tick Terms, submit.** Then sync this
+   file to exactly what was submitted and freeze it, as the July and August files were.
+6. **Record the field-5 sha256 over the block body plus one trailing newline** — that is
+   the convention the August entry uses, and checking it any other way looks like a
+   mismatch.
+
+**Timing.** Judging is monthly after the round closes, so submitting early buys nothing.
+Submit when something moves upstream, with the last weekend (09-26/27) as the backstop.
+
+**State as of 2026-08-30** (the audit pass): all 17 links 200; every artifact-backed number
+re-derived and passing; 60 committed evidence files; the repo pushed at `698a8da`; two
+upstream replies drafted and waiting on the user to post
+(`issue1582_reply_nerln.md`, `issue1611_reply_bullo27_round2.md`).
 
 ---
 
