@@ -4,9 +4,10 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v9 (2026-08-30). Arm D — the transductive variant of arm C, pre-registered
-at commit `923895d` before it ran — landed at **14.3% of the gap** and is folded into the
-ladder paragraph and the evidence table. v8 was the full pre-submission audit. The adaptation ladder
+**Status:** DRAFT v10 (2026-08-30). Arm D — the transductive variant of arm C, pre-registered
+at commit `923895d` before it ran — landed at **14.3% of the gap**, and was then pointed at
+PHerc1447 itself under criteria fixed at `1da7685`, where it met none of them. Both are in
+the ladder paragraph and the evidence table. v8 was the full pre-submission audit. The adaptation ladder
 is finished: arms B and C were pre-registered and run, so the PHerc1447 paragraph reports
 three closed routes rather than one. Also folded in: the pyramid-pooling measurement that
 settles the mechanism behind the domain-match retraction (docs/15 appendix 3), prompted by a
@@ -214,14 +215,20 @@ output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below chance — and
 adaptation objective improves monotonically the whole way down, so no label-free stopping
 rule built on it could have caught this. Label space: self-training on the model's own
 confident pixels is the rung that helps, and it helps most when it labels the sheets it is
-about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap, against
-+0.030 when the pseudo-labels come from a different segment. Both were pre-registered; the
+about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap, against +0.030
+when the pseudo-labels come from a different segment. Both were pre-registered; the
 transductive one was committed at +5% to +30% and landed at 14.3%. That number is the
 useful one, because it prices the annotation: with the base checkpoint, the recipe and the
 step count held fixed, a human's labels on one segment buy +0.32 where the model's own
 confident guesses buy +0.046. A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES the best
-label-free method — and since that method needs no labels at all, the 14% is what a
-scroll nobody has annotated can have today. Annotate something, and half a segment will do
+label-free method. And because that method needs no labels at all, I pointed it at
+PHerc1447 itself — the last thing docs/16 said had to happen before that scroll could be
+read. It met none of the three criteria I fixed before running it: the patches stay
+rounded instead of becoming strokes, the two seeds agree no more than before on where the
+ink is (top-decile overlap 0.173 to 0.177), and the output collapses to one mode rather
+than committing. Self-training amplifies what a model already believes, and on that scroll
+it believes nothing. So the cheap ways out are measured and closed, and the step that
+works is the one that needs a person: annotate something, and half a segment will do
 (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
@@ -284,7 +291,7 @@ Field hashes at this revision, over the block body plus one trailing newline —
 convention the August entry uses:
 
 - field 4 — 1,501 chars, `fff1b5f4ed935f9dcdd9aa425810bee00056111331e58aacb3d971aa803e7ae7`
-- field 5 — 10,462 chars, `b81f688ce28e252479d1bc711ac95c9d2cb6ed65a59aa621842f3a7041953d9a`
+- field 5 — 10,983 chars, `d96fd1b53d5011ce2251ef0d2227deb8f8a15bbae4a881f372a266de4f7d0c1d`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
@@ -300,6 +307,7 @@ against what was actually pasted.
 | arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
 | arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
 | arm D (transductive): +0.046 F1, 14 of 14 cells, 14.3% of the gap, AUC 0.659 → 0.742; pre-registered at +5–30% | `runs/ink9um_scorecard/armD_pseudoT_matrix.csv` (18 cells) + `armD_pseudoT_summary.json` + `armD_rank_check_w01_s42.json`, `docs/18` |
+| arm D on PHerc1447 (unscoreable, judged against criteria fixed first): 0 of 3 met — patches not strokes, top-decile seed overlap 0.173 → 0.177, one-mode collapse | `runs/first_letters/pherc1447_armD_compare.json` + `pherc1447_base_on_sheet.json`, `docs/images/pherc1447_armD_before_after.png`, `docs/18` |
 | the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
