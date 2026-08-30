@@ -311,8 +311,10 @@ verdict does not move: 9.1% is inside the same pre-registered interval.
 ## What it means
 
 The spectral difference is real and measurable — aligned and native separate with no
-overlap, and `spectrum_match.py` closes 38% of that distance at the patch level. Closing it
-moves F1 by nothing. **So the aligned representation's advantage is not carried by the
+overlap, and `spectrum_match.py` closes 38% of that distance at the patch level — mean over
+the four filtered volumes of the drop in total variation against the source profile, 27.6% to
+54.1% by volume, 35.7% if the four are pooled first
+(`runs/spectra/filter_effect_native0139.json`). Closing it moves F1 by nothing. **So the aligned representation's advantage is not carried by the
 radial power spectrum we measured.** Matching second-order statistics is not enough; whatever
 makes the aligned render better lives somewhere else — phase structure, information along z,
 or something the 4x z pooling produces that a radial profile does not see.

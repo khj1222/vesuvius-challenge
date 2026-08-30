@@ -1,0 +1,42 @@
+{
+  "question": "how much of the source-target spectral distance does the matching filter close?",
+  "source_profile": "source_corpus_aligned.json (the no0139 training corpus, aligned, 6 volumes)",
+  "target_volumes": "0139 native w035/w039/w040/w041, before and after tools/spectrum_match.py apply",
+  "metric": "total variation between shape-normalised radial power profiles, 0.5*sum|a-b|",
+  "per_volume": {
+    "w035": {
+      "tv_before": 0.05961,
+      "tv_after": 0.02735,
+      "closed_pct": 54.1
+    },
+    "w039": {
+      "tv_before": 0.09509,
+      "tv_after": 0.06444,
+      "closed_pct": 32.2
+    },
+    "w040": {
+      "tv_before": 0.10554,
+      "tv_after": 0.07637,
+      "closed_pct": 27.6
+    },
+    "w041": {
+      "tv_before": 0.08839,
+      "tv_after": 0.05599,
+      "closed_pct": 36.7
+    }
+  },
+  "mean_closed_pct": 37.7,
+  "median_closed_pct": 34.5,
+  "pooled": {
+    "tv_before": 0.08709,
+    "tv_after": 0.05603,
+    "closed_pct": 35.7
+  },
+  "which_number_docs_quote": "docs/18's '38% of the spectral distance' is mean_closed_pct; the pooled figure over the averaged target profile is 35.7%",
+  "spectral_centroid": {
+    "source": 0.0318,
+    "target_raw": 0.0254,
+    "target_filtered": 0.0285
+  },
+  "measured": "2026-08-30, re-derived for the pre-submission check"
+}
