@@ -509,6 +509,30 @@ is what the numbers are.
   which is the signature of a prediction squashed downward, not of a sharper
   boundary.
 
+## The trajectory: neutral at 50 steps, on the floor by 400
+
+Every checkpoint scored on the two probe segments, both seeds — the schedule the
+addendum fixed.
+
+| probe | LOSO base | 50 | 100 | 200 | 400 | 800 | 1600 |
+|---|---|---|---|---|---|---|---|
+| w01 s42 | 0.4607 | 0.4680 @68 | 0.4606 @63 | 0.4318 @59 | 0.4148 @18 | 0.4148 @0 | 0.4148 @0 |
+| w01 s43 | 0.4621 | 0.4741 @69 | 0.4558 @66 | 0.4198 @64 | 0.4148 @0 | 0.4148 @5 | 0.4148 @1 |
+| w05 s42 | 0.3861 | 0.3889 @68 | 0.3802 @62 | 0.3589 @59 | 0.3485 @18 | 0.3485 @0 | 0.3485 @0 |
+| w05 s43 | 0.3971 | 0.3978 @69 | 0.3762 @66 | 0.3488 @63 | 0.3485 @0 | 0.3485 @0 | 0.3485 @0 |
+
+Four probes, one shape. At **50 steps** the arm is neutral — +0.003 to +0.012,
+inside the noise floor, and positive in all four. By **100** it is level or below,
+by **200** it has cost 0.03 to 0.05, and from **400 onwards every cell sits exactly
+on its segment's all-positive floor with the best threshold pinned at 0 to 18**.
+The collapse is complete before a quarter of the budget section 3B called "a few
+hundred steps" has been spent.
+
+The best-of-grid number, which section 4 says to report as an upper bound: taking
+each probe's best checkpoint **on the target's own labels** gives **+0.0057**
+mean (+0.0007 to +0.0120) — still inside the noise floor, and unavailable to
+anyone who does not have those labels.
+
 ## It is not the 8-bit write — the ranking is what degrades
 
 The obvious alternative explanation is quantisation: every score in this project
