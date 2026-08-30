@@ -1,5 +1,5 @@
 {
-  "description": "Arm C of docs/18: self-training on pseudo-labels from the LOSO-noParis4 seed 43 ckpt_020000 predictions over all eight Paris4 segments (p>=0.6 positive, p<=0.4 negative, middle discarded, valid render area only); no target annotation used.",
+  "description": "Arm C of docs/18: self-training on pseudo-labels for phercparis4-w00 only, derived from the LOSO-noParis4 seed 43 ckpt_020000 predictions (p>=0.6 positive, p<=0.4 negative, middle discarded, valid render area only). The direct counterpart of the docs/15 part 4 fine-tune: same base, same segment, same recipe, pseudo-labels instead of annotation. No target annotation used.",
   "mode": "flat",
   "model_type": "vesuvius_unet_3d_stem_2d",
   "model_config": {
@@ -70,7 +70,7 @@
   "val_steps": 32,
   "val_preview_batches": 1,
   "log_every": 50,
-  "dataloader_workers": 6,
+  "dataloader_workers": 12,
   "pin_memory": true,
   "verify_finite_gradients_steps": 0,
   "max_amp_overflow_events": 0,
@@ -79,46 +79,18 @@
     {
       "segments_path": "D:/vesuvius-challenge/data/ink_9um/labels/pseudo_s43",
       "segments": [
-        "phercparis4-w00",
-        "phercparis4-w01",
-        "phercparis4-w02",
-        "phercparis4-w03",
-        "phercparis4-w05",
-        "phercparis4-w06",
-        "phercparis4-w07",
-        "phercparis4-w09"
+        "phercparis4-w00"
       ],
       "surface_volume_paths": {
-        "phercparis4-w00": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w00.zarr",
-        "phercparis4-w01": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w01.zarr",
-        "phercparis4-w02": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w02.zarr",
-        "phercparis4-w03": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w03.zarr",
-        "phercparis4-w05": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w05.zarr",
-        "phercparis4-w06": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w06.zarr",
-        "phercparis4-w07": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w07.zarr",
-        "phercparis4-w09": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w09.zarr"
+        "phercparis4-w00": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w00.zarr"
       },
       "volume_scale": 0,
       "sampling_scroll": "Paris4",
       "sampling_physical_segment_keys": {
-        "phercparis4-w00": "Paris4:w00",
-        "phercparis4-w01": "Paris4:w01",
-        "phercparis4-w02": "Paris4:w02",
-        "phercparis4-w03": "Paris4:w03",
-        "phercparis4-w05": "Paris4:w05",
-        "phercparis4-w06": "Paris4:w06",
-        "phercparis4-w07": "Paris4:w07",
-        "phercparis4-w09": "Paris4:w09"
+        "phercparis4-w00": "Paris4:w00"
       },
       "sampling_representation_keys": {
-        "phercparis4-w00": "public_2p4_level2_zmean4:phercparis4-w00",
-        "phercparis4-w01": "public_2p4_level2_zmean4:phercparis4-w01",
-        "phercparis4-w02": "public_2p4_level2_zmean4:phercparis4-w02",
-        "phercparis4-w03": "public_2p4_level2_zmean4:phercparis4-w03",
-        "phercparis4-w05": "public_2p4_level2_zmean4:phercparis4-w05",
-        "phercparis4-w06": "public_2p4_level2_zmean4:phercparis4-w06",
-        "phercparis4-w07": "public_2p4_level2_zmean4:phercparis4-w07",
-        "phercparis4-w09": "public_2p4_level2_zmean4:phercparis4-w09"
+        "phercparis4-w00": "public_2p4_level2_zmean4:phercparis4-w00"
       }
     }
   ],
@@ -139,6 +111,13 @@
     "pherc1667-w028",
     "pherc1667-w029",
     "pherc1667-w031",
+    "phercparis4-w01",
+    "phercparis4-w02",
+    "phercparis4-w03",
+    "phercparis4-w05",
+    "phercparis4-w06",
+    "phercparis4-w07",
+    "phercparis4-w09",
     "w035",
     "w039",
     "w040",

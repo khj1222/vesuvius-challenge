@@ -449,6 +449,39 @@ The pseudo-labels are built by `tools/make_pseudo_labels.py` into the corpus's o
 label contract, so the released recipe consumes them unmodified. The target's real
 annotation is opened only afterwards, to score.
 
+## Deviation, recorded before any arm-C score exists (2026-08-30, 10:15)
+
+The rule above said pseudo-labels for **all eight** Paris4 segments, including the
+seven that get scored, on the grounds that self-training is transductive and the
+favourable condition should be granted. That run was started and **stopped after
+13 minutes**, before a single training step: with 78–85% of every sheet
+supervised, the trainer's patch discovery took 13 minutes for the first segment
+and projected **1h32m for the remaining seven**, at 10.2 GB resident and climbing,
+per seed. Two seeds of that plus scoring does not fit the day, and a run that has
+to be killed halfway is worth less than a smaller one that finishes.
+
+**What it was changed to: `phercparis4-w00` only.** The pseudo-label trees for the
+other seven are built and stay in the repository, unused by this arm.
+
+This makes arm C the **direct counterpart of the docs/15 part 4 fine-tune**: same
+base checkpoint, same single segment, same recipe, same seven scored segments,
+same 2,500 steps — the config differs from the supervised arm in exactly three
+keys (`datasets`, `description`, `out_dir`). The only variable left is where the
+labels on w00 came from: a human annotator, or the model's own confident
+predictions. That is a cleaner isolation than the eight-segment version offered,
+and it is the comparison the result section reports.
+
+**What was given up, stated plainly.** The eight-segment version would also have
+let the model adapt on the very sheets it is then scored on. This one does not, so
+a null result here does **not** rule out that transductive self-training — pseudo-
+labelling the target segments themselves — would do better. That variant is
+untested and is named as untested.
+
+The prediction is unchanged: **−10% to +15% of the gap**. No F1 for any arm-C
+checkpoint existed when this was written; the run that was stopped never reached
+its first optimisation step.
+
+
 ---
 
 # Result — arm B: entropy minimisation makes it worse, and the objective never says so (2026-08-30)
