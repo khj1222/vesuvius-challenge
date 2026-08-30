@@ -268,9 +268,18 @@ before pasting.
 Submit when something moves upstream, with the last weekend (09-26/27) as the backstop.
 
 **State as of 2026-08-30** (the audit pass): all 17 links 200; every artifact-backed number
-re-derived and passing; 60 committed evidence files; the repo pushed at `698a8da`; two
-upstream replies drafted and waiting on the user to post
-(`issue1582_reply_nerln.md`, `issue1611_reply_bullo27_round2.md`).
+re-derived and passing; 60 committed evidence files; the repo pushed; two upstream replies
+drafted and waiting on the user to post (`issue1582_reply_nerln.md`,
+`issue1611_reply_bullo27_round2.md`).
+
+Field hashes at this revision, over the block body plus one trailing newline — the
+convention the August entry uses:
+
+- field 4 — 1,501 chars, `fff1b5f4ed935f9dcdd9aa425810bee00056111331e58aacb3d971aa803e7ae7`
+- field 5 — 10,027 chars, `9ffab5742fa52ce0ea734cf428985ca7060fbbc6ff8b84b08c6ccb9933553d10`
+
+If either field is edited before submitting, recompute these and record the new pair
+against what was actually pasted.
 
 ---
 
