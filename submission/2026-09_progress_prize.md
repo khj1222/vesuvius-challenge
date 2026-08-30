@@ -235,7 +235,7 @@ generator and found a crash on a batch smaller than the surviving scroll count, 
 days later. Being reproduced and being corrected are the two things a measurement of an
 open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 plus 60 committed evidence
+Everything is MIT, documented end to end (docs/14–18 plus 63 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
@@ -284,7 +284,7 @@ Field hashes at this revision, over the block body plus one trailing newline —
 convention the August entry uses:
 
 - field 4 — 1,501 chars, `fff1b5f4ed935f9dcdd9aa425810bee00056111331e58aacb3d971aa803e7ae7`
-- field 5 — 10,462 chars, `74b9879ecf74a75cef0c32ec709834bdae16f1c1504c139c4d141669d44f0af7`
+- field 5 — 10,462 chars, `b81f688ce28e252479d1bc711ac95c9d2cb6ed65a59aa621842f3a7041953d9a`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
