@@ -849,6 +849,114 @@ thing".
 
 ---
 
+# Result — arm D: pseudo-labelling the sheets you want to read is better, and still nowhere near an annotation (2026-08-30)
+
+Run exactly as pre-registered above: the leave-Paris4-out arm at `ckpt_020000`, both seeds,
+fine-tuned for 2,500 steps on pseudo-labels **for the seven scored segments themselves**,
+then scored on those same seven with the withheld annotation. 18 cells;
+`runs/ink9um_scorecard/armD_pseudoT_matrix.csv` and `armD_pseudoT_summary.json`.
+
+No annotation entered the adaptation at any point. The pseudo-labels come from the images and
+the base model's own predictions, cover the valid sheet rather than the annotated regions, and
+the supervision mask is never opened.
+
+## Headline
+
+| segment | trivial floor | LOSO base (s42 / s43) | arm C (w00's labels) | **arm D** (own sheets) | D mean delta | D − C |
+|---|---|---|---|---|---|---|
+| w01 | 0.4148 | 0.4607 / 0.4621 | 0.5027 / 0.5383 | **0.5444 / 0.5285** | **+0.0750** | +0.0159 |
+| w02 | 0.3791 | 0.4096 / 0.4174 | 0.4520 / 0.4628 | **0.4698 / 0.4539** | **+0.0484** | +0.0045 |
+| w03 | 0.5124 | 0.5233 / 0.5331 | 0.5322 / 0.5444 | **0.5474 / 0.5449** | **+0.0180** | +0.0079 |
+| w05 | 0.3485 | 0.3861 / 0.3971 | 0.3983 / 0.4331 | **0.4445 / 0.4332** | **+0.0472** | +0.0232 |
+| w06 | 0.4743 | 0.5013 / 0.4985 | 0.5020 / 0.5181 | **0.5379 / 0.5209** | **+0.0295** | +0.0194 |
+| w07 | 0.4778 | 0.5522 / 0.5551 | 0.5598 / 0.5949 | **0.5937 / 0.6031** | **+0.0447** | +0.0211 |
+| w09 | 0.4424 | 0.5875 / 0.5981 | 0.6217 / 0.6458 | **0.6600 / 0.6391** | **+0.0568** | +0.0158 |
+
+Mean over the 14 cells: **0.4916 → 0.5372, a change of +0.0457**, against arm C's +0.0303 and
+a fine-tune bound of 0.8118. **All 14 cells improve**, all 7 segments at both seeds.
+
+## Verdict, by the rules fixed in section 4
+
+**It improves, consistently, and past the noise floor** — +0.0457 against ~0.03, 14 of 14
+cells, 7 of 7 segments. **It recovers 14.3% of the gap** (median per cell 15.2%).
+
+**The pre-registered prediction was +5% to +30%: 14.3% is inside it.** The sharper
+commitment — that it would not exceed 50% — also holds, and by a wide margin. Both were
+written down before the first pseudo-label existed.
+
+## Against arm C, which is the comparison the arm exists for
+
+Only one thing changed between C and D: which sheets got pseudo-labelled.
+
+- **arm D − arm C = +0.0154 mean**, D better in **11 of 14** cells, range −0.0098 … +0.0462.
+- **That difference is below this project's 0.03 noise floor.** The direction is consistent
+  and the mechanism is plausible — adapting on the surface you will actually read — but by
+  the rule fixed in section 4, **"transductive beats non-transductive" is not established
+  here**; what is established is that both beat direct transfer and that D does so past the
+  floor while C sat on it.
+
+## It is a ranking gain, and it peaks where the pre-registration said to look
+
+`tools/float_rank_check.py` on w01, seed 42, over the annotated area:
+
+| checkpoint | AUC | best F1 float | best F1 uint8 | p25–p75 |
+|---|---|---|---|---|
+| LOSO base | 0.6593 | 0.4544 | 0.4545 | 0.287–0.442 |
+| arm C, 2,500 | 0.7002 | 0.4873 | 0.4879 | 0.245–0.301 |
+| **arm D, 2,500** | **0.7419** | **0.5253** | 0.5254 | 0.251–0.349 |
+| arm D, 5,000 | 0.7138 | 0.4992 | 0.4993 | 0.255–0.357 |
+
+**The failure signature did not appear.** Section 3D's entrenchment case was "F1 flat or
+falling while the model gets more confident" — instead AUC rises by 0.08 over the base and by
+0.04 over arm C, so the model is genuinely ordering pixels better rather than becoming surer
+of the same ordering. Self-training on one's own errors is a real failure mode; it is not what
+happened at 2,500 steps here.
+
+At 5,000 it starts to come back down on this cell (AUC 0.7419 → 0.7138), and the probe F1
+splits by seed exactly as arm C's did:
+
+| probe | LOSO base | 2,500 | 5,000 |
+|---|---|---|---|
+| w01 s42 | 0.4607 | 0.5444 | 0.5091 |
+| w01 s43 | 0.4621 | 0.5285 | 0.5620 |
+| w05 s42 | 0.3861 | 0.4445 | 0.4190 |
+| w05 s43 | 0.3971 | 0.4332 | 0.4646 |
+
+So 2,500 remains the right stopping point and there is no case for running longer — the same
+conclusion arm C reached, from the same split.
+
+## What it costs, and what it still does not buy
+
+Thinning made the arm affordable: patch discovery over seven segments took **2.5 minutes**
+against the 13 minutes per segment the unthinned version projected, and each seed trained in
+**17–18 minutes**. Supervision after thinning covers 8.8–8.9% of each sheet, next to the 8.4%
+a real annotation covers on w01.
+
+And the headline comparison of the whole ladder is unchanged in shape:
+
+| what you give the model on the target scroll | mean gain on the seven segments | share of the gap |
+|---|---|---|
+| nothing (direct transfer) | — | 0% |
+| its own confident pixels on a different segment (arm C) | +0.0303 | 9.5% |
+| **its own confident pixels on these segments (arm D)** | **+0.0457** | **14.3%** |
+| **one segment annotated by a human** (docs/15 part 4) | **+0.3202** | **82%** |
+
+**A human annotation on one segment is still worth seven times the best label-free method
+here.** That is the number to quote when someone asks whether the annotation effort can be
+avoided: it cannot, but a seventh of it comes free.
+
+## Limits
+
+- **The D-versus-C difference is inside the noise floor**, as stated above. Establishing it
+  would need more segments or more seeds.
+- **One target scroll.** Paris4 only, like every other arm; docs/15 measured the transfer
+  margin varying more than twofold by target, so 14.3% is a Paris4 number.
+- **The thinning is untested as a variable.** It was a compute measure, declared in advance;
+  whether keeping all the confident pixels would do better or worse is not known.
+- **Two rounds were not tried.** Self-training is usually iterated; this is one round.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
@@ -856,6 +964,7 @@ thing".
 | **A** — spectrum matching | reshape the target render's radial power spectrum to the source's, then re-infer | 0–20% of the gap | **+0.005 F1**, median 9.1% recovered, 17 of 24 cells | no effect |
 | **B** — entropy minimisation | adapt the 27,712 normalisation affines to make the target's predictions confident | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
 | **C** — pseudo-label self-training | fine-tune on the model's own confident pixels for one target segment | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** of the gap | improves, at the noise floor |
+| **D** — the same, transductive | pseudo-label the sheets to be read, rather than a different one | +5% to +30%, not above 50% | **+0.046 F1**, 14 of 14 cells, **+14.3%** of the gap | improves, past the floor |
 
 Three cheap routes, each with its design, prediction and decision rule fixed in
 public before it ran. Section 7 asked what gets published either way, and the
@@ -866,26 +975,30 @@ anticipated:
 input-space route buys nothing. The classical test-time route is actively
 harmful, and — the part worth carrying elsewhere — **its own objective improves
 monotonically while the model degrades, so there is no label-free signal that
-would have told anyone to stop.** The one route that helps, self-training,
-recovers **a tenth** of what a single annotated segment recovers, holding the
-base, the segment, the recipe and the step count fixed.
+would have told anyone to stop.** The route that helps is self-training, and it
+helps most when it labels the sheets it is about to read: **14.3% of the gap**,
+against **82%** for one segment annotated by a person. Holding the base, the
+recipe and the step count fixed, **a human annotation is worth about seven times
+the best label-free method measured here.**
 
 So the practical statement for an unlabelled scroll is unchanged in direction and
 now quantified: **annotate something.** Half of one segment keeps 89% of the
-benefit (docs/15 part 5); the model's own confident guesses on a whole segment
-keep 9.5%. Between those two numbers is the entire case for spending annotator
-time rather than GPU time.
+benefit (docs/15 part 5); the model's own confident guesses on the sheets it will
+read keep 14.3%. Between those two numbers is the entire case for spending
+annotator time rather than GPU time — and the 14.3% is the part you get for free
+on a scroll where annotating is not yet possible.
 
 One prediction of three was wrong, and it was wrong in the direction I did not
 consider — I expected entropy minimisation to help a little and it hurts. That is
 what the pre-registration was for.
 
-**Arm D is the open item.** The section above this one pre-registers the
-transductive variant of arm C — pseudo-labelling the sheets to be read rather
-than a different one — because it is the only method here that needs no
-annotation at all, and therefore the only one that could be pointed at a scroll
-nobody has labelled. Its prediction (+5% to +30% of the gap, and not above 50%)
-was committed before it ran.
+**Arm D closed the open item, and its prediction held.** The transductive
+variant — pseudo-labelling the sheets to be read rather than a different one —
+recovers **14.3%** of the gap against arm C's 9.5%, inside the +5% to +30%
+committed before it ran and well under the 50% ceiling also committed. It is the
+only method in this ladder that needs no annotation at all, so it is the one that
+can be pointed at a scroll nobody has labelled; whether that is worth doing is
+now a question with a number attached rather than a hope.
 
 ---
 

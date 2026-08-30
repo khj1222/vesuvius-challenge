@@ -1,0 +1,143 @@
+{
+  "segment": "phercparis4-w01",
+  "volume": "data/ink_9um/surface-volumes/aligned9/phercparis4-w01.zarr",
+  "supervised_pixels": 8268843,
+  "checkpoints": {
+    "loso42_20k": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.15810383558273317,
+      "float": {
+        "auc": 0.6593125479796529,
+        "best_f1": 0.45441877300163286,
+        "best_precision": 0.34779917158671947,
+        "best_recall": 0.6553062213803427,
+        "threshold_at_best": 0.3415217101573944,
+        "kept_fraction_at_best": 0.49307889870444993
+      },
+      "uint8": {
+        "auc": 0.6592852207716583,
+        "best_f1": 0.454479631577314,
+        "best_precision": 0.34849921829148606,
+        "best_recall": 0.653086659941283,
+        "threshold_at_best": 87.0,
+        "kept_fraction_at_best": 0.4904216950303688
+      },
+      "distribution": {
+        "min": 0.1939511001110077,
+        "max": 0.9274482727050781,
+        "percentiles": {
+          "1": 0.24187098443508148,
+          "25": 0.28713878989219666,
+          "50": 0.3396012783050537,
+          "75": 0.44239699840545654,
+          "99": 0.7786837220191956
+        },
+        "distinct_uint8_levels": 187,
+        "interquartile_uint8_levels": 41
+      }
+    },
+    "armC42_2500": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.1642397165298462,
+      "float": {
+        "auc": 0.7001953360108926,
+        "best_f1": 0.48733634051452923,
+        "best_precision": 0.3952688084243478,
+        "best_recall": 0.635316766954367,
+        "threshold_at_best": 0.2650388777256012,
+        "kept_fraction_at_best": 0.4206282547630908
+      },
+      "uint8": {
+        "auc": 0.6998220251563821,
+        "best_f1": 0.4879389746819358,
+        "best_precision": 0.39205422806879264,
+        "best_recall": 0.6459090150794314,
+        "threshold_at_best": 67.0,
+        "kept_fraction_at_best": 0.4311475015307462
+      },
+      "distribution": {
+        "min": 0.19254031777381897,
+        "max": 0.8957523703575134,
+        "percentiles": {
+          "1": 0.22655390202999115,
+          "25": 0.24475248157978058,
+          "50": 0.25666290521621704,
+          "75": 0.3011687994003296,
+          "99": 0.7984132766723633
+        },
+        "distinct_uint8_levels": 180,
+        "interquartile_uint8_levels": 16
+      }
+    },
+    "armD42_2500": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.19033914804458618,
+      "float": {
+        "auc": 0.7418729959268524,
+        "best_f1": 0.5252668119004723,
+        "best_precision": 0.4677235311736537,
+        "best_recall": 0.5989553319614537,
+        "threshold_at_best": 0.30462634563446045,
+        "kept_fraction_at_best": 0.33512427312986837
+      },
+      "uint8": {
+        "auc": 0.7415634154120004,
+        "best_f1": 0.5253727583583635,
+        "best_precision": 0.46639774541930784,
+        "best_recall": 0.6014212032583144,
+        "threshold_at_best": 77.0,
+        "kept_fraction_at_best": 0.3374605129157731
+      },
+      "distribution": {
+        "min": 0.20344462990760803,
+        "max": 0.9118831157684326,
+        "percentiles": {
+          "1": 0.23548468947410583,
+          "25": 0.25137224793434143,
+          "50": 0.27036282420158386,
+          "75": 0.34916025400161743,
+          "99": 0.8036659359931946
+        },
+        "distinct_uint8_levels": 182,
+        "interquartile_uint8_levels": 26
+      }
+    },
+    "armD42_5000": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.18058147033055624,
+      "float": {
+        "auc": 0.7138222567529406,
+        "best_f1": 0.4991609656083979,
+        "best_precision": 0.42294104467503085,
+        "best_recall": 0.608891832078601,
+        "threshold_at_best": 0.29646846652030945,
+        "kept_fraction_at_best": 0.3767566998188259
+      },
+      "uint8": {
+        "auc": 0.713535311160419,
+        "best_f1": 0.4992852659514358,
+        "best_precision": 0.4218693809155808,
+        "best_recall": 0.6114995741565967,
+        "threshold_at_best": 75.0,
+        "kept_fraction_at_best": 0.3793314252066462
+      },
+      "distribution": {
+        "min": 0.21122214198112488,
+        "max": 0.9022403955459595,
+        "percentiles": {
+          "1": 0.23938249051570892,
+          "25": 0.25516054034233093,
+          "50": 0.2743023931980133,
+          "75": 0.35744261741638184,
+          "99": 0.8057525157928467
+        },
+        "distinct_uint8_levels": 177,
+        "interquartile_uint8_levels": 27
+      }
+    }
+  }
+}
