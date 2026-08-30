@@ -136,7 +136,7 @@ Two chained attempts completed it (`347 → 708 → 1248` of 1248 level-0 chunks
 The output is correct: `[28, 3700, 5460]`, chunks `[28,128,128]`, pyramid L0–L5 complete, 389 MB,
 and it fed straight into ink inference without modification.
 
-- [ ] I personally encountered or reproduced this using the version and data stated above.
+- [x] I personally encountered or reproduced this using the version and data stated above.
 
 ## Details
 
