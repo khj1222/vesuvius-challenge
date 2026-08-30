@@ -1,0 +1,79 @@
+{
+  "segment": "pherc1447-20250703034159",
+  "canvas": [
+    3700,
+    5460
+  ],
+  "sheet_share_of_canvas": 0.21048,
+  "note": "docs/16 reported statistics over the written area, which is 67.03% of the canvas while the render's valid area is 21.05%; 68.9% of written pixels are off-sheet padding. These are the same statistics restricted to the sheet.",
+  "checkpoints": {
+    "seed42_step010000": {
+      "written_share_of_canvas": 0.67034,
+      "off_sheet_share_of_written": 0.6895,
+      "on_sheet": {
+        "n": 4252141,
+        "max": 237,
+        "gt128_share": 0.32268,
+        "percentiles": {
+          "5": 80,
+          "25": 96,
+          "50": 113,
+          "75": 137,
+          "95": 174
+        }
+      },
+      "off_sheet_nonzero_median": 109
+    },
+    "seed42_step020000": {
+      "written_share_of_canvas": 0.67034,
+      "off_sheet_share_of_written": 0.6895,
+      "on_sheet": {
+        "n": 4252141,
+        "max": 214,
+        "gt128_share": 0.23042,
+        "percentiles": {
+          "5": 71,
+          "25": 84,
+          "50": 100,
+          "75": 125,
+          "95": 173
+        }
+      },
+      "off_sheet_nonzero_median": 94
+    },
+    "seed43_step010000": {
+      "written_share_of_canvas": 0.67034,
+      "off_sheet_share_of_written": 0.6895,
+      "on_sheet": {
+        "n": 4252141,
+        "max": 213,
+        "gt128_share": 0.21994,
+        "percentiles": {
+          "5": 78,
+          "25": 87,
+          "50": 103,
+          "75": 125,
+          "95": 158
+        }
+      },
+      "off_sheet_nonzero_median": 100
+    },
+    "seed43_step020000": {
+      "written_share_of_canvas": 0.67034,
+      "off_sheet_share_of_written": 0.6895,
+      "on_sheet": {
+        "n": 4252141,
+        "max": 211,
+        "gt128_share": 0.1062,
+        "percentiles": {
+          "5": 70,
+          "25": 78,
+          "50": 88,
+          "75": 105,
+          "95": 151
+        }
+      },
+      "off_sheet_nonzero_median": 86
+    }
+  }
+}

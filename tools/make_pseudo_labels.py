@@ -38,8 +38,10 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument("--segment", required=True, help="segment name, e.g. phercparis4-w01")
     parser.add_argument("--volume", type=Path, required=True,
                         help="the segment's surface volume (for the valid render area)")
-    parser.add_argument("--reference", type=Path, required=True,
-                        help="the real label tree for this segment, read for shape and contract")
+    parser.add_argument("--reference", type=Path, default=None,
+                        help="the real label tree for this segment, read for shape and contract; "
+                             "omit on a scroll that has no labels at all, and the contract is "
+                             "taken from the volume instead")
     parser.add_argument("--center", type=float, default=0.5,
                         help="the model's own decision point, in probability")
     parser.add_argument("--margin", type=float, default=0.1,
@@ -96,9 +98,24 @@ def write_label(path: Path, plane: np.ndarray, contract: dict, attrs: dict) -> N
         array[channel, y0:y1, :] = plane[y0:y1, :]
 
 
+def volume_contract(volume: Path) -> dict:
+    """The label contract for a scroll with no labels: take it from the image.
+
+    An unread scroll has no reference tree to copy chunking and the annotation
+    channel from, which is the whole point of pointing a label-free method at it.
+    The grid is the volume's own, and the filled channel is its middle.
+    """
+    array = zarr.open(str(volume / "0") if (volume / "0").exists() else str(volume), mode="r")
+    shape = tuple(int(v) for v in array.shape)
+    chunks = tuple(int(v) for v in (array.chunks or shape))
+    return {"shape": shape, "chunks": chunks, "dtype": array.dtype,
+            "channel": shape[0] // 2, "attrs": {"derived_from_volume": True}}
+
+
 def main(argv=None) -> int:
     args = parse_args(argv)
-    contract = reference_contract(args.reference, args.segment)
+    contract = (reference_contract(args.reference, args.segment) if args.reference is not None
+                else volume_contract(args.volume))
     prediction = tifffile.imread(args.prediction)
     if prediction.shape != contract["shape"][1:]:
         raise SystemExit(f"error: prediction {prediction.shape} does not match the label grid "
@@ -172,7 +189,8 @@ def main(argv=None) -> int:
         "annotation_center_channel": contract["channel"],
         "output_channels": contract["shape"][0],
         "no_target_annotation_used": True,
-        "reference_tree": str(args.reference).replace("\\", "/"),
+        "reference_tree": (str(args.reference).replace("\\", "/")
+                           if args.reference is not None else "none (contract from the volume)"),
         "stats": stats,
     }
     write_label(out / f"{args.segment}_inklabels.zarr",
