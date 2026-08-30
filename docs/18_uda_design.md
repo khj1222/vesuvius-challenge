@@ -957,6 +957,75 @@ avoided: it cannot, but a seventh of it comes free.
 
 ---
 
+# Arm D on PHerc1447 — the unscoreable check, written down first (2026-08-30)
+
+Section 6 of this document committed to this before any arm ran:
+
+> Whatever survives the ladder gets run on the docs/16 render as the final, unscoreable
+> check — and judged by eye, stated as such.
+
+Arm D survived, and it is the only method here that uses **no labels at all**, so it is the
+only one that can be pointed at a scroll nobody has annotated. This is that run. Because
+there is nothing to score against, what counts as a result has to be fixed **before looking
+at the output**, which is what this section is for.
+
+## What runs
+
+- **Target**: the docs/16 render, PHerc1447 segment `20250703034159-auto_grown_20250703034159599`
+  (7.40 cm², the largest on that scroll), `[28, 3700, 5460]`.
+- **Base**: the **released** `hybrid_3d2d` checkpoints at step 20000, both seeds — what a
+  deployment would actually reach for, and what docs/16 already ran on this render.
+- **Pseudo-labels**: the same rule as arm D — p ≥ 0.6 positive, p ≤ 0.4 negative, middle
+  discarded, restricted to the render's valid area, supervision thinned one 128px block in
+  every 3x3 — computed from **that same base checkpoint's own prediction on this render**,
+  which docs/16 already produced.
+- **Adaptation**: the same recipe, **2,500 steps**, then re-infer the whole render.
+- No label of any kind exists for this scroll, so none is used and none can be used to score.
+
+## What I expect, committed now
+
+**No readable text.** The reasoning is not pessimism, it is what the ladder measured. On
+Paris4 arm D recovers 14.3% of a gap whose *starting point already carries real signal* —
+direct transfer there scores F1 0.49 against a 0.41 floor, so the confident pixels it
+bootstraps from are more often right than wrong. On PHerc1447 docs/16 found the four
+signatures of **no signal at all**: the checkpoints disagree threefold on how much surface is
+strong ink, none reaches full confidence, the surface is mid-grey rather than bimodal, and at
+full resolution the output is rounded patches rather than connected strokes. Self-training
+started from that is bootstrapping from noise, and the honest expectation is that it sharpens
+noise.
+
+**What would change my mind — fixed here so it cannot be fitted afterwards:**
+
+1. **Connected strokes** at full resolution where the base showed rounded patches — letters
+   have joins, corners and consistent stroke width; blobs do not.
+2. **The two seeds agreeing on where the strokes are.** They start from different released
+   checkpoints and adapt independently; agreement on shape, not just on coarse layout, is
+   hard to get from noise.
+3. **A bimodal surface distribution** replacing the mid-grey one, i.e. the prediction
+   committing rather than hedging.
+
+Any one of those alone is weak. **Two of the three, in the same place, is the bar** for saying
+something happened, and even then it is an eye judgement on an unlabelled scroll and gets
+reported as exactly that.
+
+**What does not count**, because docs/16 already caught these traps:
+- the non-zero share (67.034% on all four base checkpoints) — that is the rendered valid
+  area, not a detection rate;
+- the `>128` share moving — the base checkpoints already disagree threefold on it;
+- the prediction getting *more confident*. Arm B taught this exactly: confidence is not
+  correctness, and self-training's known failure mode is becoming certain about its own
+  errors. Increased confidence with unchanged structure is the **negative** outcome, not a
+  positive one.
+
+## What gets reported either way
+
+The before/after distribution statistics docs/16 used, side by side; full-resolution crops of
+the same region from the base and the adapted model, for both seeds; and a plain statement of
+which of the three criteria above were met. If none are, this closes the loop docs/16 opened
+with a measured negative rather than an open question.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
