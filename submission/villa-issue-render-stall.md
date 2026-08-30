@@ -40,13 +40,30 @@ posted issue body still needs the same edit.
 ## Title
 
 ```
-vc_render_tifxyz: remote chunk streaming stalls indefinitely with no retry or error
+vc_render_tifxyz: remote chunk streaming stalls indefinitely with no error
 ```
+
+(Title edited 2026-08-30: "with no retry or error" -> "with no error". The binary does
+retry at the fetch layer; see the update block at the top of the body.)
 
 ## Body
 
-**In one sentence:** When `--remote-url` streaming stalls mid-render, `vc_render_tifxyz` waits
-forever instead of retrying or failing, so a render that is 20% done simply stops with no error.
+> **Update, 2026-08-30 — one claim in this report is wrong and is struck.** @Bullo27 identified
+> the binary this was run on: `ghcr.io/scrollprize/villa/volume-cartographer:edge` is the image
+> built from `1e3f4c021f4e53bea3867772ed05f51a7e586a9c`, created 2026-05-13, digest
+> `sha256:bad516f66001abca759454cc43e4fd11e5b19aa55d36bdc2043817291c8083c4` — confirmed against
+> my local image. **That revision does retry**: three attempts with a 30 s transfer cap that
+> `ZarrChunkFetcher` raises to 60 s. My "no retry" wording came from reading
+> `merge-ink-pipelines`, whose cache subsystem this image does not contain, and the title has
+> been edited accordingly. What stands is the observation and the mechanism it points at: an
+> untimed `cv_.wait` with no attempt cap (`1e3f4c021:render/ChunkCache.cpp:218` and `:749`)
+> parks the caller before any retry can be attempted. Also worth stating for anyone reproducing:
+> **`:edge` is the only published runtime tag and it has been the same May image since**, so a
+> fresh pull reproduces on the same three-and-a-half-month-old binary. Discussion:
+> https://github.com/ScrollPrize/villa/issues/1611#issuecomment-latest
+
+**In one sentence:** When `--remote-url` streaming stalls mid-render, `vc_render_tifxyz` parks
+forever on a chunk instead of failing, so a render that is 20% done simply stops with no error.
 
 **I was trying to:** Render a PHerc1447 auto-grown segment into a ~9 µm surface volume so I
 could run the released `ink_9um` ink-detection checkpoints on it. PHerc1447 has 15 segments but
@@ -95,11 +112,13 @@ window while it was in this state:
 
 So it is neither out of memory nor computing; it is waiting on something that is not coming.
 
-**What I expected or needed:** Either retry the chunk fetch (the public bucket returns transient
-5xx and drops connections under sustained reads — I hit the same thing this month running
-`prepare_9um_isotropic_input` over the whole `ink_9um` corpus, where only *per-tile* retries with
-backoff got through), or give up on that chunk with an error so the caller knows the render
-stopped.
+**What I expected or needed:** A **bounded** wait — a timed wait with an attempt cap — so that a
+parked chunk either reaches the retry the fetch layer already performs, or gives up with an error
+the caller can see. The public bucket does return transient 5xx and drop connections under
+sustained reads (I hit the same thing this month running `prepare_9um_isotropic_input` over the
+whole `ink_9um` corpus, where only *per-tile* retries with backoff got through), so the fetch
+layer's retries are the right response — they just never get the chance when the wait above them
+never returns.
 
 **Evidence / reproduction:** The command above, run against that public volume, on a connection
 that sustains roughly 4 MiB/s. It stalled at a different tile-row on each of four attempts
