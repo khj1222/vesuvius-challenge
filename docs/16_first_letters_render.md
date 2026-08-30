@@ -96,7 +96,12 @@ playbook is "annotate the single most promising segment, then fine-tune in
 minutes", and **this prediction does not say where to annotate**. On Paris4
 there were labels, so fine-tuning was possible; 1447 has no ground truth, and
 this output alone cannot pick a starting point. **Unsupervised domain adaptation
-has to come first, and that is a separate problem.** This document is the
+has to come first, and that is a separate problem.** It was then run as a
+pre-registered ladder of the three cheapest methods
+([docs/18](18_uda_design.md), 2026-08-30): input-space spectrum matching buys
+nothing, test-time entropy minimisation actively harms, and pseudo-label
+self-training recovers about a tenth of what one annotated segment recovers. The
+prerequisite named here is still a prerequisite, and it is now priced. This document is the
 quantitative case for that — the same statement made at the end of docs/15 part
 1, now demonstrated on an actually unseen scroll.
 

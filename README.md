@@ -221,6 +221,31 @@ more** on the held-out pixels nearest its training pixels.
 [`audit_holdout_masks.py`](tools/audit_holdout_masks.py) does this for any
 segment.
 
+### 10. Can a model adapt to a scroll nobody has labelled? — [docs/18](docs/18_uda_design.md)
+
+docs/16 ends at a wall: direct transfer reads nothing, and the prediction cannot
+say where to annotate, so unsupervised adaptation has to come first. This is that
+question, run as three arms whose **design, prediction and decision rule were each
+committed publicly before the run**.
+
+| arm | predicted | measured | verdict |
+|---|---|---|---|
+| **A** spectrum matching | 0–20% of the gap | +0.005 F1, median 8.4% | no effect |
+| **B** entropy minimisation (TENT) | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
+| **C** pseudo-label self-training | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** | improves, at the noise floor |
+
+Two things are worth taking away from it. **Arm B's own objective is
+anti-correlated with quality** — the entropy it minimises falls monotonically the
+whole way down while AUC falls to below chance, so no label-free early stop built
+on that objective could have caught it; the only correct choice was not to start.
+And **arm C prices the annotation**: with the base checkpoint, the segment, the
+recipe and the step count held fixed, a human annotation on one segment buys
++0.320 F1 on seven unseen segments and the model's own confident predictions buy
++0.030. The annotation is worth about ten times the guess.
+
+One of the three predictions was wrong, in the direction not considered. That is
+what committing them in advance was for.
+
 ---
 
 ## Upstream contributions to ScrollPrize/villa
@@ -311,5 +336,7 @@ vesuvius-challenge/
 - [x] **September track measured** (2026-08-22/26) — ink_9um scorecard, three LOSO arms,
       fine-tune cost curve, the render path on an unseen scroll
 - [x] **August round submitted** (2026-08-29)
-- [ ] September round — held-out mask audit ([docs/17](docs/17_holdout_audit.md)),
-      label-efficiency curve, and unsupervised domain adaptation
+- [x] **September track measured** (2026-08-29/30) — held-out mask audit
+      ([docs/17](docs/17_holdout_audit.md)), the label-efficiency curve, and the
+      pre-registered adaptation ladder ([docs/18](docs/18_uda_design.md))
+- [ ] September round — submission (deadline 2026-09-30)
