@@ -757,6 +757,98 @@ comparable to the whole effect.
 
 ---
 
+# Arm D — the transductive variant of arm C, pre-registered (2026-08-30)
+
+Arm C's deviation note gave up one thing explicitly:
+
+> The eight-segment version would also have let the model adapt on the very sheets it is
+> then scored on. This one does not, so a null result here does **not** rule out that
+> transductive self-training — pseudo-labelling the target segments themselves — would do
+> better. That variant is untested and is named as untested.
+
+This is that variant, and it is the one a deployment would actually run. It is also **the
+only method in this document that needs no annotation at all**, which is why it matters
+beyond the ladder: it is the only one that can be pointed at a scroll nobody has labelled.
+
+Written and committed **before any arm-D pseudo-label, checkpoint or score exists**.
+
+## The design
+
+| | arm C (run 2026-08-30) | **arm D (this)** |
+|---|---|---|
+| pseudo-labelled | `phercparis4-w00` only | **the seven scored segments themselves** |
+| scored | the other seven | **the same seven** |
+| labels used in adaptation | none | none |
+| what a deployment has | the scroll's images | the scroll's images |
+
+Everything else is held to arm C: the same base (leave-Paris4-out `ckpt_020000`, both
+seeds), the same rule (**p ≥ 0.6 positive, p ≤ 0.4 negative, middle discarded, restricted to
+the render's valid area**), the same released recipe, the same **2,500 steps**, the same
+inference and scoring flags, the same seven segments.
+
+**Each seed pseudo-labels from its own base.** Seed 42's labels come from the seed-42
+checkpoint's predictions, seed 43's from seed 43's — as in arm C — so the two arms are not
+sharing a hidden input.
+
+**Adapting on the scored sheets is not scoring on training labels.** The target's annotation
+is never opened during adaptation; the pseudo-labels come from the images and the model's own
+output, and they cover the whole valid sheet rather than the annotated regions, so the
+supervision mask never enters either. Scoring afterwards uses the withheld annotation exactly
+as every other arm does.
+
+## One compute concession, stated before the run
+
+Pseudo-labelling a whole sheet puts 78–85% of it under supervision, and that is what made the
+eight-segment attempt unaffordable: patch discovery took 13 minutes for the first segment and
+projected 1h32m per seed at 10 GB and climbing.
+
+So the supervision is **thinned on a deterministic grid: one 128 px block kept in every 3x3**,
+about 1/9 of the confident set. Two things about it:
+
+- **The pseudo-label content is unchanged** — the same pixels are called ink and background by
+  the same rule. Only *how many* of them carry supervision changes.
+- It lands the supervised area near what a real annotation covers on these segments (w01's
+  real annotation is 8.3M of 99M sheet pixels, 8.4%), so the sampler sees a training
+  distribution of roughly the shape the recipe was written for, rather than a sheet that is
+  supervised nearly everywhere.
+
+If arm D wins, the obvious follow-up is whether the thinning cost it anything. Not tested here.
+
+## Prediction, committed now
+
+**+5% to +30% of the gap** (arm C, non-transductive, returned +9.5%).
+
+Reasoning, so the prediction can be judged and not just scored: adapting on the target sheets
+gives the model the exact surface it will be read on, and seven segments of it rather than
+one, which should help. But docs/15 part 4a measured the cross-scroll gap as **bias**, and on
+these sheets the pseudo-labels *are* the model's own errors on those sheets — the failure
+mode self-training is famous for. I expect the first effect to win by a little and the second
+to cap it well below what a real annotation buys.
+
+**Second, sharper commitment: it will not exceed 50% of the gap.** One labelled segment buys
+82%. If pseudo-labels on seven sheets reach half of that, the bias reading in docs/15 part 4a
+is in serious trouble and that is the more interesting outcome — which is why the number is
+written down now.
+
+## Decision rules — unchanged from section 4
+
+Differences under **~0.03 F1 are noise**; both seeds; all seven segments; a result holding on
+fewer than 5 of 7 is reported as inconsistent whatever its mean; compared at the **fixed
+pre-registered step (2,500)**, with best-of-grid reported only as an oracle upper bound.
+
+**The comparison that decides it** is arm D against arm C on the same fourteen cells, since
+the only thing that changes between them is which sheets were pseudo-labelled.
+
+## Failure signature to watch for
+
+If self-training entrenches its own errors rather than sharpening them, F1 stays flat or
+falls **while the model gets more confident** — mean predicted probability rising with AUC
+flat or down. `tools/float_rank_check.py` is run on the probe segment either way, because
+that is the measurement that separates "learned something" from "became surer of the same
+thing".
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
@@ -787,6 +879,13 @@ time rather than GPU time.
 One prediction of three was wrong, and it was wrong in the direction I did not
 consider — I expected entropy minimisation to help a little and it hurts. That is
 what the pre-registration was for.
+
+**Arm D is the open item.** The section above this one pre-registers the
+transductive variant of arm C — pseudo-labelling the sheets to be read rather
+than a different one — because it is the only method here that needs no
+annotation at all, and therefore the only one that could be pointed at a scroll
+nobody has labelled. Its prediction (+5% to +30% of the gap, and not above 50%)
+was committed before it ran.
 
 ---
 
