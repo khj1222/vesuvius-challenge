@@ -21,9 +21,10 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-Field 5 is ~8,800 characters, which is long. If it has to shrink, the domain-match refutation
-in the measurement paragraph is the first candidate — it is the longest passage and its detail
-lives in docs/15 appendix 2.
+Field 5 is ~9,900 characters, which is long. The measurement paragraph was already tightened
+once (2026-08-30) to pay for the adaptation-ladder paragraph. If it has to shrink further, cut
+the spectral detail from the ladder paragraph next — arm A's numbers live in docs/18 — and then
+the audit paragraph, whose detail is in docs/17.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
@@ -128,21 +129,19 @@ and the 0139 arm, trained on HALF the corpus, transfers best, so target-scroll i
 dominates source size. On the four physical segments that exist in both representation
 families, transfer to the aligned representation beats the native render 4 out of 4. I
 first published that as domain match — models transfer best into the family they trained
-on. A reviewer on villa #1580 pointed out the grid contained a control for that reading,
-so I pre-registered the test it could not settle (the same segments held out in BOTH
-families, so the model has seen the native one), pushed the design and the reading
-committed to each outcome before the runs finished, and it refuted me: the gap came back
-unchanged, +0.058 against +0.061, with native exposure raised from 0% to 16.4% of
-training batches. The mechanism is not familiarity but quality, and it is now
-measured rather than asserted: a reviewer on the retraction thread proposed that aligned
-inputs are averages of many acquired samples and flagged the one assumption it rested on —
-whether the published pyramids are averaged or decimated. Reading them says averaged, in
-every one of 18 window comparisons across three scrolls, to the rounding bound of 0.50 grey
-levels; and the pyramids never touch z, so the recipe's 4x z pool multiplies the in-plane
-16 a second time. One aligned voxel is the mean of 64 acquired 2.399 µm voxels where the
-native voxel covering the same space is a single 9.362 µm acquisition. Render aligned,
-whatever the model trained on. The retraction is in docs/15 appendix 2, the pooling
-measurement in appendix 3, and both are on the upstream thread.
+on — and a reviewer on villa #1580 pointed out the grid contained a control for that
+reading. So I pre-registered the test it could not settle, pushing the design and the
+reading committed to each outcome before the runs finished, and it refuted me: with the
+same segments held out in both families, native exposure raised from 0% to 16.4% of
+training batches, the gap came back unchanged at +0.058 against +0.061. The mechanism is
+not familiarity but quality, and the reviewer who proposed why — aligned inputs are
+averages of many acquired samples — flagged the assumption it rested on: are the published
+pyramids averaged or decimated? Reading them says averaged, in all 18 window comparisons
+across three scrolls, to the 0.50 grey-level rounding bound; and they never touch z, so
+the recipe's 4x z pool multiplies the in-plane 16 again. One aligned voxel is the mean of
+64 acquired 2.399 µm voxels where the native voxel covering the same space is a single
+9.362 µm acquisition. Render aligned, whatever the model trained on. Retraction in docs/15
+appendix 2, pooling measurement in appendix 3, both on the upstream thread.
 
 The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
 on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
@@ -186,15 +185,25 @@ nothing, not where to annotate — and unsupervised adaptation has to precede st
 an unlabeled scroll. I would rather report that than imply the recipe is ready to point at
 PHerc0800 tomorrow (docs/16).
 
-So I tested the cheapest way out, and it is closed. That render is spectrally a native-class
-input — every aligned volume measures a radial spectral centroid of 0.0278 or above, every
-native one 0.0262 or below, PHerc1447 sits at 0.0248 — and PHerc1447 has only an 8.640 µm
-scan, so the aligned recipe cannot be followed there at all. A matching filter closes 38% of
-that spectral distance, so I pre-registered the design, the rules and a prediction of 0–20%
-before running it, and scored it where both representations of the same segments exist.
-Median recovery 8.4%, mean gain +0.005 F1 — a sixth of the noise floor, no effect by the rule
-I had fixed. The spectral difference is real and is not what makes an aligned render better.
-Unsupervised adaptation stays the prerequisite, one cheap substitute lighter (docs/18).
+So I pre-registered the three cheapest ways out — design, prediction and decision rule
+pushed publicly before each run — and ran all three. Input space: that render is
+spectrally a native-class input, and PHerc1447 has only an 8.640 µm scan, so the
+"render aligned" guidance cannot be followed there at all; a matching filter closes 38%
+of the spectral distance between the families and buys a median 8.4% of the transfer
+gap, mean +0.005 F1 — no effect by the rule I had fixed, inside the 0–20% I predicted.
+Parameter space: test-time entropy minimisation on the only surface the architecture
+leaves — 27,712 normalisation affines, 0.08% of the model — costs 0.041 F1 across
+fourteen cells with not one improving, and by 400 steps every scored cell sits on its
+segment's all-positive floor. I predicted +10 to +40%; it is −13%, so that prediction is
+refuted with the sign wrong. A rank check in float shows the loss is the model and not
+the 8-bit output — AUC falls 0.66 to 0.48, below chance — and that the adaptation
+objective improves monotonically the whole way down, so no label-free stopping rule
+built on it could have caught this. Label space: self-training on the model's own
+confident pixels is the one rung that helps, +0.030 F1 with all fourteen cells
+improving, 9.5% of the gap. That last number is the useful one, because it prices the
+annotation: with the base checkpoint, the segment, the recipe and the step count held
+fixed, a human's labels on one segment buy +0.320 and the model's own confident guesses
+buy +0.030. Annotate something — and half a segment will do (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
@@ -207,7 +216,7 @@ generator and found a crash on a batch smaller than the surviving scroll count, 
 days later. Being reproduced and being corrected are the two things a measurement of an
 open problem needs.
 
-Everything is MIT, documented end to end (docs/14–17 plus 38 committed evidence
+Everything is MIT, documented end to end (docs/14–18 plus 55 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
@@ -228,6 +237,7 @@ opens; the layout above assumes August's.
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
 | arm A: spectrum matching gains +0.005 F1, median 8.4% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
 | arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48 while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
+| arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
 | the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
@@ -264,11 +274,14 @@ every quoted figure.)
   with #1234.
 * **Fold in September events before submitting**: ①✅ done — the render path ran on
   2026-08-26 and its negative result is now the field-5 paragraph after the playbook
-  (docs/16); if more segments get rendered before submitting, update the count there ②upstream replies that touch the framing — #1231
-  still silent; **stantheman0128's scoring of our depth band landed 2026-08-25 and belongs
-  to August, not here** (it is folded into the August form's field 5; do not repeat it);
-  #1535 still unreviewed ③a smaller-annotation label-efficiency point
-  (does half a segment still close the gap?) if measured.
+  (docs/16); if more segments get rendered before submitting, update the count there
+  ②upstream replies that touch the framing — #1231 still silent; **stantheman0128's scoring
+  of our depth band landed 2026-08-25 and belongs to August, not here** (it is folded into
+  the August form's field 5; do not repeat it); #1535 still unreviewed; **two replies were
+  drafted 2026-08-30 and are waiting on the user to post them** (`issue1582_reply_nerln.md`,
+  `issue1611_reply_bullo27_round2.md`) — if either draws an answer that changes the framing,
+  it belongs here ③✅ done — the label-efficiency curve (docs/15 part 5) and the full
+  adaptation ladder (docs/18 arms A, B, C) both ran and are in field 5.
 * **Honesty guardrails already embedded in the text** — keep them through edits: closure
   percentages use the train-pixel ref as denominator (generous baseline, said as such);
   "one segment" is w00, one of the larger Paris4 annotations; best-of-grid comparisons
