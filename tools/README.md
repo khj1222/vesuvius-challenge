@@ -444,6 +444,26 @@ A mean-built pyramid shows a maximum absolute difference of 0.50 grey levels —
 the rounding bound — against tens of grey levels for decimation. S3 drops
 connections mid-read, so every read and every level open retries with backoff.
 
+## `float_rank_check.py` — did the model change, or only the scale it is written on?
+
+Every score here comes from a uint8 TIFF, so an adaptation that squashes its
+output into a handful of grey levels can lose F1 without having changed how it
+ranks pixels. This re-runs a checkpoint in float over the annotated area and
+reports **AUC** (rank-only, immune to any rescaling), **best F1 in float**, and
+**best F1 after uint8 quantisation**. A gap between the last two is the write; a
+drop in the first is the model.
+
+```bash
+python tools/float_rank_check.py <volume.zarr> <label-dir> --segment <name>   --checkpoints base.pth adapted.pth --names base adapted --out report.json
+```
+
+Inference is a single non-overlapping pass, not the blended one `infer` performs,
+so absolute numbers sit slightly below the matrices — the comparison between
+checkpoints under identical conditions is the point. It answered the question for
+arm B: float and uint8 agreed to 0.001, and the AUC had fallen from 0.66 to 0.48.
+
+`--batch-size 8` · `--max-blocks` · `--code-root`
+
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
