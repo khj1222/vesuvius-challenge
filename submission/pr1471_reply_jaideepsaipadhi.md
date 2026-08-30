@@ -61,7 +61,7 @@ Two things worth noting. Short strips are *not* padded — a 5-row remainder dec
 
 The trigger is a property of the extent, not the content:
 
-- `rowsperstrip == 1` — every strip is one row, and this is what a lot of writers emit for uncompressed or small images; or
+- `rowsperstrip == 1` — every strip is one row. I got there by asking tifffile for it and I don't have a survey of how often writers in the wild do; or
 - `height % rowsperstrip == 1` — only the last strip is, which is roughly a 1-in-`rowsperstrip` accident of image height.
 
 Both are in the matrix: 513×1027 at `rowsperstrip=256`, and 2049×1027 at `rowsperstrip=16`, crash; the same extents tiled do not. This is a regression in the strict sense — those files convert today, slowly, through the in-memory path.
