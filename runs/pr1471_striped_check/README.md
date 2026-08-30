@@ -45,6 +45,8 @@ The reply built from these artifacts is `submission/pr1471_reply_jaideepsaipadhi
 | `real_equality.jsonl` | per-level equality of the real striped outputs against the tiled one |
 | `pytest_pr_suite.txt` | the PR's own 14 tests, on `head` and on `head+fix` |
 | `verify_numbers.py` | re-derives every figure quoted in the reply and asserts it appears there |
+| `patch_onerow_strip_fix.patch` | the one-row-strip fix, as applied to `head` in the worktree `D:/vw6` |
+| `patch_fullwidth_blocks.patch` | that fix plus full-width write blocks, as applied in `D:/vw7` |
 
 ## Reproducing
 
@@ -58,3 +60,12 @@ One methodological note that cost an hour: **zarr chunk payloads are not reprodu
 processes**, so byte-comparing the stores reports differences that do not exist in the data.
 Every verdict here is decoded-array equality; `compare_zarr.py` hashes first only as a fast
 path and falls back to a numeric comparison whenever the hashes disagree, which was always.
+
+
+## Local worktrees
+
+The four trees are sparse checkouts of `ScrollPrize/villa` (`vesuvius/` only, ~21 MB each),
+kept for re-running this while #1471 is open: `D:/vw4` = head, `D:/vw5` = base, `D:/vw6` =
+head + the one-row-strip fix, `D:/vw7` = head + that fix + full-width blocks. The vw6 and vw7
+edits are uncommitted, which is why they are also exported as the two patches above; the trees
+can be removed with `git worktree remove` once the PR resolves.

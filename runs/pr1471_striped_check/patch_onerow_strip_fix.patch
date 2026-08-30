@@ -1,0 +1,34 @@
+diff --git a/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py b/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
+index 824c53d..f7af9a0 100644
+--- a/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
++++ b/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
+@@ -310,6 +310,20 @@ def _get_streamable_tiff_metadata(
+ _STREAMABLE_COMPRESSIONS = frozenset({1, 5, 8, 32773, 32946})
+ 
+ 
++def _decoded_block_to_2d(decoded: np.ndarray, source_path: Path) -> np.ndarray:
++    """Return a decoded tile or strip as 2D without losing a length-1 row axis.
++
++    ``page.decode`` returns ``(depth, rows, columns, samples)`` for a strip
++    exactly as it does for a tile. ``_normalize_to_2d`` squeezes, which is
++    right for a whole image but drops the row axis of a one-row strip --
++    ``(1, 1, width, 1)`` becomes ``(width,)`` -- so index the axes explicitly.
++    """
++    block = np.asarray(decoded)
++    if block.ndim == 4:
++        return np.ascontiguousarray(block[0, :, :, 0])
++    return _normalize_to_2d(block, source_path)
++
++
+ def _write_streamed_tiff_level_zero(input_path: Path, dataset: zarr.Array) -> None:
+     """Stream a tiled OR striped TIFF's level-0 data into ``dataset``.
+ 
+@@ -353,7 +367,7 @@ def _write_streamed_tiff_level_zero(input_path: Path, dataset: zarr.Array) -> No
+                     )
+                     if decoded is None:
+                         continue
+-                    tile_YX = _normalize_to_2d(decoded, input_path)
++                    tile_YX = _decoded_block_to_2d(decoded, input_path)
+                     tile_y, tile_x = position[2], position[3]
+                     overlap_y0 = max(block_y, tile_y)
+                     overlap_y1 = min(block_y + block_height, tile_y + tile_YX.shape[0])

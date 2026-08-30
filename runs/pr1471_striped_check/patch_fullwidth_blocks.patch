@@ -1,0 +1,51 @@
+diff --git a/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py b/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
+index 824c53d..2ac0dd7 100644
+--- a/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
++++ b/vesuvius/src/vesuvius/ink_detection/preprocessing/create_label_zarrs.py
+@@ -310,6 +310,24 @@ def _get_streamable_tiff_metadata(
+ _STREAMABLE_COMPRESSIONS = frozenset({1, 5, 8, 32773, 32946})
+ 
+ 
++def _iter_block_slices_2d(
++    height: int, width: int, *, block_rows: int, block_columns: int
++) -> Iterable[tuple[int, int, int, int]]:
++    for y_start in range(0, height, block_rows):
++        block_height = min(block_rows, height - y_start)
++        for x_start in range(0, width, block_columns):
++            block_width = min(block_columns, width - x_start)
++            yield y_start, x_start, block_height, block_width
++
++
++def _decoded_block_to_2d(decoded: np.ndarray, source_path: Path) -> np.ndarray:
++    """Return a decoded tile or strip as 2D without losing a length-1 row axis."""
++    block = np.asarray(decoded)
++    if block.ndim == 4:
++        return np.ascontiguousarray(block[0, :, :, 0])
++    return _normalize_to_2d(block, source_path)
++
++
+ def _write_streamed_tiff_level_zero(input_path: Path, dataset: zarr.Array) -> None:
+     """Stream a tiled OR striped TIFF's level-0 data into ``dataset``.
+ 
+@@ -331,8 +349,10 @@ def _write_streamed_tiff_level_zero(input_path: Path, dataset: zarr.Array) -> No
+         image_height, image_width = _normalized_2d_shape(page.shape, input_path)
+         tile_height, tile_width = page.chunks
+         _, tiles_across = page.chunked
+-        for block_y, block_x, block_height, block_width in _iter_block_slices(
+-            image_height, image_width
++        block_columns = image_width if tiles_across == 1 else STREAM_BLOCK_SIZE
++        for block_y, block_x, block_height, block_width in _iter_block_slices_2d(
++            image_height, image_width, block_rows=STREAM_BLOCK_SIZE,
++            block_columns=block_columns,
+         ):
+             block_YX = np.zeros((block_height, block_width), dtype=page.dtype)
+             tile_row_start = block_y // tile_height
+@@ -353,7 +373,7 @@ def _write_streamed_tiff_level_zero(input_path: Path, dataset: zarr.Array) -> No
+                     )
+                     if decoded is None:
+                         continue
+-                    tile_YX = _normalize_to_2d(decoded, input_path)
++                    tile_YX = _decoded_block_to_2d(decoded, input_path)
+                     tile_y, tile_x = position[2], position[3]
+                     overlap_y0 = max(block_y, tile_y)
+                     overlap_y1 = min(block_y + block_height, tile_y + tile_YX.shape[0])
