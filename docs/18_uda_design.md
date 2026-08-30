@@ -1183,6 +1183,63 @@ all-positive floor.
 
 ---
 
+# The 1667 step curve — what it can and cannot rescue (2026-08-30, before it runs)
+
+The 1667 replication refuted three of its four commitments: arm D reversed sign (+14.3% of
+the gap on Paris4, **−15.1%** here), the ordering broke, and the supervised bound recovered
+**24.1%** where Paris4 recovered 82%. Before any of that is written up as "the Paris4 result
+is scroll-specific", one confound has to go: **every arm was stopped at 2,500 steps**, a
+number chosen because Paris4's fine-tune peaks there and declines after. Nobody has checked
+whether 1667's does.
+
+So all six runs continue to **10,000 steps** and are scored at **5,000 and 10,000** as well,
+giving each arm a three-point curve. The rules for reading it are fixed here.
+
+## What each outcome will mean
+
+**If the supervised bound keeps climbing** — FT at 10,000 recovering materially more of its
+gap than the 24.1% it shows at 2,500 — then 2,500 was the wrong stopping point for this
+scroll and the honest headline becomes **"how long adaptation takes is scroll-dependent"**,
+not "the recipe fails on 1667". docs/15's "saturates at 2,500 steps, about seven minutes"
+then needs qualifying as a Paris4 measurement, which is a correction to a published claim of
+ours and gets flagged as one.
+
+**If the supervised bound is flat or falling past 2,500** — Paris4's shape — then the
+stopping point is exonerated and the difference is the scroll. The Paris4 numbers get
+labelled scroll-specific in docs/15, docs/18, the README and the submission text, and the
+finding becomes the variance itself: the same recipe, the same steps, one scroll where an
+annotated segment buys 82% and another where it buys 24%.
+
+**Arms C and D are read against whatever FT does.** If FT climbs and they do not,
+self-training is what fails on this scroll rather than adaptation generally. If all three
+climb together, the whole 2,500-step comparison was premature and every number in the 1667
+section is provisional until the curve settles.
+
+**Arm D specifically**: it is currently *below its own starting point* (−0.0157). If more
+steps bring it back above the base, the Paris4-versus-1667 reversal is a schedule artifact.
+If it goes further down, self-training is actively harmful here and that is a second scroll
+where a pre-registered prediction of mine was wrong.
+
+## What this cannot rescue
+
+Nothing here can make the 2,500-step numbers wrong — they are measured, and they are the
+numbers the pre-registered comparison specified. A better result at 10,000 does not replace
+them; it adds a second column and changes what the comparison is *about*. **Both get
+reported.**
+
+And no outcome restores the original claim in its published form: docs/15 says the fine-tune
+saturates at 2,500 steps, and on 1667 that is either false (it keeps climbing) or true with
+a much worse ceiling (24%). Either way, that sentence acquires a scroll.
+
+## Mechanics
+
+Six runs resumed from their own 2,500-step checkpoints with full optimiser state, to the same
+10,000-step schedule the configs already carry, so the learning-rate trajectory is the one
+the recipe defines rather than a restarted one. Scoring is the same five segments, both
+seeds, the same flags. 60 new cells on top of the 30 already measured.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
