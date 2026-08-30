@@ -637,5 +637,148 @@ anyone running it has these numbers as the baseline to beat, and the bar is
 
 ---
 
+# Result — arm C: the only rung that helps, and it is worth a tenth of the annotation (2026-08-30)
+
+Run as the deviation note above fixed it: the leave-Paris4-out arm at `ckpt_020000`
+fine-tuned on **pseudo-labels for `phercparis4-w00` alone**, derived from its own
+predictions on that segment, at both seeds, for 2,500 steps of the released
+recipe, scored on the seven segments the supervised fine-tune never saw. 18 cells;
+`runs/ink9um_scorecard/armC_pseudo_matrix.csv` and `armC_pseudo_summary.json`.
+
+The config differs from the docs/15 part 4 fine-tune in exactly three keys —
+`datasets`, `description`, `out_dir` — so the comparison isolates one thing: where
+w00's labels came from.
+
+## Headline
+
+| segment | trivial floor | LOSO base (s42 / s43) | arm C s42 | arm C s43 | mean delta | supervised bound |
+|---|---|---|---|---|---|---|
+| w01 | 0.4148 | 0.4607 / 0.4621 | 0.5027 | 0.5383 | **+0.0591** | 0.8573 |
+| w02 | 0.3791 | 0.4096 / 0.4174 | 0.4520 | 0.4628 | **+0.0439** | 0.8122 |
+| w03 | 0.5124 | 0.5233 / 0.5331 | 0.5322 | 0.5444 | **+0.0101** | 0.8143 |
+| w05 | 0.3485 | 0.3861 / 0.3971 | 0.3983 | 0.4331 | **+0.0241** | 0.7620 |
+| w06 | 0.4743 | 0.5013 / 0.4985 | 0.5020 | 0.5181 | **+0.0101** | 0.7880 |
+| w07 | 0.4778 | 0.5522 / 0.5551 | 0.5598 | 0.5949 | **+0.0237** | 0.7846 |
+| w09 | 0.4424 | 0.5875 / 0.5981 | 0.6217 | 0.6458 | **+0.0410** | 0.7947 |
+
+Mean over the 14 cells: **0.4916 to 0.5219, a change of +0.0303**. **Every cell of
+fourteen improves**, and every segment improves at both seeds. Per-seed means are
++0.0211 (s42) and +0.0394 (s43); per-cell shares of the gap run +0.2% to +20.9%.
+
+## Verdict, by the rules fixed in section 4
+
+**It improves, consistently — and by about the width of the noise floor.** +0.0303
+against a floor of ~0.03 is the smallest effect this project would call an effect
+at all; what makes it one is the consistency, 14 of 14 cells and 7 of 7 segments
+at both seeds, which a 0.03 coin-flip does not produce.
+
+**The pre-registered prediction was −10% to +15% of the gap; the result is +9.5%.**
+That is inside the interval. The reasoning behind it — the cross-scroll gap is bias
+(docs/15 part 4a), so a model's confident errors are its own errors and training on
+them reinforces them — survives in its quantitative form: self-training recovers a
+tenth of the gap, not the gap.
+
+## The number this arm exists to produce
+
+Same base checkpoint, same segment, same recipe, same 2,500 steps, one variable:
+
+| labels on w00 | mean gain on the seven unseen segments | share of the gap |
+|---|---|---|
+| a human annotator's (docs/15 part 4) | **+0.3202** | 82% |
+| the model's own confident predictions | **+0.0303** | 9.5% |
+
+**The annotation is worth about ten times what the model's own confident guesses
+are worth.** That is the honest reply to "can we not just bootstrap it?", and it is
+measured on the same seven segments with the same scoring rules rather than
+argued.
+
+## It is a real change in ranking, not a re-calibration
+
+`tools/float_rank_check.py` on w01, seed 42, over the annotated area:
+
+| checkpoint | AUC | best F1 float | best F1 uint8 | p25–p75 |
+|---|---|---|---|---|
+| LOSO base | 0.6593 | 0.4544 | 0.4545 | 0.287–0.442 |
+| arm C, 2,500 | **0.7002** | 0.4873 | 0.4879 | 0.245–0.301 |
+| arm C, 5,000 | **0.7102** | 0.4996 | 0.4999 | 0.245–0.302 |
+
+AUC is rank-only, so the +0.04 it gains is the model ordering pixels better, not
+the same ordering written on a nicer scale. That is the opposite of arm B, whose
+AUC fell to 0.48 — two methods that both chase confidence, one destroying the
+ordering and one improving it. The difference is that arm C's confidence is
+converted into **hard targets on the target scroll's own geometry and then trained
+with the supervised loss**, while arm B's is a direct objective on the output with
+nothing to hold it in place.
+
+The best threshold moves from 72–112 at the base to **63–97**, a much smaller shift
+than arm B's collapse to 30–66, and no cell lands anywhere near its trivial floor
+(the closest clears it by +0.020, the median by +0.083).
+
+## Does it want more steps? The seeds disagree
+
+The supervised fine-tune peaks at 2,500 and declines after, which is why 2,500 was
+the pre-registered step here. Scoring 5,000 on the two probe segments does not
+settle whether that was the right choice — it splits by seed:
+
+| probe | 2,500 | 5,000 | change |
+|---|---|---|---|
+| w01 s42 | 0.5027 | 0.5156 | **+0.0129** |
+| w05 s42 | 0.3983 | 0.4123 | **+0.0140** |
+| w01 s43 | 0.5383 | 0.5179 | **−0.0204** |
+| w05 s43 | 0.4331 | 0.4174 | **−0.0157** |
+
+Seed 42 is still climbing at 5,000 and its AUC agrees (0.7002 → 0.7102); seed 43
+has turned over. So there is no case for running longer, the pre-registered step
+stands, and — worth noting for anyone reading the headline — **which seed you get
+matters more than 2,500 versus 5,000 does**: the per-seed means differ by 0.018,
+comparable to the whole effect.
+
+## Limits
+
+- **One segment's pseudo-labels, not the target's own sheets.** The transductive
+  version — pseudo-labelling the seven scored segments themselves — is the variant
+  a deployment would actually run, and it is untested here (see the deviation note).
+  It could plausibly do better.
+- **The thresholds were not tuned.** 0.5 ± 0.1 was fixed before the run because the
+  literal pre-registered rule selected nothing; no other pair was tried, on this or
+  any other target.
+- **One target scroll**, as with every arm. docs/15 measured the transfer margin
+  varying more than twofold by target, so "9.5%" is a Paris4 number.
+
+---
+
+# The ladder, finished (2026-08-30)
+
+| arm | what it does | predicted | measured | verdict |
+|---|---|---|---|---|
+| **A** — spectrum matching | reshape the target render's radial power spectrum to the source's, then re-infer | 0–20% of the gap | **+0.005 F1**, median 8.4% recovered, 17 of 24 cells | no effect |
+| **B** — entropy minimisation | adapt the 27,712 normalisation affines to make the target's predictions confident | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
+| **C** — pseudo-label self-training | fine-tune on the model's own confident pixels for one target segment | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** of the gap | improves, at the noise floor |
+
+Three cheap routes, each with its design, prediction and decision rule fixed in
+public before it ran. Section 7 asked what gets published either way, and the
+answer the ladder actually produced is more useful than either branch it
+anticipated:
+
+**Unsupervised adaptation on this corpus is not free and is not enough.** The
+input-space route buys nothing. The classical test-time route is actively
+harmful, and — the part worth carrying elsewhere — **its own objective improves
+monotonically while the model degrades, so there is no label-free signal that
+would have told anyone to stop.** The one route that helps, self-training,
+recovers **a tenth** of what a single annotated segment recovers, holding the
+base, the segment, the recipe and the step count fixed.
+
+So the practical statement for an unlabelled scroll is unchanged in direction and
+now quantified: **annotate something.** Half of one segment keeps 89% of the
+benefit (docs/15 part 5); the model's own confident guesses on a whole segment
+keep 9.5%. Between those two numbers is the entire case for spending annotator
+time rather than GPU time.
+
+One prediction of three was wrong, and it was wrong in the direction I did not
+consider — I expected entropy minimisation to help a little and it hurts. That is
+what the pre-registration was for.
+
+---
+
 MIT-licensed. Pre-registered before any arm was run; the git history of this
 file is the timestamp.

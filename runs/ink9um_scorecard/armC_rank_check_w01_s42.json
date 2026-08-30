@@ -1,0 +1,109 @@
+{
+  "segment": "phercparis4-w01",
+  "volume": "data/ink_9um/surface-volumes/aligned9/phercparis4-w01.zarr",
+  "supervised_pixels": 8268843,
+  "checkpoints": {
+    "loso42_20k": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.16933623949686685,
+      "float": {
+        "auc": 0.6593125479796529,
+        "best_f1": 0.45441877300163286,
+        "best_precision": 0.34779917158671947,
+        "best_recall": 0.6553062213803427,
+        "threshold_at_best": 0.3415217101573944,
+        "kept_fraction_at_best": 0.49307889870444993
+      },
+      "uint8": {
+        "auc": 0.6592852207716583,
+        "best_f1": 0.454479631577314,
+        "best_precision": 0.34849921829148606,
+        "best_recall": 0.653086659941283,
+        "threshold_at_best": 87.0,
+        "kept_fraction_at_best": 0.4904216950303688
+      },
+      "distribution": {
+        "min": 0.1939511001110077,
+        "max": 0.9274482727050781,
+        "percentiles": {
+          "1": 0.24187098443508148,
+          "25": 0.28713878989219666,
+          "50": 0.3396012783050537,
+          "75": 0.44239699840545654,
+          "99": 0.7786837220191956
+        },
+        "distinct_uint8_levels": 187,
+        "interquartile_uint8_levels": 41
+      }
+    },
+    "armC42_2500": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.15844167470932008,
+      "float": {
+        "auc": 0.7001953360108926,
+        "best_f1": 0.48733634051452923,
+        "best_precision": 0.3952688084243478,
+        "best_recall": 0.635316766954367,
+        "threshold_at_best": 0.2650388777256012,
+        "kept_fraction_at_best": 0.4206282547630908
+      },
+      "uint8": {
+        "auc": 0.6998220251563821,
+        "best_f1": 0.4879389746819358,
+        "best_precision": 0.39205422806879264,
+        "best_recall": 0.6459090150794314,
+        "threshold_at_best": 67.0,
+        "kept_fraction_at_best": 0.4311475015307462
+      },
+      "distribution": {
+        "min": 0.19254031777381897,
+        "max": 0.8957523703575134,
+        "percentiles": {
+          "1": 0.22655390202999115,
+          "25": 0.24475248157978058,
+          "50": 0.25666290521621704,
+          "75": 0.3011687994003296,
+          "99": 0.7984132766723633
+        },
+        "distinct_uint8_levels": 180,
+        "interquartile_uint8_levels": 16
+      }
+    },
+    "armC42_5000": {
+      "pixels": 8268843,
+      "ink_fraction": 0.2616981601900048,
+      "minutes": 0.14120938777923583,
+      "float": {
+        "auc": 0.7101981291517672,
+        "best_f1": 0.49958384631004926,
+        "best_precision": 0.41250500825854686,
+        "best_recall": 0.6332644928858966,
+        "threshold_at_best": 0.2649082839488983,
+        "kept_fraction_at_best": 0.4017506439534527
+      },
+      "uint8": {
+        "auc": 0.7098624236660717,
+        "best_f1": 0.49992442753860494,
+        "best_precision": 0.4093496686005789,
+        "best_recall": 0.6419699058338467,
+        "threshold_at_best": 67.0,
+        "kept_fraction_at_best": 0.4104127989852994
+      },
+      "distribution": {
+        "min": 0.18206502497196198,
+        "max": 0.9178491830825806,
+        "percentiles": {
+          "1": 0.22249233722686768,
+          "25": 0.24532505869865417,
+          "50": 0.255451500415802,
+          "75": 0.3017231822013855,
+          "99": 0.8265496492385864
+        },
+        "distinct_uint8_levels": 189,
+        "interquartile_uint8_levels": 15
+      }
+    }
+  }
+}
