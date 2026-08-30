@@ -1,0 +1,19 @@
+{
+ "tree": "D:\\vw8\\ink-detection\\koine_machines\\inference\\infer.py",
+ "device": "cuda",
+ "triton": "absent",
+ "disabled_returns_same_object": true,
+ "returned_type": "_CompiledWithEagerFallback",
+ "forward_1": "ok",
+ "forward_1_matches_eager": true,
+ "forward_2": "ok",
+ "forward_2_matches_eager": true,
+ "warnings": [
+  "torch.compile disabled.",
+  "Enabled torch.compile (mode=reduce-overhead)",
+  "torch.compile failed on the first forward (Cannot find a working triton installation. Either the package is not installed or it is too old. More information on installing Triton can be found at: https://github.com/triton-lang/triton\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n). Continuing without compilation."
+ ],
+ "wrapper_is_module": true,
+ "wrapper_params": 2,
+ "eager_params": 2
+}

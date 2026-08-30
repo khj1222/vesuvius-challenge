@@ -1,0 +1,16 @@
+{
+ "tree": "D:\\vesuvius-challenge\\external\\villa\\ink-detection\\koine_machines\\inference\\infer.py",
+ "device": "cuda",
+ "triton": "absent",
+ "disabled_returns_same_object": true,
+ "returned_type": "OptimizedModule",
+ "forward_1": "RAISED TritonMissing: Cannot find a working triton installation. Either the package is not installed or it is too old. More informat",
+ "forward_2": "RAISED TritonMissing: Cannot find a working triton installation. Either the package is not installed or it is too old. More informat",
+ "warnings": [
+  "torch.compile disabled.",
+  "Enabled torch.compile (mode=reduce-overhead)"
+ ],
+ "wrapper_is_module": true,
+ "wrapper_params": 2,
+ "eager_params": 2
+}

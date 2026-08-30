@@ -1,0 +1,7 @@
+{
+ "returned_type": "_CompiledWithEagerFallback",
+ "compiled_calls": 3,
+ "verified_flag": true,
+ "outputs_match_eager": true,
+ "fallback_warnings": []
+}

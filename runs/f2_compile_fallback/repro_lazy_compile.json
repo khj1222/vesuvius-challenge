@@ -1,0 +1,12 @@
+{
+ "torch": "2.10.0+cu128",
+ "cuda": true,
+ "triton": "absent (ModuleNotFoundError)",
+ "compile_call": "returned without raising",
+ "first_forward": "RAISED TritonMissing: Cannot find a working triton installation. Either the package is not installed or it is too old. More information on installing Triton can be found at: https://",
+ "first_forward_frames": [
+  "File \"D:\\vesuvius-challenge\\external\\villa\\ink-detection\\.venv\\Lib\\site-packages\\torch\\nn\\modules\\module.py\", line 1787, in _call_impl",
+  "File \"D:\\vesuvius-challenge\\external\\villa\\ink-detection\\.venv\\Lib\\site-packages\\torch\\_dynamo\\eval_frame.py\", line 967, in compile_wrapper",
+  "File \"D:\\vesuvius-challenge\\external\\villa\\ink-detection\\.venv\\Lib\\site-packages\\torch\\_inductor\\scheduler.py\", line 5433, in create_backend"
+ ]
+}

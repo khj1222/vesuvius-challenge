@@ -1,0 +1,96 @@
+From 66c7e1942724094c74aae88ccbdccc8b57e3e8ab Mon Sep 17 00:00:00 2001
+From: khj1222 <bluekgssk@gmail.com>
+Date: Mon, 31 Aug 2026 08:54:53 +0900
+Subject: [PATCH] infer: guard the forward where torch.compile actually
+ compiles
+
+maybe_compile_model wraps the call to torch.compile, but that call returns a
+wrapper and the backend runs on the first forward, so the existing except
+never fires for a backend that cannot build. On any install without a working
+Triton -- every native-Windows one, since Triton ships no Windows wheel --
+inference therefore dies with TritonMissing in the middle of the run, after the
+model, the volume and the block schedule are already set up, instead of taking
+the documented fallback.
+
+Return a small module that calls the compiled model and, on the first
+exception, logs the warning the function already promises and continues with
+the eager module. After the first successful forward it stops guarding, so a
+working backend keeps the compiled path with one attribute test per call.
+
+The eager module is the registered child and the compiled wrapper is held in a
+plain attribute: torch.compile wraps the same module, so registering both would
+duplicate every parameter.
+
+Verified on torch 2.10.0+cu128 with Triton absent: before, both forwards raise
+TritonMissing; after, the first logs "Continuing without compilation" and both
+return the eager result. With a stubbed working backend, 3 of 3 forwards go to
+the compiled module and no fallback warning is emitted.
+---
+ .../koine_machines/inference/infer.py         | 44 ++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
+
+diff --git a/ink-detection/koine_machines/inference/infer.py b/ink-detection/koine_machines/inference/infer.py
+index 5898a1580..35b1fa39b 100644
+--- a/ink-detection/koine_machines/inference/infer.py
++++ b/ink-detection/koine_machines/inference/infer.py
+@@ -1392,6 +1392,48 @@ def configure_model(args: argparse.Namespace) -> ConfiguredModel:
+     )
+ 
+ 
++class _CompiledWithEagerFallback(torch.nn.Module):
++    """A compiled model that falls back to eager if the backend fails when it runs.
++
++    ``torch.compile`` compiles nothing: it returns a wrapper and the backend runs
++    on the first forward. A backend that cannot build therefore raises there, not
++    at the call ``maybe_compile_model`` guards -- so on any install without a
++    working Triton (every native-Windows one, since Triton ships no Windows
++    wheel) inference dies mid-run with ``TritonMissing`` instead of taking the
++    documented fallback. Guarding the first forward restores the promise the
++    warning already makes, and costs one attribute test per call until the first
++    forward has succeeded.
++
++    The eager module is the registered child so ``.to()``, ``.eval()`` and
++    ``repr`` behave normally; the compiled wrapper holds the very same module, so
++    registering it as well would only duplicate every parameter.
++    """
++
++    def __init__(self, eager_model: torch.nn.Module, compiled_model: torch.nn.Module) -> None:
++        super().__init__()
++        self.model = eager_model
++        object.__setattr__(self, "_compiled_model", compiled_model)
++        object.__setattr__(self, "_compiled_verified", False)
++
++    def forward(self, *args, **kwargs):
++        compiled_model = self._compiled_model
++        if compiled_model is None:
++            return self.model(*args, **kwargs)
++        if self._compiled_verified:
++            return compiled_model(*args, **kwargs)
++        try:
++            outputs = compiled_model(*args, **kwargs)
++        except Exception as exc:
++            LOGGER.warning(
++                "torch.compile failed on the first forward (%s). Continuing without compilation.",
++                exc,
++            )
++            object.__setattr__(self, "_compiled_model", None)
++            return self.model(*args, **kwargs)
++        object.__setattr__(self, "_compiled_verified", True)
++        return outputs
++
++
+ def maybe_compile_model(
+     model: torch.nn.Module,
+     *,
+@@ -1411,7 +1453,7 @@ def maybe_compile_model(
+         LOGGER.warning("torch.compile failed (%s). Continuing without compilation.", exc)
+         return model
+     LOGGER.info("Enabled torch.compile (mode=%s)", mode)
+-    return compiled_model
++    return _CompiledWithEagerFallback(model, compiled_model)
+ 
+ 
+ def prepare_model_for_inference(
+-- 
+2.53.0.windows.2
+
