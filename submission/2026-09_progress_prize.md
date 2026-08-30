@@ -94,7 +94,7 @@ https://github.com/khj1222/vesuvius-challenge
 Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
-Raw numbers (1,612 scored cells, 27 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
+Raw numbers (1,720 scored cells, 33 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
@@ -174,11 +174,7 @@ that is where Paris4 saturates, so I extended all six runs to 10,000 and scored 
 10,000 too. 1667's fine-tune peaks at 2,500 and falls monotonically after, exactly as
 Paris4's does — the saturation point replicates, the magnitude does not. So what an
 annotation buys varies threefold between two scrolls of the same corpus, and for open
-problem #7 that variance is the more useful number than either headline. The label-free
-ladder crosses even worse: on 1667 arm C never leaves the noise floor at any step and arm
-D is negative at every step, below its own starting point, where on Paris4 it improved 14
-of 14 cells. What survives the crossing is the ordering — annotation beats guessing on
-both scrolls — and the saturation point; what does not is every magnitude.
+problem #7 that variance is the more useful number than either headline.
 
 And the price has a price curve (part 5). Rebuilding that fine-tune on nested subsets of
 the same annotation — 50.3%, 20.7% and 13.5% of the area, regions kept whole — half the
@@ -221,7 +217,11 @@ where the model's own guesses buy +0.046, so A HUMAN ANNOTATION IS WORTH ABOUT S
 the best label-free method. And because that method needs no labels I pointed it at
 PHerc1447 itself under three criteria fixed beforehand; it met none — the patches stay
 rounded, the seeds agree no more on where the ink is, and the output collapses to one
-mode. Self-training amplifies what a model already believes, and there it believes nothing
+mode. Self-training amplifies what a model already believes, and there it believes nothing.
+And none of it crosses to the second scroll: on 1667 arm C never leaves the noise floor at
+any step and arm D is negative at every step, below its own starting point, where on
+Paris4 it improved 14 of 14 cells. What survives the crossing is the ordering — annotation
+beats guessing on both scrolls — and the saturation point; what does not is any magnitude
 (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
@@ -234,7 +234,7 @@ person then reviewed the generator and found a crash on a batch smaller than the
 scroll count, fixed two days later. Being reproduced and being corrected are the two
 things a measurement of an open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 plus 63 committed evidence
+Everything is MIT, documented end to end (docs/14–18 plus 68 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
@@ -282,8 +282,8 @@ drafted and waiting on the user to post (`issue1582_reply_nerln.md`,
 Field hashes at this revision, over the block body plus one trailing newline — the
 convention the August entry uses:
 
-- field 4 — 1,501 chars, `fff1b5f4ed935f9dcdd9aa425810bee00056111331e58aacb3d971aa803e7ae7`
-- field 5 — 9,821 chars, `e529494816458265f957f7926d6222019e4198b5497cc398f311378422a9b729`
+- field 4 — 1,501 chars, `a2180a88444771ca3fa074ce8a97449afca1f22e941e3aa73b48ea6fbd747ca5`
+- field 5 — 9,822 chars, `1eeeb28f7a7bcf5b48549ed7e4d4ea13bd8f18ee5d2d58ad40ee57877fcb818c`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
