@@ -1026,6 +1026,101 @@ with a measured negative rather than an open question.
 
 ---
 
+# Result — arm D on PHerc1447: none of the three criteria met (2026-08-30)
+
+Run as fixed above: the released `hybrid_3d2d` checkpoints at step 20000, both seeds,
+adapted for 2,500 steps on pseudo-labels built from **their own predictions on this render**,
+then re-inferred over the whole segment. No label of any kind exists for this scroll, so
+nothing below is a score.
+
+## First, a correction to the docs/16 baseline
+
+Measuring the "before" turned up a defect in how docs/16 measured the "after" it never had.
+docs/16 computed its statistics over the prediction's **written area**, which is 67.03% of
+the canvas, and described that as "the rendered valid area". It is not:
+
+- **The render's valid area is 21.05% of the canvas**, identical at every z.
+- **68.9% of the written pixels are off the sheet** — inference schedules blocks from a
+  coarse occupancy scan and hann-blends across whole blocks, so it paints well past the
+  rendered ribbon, onto zeros.
+- The model's output on that padding has almost the same distribution as on the sheet:
+  median **86–109 off-sheet against 88–113 on-sheet**.
+
+That last line is a sharper version of docs/16's own conclusion than docs/16 made: **the
+model produces the same mid-grey field on zero input as on the scroll**, which is what
+"the output is not driven by the data" looks like when you measure it. The four signatures
+survive re-derivation on the sheet — `>128` share 10.6–32.3% across the four checkpoints
+(still a ~3x disagreement), max 211–237 (still never near 255), median 88–113 (still
+mid-grey). Numbers: `runs/first_letters/pherc1447_base_on_sheet.json`.
+
+## What adaptation did
+
+| | seed 42 base | seed 42 arm D | seed 43 base | seed 43 arm D |
+|---|---|---|---|---|
+| on-sheet `>128` share | 23.04% | **3.71%** | 10.62% | **0.90%** |
+| on-sheet median | 100 | **54** | 88 | **58** |
+| bottom third of range | 5.2% | **91.3%** | 6.4% | **97.5%** |
+| middle third | 79.1% | **6.5%** | 86.5% | **1.8%** |
+| top third | 15.8% | 2.3% | 7.1% | 0.7% |
+| max | 214 | 237 | 211 | 226 |
+
+**This is one-sided collapse, not commitment.** The pre-registered criterion was a *bimodal*
+surface — the prediction committing to ink and not-ink. What happened is that 91–98% of the
+sheet moved into the bottom third of the range while the top third shrank. The same shape as
+arm B's collapse on Paris4, where it was scoreable and cost 0.04 F1.
+
+⚠️ **A measurement mistake of my own, caught and reported**: the first version of this
+comparison scored "bimodality" as the share of mass *outside the middle third*, which a
+one-sided pile at the bottom satisfies perfectly — it reported 0.93 and 0.98, i.e. "highly
+bimodal", for exactly the collapse above. The three-way split in the table is what the
+criterion actually meant.
+
+## The three criteria, judged
+
+**1. Connected strokes where the base showed rounded patches — NOT met.** Matched
+full-resolution crops of the 512px window with the *most* above-threshold pixels — the arm's
+best case, chosen on the arm's own output — are in
+[`pherc1447_armD_before_after.png`](images/pherc1447_armD_before_after.png) (base s42, arm D
+s42, base s43, arm D s43). Adaptation raises contrast sharply: the soft mid-grey mush becomes
+dark background with bright patches. But the patches are the same rounded, variable-width,
+join-free shapes docs/16 described, at a scale far coarser than the papyrus fibre texture
+visible in the surface itself ([`pherc1447_armD_surface.png`](images/pherc1447_armD_surface.png)).
+Higher contrast, same shapes.
+
+**2. The two seeds agreeing on where the strokes are — NOT met, and the near-miss is
+instructive.** Pearson correlation between the seeds' on-sheet predictions rises from
+**0.476 to 0.865**, which looks like exactly the agreement the criterion asked for. But the
+**top-decile IoU — do they pick the same pixels as most-ink? — is 0.173 before and 0.177
+after.** The correlation gain is both seeds collapsing toward the same mostly-dark field; on
+*where the ink is*, they agree no more than before. Had the criterion been "correlation goes
+up" this would have passed, which is why it was written as "agreeing on where the strokes
+are".
+
+**3. A bimodal surface distribution — NOT met.** See the table: unimodal at the bottom.
+
+**Nothing met. The committed expectation — no readable text — holds.**
+
+## What this closes
+
+docs/16 ended by naming unsupervised adaptation as the prerequisite for reading an unlabelled
+scroll. That prerequisite now has a measurement rather than a placeholder: **the best
+label-free method in this ladder, the one that recovers 14.3% of the cross-scroll gap where
+the gap is measurable, changes nothing readable on a scroll where the base model has no
+signal to begin with.** Self-training amplifies what the model already believes; on Paris4
+that belief is better than chance, and on PHerc1447 docs/16 measured that it is not.
+
+So the honest statement for First Letters is unchanged and now costed at both ends: direct
+inference scouts only in the weak sense, unsupervised adaptation does not rescue it, and the
+step that works is the one that needs a person — one annotated segment, or half of one
+(docs/15 part 5).
+
+**What was not tried**: iterating self-training for more rounds, a different base checkpoint,
+or the other fourteen PHerc1447 segments. The first two are cheap and would not change a
+"no signal to amplify" diagnosis; the third is ~30 minutes each and docs/16 already argued the
+result would be the same.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
@@ -1060,6 +1155,14 @@ on a scroll where annotating is not yet possible.
 One prediction of three was wrong, and it was wrong in the direction I did not
 consider — I expected entropy minimisation to help a little and it hurts. That is
 what the pre-registration was for.
+
+**And it was pointed at a scroll nobody has read.** Arm D on PHerc1447 met **none** of
+the three criteria fixed before the run: the patches stay rounded rather than
+becoming strokes, the seeds' agreement on *where* the ink is does not move
+(top-decile IoU 0.173 → 0.177) even as their overall correlation rises to 0.865,
+and the distribution collapses to one mode at the bottom rather than becoming
+bimodal. Self-training amplifies what a model already believes, and docs/16
+measured that on this scroll it believes nothing.
 
 **Arm D closed the open item, and its prediction held.** The transductive
 variant — pseudo-labelling the sheets to be read rather than a different one —

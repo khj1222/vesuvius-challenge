@@ -97,11 +97,27 @@ minutes", and **this prediction does not say where to annotate**. On Paris4
 there were labels, so fine-tuning was possible; 1447 has no ground truth, and
 this output alone cannot pick a starting point. **Unsupervised domain adaptation
 has to come first, and that is a separate problem.** It was then run as a
-pre-registered ladder of the three cheapest methods
-([docs/18](18_uda_design.md), 2026-08-30): input-space spectrum matching buys
-nothing, test-time entropy minimisation actively harms, and pseudo-label
-self-training recovers about a tenth of what one annotated segment recovers. The
-prerequisite named here is still a prerequisite, and it is now priced. This document is the
+pre-registered ladder ([docs/18](18_uda_design.md), 2026-08-30): input-space
+spectrum matching buys nothing, test-time entropy minimisation actively harms,
+and pseudo-label self-training recovers 9.5% of the cross-scroll gap from a
+different segment and 14.3% from the sheets it is about to read. **The last of
+those was then pointed at this render**, since it needs no labels at all, and met
+none of the three criteria fixed before it ran — the patches stay rounded, the
+seeds agree no more on where the ink is, and the distribution collapses to one
+mode rather than committing. The prerequisite named here is still a prerequisite,
+it is now priced, and the cheap ways of meeting it are measured and closed.
+
+WARNING — **the statistics below were computed over the written area, and that is
+not the sheet.** Re-measured 2026-08-30: the render's valid area is **21.05%** of
+the canvas while the prediction covers 67.03%, so **68.9% of the written pixels
+are off-sheet padding** that inference paints because it schedules whole blocks
+from a coarse occupancy scan. Re-derived on the sheet the conclusions hold with
+different numbers — `>128` share 10.6–32.3% across the four checkpoints, max
+211–237, median 88–113 — and one of them gets sharper: the model's output on the
+padding has almost the same distribution as on the scroll (median 86–109 against
+88–113), which is what "not driven by the data" looks like measured rather than
+argued. Numbers in `runs/first_letters/pherc1447_base_on_sheet.json`; the
+paragraph below is left as written, with its 67.034% now explained. This document is the
 quantitative case for that — the same statement made at the end of docs/15 part
 1, now demonstrated on an actually unseen scroll.
 

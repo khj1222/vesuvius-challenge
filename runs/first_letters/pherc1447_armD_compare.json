@@ -1,0 +1,77 @@
+{
+  "segment": "pherc1447-20250703034159",
+  "sheet_share_of_canvas": 0.21048,
+  "unscoreable": "PHerc1447 has no annotation; none of this is a score",
+  "arms": {
+    "seed42_base": {
+      "n_on_sheet": 4252141,
+      "max": 214,
+      "gt128_share": 0.23042,
+      "percentiles": {
+        "5": 71,
+        "25": 84,
+        "50": 100,
+        "75": 125,
+        "95": 173
+      },
+      "iqr": 41,
+      "off_sheet_nonzero_median": 94,
+      "bimodality": 0.2094
+    },
+    "seed42_armD": {
+      "n_on_sheet": 4252141,
+      "max": 237,
+      "gt128_share": 0.03711,
+      "percentiles": {
+        "5": 0,
+        "25": 0,
+        "50": 54,
+        "75": 63,
+        "95": 109
+      },
+      "iqr": 63,
+      "off_sheet_nonzero_median": 63,
+      "bimodality": 0.9354
+    },
+    "seed43_base": {
+      "n_on_sheet": 4252141,
+      "max": 211,
+      "gt128_share": 0.1062,
+      "percentiles": {
+        "5": 70,
+        "25": 78,
+        "50": 88,
+        "75": 105,
+        "95": 151
+      },
+      "iqr": 27,
+      "off_sheet_nonzero_median": 86,
+      "bimodality": 0.1351
+    },
+    "seed43_armD": {
+      "n_on_sheet": 4252141,
+      "max": 226,
+      "gt128_share": 0.00903,
+      "percentiles": {
+        "5": 0,
+        "25": 0,
+        "50": 58,
+        "75": 63,
+        "95": 66
+      },
+      "iqr": 63,
+      "off_sheet_nonzero_median": 63,
+      "bimodality": 0.9817
+    }
+  },
+  "seed_agreement": {
+    "base": {
+      "pearson_on_sheet": 0.4755,
+      "top_decile_iou": 0.173
+    },
+    "armD": {
+      "pearson_on_sheet": 0.8647,
+      "top_decile_iou": 0.177
+    }
+  }
+}
