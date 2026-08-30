@@ -1,0 +1,2938 @@
+[
+ {
+  "case": "even_block",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 2048,
+  "width": 2048,
+  "kind": "label",
+  "n_blocks": 2048,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\even_block\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(2048,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:even_block/strip1",
+   "left": "<scratch>\\work_fix\\even_block\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\even_block\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 356,
+   "files_right": 356,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 342,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2048,
+      2048
+     ],
+     "shape_right": [
+      65,
+      2048,
+      2048
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 272629760
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1024,
+      1024
+     ],
+     "shape_right": [
+      65,
+      1024,
+      1024
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68157440
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      512,
+      512
+     ],
+     "shape_right": [
+      65,
+      512,
+      512
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17039360
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      256,
+      256
+     ],
+     "shape_right": [
+      65,
+      256,
+      256
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4259840
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      128,
+      128
+     ],
+     "shape_right": [
+      65,
+      128,
+      128
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1064960
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      64,
+      64
+     ],
+     "shape_right": [
+      65,
+      64,
+      64
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 266240
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "odd_odd",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 2049,
+  "width": 2051,
+  "kind": "label",
+  "n_blocks": 2049,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\odd_odd\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(2051,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:odd_odd/strip1",
+   "left": "<scratch>\\work_fix\\odd_odd\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\odd_odd\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 417,
+   "files_right": 417,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 403,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      2051
+     ],
+     "shape_right": [
+      65,
+      2049,
+      2051
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162435
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1026
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1026
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68357250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "odd_odd",
+  "layout": "strip1024",
+  "mode": "nearest",
+  "height": 2049,
+  "width": 2051,
+  "kind": "label",
+  "n_blocks": 3,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\odd_odd\\strip1024\\head\\seg\\seg_inklabels.tif, but got shape=(2051,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:odd_odd/strip1024",
+   "left": "<scratch>\\work_fix\\odd_odd\\strip1024\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\odd_odd\\strip1024\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 417,
+   "files_right": 417,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 403,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      2051
+     ],
+     "shape_right": [
+      65,
+      2049,
+      2051
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162435
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1026
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1026
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68357250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "odd_cross_block",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 1025,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 1025,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\odd_cross_block\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(1027,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:odd_cross_block/strip1",
+   "left": "<scratch>\\work_fix\\odd_cross_block\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\odd_cross_block\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 127,
+   "files_right": 127,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 113,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      1025,
+      1027
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68423875
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      513,
+      514
+     ],
+     "shape_right": [
+      65,
+      513,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17139330
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      33,
+      33
+     ],
+     "shape_right": [
+      65,
+      33,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 70785
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "odd_cross_block",
+  "layout": "strip1024",
+  "mode": "nearest",
+  "height": 1025,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 2,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\odd_cross_block\\strip1024\\head\\seg\\seg_inklabels.tif, but got shape=(1027,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:odd_cross_block/strip1024",
+   "left": "<scratch>\\work_fix\\odd_cross_block\\strip1024\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\odd_cross_block\\strip1024\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 127,
+   "files_right": 127,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 113,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      1025,
+      1027
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68423875
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      513,
+      514
+     ],
+     "shape_right": [
+      65,
+      513,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17139330
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      33,
+      33
+     ],
+     "shape_right": [
+      65,
+      33,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 70785
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "coprime",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 1543,
+  "width": 2311,
+  "kind": "label",
+  "n_blocks": 1543,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\coprime\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(2311,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:coprime/strip1",
+   "left": "<scratch>\\work_fix\\coprime\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\coprime\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 360,
+   "files_right": 360,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/17",
+    "0/0/0/18",
+    "0/0/0/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 346,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      1543,
+      2311
+     ],
+     "shape_right": [
+      65,
+      1543,
+      2311
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 231781745
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      772,
+      1156
+     ],
+     "shape_right": [
+      65,
+      772,
+      1156
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 58008080
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      386,
+      578
+     ],
+     "shape_right": [
+      65,
+      386,
+      578
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 14502020
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      193,
+      289
+     ],
+     "shape_right": [
+      65,
+      193,
+      289
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 3625505
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      97,
+      145
+     ],
+     "shape_right": [
+      65,
+      97,
+      145
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 914225
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      49,
+      73
+     ],
+     "shape_right": [
+      65,
+      49,
+      73
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 232505
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "tall_narrow",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 4099,
+  "width": 37,
+  "kind": "label",
+  "n_blocks": 4099,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\tall_narrow\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(37,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:tall_narrow/strip1",
+   "left": "<scratch>\\work_fix\\tall_narrow\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\tall_narrow\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 82,
+   "files_right": 82,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/1/0",
+    "0/0/10/0",
+    "0/0/11/0",
+    "0/0/12/0",
+    "0/0/13/0",
+    "0/0/14/0",
+    "0/0/15/0",
+    "0/0/16/0",
+    "0/0/17/0",
+    "0/0/18/0",
+    "0/0/19/0"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 68,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      4099,
+      37
+     ],
+     "shape_right": [
+      65,
+      4099,
+      37
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 9858095
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      2050,
+      19
+     ],
+     "shape_right": [
+      65,
+      2050,
+      19
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2531750
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      1025,
+      10
+     ],
+     "shape_right": [
+      65,
+      1025,
+      10
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 666250
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      513,
+      5
+     ],
+     "shape_right": [
+      65,
+      513,
+      5
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 166725
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      257,
+      3
+     ],
+     "shape_right": [
+      65,
+      257,
+      3
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 50115
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      129,
+      2
+     ],
+     "shape_right": [
+      65,
+      129,
+      2
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 16770
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "wide_short",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 37,
+  "width": 4099,
+  "kind": "label",
+  "n_blocks": 37,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\wide_short\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:wide_short/strip1",
+   "left": "<scratch>\\work_fix\\wide_short\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\wide_short\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 83,
+   "files_right": 83,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/17",
+    "0/0/0/18",
+    "0/0/0/19"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 69,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      37,
+      4099
+     ],
+     "shape_right": [
+      65,
+      37,
+      4099
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 9858095
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      19,
+      2050
+     ],
+     "shape_right": [
+      65,
+      19,
+      2050
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2531750
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      10,
+      1025
+     ],
+     "shape_right": [
+      65,
+      10,
+      1025
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 666250
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      5,
+      513
+     ],
+     "shape_right": [
+      65,
+      5,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 166725
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      3,
+      257
+     ],
+     "shape_right": [
+      65,
+      3,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 50115
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      2,
+      129
+     ],
+     "shape_right": [
+      65,
+      2,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 16770
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "parity_flip",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 2050,
+  "width": 2050,
+  "kind": "label",
+  "n_blocks": 2050,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\parity_flip\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(2050,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:parity_flip/strip1",
+   "left": "<scratch>\\work_fix\\parity_flip\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\parity_flip\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 416,
+   "files_right": 416,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 402,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2050,
+      2050
+     ],
+     "shape_right": [
+      65,
+      2050,
+      2050
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162500
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1025
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1025
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68290625
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "tiny_odd",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 63,
+  "width": 65,
+  "kind": "label",
+  "n_blocks": 63,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\tiny_odd\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(65,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:tiny_odd/strip1",
+   "left": "<scratch>\\work_fix\\tiny_odd\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\tiny_odd\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 19,
+   "files_right": 19,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "1/0/0/0",
+    "2/0/0/0",
+    "3/0/0/0",
+    "4/0/0/0"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 5,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      63,
+      65
+     ],
+     "shape_right": [
+      65,
+      63,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 266175
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      32,
+      33
+     ],
+     "shape_right": [
+      65,
+      32,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68640
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      16,
+      17
+     ],
+     "shape_right": [
+      65,
+      16,
+      17
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17680
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      8,
+      9
+     ],
+     "shape_right": [
+      65,
+      8,
+      9
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4680
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      4,
+      5
+     ],
+     "shape_right": [
+      65,
+      4,
+      5
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1300
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      2,
+      3
+     ],
+     "shape_right": [
+      65,
+      2,
+      3
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 390
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mean_odd_odd",
+  "layout": "strip1",
+  "mode": "mean",
+  "height": 2049,
+  "width": 2051,
+  "kind": "gray",
+  "n_blocks": 2049,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\mean_odd_odd\\strip1\\head\\seg\\seg_max.tif, but got shape=(2051,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mean_odd_odd/strip1",
+   "left": "<scratch>\\work_fix\\mean_odd_odd\\strip1\\headfix\\seg\\seg_max.zarr",
+   "right": "<scratch>\\work_fix\\mean_odd_odd\\strip1\\base\\seg\\seg_max.zarr",
+   "byte_identical": false,
+   "files_left": 423,
+   "files_right": 423,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 409,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      2051
+     ],
+     "shape_right": [
+      65,
+      2049,
+      2051
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162435
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1026
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1026
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68357250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mean_coprime",
+  "layout": "strip1",
+  "mode": "mean",
+  "height": 1543,
+  "width": 2311,
+  "kind": "gray",
+  "n_blocks": 1543,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\mean_coprime\\strip1\\head\\seg\\seg_max.tif, but got shape=(2311,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mean_coprime/strip1",
+   "left": "<scratch>\\work_fix\\mean_coprime\\strip1\\headfix\\seg\\seg_max.zarr",
+   "right": "<scratch>\\work_fix\\mean_coprime\\strip1\\base\\seg\\seg_max.zarr",
+   "byte_identical": false,
+   "files_left": 360,
+   "files_right": 360,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/17",
+    "0/0/0/18",
+    "0/0/0/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 346,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      1543,
+      2311
+     ],
+     "shape_right": [
+      65,
+      1543,
+      2311
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 231781745
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      772,
+      1156
+     ],
+     "shape_right": [
+      65,
+      772,
+      1156
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 58008080
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      386,
+      578
+     ],
+     "shape_right": [
+      65,
+      386,
+      578
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 14502020
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      193,
+      289
+     ],
+     "shape_right": [
+      65,
+      193,
+      289
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 3625505
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      97,
+      145
+     ],
+     "shape_right": [
+      65,
+      97,
+      145
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 914225
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      49,
+      73
+     ],
+     "shape_right": [
+      65,
+      49,
+      73
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 232505
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mean_parity_flip",
+  "layout": "strip1",
+  "mode": "mean",
+  "height": 2050,
+  "width": 2050,
+  "kind": "gray",
+  "n_blocks": 2050,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\mean_parity_flip\\strip1\\head\\seg\\seg_max.tif, but got shape=(2050,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mean_parity_flip/strip1",
+   "left": "<scratch>\\work_fix\\mean_parity_flip\\strip1\\headfix\\seg\\seg_max.zarr",
+   "right": "<scratch>\\work_fix\\mean_parity_flip\\strip1\\base\\seg\\seg_max.zarr",
+   "byte_identical": false,
+   "files_left": 423,
+   "files_right": 423,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 409,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2050,
+      2050
+     ],
+     "shape_right": [
+      65,
+      2050,
+      2050
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162500
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1025
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1025
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68290625
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "u16_odd",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 2049,
+  "width": 2051,
+  "kind": "u16",
+  "n_blocks": 2049,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\u16_odd\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(2051,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:u16_odd/strip1",
+   "left": "<scratch>\\work_fix\\u16_odd\\strip1\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\u16_odd\\strip1\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 417,
+   "files_right": 417,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/10",
+    "0/0/0/11",
+    "0/0/0/12",
+    "0/0/0/13",
+    "0/0/0/14",
+    "0/0/0/15",
+    "0/0/0/16",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 403,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      2051
+     ],
+     "shape_right": [
+      65,
+      2049,
+      2051
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 273162435
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      1026
+     ],
+     "shape_right": [
+      65,
+      1025,
+      1026
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 68357250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      513
+     ],
+     "shape_right": [
+      65,
+      513,
+      513
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 17105985
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      257
+     ],
+     "shape_right": [
+      65,
+      257,
+      257
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 4293185
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      129
+     ],
+     "shape_right": [
+      65,
+      129,
+      129
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 1081665
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      65
+     ],
+     "shape_right": [
+      65,
+      65,
+      65
+     ],
+     "dtype_left": "uint16",
+     "dtype_right": "uint16",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 274625
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mod1_256",
+  "layout": "strip256",
+  "mode": "nearest",
+  "height": 513,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 3,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\mod1_256\\strip256\\head\\seg\\seg_inklabels.tif, but got shape=(1027,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mod1_256/strip256",
+   "left": "<scratch>\\work_fix\\mod1_256\\strip256\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\mod1_256\\strip256\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 84,
+   "files_right": 84,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 70,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      513,
+      1027
+     ],
+     "shape_right": [
+      65,
+      513,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 34245315
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      257,
+      514
+     ],
+     "shape_right": [
+      65,
+      257,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 8586370
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      129,
+      257
+     ],
+     "shape_right": [
+      65,
+      129,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2154945
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      65,
+      129
+     ],
+     "shape_right": [
+      65,
+      65,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 545025
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      33,
+      65
+     ],
+     "shape_right": [
+      65,
+      33,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 139425
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      17,
+      33
+     ],
+     "shape_right": [
+      65,
+      17,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 36465
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mod1_256",
+  "layout": "tiled256",
+  "mode": "nearest",
+  "height": 513,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 15,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": true,
+  "head_error": null,
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mod1_256/tiled256",
+   "left": "<scratch>\\work_fix\\mod1_256\\tiled256\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\mod1_256\\tiled256\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 84,
+   "files_right": 84,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 70,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      513,
+      1027
+     ],
+     "shape_right": [
+      65,
+      513,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 34245315
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      257,
+      514
+     ],
+     "shape_right": [
+      65,
+      257,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 8586370
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      129,
+      257
+     ],
+     "shape_right": [
+      65,
+      129,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2154945
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      65,
+      129
+     ],
+     "shape_right": [
+      65,
+      65,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 545025
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      33,
+      65
+     ],
+     "shape_right": [
+      65,
+      33,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 139425
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      17,
+      33
+     ],
+     "shape_right": [
+      65,
+      17,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 36465
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mod1_16",
+  "layout": "strip16",
+  "mode": "nearest",
+  "height": 2049,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 129,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\mod1_16\\strip16\\head\\seg\\seg_inklabels.tif, but got shape=(1027,)",
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mod1_16/strip16",
+   "left": "<scratch>\\work_fix\\mod1_16\\strip16\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\mod1_16\\strip16\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 234,
+   "files_right": 234,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 220,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      1027
+     ],
+     "shape_right": [
+      65,
+      2049,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 136780995
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      514
+     ],
+     "shape_right": [
+      65,
+      1025,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 34245250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      257
+     ],
+     "shape_right": [
+      65,
+      513,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 8569665
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      129
+     ],
+     "shape_right": [
+      65,
+      257,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2154945
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      65
+     ],
+     "shape_right": [
+      65,
+      129,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 545025
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      33
+     ],
+     "shape_right": [
+      65,
+      65,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 139425
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "mod1_16",
+  "layout": "tiled256",
+  "mode": "nearest",
+  "height": 2049,
+  "width": 1027,
+  "kind": "label",
+  "n_blocks": 45,
+  "last_block_rows": 1,
+  "base_ok": true,
+  "base_error": null,
+  "head_ok": true,
+  "head_error": null,
+  "headfix_ok": true,
+  "headfix_error": null,
+  "fix_vs_base": "equal",
+  "fix_vs_base_detail": {
+   "label": "fix:mod1_16/tiled256",
+   "left": "<scratch>\\work_fix\\mod1_16\\tiled256\\headfix\\seg\\seg_inklabels.zarr",
+   "right": "<scratch>\\work_fix\\mod1_16\\tiled256\\base\\seg\\seg_inklabels.zarr",
+   "byte_identical": false,
+   "files_left": 234,
+   "files_right": 234,
+   "only_left": [],
+   "only_right": [],
+   "changed": [
+    "0/0/0/0",
+    "0/0/0/1",
+    "0/0/0/2",
+    "0/0/0/3",
+    "0/0/0/4",
+    "0/0/0/5",
+    "0/0/0/6",
+    "0/0/0/7",
+    "0/0/0/8",
+    "0/0/1/0",
+    "0/0/1/1",
+    "0/0/1/2"
+   ],
+   "n_only_left": 0,
+   "n_only_right": 0,
+   "n_changed": 220,
+   "numeric": [
+    {
+     "level": 0,
+     "shape_left": [
+      65,
+      2049,
+      1027
+     ],
+     "shape_right": [
+      65,
+      2049,
+      1027
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 136780995
+    },
+    {
+     "level": 1,
+     "shape_left": [
+      65,
+      1025,
+      514
+     ],
+     "shape_right": [
+      65,
+      1025,
+      514
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 34245250
+    },
+    {
+     "level": 2,
+     "shape_left": [
+      65,
+      513,
+      257
+     ],
+     "shape_right": [
+      65,
+      513,
+      257
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 8569665
+    },
+    {
+     "level": 3,
+     "shape_left": [
+      65,
+      257,
+      129
+     ],
+     "shape_right": [
+      65,
+      257,
+      129
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 2154945
+    },
+    {
+     "level": 4,
+     "shape_left": [
+      65,
+      129,
+      65
+     ],
+     "shape_right": [
+      65,
+      129,
+      65
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 545025
+    },
+    {
+     "level": 5,
+     "shape_left": [
+      65,
+      65,
+      33
+     ],
+     "shape_right": [
+      65,
+      65,
+      33
+     ],
+     "dtype_left": "uint8",
+     "dtype_right": "uint8",
+     "equal": true,
+     "mismatched_voxels": 0,
+     "voxels": 139425
+    }
+   ],
+   "numerically_equal": true
+  }
+ },
+ {
+  "case": "height1",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 1,
+  "width": 4099,
+  "kind": "label",
+  "n_blocks": 1,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\strip1\\base\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\strip1\\headfix\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "height1",
+  "layout": "stripfull",
+  "mode": "nearest",
+  "height": 1,
+  "width": 4099,
+  "kind": "label",
+  "n_blocks": 1,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\stripfull\\base\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\stripfull\\head\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\stripfull\\headfix\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "height1",
+  "layout": "tiled256",
+  "mode": "nearest",
+  "height": 1,
+  "width": 4099,
+  "kind": "label",
+  "n_blocks": 17,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\tiled256\\base\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\tiled256\\head\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\height1\\tiled256\\headfix\\seg\\seg_inklabels.tif, but got shape=(1, 4099)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "width1",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 4099,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 4099,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip1\\base\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip1\\headfix\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "width1",
+  "layout": "strip7",
+  "mode": "nearest",
+  "height": 4099,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 586,
+  "last_block_rows": 4,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip7\\base\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip7\\head\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\strip7\\headfix\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "width1",
+  "layout": "stripfull",
+  "mode": "nearest",
+  "height": 4099,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 1,
+  "last_block_rows": 4099,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\stripfull\\base\\seg\\seg_inklabels.tif, but got shape=(4099,)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\stripfull\\head\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\stripfull\\headfix\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "width1",
+  "layout": "tiled256",
+  "mode": "nearest",
+  "height": 4099,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 17,
+  "last_block_rows": 3,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\tiled256\\base\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\tiled256\\head\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\width1\\tiled256\\headfix\\seg\\seg_inklabels.tif, but got shape=(4099, 1)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "both1",
+  "layout": "strip1",
+  "mode": "nearest",
+  "height": 1,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 1,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\strip1\\base\\seg\\seg_inklabels.tif, but got shape=()",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\strip1\\head\\seg\\seg_inklabels.tif, but got shape=(1, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\strip1\\headfix\\seg\\seg_inklabels.tif, but got shape=(1, 1)",
+  "fix_vs_base": "n/a"
+ },
+ {
+  "case": "both1",
+  "layout": "tiled256",
+  "mode": "nearest",
+  "height": 1,
+  "width": 1,
+  "kind": "label",
+  "n_blocks": 1,
+  "last_block_rows": 1,
+  "base_ok": false,
+  "base_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\tiled256\\base\\seg\\seg_inklabels.tif, but got shape=(1, 1)",
+  "head_ok": false,
+  "head_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\tiled256\\head\\seg\\seg_inklabels.tif, but got shape=(1, 1)",
+  "headfix_ok": false,
+  "headfix_error": "ValueError: Expected a 2D image at <scratch>\\work_fix\\both1\\tiled256\\headfix\\seg\\seg_inklabels.tif, but got shape=(1, 1)",
+  "fix_vs_base": "n/a"
+ }
+]

@@ -1,0 +1,56 @@
+{
+ "source": "D:\\vesuvius-challenge\\data\\ink-dataset\\phercparis4\\w00_20231016151002\\w00_20231016151002_validation_mask.tif",
+ "shape": [
+  32249,
+  51380
+ ],
+ "dtype": "uint8",
+ "nonzero": 19083344,
+ "layouts": {
+  "tiled256": {
+   "path": "<scratch>\\real\\tiled256\\seg\\seg_inklabels.tif",
+   "file_mb": 10.49,
+   "is_tiled": true,
+   "chunks": [
+    256,
+    256
+   ],
+   "chunked": [
+    126,
+    201
+   ],
+   "n_blocks": 25326,
+   "compression": 5
+  },
+  "strip1024": {
+   "path": "<scratch>\\real\\strip1024\\seg\\seg_inklabels.tif",
+   "file_mb": 1.36,
+   "is_tiled": false,
+   "chunks": [
+    1024,
+    51380
+   ],
+   "chunked": [
+    32,
+    1
+   ],
+   "n_blocks": 32,
+   "compression": 5
+  },
+  "strip7": {
+   "path": "<scratch>\\real\\strip7\\seg\\seg_inklabels.tif",
+   "file_mb": 4.9,
+   "is_tiled": false,
+   "chunks": [
+    7,
+    51380
+   ],
+   "chunked": [
+    4607,
+    1
+   ],
+   "n_blocks": 4607,
+   "compression": 5
+  }
+ }
+}
