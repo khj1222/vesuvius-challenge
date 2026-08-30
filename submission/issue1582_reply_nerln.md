@@ -51,13 +51,13 @@ question: estimate the source corpus's mean radial power spectrum and the target
 matching filter to the native render, re-infer. Aligned and native separate cleanly in that
 statistic (every aligned volume at spectral centroid ≥ 0.0278, every native ≤ 0.0262) and the
 filter closes 38% of the distance at the patch level — mean over the four filtered volumes of
-the drop in total variation against the source profile. The F1 effect was **+0.005 mean,
-median 9.1% of the aligned-native gap, 17 of 24 cells improving** — no effect by the noise
-floor I had fixed in advance. (That median is per cell, `(filtered − raw) / (aligned − raw)`
-at the same segment, seed and step; the mean of that ratio is useless here because one cell
-has an aligned-native gap of 0.0015.) That is what a sample-count account predicts: a filter can reshape a
-spectrum, but it cannot restore measurements that were never taken. It is not what a
-"different but equivalent representation" account predicts.
+the drop in total variation against the source profile. The F1 effect was **+0.005 mean, median
+9.1% of the aligned-native gap, 17 of 24 cells improving** — no effect by the noise floor I had
+fixed in advance. (That median is per cell, `(filtered − raw) / (aligned − raw)` at the same
+segment, seed and step; the mean of that ratio is useless here because one cell has an aligned-
+native gap of 0.0015.) That is what a sample-count account predicts: a filter can reshape a
+spectrum, but it cannot restore measurements that were never taken. It is not what a "different
+but equivalent representation" account predicts.
 
 **On the reference arms** — agreed, and I would not cite them either. You put the reason
 better than I did: with 90.7–96.8% of the available headroom already spent on training pixels
@@ -79,6 +79,6 @@ Tool and raw reports: [`tools/check_pyramid_pooling.py`](https://github.com/khj1
 [`runs/pyramid/`](https://github.com/khj1222/vesuvius-challenge/tree/main/runs/pyramid),
 write-up in [docs/15 appendix 3](https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md).
 
-- [x] The pooling figures above were produced today by the linked tool against the published
-      volumes; the 64-voxel count follows from them plus `POOL_Z = 4` in
+- [x] The pooling figures above were produced on 2026-08-30 by the linked tool against the
+      published volumes; the 64-voxel count follows from them plus `POOL_Z = 4` in
       `scripts/prepare_9um_isotropic_input.py`.
