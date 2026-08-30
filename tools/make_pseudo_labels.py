@@ -44,6 +44,12 @@ def parse_args(argv=None) -> argparse.Namespace:
                         help="the model's own decision point, in probability")
     parser.add_argument("--margin", type=float, default=0.1,
                         help="confidence margin either side of the centre")
+    parser.add_argument("--supervision-stride", type=int, default=1,
+                        help="keep one block in every N x N of the supervised area; the "
+                             "pseudo-label content is unchanged, only how much of it carries "
+                             "loss (1 = keep everything)")
+    parser.add_argument("--supervision-block", type=int, default=128,
+                        help="block edge for --supervision-stride")
     parser.add_argument("--probe", action="store_true",
                         help="report the prediction distribution and write nothing")
     return parser.parse_args(argv)
@@ -108,6 +114,21 @@ def main(argv=None) -> int:
     positive = (prediction >= high) & sheet
     negative = (prediction <= low) & sheet
     supervised = positive | negative
+    kept_fraction = 1.0
+    if args.supervision_stride > 1:
+        # Thinning is a compute measure, not a labelling one: the same pixels are
+        # called ink and background, and only a deterministic 1/stride^2 of the
+        # blocks carries loss. Masking the ink plane too keeps positives a subset
+        # of the supervised area, which the trainer would otherwise ignore anyway.
+        block, stride = args.supervision_block, args.supervision_stride
+        rows = (np.arange(prediction.shape[0]) // block) % stride == 0
+        cols = (np.arange(prediction.shape[1]) // block) % stride == 0
+        keep = rows[:, None] & cols[None, :]
+        before = int(supervised.sum())
+        supervised &= keep
+        positive &= keep
+        negative &= keep
+        kept_fraction = float(supervised.sum() / max(1, before))
 
     stats = {
         "segment": args.segment,
@@ -124,6 +145,9 @@ def main(argv=None) -> int:
         "supervised_pixels": int(supervised.sum()),
         "positive_share_of_supervised": float(positive.sum() / max(1, supervised.sum())),
         "supervised_share_of_sheet": float(supervised.sum() / max(1, sheet.sum())),
+        "supervision_stride": args.supervision_stride,
+        "supervision_block": args.supervision_block,
+        "kept_fraction_of_confident_set": round(kept_fraction, 4),
     }
     log(json.dumps({k: stats[k] for k in (
         "segment", "sheet_pixels", "prediction_min_on_sheet", "prediction_max_on_sheet",
@@ -141,7 +165,10 @@ def main(argv=None) -> int:
         "derived_from": stats["prediction"],
         "rule": (f"positive: p >= {args.center + args.margin:.2f}; "
                  f"negative: p <= {args.center - args.margin:.2f}; "
-                 "middle discarded; restricted to the render's valid area"),
+                 "middle discarded; restricted to the render's valid area"
+                 + ("" if args.supervision_stride <= 1 else
+                    f"; supervision thinned to one {args.supervision_block}px block in every "
+                    f"{args.supervision_stride}x{args.supervision_stride}")),
         "annotation_center_channel": contract["channel"],
         "output_channels": contract["shape"][0],
         "no_target_annotation_used": True,
