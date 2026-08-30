@@ -4,7 +4,9 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v8 (2026-08-30, after a full pre-submission audit). The adaptation ladder
+**Status:** DRAFT v9 (2026-08-30). Arm D — the transductive variant of arm C, pre-registered
+at commit `923895d` before it ran — landed at **14.3% of the gap** and is folded into the
+ladder paragraph and the evidence table. v8 was the full pre-submission audit. The adaptation ladder
 is finished: arms B and C were pre-registered and run, so the PHerc1447 paragraph reports
 three closed routes rather than one. Also folded in: the pyramid-pooling measurement that
 settles the mechanism behind the domain-match retraction (docs/15 appendix 3), prompted by a
@@ -30,7 +32,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-Field 5 is ~10,000 characters, which is long. The measurement paragraph was already tightened
+Field 5 is ~10,500 characters, which is long. The measurement paragraph was already tightened
 once (2026-08-30) to pay for the adaptation-ladder paragraph. If it has to shrink further, cut
 the spectral detail from the ladder paragraph next — arm A's numbers live in docs/18 — and then
 the audit paragraph, whose detail is in docs/17.
@@ -197,13 +199,13 @@ nothing, not where to annotate — and unsupervised adaptation has to precede st
 an unlabeled scroll. I would rather report that than imply the recipe is ready to point at
 PHerc0800 tomorrow (docs/16).
 
-So I pre-registered the three cheapest ways out — design, prediction and decision rule
-pushed publicly before each run — and ran all three. Input space: that render is
-spectrally a native-class input, and PHerc1447 has only an 8.640 µm scan, so the "render
-aligned" guidance cannot be followed there at all; a matching filter closes 38% of the
-spectral distance between the families and buys a median 9.1% of the transfer gap, mean
-+0.005 F1 — no effect by the rule I had fixed, inside the 0–20% I predicted. Parameter
-space: test-time entropy minimisation on the only surface the architecture leaves — 27,712
+So I pre-registered the cheapest ways out — design, prediction and decision rule pushed
+publicly before each run — and ran all four. Input space: that render is spectrally a
+native-class input, and PHerc1447 has only an 8.640 µm scan, so the "render aligned"
+guidance cannot be followed there at all; a matching filter closes 38% of the spectral
+distance between the families and buys a median 9.1% of the transfer gap, mean +0.005 F1 —
+no effect by the rule I had fixed, inside the 0–20% I predicted. Parameter space: test-
+time entropy minimisation on the only surface the architecture leaves — 27,712
 normalisation affines, 0.08% of the model — costs 0.041 F1 across fourteen cells with not
 one improving, and every checkpoint I scored at 400 steps or beyond sits on its segment's
 all-positive floor. I predicted +10 to +40%; it is −13%, so that prediction is refuted
@@ -211,11 +213,16 @@ with the sign wrong. A rank check in float shows the loss is the model and not t
 output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below chance — and that the
 adaptation objective improves monotonically the whole way down, so no label-free stopping
 rule built on it could have caught this. Label space: self-training on the model's own
-confident pixels is the one rung that helps, +0.030 F1 with all fourteen cells improving,
-9.5% of the gap. That last number is the useful one, because it prices the annotation:
-with the base checkpoint, the segment, the recipe and the step count held fixed, a human's
-labels on one segment buy +0.32 and the model's own confident guesses buy +0.03. Annotate
-something — and half a segment will do (docs/18).
+confident pixels is the rung that helps, and it helps most when it labels the sheets it is
+about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap, against
++0.030 when the pseudo-labels come from a different segment. Both were pre-registered; the
+transductive one was committed at +5% to +30% and landed at 14.3%. That number is the
+useful one, because it prices the annotation: with the base checkpoint, the recipe and the
+step count held fixed, a human's labels on one segment buy +0.32 where the model's own
+confident guesses buy +0.046. A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES the best
+label-free method — and since that method needs no labels at all, the 14% is what a
+scroll nobody has annotated can have today. Annotate something, and half a segment will do
+(docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
@@ -292,6 +299,7 @@ against what was actually pasted.
 | arm A: spectrum matching gains +0.005 F1, median 9.1% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
 | arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
 | arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
+| arm D (transductive): +0.046 F1, 14 of 14 cells, 14.3% of the gap, AUC 0.659 → 0.742; pre-registered at +5–30% | `runs/ink9um_scorecard/armD_pseudoT_matrix.csv` (18 cells) + `armD_pseudoT_summary.json` + `armD_rank_check_w01_s42.json`, `docs/18` |
 | the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
