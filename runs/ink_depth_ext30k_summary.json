@@ -1,0 +1,72 @@
+{
+  "extended_to": 30000,
+  "resume_from": 20000,
+  "date": "2026-08-15",
+  "lr_note": "full-state resume; scheduler rebuilt for 30k so steps 20k+ run a warm-restart tail (~27% peak LR), identical for both arms",
+  "arms": {
+    "v3": {
+      "folds": [
+        {
+          "fold": 0,
+          "best_f1_le20k": 0.843767,
+          "best_step_le20k": 19000,
+          "best_f1_gt20k": 0.844107,
+          "best_step_gt20k": 25000,
+          "best_f1_any": 0.844107
+        },
+        {
+          "fold": 1,
+          "best_f1_le20k": 0.844286,
+          "best_step_le20k": 19000,
+          "best_f1_gt20k": 0.851647,
+          "best_step_gt20k": 25000,
+          "best_f1_any": 0.851647
+        },
+        {
+          "fold": 2,
+          "best_f1_le20k": 0.852834,
+          "best_step_le20k": 19000,
+          "best_f1_gt20k": 0.849298,
+          "best_step_gt20k": 25000,
+          "best_f1_any": 0.852834
+        }
+      ],
+      "mean_best_le20k": 0.846962,
+      "mean_best_any": 0.849529
+    },
+    "v4": {
+      "folds": [
+        {
+          "fold": 0,
+          "best_f1_le20k": 0.797326,
+          "best_step_le20k": 17000,
+          "best_f1_gt20k": 0.803715,
+          "best_step_gt20k": 29000,
+          "best_f1_any": 0.803715
+        },
+        {
+          "fold": 1,
+          "best_f1_le20k": 0.81916,
+          "best_step_le20k": 19000,
+          "best_f1_gt20k": 0.814118,
+          "best_step_gt20k": 29000,
+          "best_f1_any": 0.81916
+        },
+        {
+          "fold": 2,
+          "best_f1_le20k": 0.809612,
+          "best_step_le20k": 19000,
+          "best_f1_gt20k": 0.817483,
+          "best_step_gt20k": 21000,
+          "best_f1_any": 0.817483
+        }
+      ],
+      "mean_best_le20k": 0.808699,
+      "mean_best_any": 0.813453
+    }
+  },
+  "gap_v3_minus_v4": {
+    "le20k": 0.038263,
+    "with_extension": 0.036076
+  }
+}

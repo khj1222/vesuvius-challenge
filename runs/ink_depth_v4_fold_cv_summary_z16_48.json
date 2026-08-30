@@ -1,0 +1,47 @@
+{
+  "segment": "w00_20231016151002",
+  "arm": "v4 (measured band)",
+  "folds": 3,
+  "z_window": "16:48",
+  "note": "re-scored: the volume prediction is reduced over the supervised column only. runs/*/validation/ holds the original whole-volume numbers.",
+  "results": [
+    {
+      "fold": 0,
+      "run_dir": "runs/ink_depth_v4_fold0",
+      "best_step": 20000,
+      "best_f1": 0.799734,
+      "threshold": 168,
+      "precision": 0.808345,
+      "recall": 0.791305,
+      "iou": 0.666298,
+      "minutes": 16.6
+    },
+    {
+      "fold": 1,
+      "run_dir": "runs/ink_depth_v4_fold1",
+      "best_step": 19000,
+      "best_f1": 0.81916,
+      "threshold": 136,
+      "precision": 0.811136,
+      "recall": 0.827344,
+      "iou": 0.69371,
+      "minutes": 16.9
+    },
+    {
+      "fold": 2,
+      "run_dir": "runs/ink_depth_v4_fold2",
+      "best_step": 20000,
+      "best_f1": 0.810384,
+      "threshold": 139,
+      "precision": 0.788898,
+      "recall": 0.833072,
+      "iou": 0.681214,
+      "minutes": 17.2
+    }
+  ],
+  "f1_mean": 0.809759,
+  "f1_min": 0.799734,
+  "f1_max": 0.81916,
+  "f1_spread": 0.019426,
+  "total_minutes": 54.1
+}

@@ -1,0 +1,38 @@
+{
+  "segment": "w00_20231016151002",
+  "folds": 3,
+  "results": [
+    {
+      "fold": 0,
+      "run_dir": "runs/ink_depth_v3_fold0",
+      "best_step": 20000,
+      "best_f1": 0.845547,
+      "threshold": 193,
+      "iou": 0.732422,
+      "minutes": 210.5
+    },
+    {
+      "fold": 1,
+      "run_dir": "runs/ink_depth_v3_fold1",
+      "best_step": 20000,
+      "best_f1": 0.845178,
+      "threshold": 180,
+      "iou": 0.731868,
+      "minutes": 123.0
+    },
+    {
+      "fold": 2,
+      "run_dir": "runs/ink_depth_v3_fold2",
+      "best_step": 19000,
+      "best_f1": 0.852834,
+      "threshold": 145,
+      "iou": 0.743427,
+      "minutes": 125.4
+    }
+  ],
+  "f1_mean": 0.847853,
+  "f1_min": 0.845178,
+  "f1_max": 0.852834,
+  "f1_spread": 0.007656,
+  "total_minutes": 462.0
+}

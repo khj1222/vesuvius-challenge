@@ -1,0 +1,38 @@
+{
+  "segment": "w02_20231031143852",
+  "folds": 3,
+  "results": [
+    {
+      "fold": 0,
+      "run_dir": "runs/ink_w02_v3_fold0",
+      "best_step": 20000,
+      "best_f1": 0.829083,
+      "threshold": 202,
+      "iou": 0.708063,
+      "minutes": 108.2
+    },
+    {
+      "fold": 1,
+      "run_dir": "runs/ink_w02_v3_fold1",
+      "best_step": 15000,
+      "best_f1": 0.813264,
+      "threshold": 162,
+      "iou": 0.685294,
+      "minutes": 107.7
+    },
+    {
+      "fold": 2,
+      "run_dir": "runs/ink_w02_v3_fold2",
+      "best_step": 17000,
+      "best_f1": 0.836404,
+      "threshold": 201,
+      "iou": 0.71881,
+      "minutes": 109.5
+    }
+  ],
+  "f1_mean": 0.82625,
+  "f1_min": 0.813264,
+  "f1_max": 0.836404,
+  "f1_spread": 0.02314,
+  "total_minutes": 327.9
+}

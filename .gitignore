@@ -37,3 +37,8 @@ wandb/
 # OS
 Thumbs.db
 .DS_Store
+
+# runs/ is GPU output: patch caches (50-95 MB each), checkpoints, logs, previews.
+# Only curated artifacts are committed, and deliberately -- add them with `git add -f`.
+# (A bare `git add runs/` once staged 1,506 files / 1.1 GB.)
+runs/*
