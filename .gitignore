@@ -42,3 +42,8 @@ Thumbs.db
 # Only curated artifacts are committed, and deliberately -- add them with `git add -f`.
 # (A bare `git add runs/` once staged 1,506 files / 1.1 GB.)
 runs/*
+
+# Prize-strategy planning: kept local on purpose. The public repo is reachable
+# from the submission links, and docs/05 was cleaned of exactly this kind of
+# content on 2026-08-29 for that reason.
+planning/
