@@ -184,10 +184,18 @@ scroll's entire annotation. Four parts:
   GPU minutes** closes 82% of the gap (0.496 to 0.822 on seven segments the
   fine-tune never saw), saturating at 2,500 steps.
 - **A First Letters playbook**, with a measured expected value for each step.
+- **The price of that repair** — rebuilding the fine-tune on nested subsets of one
+  segment's annotation: **half the annotation keeps 89% of the benefit for 0.033
+  F1**, a fifth keeps 71%, an eighth 56%. So "annotate one segment" now carries a
+  number, and the number says annotate half of one.
 
-An appendix records a hypothesis of ours that a **pre-registered** follow-up arm
-then **rejected** — the aligned representation's advantage is not domain match
-but representation quality — and the retraction was posted upstream.
+Two appendices record hypotheses put to the test rather than defended. One is ours,
+**rejected** by a **pre-registered** follow-up arm: the aligned representation's
+advantage is not domain match but representation quality, and the retraction was
+posted upstream. The other is a reviewer's explanation of *why* — checked by reading
+the published pyramids, which turn out to be mean-built and to leave z alone, so one
+aligned voxel averages **64 acquired voxels** where a native one is a single
+acquisition.
 
 ### 8. Running the render path on an unseen scroll — [docs/16](docs/16_first_letters_render.md)
 

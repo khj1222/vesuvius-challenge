@@ -4,9 +4,14 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v6 (2026-08-29, late). Both overnight experiments are folded in — the
-label-efficiency curve after the repair-price paragraph (docs/15 part 5) and arm A's negative
-result at the end of the PHerc1447 paragraph (docs/18) — and field 4 gains docs/18.
+**Status:** DRAFT v7 (2026-08-30). The adaptation ladder is finished: arms B and C were
+pre-registered and run, so the PHerc1447 paragraph now reports three closed routes rather
+than one. Also folded in: the pyramid-pooling measurement that settles the mechanism behind
+the domain-match retraction (docs/15 appendix 3), prompted by a reviewer's question on
+villa #1582.
+
+**Form checked 2026-08-30:** scrollprize.org/prizes still carries August's form and the
+08-31 deadline, as expected — September's link should appear once the round turns over.
 
 ⚠️ **villa [#1638](https://github.com/ScrollPrize/villa/issues/1638) was closed the same day it
 was filed**, by `pmh47` (Research Team Lead): a disjoint mask is not a leak, and an
@@ -128,10 +133,16 @@ so I pre-registered the test it could not settle (the same segments held out in 
 families, so the model has seen the native one), pushed the design and the reading
 committed to each outcome before the runs finished, and it refuted me: the gap came back
 unchanged, +0.058 against +0.061, with native exposure raised from 0% to 16.4% of
-training batches. The mechanism is not familiarity but quality — aligned renders are
-2.399 µm acquisitions pooled 4x in z, against a single 9.362 µm one. Render aligned,
-whatever the model trained on. The retraction is in docs/15 appendix 2 and on the
-upstream thread.
+training batches. The mechanism is not familiarity but quality, and it is now
+measured rather than asserted: a reviewer on the retraction thread proposed that aligned
+inputs are averages of many acquired samples and flagged the one assumption it rested on —
+whether the published pyramids are averaged or decimated. Reading them says averaged, in
+every one of 18 window comparisons across three scrolls, to the rounding bound of 0.50 grey
+levels; and the pyramids never touch z, so the recipe's 4x z pool multiplies the in-plane
+16 a second time. One aligned voxel is the mean of 64 acquired 2.399 µm voxels where the
+native voxel covering the same space is a single 9.362 µm acquisition. Render aligned,
+whatever the model trained on. The retraction is in docs/15 appendix 2, the pooling
+measurement in appendix 3, and both are on the upstream thread.
 
 The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
 on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
@@ -216,6 +227,8 @@ opens; the layout above assumes August's.
 |---|---|
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
 | arm A: spectrum matching gains +0.005 F1, median 8.4% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
+| arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48 while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
+| the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
 | held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
 | adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
 | within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
