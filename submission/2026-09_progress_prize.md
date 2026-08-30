@@ -4,7 +4,7 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v11 (2026-08-31). Arm D — the transductive variant of arm C, pre-registered
+**Status:** DRAFT v12 (2026-08-31, trimmed). Arm D — the transductive variant of arm C, pre-registered
 at commit `923895d` before it ran — landed at **14.3% of the gap**, and was then pointed at
 PHerc1447 itself under criteria fixed at `1da7685`, where it met none of them. Then the whole
 Paris4 comparison was replicated on 1667 (pre-registered at `cd07b16`, step curve at
@@ -36,14 +36,13 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-⚠️ **Field 5 is now ~12,300 characters and that is too long — a trim is owed before
-submitting.** It grew by three results in one day (arm D, the PHerc1447 run, the 1667
-replication) and nothing was cut to pay for them. Suggested order, cheapest first: the
-spectral detail in the ladder paragraph (arm A's numbers live in docs/18); the PHerc1447
-adaptation sentences, keeping only that it was tried and met none of its criteria; and the
-audit paragraph, whose detail is in docs/17. Target ~9,000. Do not cut the 1667 replication —
-it is the strongest thing in the field, because it is our own headline being falsified by our
-own follow-up.
+**Field 5 is 9,820 characters**, trimmed 2026-08-31 from 12,294 after three results landed
+in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
+figures checked — and what went was detail that lives in the linked documents: arm A's
+spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
+byte counts. The 1667 replication was deliberately left intact: it is our own headline being
+falsified by our own follow-up, which is the strongest thing in the field. If it must shrink
+again, the measurement paragraph is the only one with slack left.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
@@ -109,12 +108,13 @@ Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-sc
 **5. Short description of how your contributions substantially increase the probability of reading complete scrolls**
 
 ```
-Reading a complete scroll means running an ink model on a scroll nobody has labeled.
-Open problem #7 asks how well today's models survive that jump; until now there was no
-systematic number — the official 9 µm models released on 2026-08-14 ship with no
-evaluation at all. I measured the jump, diagnosed why it fails, and priced what it costs
-to fix — all on that release, with the held-out methodology that won July's Progress
-Prize and settled villa #192 in August.
+Reading a complete scroll means running an ink model on a scroll nobody has labeled. Open
+problem #7 asks how well today's models survive that jump; until now there was no
+systematic number, and the official 9 µm models released on 2026-08-14 ship with no
+evaluation at all. I measured the jump, diagnosed why it fails, priced what it costs to
+fix, and then checked whether that price holds on a second scroll — all on that release,
+with the held-out methodology that won July's Progress Prize and settled villa #192 in
+August.
 
 Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on the three
 segments that ship validation masks puts the honest within-scroll ceiling at F1 0.74–0.77
@@ -122,60 +122,47 @@ segments that ship validation masks puts the honest within-scroll ceiling at F1 
 segment — against 0.98+ on training pixels: a 0.22–0.45 memorisation gap, no step that is
 best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
 
-That yardstick then had to be checked itself, because everything honest on this corpus rests
-on three masks — and all three split their annotation *within* connected regions, so 23% to
-59% of their held-out pixels sit inside one 128px training patch of pixels the model trained
-on. Whether that adjacency pays needed no new training: the released checkpoints trained on
-those segments and my leave-one-scroll-out arms never saw the scrolls, so scoring both over
-the same distance strata separates proximity from how hard a stratum is. The control comes
-out nearly flat while the trained model gains +0.14 and +0.07 F1 more on the held-out pixels
-nearest its training pixels.
-
-I filed that upstream as villa #1638 and the research lead closed it the same day: the masks
-are disjoint from supervision, so nothing was trained on, and an intra-segment held-out number
-is legitimate provided it is named that and not read as inter-segment or inter-scroll. He is
-right, and the framing was mine to fix. What survives the correction is the size — his own
-advice is that those three kinds of result must be read differently, and this measures what
-that difference is worth here, which is why the 0.74–0.77 above is an intra-segment ceiling
-and not a statement about what these models generalise to (docs/17).
+That yardstick had to be checked itself, because everything honest here rests on three
+masks — and all three split their annotation within connected regions, so 23% to 59% of
+their held-out pixels sit inside one 128px training patch of pixels the model trained on.
+Whether that adjacency pays needed no new training: the released checkpoints trained on
+those segments while my leave-one-scroll-out arms never saw the scrolls, so scoring both
+over the same distance strata separates proximity from difficulty. The control comes out
+nearly flat while the trained model gains +0.14 and +0.07 F1 more on the pixels nearest
+its training data. I filed that as villa #1638; the research lead closed it the same day,
+because the masks are disjoint and an intra-segment held-out number is legitimate provided
+it is named that. He is right, and the framing was mine to fix — which is why the
+0.74–0.77 above is an intra-segment ceiling, not a claim about generalisation (docs/17).
 
 Then the measurement (docs/15, parts 1–2): leave-one-scroll-out, three times. I retrained
-the exact released recipe six times — the only change being one scroll removed and the
-per-batch quotas renormalised — and scored each pair of seeds on every annotated pixel of
-the held-out scroll, against the released checkpoints for which those same pixels are
-training data. Every segment is reported against its all-positive F1 floor (2p/(1+p)) so
-ink-fraction artifacts cannot masquerade as transfer. The spectrum: margin over the
-trivial classifier averages +0.06 toward Paris4, +0.13 toward 1667, +0.17 toward 0139 —
-and the 0139 arm, trained on HALF the corpus, transfers best, so target-scroll identity
-dominates source size. On the four physical segments that exist in both representation
-families, transfer to the aligned representation beats the native render 4 out of 4. I
-first published that as domain match — models transfer best into the family they trained
-on — and a reviewer on villa #1580 pointed out the grid contained a control for that
-reading. So I pre-registered the test it could not settle, pushing the design and the
-reading committed to each outcome before the runs finished, and it refuted me: with the
-same segments held out in both families, native exposure raised from 0% to 16.4% of
-training batches, the gap came back unchanged at +0.058 against +0.061. The mechanism is
-not familiarity but quality, and the reviewer who proposed why — aligned inputs are
-averages of many acquired samples — flagged the assumption it rested on: are the published
-pyramids averaged or decimated? Reading them says averaged — byte-exact in all 18 window
-comparisons across three scrolls, and another contributor reached the same answer on the
-thread the same day; and they never touch z, so
-the recipe's 4x z pool multiplies the in-plane 16 again. One aligned voxel is the mean of
-64 acquired 2.399 µm voxels where the native voxel covering the same space is a single
-9.362 µm acquisition. Render aligned, whatever the model trained on. Retraction in docs/15
-appendix 2, pooling measurement in appendix 3, both on the upstream thread.
+the released recipe six times — the only change being one scroll removed and the per-batch
+quotas renormalised — and scored each pair of seeds on every annotated pixel of the held-
+out scroll, against the released checkpoints for which those pixels are training data.
+Every segment is reported against its all-positive F1 floor so ink-fraction artifacts
+cannot masquerade as transfer. Margin over that floor averages +0.06 toward Paris4, +0.13
+toward 1667, +0.17 toward 0139 — and the 0139 arm, trained on HALF the corpus, transfers
+best, so target identity dominates source size. On the four segments existing in both
+representation families, the aligned render wins 4 out of 4. I first published that as
+domain match; a reviewer on villa #1580 pointed out the grid contained a control for that
+reading, so I pre-registered the test it could not settle, pushing the design and the
+reading committed to each outcome before the runs finished. It refuted me: with native
+exposure raised from 0% to 16.4% of training batches, the gap came back unchanged at
++0.058 against +0.061. The cause is sampling density, and that is measured rather than
+argued — the published pyramids are byte-exact 2x2 means that never touch z, so one
+aligned voxel averages 64 acquired 2.399 µm voxels against native's one. Render aligned,
+whatever the model trained on.
 
 The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
 on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
 their predictions recovers only +0.005–0.009 F1. Independent runs fail the same way on
 the same pixels — no amount of free ensembling closes this.
 
-The repair price (part 4): one labeled segment. Fine-tuning the leave-Paris4-out model
-on a single Paris4 segment (w00) lifts the seven segments it still has never seen from
-mean F1 0.496 to 0.822 — 82% of the distance to the train-pixel reference — and the
-adaptation saturates at 2,500 steps, about seven minutes on one consumer GPU. Cross-
-scroll performance peaks at 10–20k steps in all six LOSO runs and fine-tuning peaks at
-2.5k: no held-out axis anywhere justifies the released 75k schedule.
+The repair price (part 4): one labeled segment. Fine-tuning the leave-Paris4-out model on
+a single Paris4 segment lifts the seven segments it has never seen from mean F1 0.496 to
+0.822 — 82% of the distance to the train-pixel reference — saturating at 2,500 steps,
+about seven minutes on one consumer GPU. Cross-scroll performance peaks at 10–20k steps in
+all six LOSO runs and fine-tuning at 2.5k: no held-out axis anywhere justifies the
+released 75k schedule.
 
 Then I checked whether that 82% is a fact about the method or about Paris4, because a
 single-scroll headline is exactly the kind of thing that gets quoted without its scroll.
@@ -187,83 +174,65 @@ that is where Paris4 saturates, so I extended all six runs to 10,000 and scored 
 10,000 too. 1667's fine-tune peaks at 2,500 and falls monotonically after, exactly as
 Paris4's does — the saturation point replicates, the magnitude does not. So what an
 annotation buys varies threefold between two scrolls of the same corpus, and for open
-problem #7 that variance is the more useful number than either headline.
+problem #7 that variance is the more useful number than either headline. The label-free
+ladder crosses even worse: on 1667 arm C never leaves the noise floor at any step and arm
+D is negative at every step, below its own starting point, where on Paris4 it improved 14
+of 14 cells. What survives the crossing is the ordering — annotation beats guessing on
+both scrolls — and the saturation point; what does not is every magnitude.
 
-And the price has a price curve (part 5). That fine-tune used all of w00's annotation, one
-of the largest in Paris4, so I rebuilt it on nested subsets — 50.3%, 20.7% and 13.5% of the
-annotated area, regions kept whole, configs differing from the full arm in three keys — and
-rescored the same seven segments. Half the annotation keeps 89% of the benefit for 0.033 F1,
-above the noise floor on six of seven segments: real, but cheap against halving the
-annotation work. Below that it bends — a fifth keeps 71%, an eighth 56% — and the smallest
-arm is also the only one that overfits by step 5,000. So "annotate one segment" now carries a
-number, and the number says annotate half of one. What it does not explain is why the budget
-is worth three times as much on one segment as another (w09 keeps 93.5% at half, w07 82.7%),
-which the trivial floor does not predict.
+And the price has a price curve (part 5). Rebuilding that fine-tune on nested subsets of
+the same annotation — 50.3%, 20.7% and 13.5% of the area, regions kept whole — half the
+annotation keeps 89% of the benefit for 0.033 F1: above the noise floor on six of seven
+segments, so real, but cheap against halving the annotation work. Below that it bends, a
+fifth keeping 71% and an eighth 56%, and the smallest arm is the only one that overfits by
+step 5,000. So "annotate one segment" now says annotate half of one.
 
 Why this raises the probability of reading complete scrolls: the First Letters targets
-have no labels, so cross-scroll transfer is the deployment condition — and it now has a
-measured playbook instead of a hope. Render the target aligned; use direct inference
-(floor +0.06–0.17) only to scout for promising surface; annotate one segment; fine-tune
-for minutes; re-infer everything. Every stage of that recipe carries an expected value
-measured here, and the apparatus to re-verify any proposed improvement is one config line
-and ~3 hours of training on a consumer GPU.
+have no labels, so cross-scroll transfer is the deployment condition, and it now has a
+measured playbook instead of a hope. Render the target aligned; use direct inference only
+to scout for promising surface; annotate one segment; fine-tune for minutes; re-infer.
+Every stage carries an expected value measured here, and re-verifying any proposed
+improvement costs one config line and about three GPU hours.
 
 I then ran that playbook on a scroll nobody has read. PHerc1447 ships no rendered surface
 volume for any of its fifteen segments, so I rendered the largest (7.40 cm²) from its mesh
-in twenty-five minutes of streaming, and the 389 MB result fed the released checkpoints
+in twenty-five minutes of streaming and fed the result to the released checkpoints
 unmodified. Nothing readable came out, and it fails the way the margins predict: the four
 checkpoints disagree threefold on how much surface is strong ink, none reaches full
-confidence anywhere, and at full resolution the output is rounded patches rather than
-connected strokes. So step two scouts only in the weak sense — it says the model has
-nothing, not where to annotate — and unsupervised adaptation has to precede step three on
-an unlabeled scroll. I would rather report that than imply the recipe is ready to point at
-PHerc0800 tomorrow (docs/16).
+confidence, and at full resolution the output is rounded patches rather than connected
+strokes. So step two scouts only in the weak sense — it says the model has nothing, not
+where to annotate — and unsupervised adaptation has to precede step three (docs/16).
 
 So I pre-registered the cheapest ways out — design, prediction and decision rule pushed
-publicly before each run — and ran all four. Input space: that render is spectrally a
-native-class input, and PHerc1447 has only an 8.640 µm scan, so the "render aligned"
-guidance cannot be followed there at all; a matching filter closes 38% of the spectral
-distance between the families and buys a median 9.1% of the transfer gap, mean +0.005 F1 —
-no effect by the rule I had fixed, inside the 0–20% I predicted. Parameter space: test-
-time entropy minimisation on the only surface the architecture leaves — 27,712
-normalisation affines, 0.08% of the model — costs 0.041 F1 across fourteen cells with not
-one improving, and every checkpoint I scored at 400 steps or beyond sits on its segment's
-all-positive floor. I predicted +10 to +40%; it is −13%, so that prediction is refuted
-with the sign wrong. A rank check in float shows the loss is the model and not the 8-bit
-output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below chance — and that the
-adaptation objective improves monotonically the whole way down, so no label-free stopping
-rule built on it could have caught this. Label space: self-training on the model's own
-confident pixels is the rung that helps, and it helps most when it labels the sheets it is
-about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap, against +0.030
-when the pseudo-labels come from a different segment. Both were pre-registered; the
-transductive one was committed at +5% to +30% and landed at 14.3%. That number is the
-useful one, because it prices the annotation: with the base checkpoint, the recipe and the
-step count held fixed, a human's labels on one segment buy +0.32 where the model's own
-confident guesses buy +0.046 — A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES the best
-label-free method. That ladder is Paris4 too, and it crosses even worse than the
-annotation does: on 1667 arm C never leaves the noise floor at any step and arm D is
-negative at every step, below its own starting point, where on Paris4 it improved 14 of 14
-cells. The ordering survives the crossing — annotation beats guessing on both scrolls —
-and the label-free numbers do not. And because that method needs no labels at all, I
-pointed it at PHerc1447 itself — the last thing docs/16 said had to happen before that
-scroll could be read. It met none of the three criteria I fixed before running it: the
-patches stay rounded instead of becoming strokes, the two seeds agree no more than before
-on where the ink is (top-decile overlap 0.173 to 0.177), and the output collapses to one
-mode rather than committing. Self-training amplifies what a model already believes, and on
-that scroll it believes nothing. So the cheap ways out are measured and closed, and the
-step that works is the one that needs a person: annotate something, and half a segment
-will do (docs/18).
+publicly before each run — and ran all four. Input space: matching the target's power
+spectrum to the source's recovers a median 9.1% of the gap, mean +0.005 F1 — no effect,
+inside the 0–20% I predicted, and it closes the cheapest escape for PHerc1447, which has
+only an 8.640 µm scan and cannot follow the render-aligned guidance at all. Parameter
+space: test-time entropy minimisation on the only surface the architecture leaves, the
+27,712 normalisation affines, costs 0.041 F1 across fourteen cells with not one improving.
+I predicted +10 to +40%; it is −13%, refuted with the sign wrong. A float rank check shows
+the loss is the model and not the 8-bit output — AUC 0.62–0.66 down to 0.48–0.55 — and
+that the adaptation objective improves monotonically the whole way down, so no label-free
+stopping rule built on it could have caught this. Label space: self-training on the
+model's own confident pixels is the rung that helps, most when it labels the sheets it is
+about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap. That prices the
+annotation: base, recipe and step count fixed, a human's labels on one segment buy +0.32
+where the model's own guesses buy +0.046, so A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES
+the best label-free method. And because that method needs no labels I pointed it at
+PHerc1447 itself under three criteria fixed beforehand; it met none — the patches stay
+rounded, the seeds agree no more on where the ink is, and the output collapses to one
+mode. Self-training amplifies what a model already believes, and there it believes nothing
+(docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
-published — its `datasets` block is a single `/path/to/` placeholder while the 29
-representations live in a separate contract file — so the join, and the holdout flags that
-turn it into this probe, are villa PR #1608; it regenerates my three arm configs
-byte-for-byte. Both have already survived outside hands: one contributor pulled the raw
-0139 matrix and recomputed every published figure from it, confirming the margins hold
-under four different checkpoint-selection rules, and the same person then reviewed the
-generator and found a crash on a batch smaller than the surviving scroll count, fixed two
-days later. Being reproduced and being corrected are the two things a measurement of an
-open problem needs.
+published — its datasets block is a single placeholder while the 29 representations live
+in a separate contract file — so the join, and the holdout flags that turn it into this
+probe, are villa PR #1608; it regenerates my three arm configs byte-for-byte. Both have
+survived outside hands: one contributor pulled the raw 0139 matrix and recomputed every
+published figure, confirming the margins hold under four selection rules, and the same
+person then reviewed the generator and found a crash on a batch smaller than the surviving
+scroll count, fixed two days later. Being reproduced and being corrected are the two
+things a measurement of an open problem needs.
 
 Everything is MIT, documented end to end (docs/14–18 plus 63 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
@@ -314,7 +283,7 @@ Field hashes at this revision, over the block body plus one trailing newline —
 convention the August entry uses:
 
 - field 4 — 1,501 chars, `fff1b5f4ed935f9dcdd9aa425810bee00056111331e58aacb3d971aa803e7ae7`
-- field 5 — 12,295 chars, `5020fa992e774b5c6b0e1788b8e48ed31844dd8084ba6c79e6abcb04cb68779c`
+- field 5 — 9,821 chars, `e529494816458265f957f7926d6222019e4198b5497cc398f311378422a9b729`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
