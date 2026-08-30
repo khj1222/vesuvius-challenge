@@ -233,17 +233,20 @@ committed publicly before the run**.
 | **A** spectrum matching | 0–20% of the gap | +0.005 F1, median 9.1% | no effect |
 | **B** entropy minimisation (TENT) | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
 | **C** pseudo-label self-training | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** | improves, at the noise floor |
+| **D** the same, transductive | +5% to +30% | **+0.046 F1**, 14 of 14 cells, **+14.3%** | improves, past the floor |
 
 Two things are worth taking away from it. **Arm B's own objective is
 anti-correlated with quality** — the entropy it minimises falls monotonically the
 whole way down while AUC falls to below chance, so no label-free early stop built
 on that objective could have caught it; the only correct choice was not to start.
-And **arm C prices the annotation**: with the base checkpoint, the segment, the
-recipe and the step count held fixed, a human annotation on one segment buys
-+0.320 F1 on seven unseen segments and the model's own confident predictions buy
-+0.030. The annotation is worth about ten times the guess.
+And **arms C and D price the annotation**: with the base checkpoint, the recipe
+and the step count held fixed, a human annotation on one segment buys +0.320 F1 on
+seven segments, while the model's own confident predictions buy +0.030 on a
+different segment and +0.046 on the sheets it is about to read. **The annotation
+is worth about seven times the best label-free method** — and that label-free 14%
+is what you can have on a scroll nobody has annotated yet.
 
-One of the three predictions was wrong, in the direction not considered. That is
+One of the four predictions was wrong, in the direction not considered. That is
 what committing them in advance was for.
 
 ---
