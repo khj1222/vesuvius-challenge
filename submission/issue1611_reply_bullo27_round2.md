@@ -52,5 +52,5 @@ work.
 Thank you for reading the tree I was actually running rather than the one I quoted. The
 staleness finding is worth more to the next person than my original report was.
 
-- [x] The image labels and digest above were read from the local image that produced the
-      stalls, today.
+- [x] The image labels and digest above were read on 2026-08-30 from the local image that
+      produced the stalls.
