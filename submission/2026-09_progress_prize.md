@@ -198,25 +198,23 @@ PHerc0800 tomorrow (docs/16).
 
 So I pre-registered the three cheapest ways out — design, prediction and decision rule
 pushed publicly before each run — and ran all three. Input space: that render is
-spectrally a native-class input, and PHerc1447 has only an 8.640 µm scan, so the
-"render aligned" guidance cannot be followed there at all; a matching filter closes 38%
-of the spectral distance between the families and buys a median 9.1% of the transfer
-gap, mean +0.005 F1 — no effect by the rule I had fixed, inside the 0–20% I predicted.
-Parameter space: test-time entropy minimisation on the only surface the architecture
-leaves — 27,712 normalisation affines, 0.08% of the model — costs 0.041 F1 across
-fourteen cells with not one improving, and every checkpoint I scored at 400 steps or
-beyond sits on its segment's all-positive floor. I predicted +10 to +40%; it is −13%, so
-that prediction is refuted with the sign wrong. A rank check in float shows the loss is the
-model and not the 8-bit output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below
-chance —
-and that the adaptation
-objective improves monotonically the whole way down, so no label-free stopping rule
-built on it could have caught this. Label space: self-training on the model's own
-confident pixels is the one rung that helps, +0.030 F1 with all fourteen cells
-improving, 9.5% of the gap. That last number is the useful one, because it prices the
-annotation: with the base checkpoint, the segment, the recipe and the step count held
-fixed, a human's labels on one segment buy +0.32 and the model's own confident guesses buy
-+0.03. Annotate something — and half a segment will do (docs/18).
+spectrally a native-class input, and PHerc1447 has only an 8.640 µm scan, so the "render
+aligned" guidance cannot be followed there at all; a matching filter closes 38% of the
+spectral distance between the families and buys a median 9.1% of the transfer gap, mean
++0.005 F1 — no effect by the rule I had fixed, inside the 0–20% I predicted. Parameter
+space: test-time entropy minimisation on the only surface the architecture leaves — 27,712
+normalisation affines, 0.08% of the model — costs 0.041 F1 across fourteen cells with not
+one improving, and every checkpoint I scored at 400 steps or beyond sits on its segment's
+all-positive floor. I predicted +10 to +40%; it is −13%, so that prediction is refuted
+with the sign wrong. A rank check in float shows the loss is the model and not the 8-bit
+output — AUC falls from 0.62–0.66 to 0.48–0.55, at or below chance — and that the
+adaptation objective improves monotonically the whole way down, so no label-free stopping
+rule built on it could have caught this. Label space: self-training on the model's own
+confident pixels is the one rung that helps, +0.030 F1 with all fourteen cells improving,
+9.5% of the gap. That last number is the useful one, because it prices the annotation:
+with the base checkpoint, the segment, the recipe and the step count held fixed, a human's
+labels on one segment buy +0.32 and the model's own confident guesses buy +0.03. Annotate
+something — and half a segment will do (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
 published — its `datasets` block is a single `/path/to/` placeholder while the 29
