@@ -263,6 +263,15 @@ things in the same way — which is exactly what the near-irrelevance of the see
 
 ## 4b. Label efficiency — one annotated segment on the target scroll closes 82%
 
+WARNING — **82% is a Paris4 number, and the replication says so.** The same recipe,
+the same step count and the same scoring rules on **1667** (docs/18, 2026-08-31)
+give **24%**: one annotated segment there lifts the five held-out segments by
++0.104 F1 against Paris4's +0.320. The *shape* replicates — the fine-tune peaks at
+2,500 steps on both scrolls and declines after, which is why a step curve to 10,000
+was run before saying this — but the magnitude does not. What an annotated segment
+buys is scroll-dependent by a factor of three, and that variation is now the more
+useful finding than the 82% itself.
+
 LOSO-noParis4 (each seed's ckpt_020000, weights only) was fine-tuned **on w00's
 labels alone**, following the official recipe unchanged for 10k steps (~27 min
 per seed), then scored on **the seven segments the fine-tune never saw**. 56
@@ -297,7 +306,8 @@ cells; `runs/ink9um_scorecard/ft_paris4_matrix.csv` (plus
    own advantage, not family *match* — appendix 2).
 3. **Cost to repair**: **one annotated segment on the target scroll plus 7 GPU
    minutes** closes about 82% of the gap (0.50 to 0.82, above the in-scroll
-   honest ceiling of 0.74-0.77).
+   honest ceiling of 0.74-0.77) — **on Paris4. On 1667 the same recipe closes
+   24%** (docs/18, 2026-08-31), so quote this with the scroll attached.
 4. **First Letters implication**: for an unseen scroll (0800/1447) the strategy
    is render (**in the aligned family** — because of representation quality, not
    because it matches the training corpus; appendix 2), treat direct inference

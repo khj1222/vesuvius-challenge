@@ -182,7 +182,9 @@ scroll's entire annotation. Four parts:
   +0.005 to +0.009.
 - **Cost to repair** — **one annotated segment on the target scroll plus about 7
   GPU minutes** closes 82% of the gap (0.496 to 0.822 on seven segments the
-  fine-tune never saw), saturating at 2,500 steps.
+  fine-tune never saw), saturating at 2,500 steps. **On a second scroll the same
+  recipe closes 24%** ([docs/18](docs/18_uda_design.md)): the saturation point
+  replicates, the magnitude does not.
 - **A First Letters playbook**, with a measured expected value for each step.
 - **The price of that repair** — rebuilding the fine-tune on nested subsets of one
   segment's annotation: **half the annotation keeps 89% of the benefit for 0.033
@@ -234,6 +236,11 @@ committed publicly before the run**.
 | **B** entropy minimisation (TENT) | 10–40% | **−0.041 F1**, 0 of 14 cells, AUC 0.66 → 0.48 | **harms**; prediction refuted |
 | **C** pseudo-label self-training | −10% to +15% | **+0.030 F1**, 14 of 14 cells, **+9.5%** | improves, at the noise floor |
 | **D** the same, transductive | +5% to +30% | **+0.046 F1**, 14 of 14 cells, **+14.3%** | improves, past the floor |
+
+**All four rows are Paris4.** Replicated on 1667 (2026-08-31, 90 more cells), arm C
+stays inside the noise floor at every step and **arm D is negative at every step** —
+so the label-free result does not cross between scrolls, and neither does the size
+of what an annotation buys.
 
 Two things are worth taking away from it. **Arm B's own objective is
 anti-correlated with quality** — the entropy it minimises falls monotonically the
