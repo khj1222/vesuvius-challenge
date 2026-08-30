@@ -493,10 +493,11 @@ fine-tune never saw. 14 headline cells;
 `runs/ink9um_scorecard/armB_tent_matrix.csv` and `armB_tent_summary.json`.
 
 The adaptation touched what it was supposed to touch and nothing else: the
-adapted checkpoint differs from its base in 252 of 508 state-dict tensors, which
-are the 64 normalisation layers counted twice (the model exposes each norm module
-under two names), **27,712 unique parameters, maximum change 0.025**. Every
-convolution is byte-identical.
+adapted checkpoint differs from its base in 252 of 508 state-dict entries, and
+those 252 are aliases of the **128 parameter tensors of its 64 normalisation
+layers** (62 `InstanceNorm2d` and 2 `InstanceNorm3d`; the model exposes most norm
+modules under two names, so they appear twice) — **27,712 unique parameters,
+maximum change 0.025**. Every convolution is byte-identical.
 
 ## Headline
 
