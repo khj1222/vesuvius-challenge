@@ -36,13 +36,18 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 9,820 characters**, trimmed 2026-08-31 from 12,294 after three results landed
+**Field 5 is 10,454 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
 byte counts. The 1667 replication was deliberately left intact: it is our own headline being
 falsified by our own follow-up, which is the strongest thing in the field. If it must shrink
 again, the measurement paragraph is the only one with slack left.
+
+On 2026-08-31 the invited check of villa #1471 was added back (+632 characters):
+another contributor asked for this harness to be pointed at their PR, and it found a
+regression there. It sits in the traction paragraph because that is the claim it
+supports — the apparatus is being asked for by name.
 
 ⚠️ **The form URL is specific to each round and the previous one closes** — get September's from
 https://scrollprize.org/prizes, not from the August link. August's form also dropped the
@@ -102,6 +107,7 @@ Pre-registered adaptation study, three arms, all run: https://github.com/khj1222
 Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-challenge/tree/main/tools
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
+Invited check of another contributor's PR (found a crash, verified a fix): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/pr1471_striped_check
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
 
@@ -231,10 +237,17 @@ probe, are villa PR #1608; it regenerates my three arm configs byte-for-byte. Bo
 survived outside hands: one contributor pulled the raw 0139 matrix and recomputed every
 published figure, confirming the margins hold under four selection rules, and the same
 person then reviewed the generator and found a crash on a batch smaller than the surviving
-scroll count, fixed two days later. Being reproduced and being corrected are the two
-things a measurement of an open problem needs.
+scroll count, fixed two days later. The traffic went the other way too: the author of
+villa PR #1471 asked for this harness to be pointed at their striped-TIFF streaming
+path, specifically at the odd extents their own testing did not cover. It reproduces
+today's output exactly -- 42 of 42 variants identical at all six pyramid levels, 9.66
+billion voxels -- and it crashes on any image whose height leaves a strip of exactly
+one row, which converts fine today; the fix is verified against the same matrix, and
+the real-file run answers the memory-versus-speed question they had asked to have
+measured rather than argued. Being reproduced, being corrected, and being asked to
+check someone else's work are the three things a measurement of an open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 plus 68 committed evidence
+Everything is MIT, documented end to end (docs/14–18 plus 100 committed evidence
 files), and continuous with the July harness and the August #192 verdict — one
 apparatus, three months of answered questions.
 ```
@@ -274,16 +287,18 @@ before pasting.
 **Timing.** Judging is monthly after the round closes, so submitting early buys nothing.
 Submit when something moves upstream, with the last weekend (09-26/27) as the backstop.
 
-**State as of 2026-08-30** (audit pass, then arm D): all 17 links 200; every artifact-backed number
-re-derived and passing; 63 committed evidence files; the repo pushed; two upstream replies
-drafted and waiting on the user to post (`issue1582_reply_nerln.md`,
-`issue1611_reply_bullo27_round2.md`).
+**State as of 2026-08-31**: the two replies above were posted on 08-30; the invited #1471 check
+was run and added to fields 4 and 5; 100 committed evidence files; every cited path in this
+file resolves in the repository (23 of 23), which was not true of the August text until
+today — its evidence table pointed at nine `runs/*.json` that lived only in an untracked
+tree, and those files are now committed at the cited paths. One reply is drafted and
+waiting on the user to post: `pr1471_reply_jaideepsaipadhi.md`.
 
 Field hashes at this revision, over the block body plus one trailing newline — the
 convention the August entry uses:
 
-- field 4 — 1,501 chars, `a2180a88444771ca3fa074ce8a97449afca1f22e941e3aa73b48ea6fbd747ca5`
-- field 5 — 9,822 chars, `1eeeb28f7a7bcf5b48549ed7e4d4ea13bd8f18ee5d2d58ad40ee57877fcb818c`
+- field 4 — 1,658 chars, `07e064d263010d046b592b8539d31687c8362737ba7fe394c064c3f0ec10736c`
+- field 5 — 10,454 chars, `d19457e8481c8fef0c36f6007af7545503faea6d35999a4f618657f22d2bb275`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
@@ -320,6 +335,7 @@ against what was actually pasted.
 | reproduction validity (online val 0.69–0.78 on official masks across arms) | `runs/ink9um_loso_*/validation_metrics.jsonl` |
 | independent recomputation of the 0139 table, margins hold under 4 selection rules | Bullo27 on villa #1580, 2026-08-24 |
 | generator upstreamed, reviewed, crash fixed | villa #1608 (`dc9edb6`), `submission/pr1608_body.md` + `pr1608_reply_bullo27.md` |
+| invited check of villa #1471: 42/42 variants identical at six levels (9,661,092,220 voxels); a one-row strip crashes the new path (`rowsperstrip == 1` or `height % rowsperstrip == 1`) and the fix is verified 18/18; on a real 32249×51380 mask the read-back design costs 3.0x wall for 2.2x peak RSS | `runs/pr1471_striped_check/` (matrix, targeted re-run, real-file timings, and `verify_numbers.py` re-deriving all 38 figures), `submission/pr1471_reply_jaideepsaipadhi.md` |
 
 (Checkpoints and prediction TIFFs stay untracked; the committed CSV/JSON files reproduce
 every quoted figure.)
