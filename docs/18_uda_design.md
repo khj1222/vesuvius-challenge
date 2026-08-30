@@ -1121,6 +1121,68 @@ result would be the same.
 
 ---
 
+# The 1667 replication, pre-registered (2026-08-30)
+
+Section 6 listed this as a threat to validity before any arm ran:
+
+> **One target scroll for the headline.** Paris4 has both bounds, but docs/15 showed the
+> transfer margin varies more than twofold by target. Anything that works on Paris4 should
+> be checked on 1667 before being called general.
+
+Arms C and D worked on Paris4. This checks them on 1667, and it repeats the **whole**
+three-way comparison rather than just the arms, because the interesting quantity —
+what an annotation is worth against what a guess is worth — needs both ends measured on
+the same scroll.
+
+Written and committed **before any 1667 pseudo-label, checkpoint or score exists**.
+
+## What runs
+
+Three arms, both seeds, all from the same base and to the same schedule:
+
+| arm | what it trains on | scored on |
+|---|---|---|
+| **FT** | `pherc1667-w018`'s **real annotation** | the other five |
+| **C** | `pherc1667-w018`'s **pseudo-labels** | the other five |
+| **D** | the **five scored segments'** own pseudo-labels | those five |
+
+- **Base**: the leave-1667-out arm at **`ckpt_010000`**, both seeds — that arm's own peak
+  step (`stepwise_mean_loso`), the same rule that picked `ckpt_020000` on Paris4.
+- **The annotated segment is w018**, 13.9M annotated pixels, the largest on this scroll —
+  matching the Paris4 design, where w00 was one of the largest.
+- **Scored**: `w013`, `w023`, `w028`, `w029`, `w031`, on their full annotation, as always.
+- Everything else is held to the Paris4 runs: p ≥ 0.6 / p ≤ 0.4 pseudo-labels over the valid
+  render area with supervision thinned one 128px block in every 3x3, the released recipe,
+  **2,500 steps**, the same inference and scoring flags.
+
+## Predictions, committed now
+
+Paris4 returned: FT 82% of the gap, arm D 14.3%, arm C 9.5%. For 1667:
+
+1. **arm C: 0–20% of the gap.**
+2. **arm D: 5–35% of the gap.** Wider than C because docs/15 measured 1667 as the *easier*
+   target — the base clears the trivial floor by +0.131 there against +0.060 on Paris4 — and
+   self-training amplifies what the model already believes, so a better starting belief
+   should amplify to at least as much. That is the reasoning; if it is wrong, the interval
+   is where it shows.
+3. **The ordering FT ≫ D ≥ C holds**, with D − C allowed to be inside the noise floor as it
+   was on Paris4 (+0.015 there).
+4. **FT closes at least 60%** of its own gap.
+
+**What would count as "Paris4 did not generalise":** arm D landing outside 5–35%, or arm D
+falling below arm C by more than the 0.03 noise floor, or the FT bound coming in under 60%.
+Any of those, and the Paris4 numbers get labelled as scroll-specific in docs/15 and in the
+submission text.
+
+## Decision rules — unchanged from section 4
+
+Noise floor ~0.03 F1; both seeds; a result holding on fewer than 4 of the 5 segments here
+(the 5-of-7 rule, scaled) is reported as inconsistent whatever its mean; fixed step 2,500;
+best-of-grid only as an oracle upper bound. Every segment reported against its own
+all-positive floor.
+
+---
+
 # The ladder, finished (2026-08-30)
 
 | arm | what it does | predicted | measured | verdict |
