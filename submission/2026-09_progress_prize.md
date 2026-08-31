@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 10,454 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,412 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -104,6 +104,7 @@ Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
 Pre-registered adaptation study, three arms, all run: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
+Pre-registered targeting test (where to annotate, and the published curve it corrects): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/20_annotation_targeting.md
 Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-challenge/tree/main/tools
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
@@ -188,6 +189,18 @@ annotation keeps 89% of the benefit for 0.033 F1: above the noise floor on six o
 segments, so real, but cheap against halving the annotation work. Below that it bends, a
 fifth keeping 71% and an eighth 56%, and the smallest arm is the only one that overfits by
 step 5,000. So "annotate one segment" now says annotate half of one.
+
+Then a pre-registered follow-up refuted the reading of that curve, including my own
+hypothesis for it. Holding the budget at a fifth and changing only *which* regions are
+annotated -- four subsets of the same segment, chosen by rules fixed before the runs --
+moves the mean by 0.0373 F1, above the noise floor, with the ordering identical in both
+seeds and one subset best on all seven scored segments. The rule I expected to win lost:
+ranking candidate regions by the model's own disagreement picked the wrong ones, by 0.017
+and 0.024 in the two seeds, so uncertainty sampling is not the answer here and I report it
+as failed. What replaces it is a correction to my own published number: the 71% above was a
+property of that subset, not of that budget, and another subset at a slightly smaller budget
+retains 82.9%. Anyone reading the curve as "a fifth of the annotation costs you 30% of the
+benefit" is reading one draw from a spread nobody had measured.
 
 Why this raises the probability of reading complete scrolls: the First Letters targets
 have no labels, so cross-scroll transfer is the deployment condition, and it now has a
@@ -297,8 +310,8 @@ waiting on the user to post: `pr1471_reply_jaideepsaipadhi.md`.
 Field hashes at this revision, over the block body plus one trailing newline — the
 convention the August entry uses:
 
-- field 4 — 1,658 chars, `07e064d263010d046b592b8539d31687c8362737ba7fe394c064c3f0ec10736c`
-- field 5 — 10,454 chars, `d19457e8481c8fef0c36f6007af7545503faea6d35999a4f618657f22d2bb275`
+- field 4 — 1,834 chars, `9f3081ff6c0a6fa356a494c19dcaedf711ea62f06de20e1201177fc9a6965056`
+- field 5 — 11,412 chars, `8a5a1a6f459ec19f3ab654d78cc74ba67d4f5ce075bb8f6fc8d01a733000f535`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
@@ -310,6 +323,7 @@ against what was actually pasted.
 | claim | source |
 |---|---|
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
+| annotation targeting (pre-registered, 42 cells): at a fifth of the annotation the subset choice moves the mean 0.0373 F1, ordering identical in both seeds, one subset best on 7 of 7 segments; the disagreement rule loses by 0.017/0.024; benefit retained 70.8% → 82.9% at a smaller budget | `runs/ink9um_scorecard/annotarget_matrix.csv` + `annotarget_summary.json` + `annotation_candidates.json`, `docs/20` |
 | arm A: spectrum matching gains +0.005 F1, median 9.1% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
 | arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
 | arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
