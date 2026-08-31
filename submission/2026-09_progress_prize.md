@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 12,512 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,603 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -206,15 +206,13 @@ step 5,000. So "annotate one segment" now says annotate half of one.
 
 Then a pre-registered follow-up refuted the reading of that curve, including my own
 hypothesis for it. Holding the budget at a fifth and changing only *which* regions are
-annotated -- four subsets of the same segment, chosen by rules fixed before the runs --
-moves the mean by 0.0373 F1, above the noise floor, with the ordering identical in both
-seeds and one subset best on all seven scored segments. The rule I expected to win lost:
-ranking candidate regions by the model's own disagreement picked the wrong ones, by 0.017
-and 0.024 in the two seeds, so uncertainty sampling is not the answer here and I report it
-as failed. What replaces it is a correction to my own published number: the 71% above was a
-property of that subset, not of that budget, and another subset at a slightly smaller budget
-retains 82.9%. Anyone reading the curve as "a fifth of the annotation costs you 30% of the
-benefit" is reading one draw from a spread nobody had measured.
+annotated -- four subsets chosen by rules fixed before the runs -- moves the mean by 0.0373
+F1, above the noise floor, with the ordering identical in both seeds and one subset best on
+all seven scored segments. The rule I expected to win lost: ranking candidate regions by the
+model's own disagreement picked the wrong ones in both seeds, so I report uncertainty
+sampling as failed. What replaces it is a correction to my own published number: the 71%
+above was a property of that subset, not of that budget, and another subset at a slightly
+smaller budget retains 82.9% (docs/20).
 
 Why this raises the probability of reading complete scrolls: the First Letters targets
 have no labels, so cross-scroll transfer is the deployment condition, and it now has a
@@ -232,29 +230,23 @@ confidence, and at full resolution the output is rounded patches rather than con
 strokes. So step two scouts only in the weak sense — it says the model has nothing, not
 where to annotate — and unsupervised adaptation has to precede step three (docs/16).
 
-So I pre-registered the cheapest ways out — design, prediction and decision rule pushed
-publicly before each run — and ran all four. Input space: matching the target's power
-spectrum to the source's recovers a median 9.1% of the gap, mean +0.005 F1 — no effect,
-inside the 0–20% I predicted, and it closes the cheapest escape for PHerc1447, which has
-only an 8.640 µm scan and cannot follow the render-aligned guidance at all. Parameter
-space: test-time entropy minimisation on the only surface the architecture leaves, the
-27,712 normalisation affines, costs 0.041 F1 across fourteen cells with not one improving.
-I predicted +10 to +40%; it is −13%, refuted with the sign wrong. A float rank check shows
-the loss is the model and not the 8-bit output — AUC 0.62–0.66 down to 0.48–0.55 — and
-that the adaptation objective improves monotonically the whole way down, so no label-free
-stopping rule built on it could have caught this. Label space: self-training on the
-model's own confident pixels is the rung that helps, most when it labels the sheets it is
-about to read — +0.046 F1, all fourteen cells improving, 14.3% of the gap. That prices the
-annotation: base, recipe and step count fixed, a human's labels on one segment buy +0.32
-where the model's own guesses buy +0.046, so A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES
-the best label-free method. And because that method needs no labels I pointed it at
-PHerc1447 itself under three criteria fixed beforehand; it met none — the patches stay
-rounded, the seeds agree no more on where the ink is, and the output collapses to one
-mode. Self-training amplifies what a model already believes, and there it believes nothing.
-And none of it crosses to the second scroll: on 1667 arm C never leaves the noise floor at
-any step and arm D is negative at every step, below its own starting point, where on
-Paris4 it improved 14 of 14 cells. What survives the crossing is the ordering — annotation
-beats guessing on both scrolls — and the saturation point; what does not is any magnitude
+So I pre-registered the other ways out too — design, prediction and decision rule pushed
+publicly before each run. Parameter space: test-time entropy minimisation on the only
+surface the architecture leaves, the 27,712 normalisation affines, costs 0.041 F1 across
+fourteen cells with not one improving. I predicted +10 to +40%; it is −13%, refuted with the
+sign wrong — and its objective improves monotonically the whole way down, so no label-free
+stopping rule built on it could have caught this. Label space: self-training on the model's
+own confident pixels is the rung that helps, most when it labels the sheets it is about to
+read — +0.046 F1, all fourteen cells improving, 14.3% of the gap. That prices the annotation:
+base, recipe and step count fixed, a human's labels on one segment buy +0.32 where the
+model's own guesses buy +0.046, so A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES the best
+label-free method. And because that method needs no labels I pointed it at PHerc1447 itself
+under three criteria fixed beforehand; it met none — the patches stay rounded, the seeds
+agree no more on where the ink is, the output collapses to one mode. Self-training amplifies
+what a model already believes, and there it believes nothing. None of it crosses to the
+second scroll either: on 1667 arm C never leaves the noise floor at any step and arm D is
+negative at every step, where on Paris4 it improved 14 of 14 cells. What survives the
+crossing is the ordering and the saturation point; what does not is any magnitude
 (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
@@ -264,14 +256,11 @@ probe, are villa PR #1608; it regenerates my three arm configs byte-for-byte. Bo
 survived outside hands: one contributor pulled the raw 0139 matrix and recomputed every
 published figure, confirming the margins hold under four selection rules, and the same
 person then reviewed the generator and found a crash on a batch smaller than the surviving
-scroll count, fixed two days later. The traffic went the other way too: the author of
-villa PR #1471 asked for this harness to be pointed at their striped-TIFF streaming
-path, specifically at the odd extents their own testing did not cover. It reproduces
-today's output exactly -- 42 of 42 variants identical at all six pyramid levels, 9.66
-billion voxels -- and it crashes on any image whose height leaves a strip of exactly
-one row, which converts fine today; the fix is verified against the same matrix, and
-the real-file run answers the memory-versus-speed question they had asked to have
-measured rather than argued. Being reproduced, being corrected, and being asked to
+scroll count, fixed two days later. The traffic went the other way too: the author of villa PR #1471 asked for this harness to
+be pointed at their striped-TIFF streaming path, at the odd extents their own testing did
+not cover. It reproduces their output exactly on 42 of 42 variants and crashes on any image
+whose height leaves a strip of exactly one row, which converts fine today; the fix is
+verified against the same matrix. Being reproduced, being corrected, and being asked to
 check someone else's work are the three things a measurement of an open problem needs.
 
 Everything is MIT, documented end to end (docs/14–18 plus 100 committed evidence
@@ -325,7 +314,7 @@ Field hashes at this revision, over the block body plus one trailing newline —
 convention the August entry uses:
 
 - field 4 — 2,015 chars, `39a669d5c4f87e8afd8ce62f78f590caa4fb60553593dda3750d1f9728acfbac`
-- field 5 — 12,512 chars, `240b243bd83bfa58b8f30d7d6615bad79d85c9883e6a82fc6387c7e32bb0c46a`
+- field 5 — 11,603 chars, `7317a79b58dfdba06d7d1601aee1eb0daec56034e58c7c1534671d99131bc563`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
