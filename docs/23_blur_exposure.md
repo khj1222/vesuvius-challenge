@@ -118,3 +118,73 @@ the published baseline applies uniformly to the arm rather than to half of it.
 
 Stated here rather than in the result, because it was decided before the arm's numbers
 existed.
+
+---
+
+## Result: no effect
+
+16 cells, both seeds, step 20,000. Raw numbers: `runs/ink9um_scorecard/blurexp_matrix.csv`
+and `blurexp_summary.json`.
+
+| | arm | baseline @20k | delta |
+|---|---|---|---|
+| native | 0.6219 | 0.6340 | **−0.0122** |
+| aligned | 0.6693 | 0.6857 | −0.0165 |
+| **gap** | 0.0474 | 0.0517 | −0.0043 |
+
+**By the pre-registered rule: no effect.** The native gain is **−0.0122** — the wrong sign,
+below the 0.03 floor, and not positive in both seeds (**+0.0090** on seed 42, **−0.0333** on
+seed 43). The aligned cost, −0.0165, is also inside the floor, so the trade clause does not
+fire either. The gap narrowed by 0.0043, and only because the aligned score fell further than
+the native one, which is not a way of closing it.
+
+The failure mode named in advance is the one that happened: *"if both move by less than 0.03,
+that is noise, and the seed spread on this corpus (0.011–0.032) is large enough to produce
+it."* The two seeds disagree in sign on native by 0.042, which is larger than either effect.
+
+### A correction to this document's own baseline
+
+The table at the top of this file quotes the baseline as native 0.6545 and aligned 0.7079.
+Those are **best-over-steps** numbers, carried over from docs/15's `representation_pairs`,
+while this arm is scored at step 20,000 only. The like-for-like baseline at step 20,000 is
+**native 0.6340, aligned 0.6857**, and that is what the table above uses.
+
+The verdict does not depend on which is used — against the best-over-steps baseline the arm
+is worse still (native −0.0326, aligned −0.0386) — but quoting a best-of-seven-steps number
+as the bar for a single-step arm would have been an unfair comparison in our own favour if
+the result had gone the other way, and it is worth fixing rather than leaving.
+
+### Predictions, scored
+
+| committed | outcome |
+|---|---|
+| native gain 0.00 to 0.03 | **−0.0122** — outside the range, on the low side |
+| probability the rule fires: 25% | it did not fire |
+| aligned cost 0.00 to −0.03 | **−0.0165** — inside the range |
+
+### Where this leaves the gap
+
+Four pre-registered attempts on the same aligned-over-native difference:
+
+| | intervention | outcome |
+|---|---|---|
+| [docs/18](18_uda_design.md) arm A | filter the native input to match aligned spectra | ran; +0.005 F1, no effect |
+| [docs/21](21_snr_augmentation.md) | train with noise calibrated to the difference | stopped: the difference has the opposite sign |
+| [docs/22](22_blur_augmentation.md) | train with blur calibrated to the difference | stopped: that strength is already in the recipe |
+| this document | apply that blur to half the patches instead of 2.7% | ran; **−0.012 F1, no effect** |
+
+Two ran and returned nothing; two were stopped by their own calibrations before spending GPU
+time. The difference is real, reproducible and mechanically explained, and nothing we can do
+without labels moves it. [docs/15](15_loso_cross_scroll.md)'s instruction stands: render the
+target in the aligned family. What moves this class of number is human annotation —
+[docs/18](18_uda_design.md) measures one annotated segment at roughly seven times the best
+label-free method on the transfer problem next door.
+
+### Run notes
+
+The arm cost more wall clock than it should have. Three runs died with `WinError 1455`, the
+Windows commit limit, raised by a DataLoader worker while another process on this machine
+held the memory — once at start-up, once at 10,200 steps, once at about 6,600. Halving the
+workers from 12 to 6 did not prevent it; waiting for free memory before each attempt did. The
+driver now waits for 25 GB free before starting a run rather than retrying into a full
+machine.

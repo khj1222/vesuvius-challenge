@@ -1,0 +1,105 @@
+{
+ "step": "020000",
+ "segments": [
+  "w035",
+  "w039",
+  "w040",
+  "w041"
+ ],
+ "noise_floor": 0.03,
+ "per_seed": {
+  "aligned": {
+   "42": {
+    "arm": 0.6676,
+    "base_step20k": 0.6715,
+    "delta": -0.004
+   },
+   "43": {
+    "arm": 0.6709,
+    "base_step20k": 0.6999,
+    "delta": -0.029
+   }
+  },
+  "native": {
+   "42": {
+    "arm": 0.6249,
+    "base_step20k": 0.6159,
+    "delta": 0.009
+   },
+   "43": {
+    "arm": 0.6188,
+    "base_step20k": 0.6521,
+    "delta": -0.0333
+   }
+  }
+ },
+ "per_segment": {
+  "w035": {
+   "aligned": {
+    "arm": 0.6845,
+    "base_step20k": 0.715
+   },
+   "native": {
+    "arm": 0.6207,
+    "base_step20k": 0.6658
+   }
+  },
+  "w039": {
+   "aligned": {
+    "arm": 0.6283,
+    "base_step20k": 0.6351
+   },
+   "native": {
+    "arm": 0.5658,
+    "base_step20k": 0.5392
+   }
+  },
+  "w040": {
+   "aligned": {
+    "arm": 0.6648,
+    "base_step20k": 0.6934
+   },
+   "native": {
+    "arm": 0.6355,
+    "base_step20k": 0.6511
+   }
+  },
+  "w041": {
+   "aligned": {
+    "arm": 0.6993,
+    "base_step20k": 0.6996
+   },
+   "native": {
+    "arm": 0.6654,
+    "base_step20k": 0.6801
+   }
+  }
+ },
+ "aggregate": {
+  "aligned": {
+   "arm": 0.6693,
+   "base_step20k": 0.6857,
+   "base_best_over_steps": 0.6976,
+   "delta_vs_step20k": -0.0165,
+   "delta_vs_best": -0.0283
+  },
+  "native": {
+   "arm": 0.6219,
+   "base_step20k": 0.634,
+   "base_best_over_steps": 0.6426,
+   "delta_vs_step20k": -0.0122,
+   "delta_vs_best": -0.0208
+  }
+ },
+ "gap": {
+  "base_step20k": 0.0517,
+  "arm": 0.0474
+ },
+ "decision": {
+  "native_gain": -0.0122,
+  "native_gain_both_seeds_positive": false,
+  "aligned_cost": -0.0165,
+  "rule_fires": false,
+  "verdict": "no effect: the native gain is -0.0122, below the 0.03 floor and not positive in both seeds (+0.0090, -0.0333)"
+ }
+}
