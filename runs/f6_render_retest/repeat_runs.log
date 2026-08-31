@@ -1,0 +1,18 @@
+=== run 2 start 19:22:14 ===
+  tile-row 1/29 (3%)  6.3 chunks/s  0m06s  eta 3m10s
+  tile-row 8/29 (27%)  6.7 chunks/s  0m51s  eta 2m14s
+  tile-row 15/29 (51%)  5.1 chunks/s  2m05s  eta 1m57s
+  tile-row 22/29 (75%)  5.1 chunks/s  3m04s  eta 0m58s
+  tile-row 29/29 (100%)  5.4 chunks/s  3m49s  eta 0m00s
+Remote zarr streaming: https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc1447/volumes/20250521151220-8.640um-1.2m-116keV-masked.zarr
+rendering 5460x3700 at scale 1 crop [5460×3700 from (0,0)]
+=== run 2 exit=0 end 19:26:10 ===
+=== run 3 start 19:26:10 ===
+  tile-row 1/29 (3%)  6.5 chunks/s  0m06s  eta 3m06s
+  tile-row 8/29 (27%)  6.2 chunks/s  0m55s  eta 2m25s
+  tile-row 15/29 (51%)  5.3 chunks/s  2m01s  eta 1m53s
+  tile-row 22/29 (75%)  5.2 chunks/s  3m02s  eta 0m58s
+  tile-row 29/29 (100%)  5.6 chunks/s  3m42s  eta 0m00s
+Remote zarr streaming: https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc1447/volumes/20250521151220-8.640um-1.2m-116keV-masked.zarr
+rendering 5460x3700 at scale 1 crop [5460×3700 from (0,0)]
+=== run 3 exit=0 end 19:30:00 ===

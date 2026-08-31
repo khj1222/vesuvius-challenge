@@ -1,0 +1,89 @@
+{
+ "question": "Does the stall reported in villa #1611 reproduce on the current build?",
+ "old": {
+  "binary": "ghcr.io/scrollprize/villa/volume-cartographer:edge",
+  "revision": "1e3f4c021f4e53bea3867772ed05f51a7e586a9c",
+  "built": "2026-05-13",
+  "ChunkCache_cpp_lines": 755,
+  "unbounded_cv_waits": [
+   218,
+   749
+  ],
+  "attempts": 4,
+  "stalled": 4,
+  "stall_points_pct": [
+   10,
+   17,
+   20,
+   27
+  ],
+  "workaround_required": "--timeout 8 chained with --resume",
+  "wall_clock_minutes": 25
+ },
+ "new": {
+  "binary": "VC3D-5479453-2026-08-30-win64.zip (official release asset)",
+  "revision": "5479453a76f0db39a8d657434d3d4c4c517f7245",
+  "built": "2026-08-30",
+  "sha256_zip": "defc4b4b783f83b9caa5b1ce3ab6a815cd287ebc54ba7f72d7b948c29335be53",
+  "ChunkCache_cpp_lines": 5672,
+  "unbounded_cv_waits": [
+   1788,
+   1873,
+   2404,
+   2529
+  ],
+  "cache_rewrite": "Rewire local remote cache (#1554), 2026-08-21",
+  "attempts": 3,
+  "stalled": 0,
+  "flags": "no --timeout, no --resume",
+  "wall_clock": [
+   "5m55s",
+   "3m56s",
+   "3m50s"
+  ],
+  "exit_codes": [
+   0,
+   0,
+   0
+  ],
+  "outputs_identical_across_runs": true
+ },
+ "output_equivalence": {
+  "pyramid_levels_match": true,
+  "levels": 6,
+  "voxels_compared": 565656000,
+  "mismatched_vs_old_chained": 14754012,
+  "mismatched_pct": 2.61,
+  "share_of_diffs_over_10_levels": 84.58,
+  "attribution": "cannot separate the version change from the old render having been produced by a resumed chain"
+ },
+ "downstream_check": {
+  "note": "docs/16's negative result is unchanged on the new render",
+  "old_render_pred_s42_020000": {
+   "gt128_pct_on_sheet": 23.38,
+   "max": 214,
+   "p50": 101,
+   "p99": 189
+  },
+  "new_render_pred_s42_020000": {
+   "gt128_pct_on_sheet": 23.69,
+   "max": 215,
+   "p50": 102,
+   "p99": 190
+  }
+ },
+ "container_status": {
+  "ghcr_tags_main_and_edge_revision": "1e3f4c021f4e53bea3867772ed05f51a7e586a9c",
+  "ghcr_tags_built": "2026-05-13",
+  "builder_image_rebuilt": "2026-07-24",
+  "github_release_latest": {
+   "published": "2026-08-30",
+   "from_commit": "5479453",
+   "platforms": [
+    "linux",
+    "macos",
+    "windows"
+   ]
+  }
+ }
+}

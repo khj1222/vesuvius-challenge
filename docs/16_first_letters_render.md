@@ -186,3 +186,19 @@ The stall in step 2 was reported upstream as
 ---
 
 MIT-licensed.
+
+## Re-verified on the current build (2026-08-31)
+
+The render above was produced with `ghcr.io/scrollprize/villa/volume-cartographer:edge`,
+revision `1e3f4c0` (2026-05-13), and needed a `--timeout` + `--resume` chain because it
+stalled four times out of four. On the official `VC3D-5479453-2026-08-30-win64` release —
+built from `main` after the cache rewrite in
+[#1554](https://github.com/ScrollPrize/villa/pull/1554) — the same render completes in a
+single pass with no timeout and no resume, three times out of three (5m55s, 3m56s, 3m50s),
+with byte-identical output across the three runs. The stall reported in
+[#1611](https://github.com/ScrollPrize/villa/issues/1611) no longer reproduces.
+
+**The conclusion of this document is unaffected.** The new render differs from the old one
+by 2.6% of voxels, but ink inference on it gives the same picture: 23.69% of sheet pixels
+above 128 against 23.38% before, max 215 against 214, median 102 against 101. There are
+still no letters. Raw numbers: `runs/f6_render_retest/summary.json`.
