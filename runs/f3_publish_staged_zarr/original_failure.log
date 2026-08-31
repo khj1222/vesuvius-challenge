@@ -1,0 +1,18 @@
+tiles=50/416
+tiles=100/416
+tiles=150/416
+tiles=200/416
+tiles=250/416
+tiles=300/416
+tiles=350/416
+tiles=400/416
+tiles=416/416
+Traceback (most recent call last):
+  File "D:\vw2\ink-detection\scripts\prepare_9um_isotropic_input.py", line 113, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\vw2\ink-detection\scripts\prepare_9um_isotropic_input.py", line 107, in main
+    partial.replace(args.output_zarr)
+  File "C:\Users\bluek\AppData\Roaming\uv\python\cpython-3.12.13-windows-x86_64-none\Lib\pathlib.py", line 1376, in replace
+    os.replace(self, target)
+PermissionError: [WinError 5] 액세스가 거부되었습니다: 'D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\phercparis4-w00.zarr.partial' -> 'D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\phercparis4-w00.zarr'

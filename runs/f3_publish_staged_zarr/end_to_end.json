@@ -1,0 +1,13 @@
+{
+ "patched": {
+  "returncode": 0,
+  "tail": "wrote C:\\Users\\bluek\\AppData\\Local\\Temp\\f3e2e.ftt4gm5l\\out.zarr shape=(21, 300, 260)",
+  "shape": [
+   21,
+   300,
+   260
+  ],
+  "bytes_match_expected_pooling": true,
+  "staging_left_behind": false
+ }
+}

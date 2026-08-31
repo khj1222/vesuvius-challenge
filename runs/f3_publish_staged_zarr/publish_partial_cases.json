@@ -1,0 +1,21 @@
+[
+ {
+  "case": "nothing held",
+  "published": true,
+  "seconds": 0.001
+ },
+ {
+  "case": "handle released after 0.8 s",
+  "outcome": "published after retrying",
+  "published": true,
+  "seconds": 1.503
+ },
+ {
+  "case": "handle never released",
+  "raised": "SystemExit",
+  "says_nothing_needs_recomputing": true,
+  "names_both_paths": true,
+  "staging_dir_still_intact": true,
+  "seconds": 0.152
+ }
+]
