@@ -126,3 +126,63 @@ over both seeds, and **aligned cost** = (new aligned mean) − (base aligned mea
 The calibration, the per-segment and per-representation cells as CSV, the summary with the
 verdict, the config, and the augmentation patch — under `runs/ink9um_scorecard/`, `configs/`
 and `submission/`.
+
+---
+
+## Calibration result: the exit condition fired
+
+Computed after this document was committed. Raw numbers:
+`runs/ink9um_scorecard/blur_calibration.json`.
+
+The Gaussian sigma at which a normalised aligned patch's high-frequency residual falls to the
+native median, per segment:
+
+| segment | native sigma_hf | aligned sigma_hf | calibrated sigma |
+|---|---|---|---|
+| w035 | 0.1158 | 0.1945 | 0.696 |
+| w039 | 0.1249 | 0.2747 | 0.856 |
+| w040 | 0.1394 | 0.2266 | 0.649 |
+| w041 | 0.1191 | 0.2663 | 0.916 |
+| **median** | | | **0.776** |
+
+Bracketed at +/- 50% that is a range of **0.39 to 1.16**. The recipe already samples
+`blur_sigma` from **0.5 to 3.0**. The calibrated centre is inside that range and below its
+midpoint of 1.75, which is exactly the exit condition written above, so **the arm does not run
+as designed.**
+
+### What the exit does and does not settle
+
+It settles the sigma. The blur strength this gap calls for is not exotic — it is at the weak
+end of what the recipe already draws from, so "the recipe blurs at the wrong strength" is
+false.
+
+It does not settle exposure, and the arithmetic is worth recording because it is the only
+live variable left:
+
+| | share of training patches |
+|---|---|
+| blurred at all by the recipe (`OneOf` with noise at p=0.2) | 10% |
+| of the recipe's sigma range that lies inside the calibrated band | 26.6% |
+| **seeing a calibrated-strength blur today** | **2.7%** |
+| the arm would have made it | 50% |
+
+So a probability-only arm is not vacuous — it would move calibrated-strength exposure by a
+factor of nineteen. But it is a weaker hypothesis than the one this document set out to test,
+and the exit clause was written precisely so that the weaker hypothesis does not get run under
+the stronger one's name. If it is worth spending, it is worth pre-registering separately.
+
+### The pattern this makes
+
+Three pre-registered attempts on the same 0.0534 gap have now stopped:
+
+| | intervention | outcome |
+|---|---|---|
+| [docs/18](18_uda_design.md) arm A | filter the native input to match aligned spectra | ran; +0.005 F1, no effect |
+| [docs/21](21_snr_augmentation.md) | train with noise calibrated to the difference | stopped: the difference has the opposite sign |
+| this document | train with blur calibrated to the difference | stopped: the calibrated strength is already in the recipe |
+
+The gap is real, it is reproducible, its mechanism is measured — and it has now resisted one
+test-time intervention and two training-time ones, two of which were stopped by their own
+calibrations before consuming GPU time. What still moves this number is human annotation:
+[docs/18](18_uda_design.md) puts one annotated segment at roughly seven times the best
+label-free method on the transfer problem next door.

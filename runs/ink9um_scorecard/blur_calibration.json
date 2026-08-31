@@ -1,0 +1,52 @@
+{
+ "method": "smallest Gaussian sigma at which a normalised aligned patch's high-frequency residual sd drops to the median measured on native patches of the same segment",
+ "segments": {
+  "pherc0139-w035": {
+   "native_hf_median": 0.11582,
+   "aligned_hf_median": 0.19453,
+   "sigma_median": 0.6958,
+   "sigma_p25": 0.5852,
+   "sigma_p75": 0.9087
+  },
+  "pherc0139-w039": {
+   "native_hf_median": 0.12487,
+   "aligned_hf_median": 0.2747,
+   "sigma_median": 0.856,
+   "sigma_p25": 0.7539,
+   "sigma_p75": 0.9268
+  },
+  "pherc0139-w040": {
+   "native_hf_median": 0.13939,
+   "aligned_hf_median": 0.22664,
+   "sigma_median": 0.6489,
+   "sigma_p25": 0.4087,
+   "sigma_p75": 0.8694
+  },
+  "pherc0139-w041": {
+   "native_hf_median": 0.11908,
+   "aligned_hf_median": 0.26629,
+   "sigma_median": 0.9155,
+   "sigma_p25": 0.6328,
+   "sigma_p75": 1.0244
+  }
+ },
+ "sigma_centre": 0.7759,
+ "sigma_range": [
+  0.3879,
+  1.1638
+ ],
+ "recipe_range_in_use": [
+  0.5,
+  3.0
+ ],
+ "recipe_midpoint": 1.75,
+ "exit_condition_met": true,
+ "exposure": {
+  "recipe_blur_probability": 0.2,
+  "blur_share_of_that_oneof": 0.5,
+  "patches_blurred_at_all": 0.1,
+  "share_of_recipe_sigma_range_inside_calibrated_band": 0.2655,
+  "patches_seeing_a_calibrated_strength_blur": 0.0266,
+  "arm_would_have_made_it": 0.5
+ }
+}
