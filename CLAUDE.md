@@ -156,6 +156,20 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-08-31 (오전~) — 계획 실행 개시: F2·F3 푸시 + S1 사전등록·기동
+
+**F2 (Windows `infer` 크래시)**: `torch.compile()`은 예외 없이 반환되고 `TritonMissing`은 **첫 forward**에서 나온다 → `maybe_compile_model`의 `except`는 도달 불가 죽은 코드. 재현 완료(`runs/f2_compile_fallback/repro_lazy_compile.json`). 첫 forward만 감싸는 래퍼로 수정: **전 두 forward 모두 크래시 → 후 경고 후 eager 결과 반환(값 일치)**, 정상 백엔드는 3/3 컴파일 경로·경고 0, 테스트 19통과. ⚠️ 합성 워밍업 텐서는 **일부러 안 씀**(shape 오판 시 리눅스에서도 컴파일이 꺼짐). 브랜치 `fix/compile-fallback-at-first-forward`(`66c7e19`), 본문 `submission/pr_f2_compile_fallback.md`.
+
+**F3 (prepare 스크립트 rename 사망)**: 조건별 실측 — 아무것도 안 잡음 rename 성공 / **안의 파일 1개 열림 → WinError 5**(우리 실패와 동일) / scandir 미완 성공 / cwd 안쪽 → WinError 32. 수정 후 0.001초 발행, 0.8초 뒤 핸들 해제 시 재시도로 1.5초 발행, 끝내 안 풀리면 **"재계산 필요 없음"을 말하는 메시지**로 종료·staging 보존. 합성 84×300×260 end-to-end 바이트 일치. 브랜치 `fix/publish-staged-zarr-on-windows`(`df799c4`), 본문 `submission/pr_f3_publish_staged_zarr.md`.
+⚠️ **둘 다 사용자 몫 2가지에 막힘**: PR 생성(웹) + villa CONTRIBUTING이 요구하는 **사람이 쓴 코멘터리**(#1434가 이걸로 닫혔음). 각 본문 하단 "Why this matters to me" 자리 비워 둠.
+
+**S1 = `docs/20_annotation_targeting.md` 사전등록(09:16:25 커밋 `33d8be8`, 예측 읽기 전)** → 6런 기동(09:28, ~7h).
+- ⚠️ **설계가 바뀐 이유**: 기존 라벨예산 기준선은 **무작위가 아니라 면적·밀도 정합 전수탐색**이었다. 그래서 질문을 "어느 규칙이 이기나"에서 **"어디를 주석하느냐가 애초에 얼마나 중요한가"**(= 모든 획득 규칙의 상한)로 바꿈.
+- 20.7% 예산 ±3%p 안의 **28개 조합** 중 4 arm: `density`(발표본, 재사용) · `disagree-max` · `disagree-min` · `random`(시드 0). 순위는 **라벨 없이** 베이스 두 시드의 불일치로 매김 — 예측이 이미 디스크에 있어 **선택에 GPU 0**.
+- **학습 전에 기록해 둔 것 2가지**: 그룹 간 불일치 폭이 0.0791~0.1091로 좁아 **순위가 쥘 신호가 약함**; ±3%p 때문에 실제 예산이 19.20~23.49%로 갈려 **`disagree-max`가 불리·`random`이 유리**. 어느 방향으로 나오든 읽는 법을 문서에 미리 적음.
+- ✅ **채점 경로를 밤새 돌리기 전에 검증**: 발표된 라벨예산 셀을 재채점해 **필드 단위 완전 일치**(F1 0.7731 @122, P 0.7927, R 0.7545, 8,268,843/2,163,941). 두 매트릭스는 셀 대 셀로 비교 가능.
+- 신규 도구: `tools/score_annotation_candidates.py`(라벨 없는 후보 순위), `tools/run_annotation_targeting.py`(재시도 드라이버), `make_label_budget.py`에 `--groups/--name` 추가(기존 체인은 **동일 재현** 확인).
+
 #### 2026-08-31 (저녁) — **$5k 타겟 30일 계획 수립** (전문 = `planning/2026-09_five_k_plan.md`, **비공개**)
 
 사용자 지시로 남은 30일을 $5k에 겨눈 계획을 작성. ⚠️ **문서는 `planning/`에 두고 gitignore** — `docs/`는 제출 문안 field 4에서 도달하는 공개 경로이고, 08-29에 같은 이유로 docs/05에서 상금 산술·경쟁자 표를 걷어냈다. 아래가 그 계획의 실행 요지(문서가 유실돼도 이걸로 재구성 가능).
