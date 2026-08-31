@@ -189,7 +189,10 @@ scroll's entire annotation. Four parts:
 - **The price of that repair** — rebuilding the fine-tune on nested subsets of one
   segment's annotation: **half the annotation keeps 89% of the benefit for 0.033
   F1**, a fifth keeps 71%, an eighth 56%. So "annotate one segment" now carries a
-  number, and the number says annotate half of one.
+  number, and the number says annotate half of one. ⚠️ That 71% has since been
+  **corrected by a pre-registered follow-up** ([docs/20](docs/20_annotation_targeting.md)):
+  it is a property of *that subset*, not of that budget — another subset at a
+  slightly smaller budget keeps **82.9%**.
 
 Two appendices record hypotheses put to the test rather than defended. One is ours,
 **rejected** by a **pre-registered** follow-up arm: the aligned representation's
@@ -255,6 +258,37 @@ is what you can have on a scroll nobody has annotated yet.
 
 One of the four predictions was wrong, in the direction not considered. That is
 what committing them in advance was for.
+
+### 11. Does it matter *where* you annotate? — [docs/20](docs/20_annotation_targeting.md)
+
+The label-efficiency curve says how much annotation is worth. This asks which part,
+holding the budget at a fifth of one segment and changing only which regions are
+annotated — four subsets picked by rules fixed before the runs.
+
+It matters, and the rule I expected to win lost. The four arms span **0.0373 F1**,
+above the noise floor, with the **ordering identical in both seeds** and one subset
+best on **all seven** scored segments; ranking candidate regions by the model's own
+disagreement picked the *worst* of them, so uncertainty sampling is reported as
+failed. What replaces it is a correction to our own published number: at that budget
+the achievable range is at least **70.8% to 82.9%** of the benefit, and the curve in
+section 7 sits at the bottom of it.
+
+### 12. Four attempts on the aligned-over-native gap — [docs/21](docs/21_snr_augmentation.md)–[23](docs/23_blur_exposure.md)
+
+The same sheet scores **0.053 F1** better rendered aligned than native, and the
+mechanism is measured. So: can a model be trained not to care?
+
+| | intervention | outcome |
+|---|---|---|
+| [docs/18](docs/18_uda_design.md) arm A | filter the native input to match aligned spectra | ran; +0.005 F1, no effect |
+| [docs/21](docs/21_snr_augmentation.md) | train with noise calibrated to the difference | **stopped by its own calibration**: native is *smoother*, not noisier — 24 of 24 cells |
+| [docs/22](docs/22_blur_augmentation.md) | train with blur calibrated to the difference | **stopped**: the calibrated sigma 0.78 is already inside the recipe's 0.5–3.0 |
+| [docs/23](docs/23_blur_exposure.md) | apply that blur to 50% of patches instead of 2.7% | ran; **−0.012 F1**, seeds disagreeing in sign, no effect |
+
+Two ran and returned nothing; two were stopped before they consumed GPU time, by
+calibrations their own pre-registrations had specified in advance. The advantage the
+aligned rendering gives you cannot be recovered by anything here that does not use
+labels — which is what turns "render aligned" from a preference into an instruction.
 
 ---
 
@@ -349,4 +383,9 @@ vesuvius-challenge/
 - [x] **September track measured** (2026-08-29/30) — held-out mask audit
       ([docs/17](docs/17_holdout_audit.md)), the label-efficiency curve, and the
       pre-registered adaptation ladder ([docs/18](docs/18_uda_design.md))
+- [x] **Annotation targeting** (2026-08-31) — where you annotate moves F1 by 0.037 and
+      corrects our own label-efficiency number ([docs/20](docs/20_annotation_targeting.md))
+- [x] **The aligned-over-native gap closed as a research target** (2026-09-01) — four
+      pre-registered attempts, two stopped by their own calibrations
+      ([docs/21](docs/21_snr_augmentation.md)–[23](docs/23_blur_exposure.md))
 - [ ] September round — submission (deadline 2026-09-30)
