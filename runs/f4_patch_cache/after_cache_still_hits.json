@@ -1,0 +1,20 @@
+{
+ "first_discovery": {
+  "patches": 1266,
+  "seconds": 3.01
+ },
+ "second_same_tree": {
+  "patches": 1266,
+  "seconds": 0.03,
+  "cache_hit": true
+ },
+ "copied_tree_first": {
+  "patches": 1266,
+  "seconds": 2.98
+ },
+ "copied_tree_second": {
+  "patches": 1266,
+  "seconds": 0.02,
+  "cache_hit": true
+ }
+}

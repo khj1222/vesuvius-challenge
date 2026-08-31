@@ -1,0 +1,4 @@
+{"phase": "1. first discovery", "patches": 1266, "training": 1266, "validation": 0, "bbox_signature": 4246969966, "cache_written": true, "token": "labeled-default-v6-po-0.25-mlc-0.0-pfs-"}
+{"phase": "2. supervision mask halved in place", "supervised_pixels_left": 1051639, "cache_still_there": true, "token_now": "labeled-default-v6-po-0.25-mlc-0.0-pfs-", "token_changed": false}
+{"phase": "3. rerun, same out_dir", "patches": 1162, "training": 1162, "validation": 0, "bbox_signature": 2951153073, "identical_to_stale": false}
+{"phase": "4. rerun, fresh out_dir (the truth)", "patches": 1162, "training": 1162, "validation": 0, "bbox_signature": 2951153073, "differs_from_stale": true}
