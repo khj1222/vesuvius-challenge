@@ -33,7 +33,9 @@ Put together: the validation metrics only ever run inside a training loop, over 
 
 If it is wanted, two shapes, smallest first:
 
-1. **Wire the two unused metrics into the existing validation pass.** `DRD` and `PFMWeighted` are already implemented and already have the shape the pass needs; this is a handful of lines and no new surface. It does nothing for anyone without a validation split, but it stops two metrics from being dead code.
+1. **Wire the two unused metrics into the existing validation pass.** Smaller than it sounds: both extend `BinaryImageMetric`, which already implements `compute_per_sample` over `_iter_sample_batches`, so `DRD(per_sample=True)` and `PFMWeighted(per_sample=True)` sit beside the two metrics the pass already builds, with no new plumbing. It does nothing for anyone without a validation split, but it stops two implemented metrics from being dead code.
+
+   One caveat that argues against this being enough on its own: `BinaryImageMetric.threshold` defaults to 0.5, and on this data the threshold that maximises F1 is nowhere near it — my sweeps land between 95 and 153 out of 255 depending on the segment and the checkpoint. A DRD logged at a fixed 0.5 during training and a DRD reported from a sweep are not the same number, and I would not want them quoted as if they were.
 2. **A `score` entry point**: `python -m koine_machines.evaluation.score <prediction> <segment_dir>`, sweeping the threshold and reporting the four metrics plus per-region breakdown as JSON. This is what I have been running outside the repo since July — the harness linked from this issue — so it is not speculative work, and upstreaming it means the numbers people quote come out of your code rather than mine.
 
 I have no preference between them, and I am happy with neither. I have also not written 2 against your interfaces, deliberately: after #1638 I would rather ask than arrive with something built.
