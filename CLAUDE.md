@@ -170,6 +170,20 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 - ✅ **채점 경로를 밤새 돌리기 전에 검증**: 발표된 라벨예산 셀을 재채점해 **필드 단위 완전 일치**(F1 0.7731 @122, P 0.7927, R 0.7545, 8,268,843/2,163,941). 두 매트릭스는 셀 대 셀로 비교 가능.
 - 신규 도구: `tools/score_annotation_candidates.py`(라벨 없는 후보 순위), `tools/run_annotation_targeting.py`(재시도 드라이버), `make_label_budget.py`에 `--groups/--name` 추가(기존 체인은 **동일 재현** 확인).
 
+#### 2026-08-31 (밤) — PR 3건 개설, 그리고 **GitHub 열린 PR 개수 제한을 처음 밟음**
+
+| PR | | 상태 |
+|---|---|---|
+| [#1661](https://github.com/ScrollPrize/villa/pull/1661) | F4 패치 캐시 | ✅ ready, 체크박스 ✓, 본문 = 초안(체크박스 한 글자 차이) |
+| [#1662](https://github.com/ScrollPrize/villa/pull/1662) | F2 compile 폴백 | 🟡 **draft로 묶임**, 체크박스 ✓ |
+| [#1663](https://github.com/ScrollPrize/villa/pull/1663) | F3 staged 발행 | 🟡 **draft로 묶임**, ⚠️ 체크박스 미체크 |
+
+- 셋 다 base `merge-ink-pipelines`, mergeable, diff가 우리 커밋과 일치(+64 / +43−1 / +38−2), **HTML 머리말 유출 0**.
+- "Why this matters to me"는 **사용자가 직접 작성**(F4는 한글로 써서 내가 번역만, F2·F3은 영어로 직접). ⚠️ **이 문단은 내가 대신 쓰지 않는다** — CONTRIBUTING이 요구하는 건 사람이 쓴 코멘터리이고 그게 LLM PR을 거르는 장치라, 대신 쓰면 형식만 통과시키는 것. #1434가 이 지점에서 닫혔다.
+- 🔴 **새 제약(계획의 전제를 깸): GitHub이 작성자당 열린 PR 수를 제한한다.** non-draft 3건(#1535·#1608·#1661)에서 막혀 draft 2건을 ready로 못 바꾼다("Author has reached the open pull request limit", ready 버튼 비활성). **$5k 패턴은 "머지된 수정 묶음"인데 동시 3건 제한이면 묶음을 한 번에 못 낸다** — 한 건이 머지/닫혀야 다음이 들어간다.
+- **사용자 결정(A안): 그냥 draft로 둔다.** #1535를 닫아 자리를 비우는 안은 기각 — 9월 문안이 #1535를 참조하고, #1434에서 **닫은 PR은 reopen이 안 됐던** 전례가 있다. #1608은 Bullo27 리뷰까지 끝나 CI 초록이라 머지에 가장 가깝고, 그게 움직이면 자리가 난다.
+- 남은 사용자 작업: **#1663의 `- [ ] I personally verified` 체크박스 켜기**(draft 여부와 무관).
+
 #### 2026-08-31 (밤) — ✅ **코멘트 3건 게시 완료(사용자 직접), 게시본 = 초안 일치**
 
 12:54~12:55 UTC 게시. **머리말(HTML 주석) 유출 0** — #1580·#1582 때 raw에 남았던 문제 재발 없음. 본문도 공백 정규화 기준 초안과 일치 확인(`scratchpad/compare_posted3.py`).
