@@ -281,6 +281,13 @@ opens; the layout above assumes August's.
 Everything below the fold is already done and verified; this is the short list to run
 before pasting.
 
+0. **⚠️ A full read-through is owed, and has not been done since 2026-09-01.** Field 5 grew
+   from 9,822 to 11,475 characters in one day as three results landed (the invited #1471
+   check, the annotation-targeting arm, and four attempts on the aligned-over-native gap).
+   Two trimming passes removed 1,037 characters of restatement and one stale promise, and
+   then stopped: what remains would cost claims, not words. Before submitting, read the
+   whole field once end to end for order and repetition — it has been edited in five places
+   without anyone reading it as a single piece since the 08-31 trim.
 1. **Get September's form** from https://scrollprize.org/prizes. Do not reuse August's
    link — each round issues a new form and closes the previous one. Check the question
    count: August had six (email, name, team, URL, description, terms). If September adds
