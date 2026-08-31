@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 11,412 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 12,512 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -105,6 +105,7 @@ Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-ch
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
 Pre-registered adaptation study, three arms, all run: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
 Pre-registered targeting test (where to annotate, and the published curve it corrects): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/20_annotation_targeting.md
+Four pre-registered attempts on the aligned-over-native gap, two stopped by their own calibrations: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/23_blur_exposure.md
 Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-challenge/tree/main/tools
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
@@ -158,6 +159,19 @@ exposure raised from 0% to 16.4% of training batches, the gap came back unchange
 argued — the published pyramids are byte-exact 2x2 means that never touch z, so one
 aligned voxel averages 64 acquired 2.399 µm voxels against native's one. Render aligned,
 whatever the model trained on.
+
+I then spent four pre-registered attempts trying to make that instruction unnecessary, and
+none of them worked. Filtering the native input to match aligned spectra recovered +0.005 F1.
+Training with noise calibrated to the difference was stopped by its own calibration: measured
+after the trainer's normalisation, the native input carries *less* high-frequency energy than
+the aligned one in 24 of 24 cells, so the correction points at blur rather than noise. The
+blur version was stopped too -- the sigma the gap calls for, 0.78, is already inside the range
+the recipe samples. Only exposure was left, so I raised the share of patches seeing a
+calibrated-strength blur from 2.7% to 50% and ran it: native -0.012, the wrong sign, inside
+the noise floor, and the two seeds disagreeing by more than the effect. Two attempts ran and
+returned nothing; two were stopped by their own calibrations before consuming GPU time. The
+advantage the aligned rendering gives you cannot be recovered by anything I can do without
+labels, which is what makes "render aligned" an instruction rather than a preference.
 
 The diagnosis (part 3): the gap is bias, not variance. The two seeds of each arm agree
 on held-out scrolls to |ΔF1| ≈ 0.01–0.03 (versus 0.22 within scrolls), and averaging
@@ -310,8 +324,8 @@ waiting on the user to post: `pr1471_reply_jaideepsaipadhi.md`.
 Field hashes at this revision, over the block body plus one trailing newline — the
 convention the August entry uses:
 
-- field 4 — 1,834 chars, `9f3081ff6c0a6fa356a494c19dcaedf711ea62f06de20e1201177fc9a6965056`
-- field 5 — 11,412 chars, `8a5a1a6f459ec19f3ab654d78cc74ba67d4f5ce075bb8f6fc8d01a733000f535`
+- field 4 — 2,015 chars, `39a669d5c4f87e8afd8ce62f78f590caa4fb60553593dda3750d1f9728acfbac`
+- field 5 — 12,512 chars, `240b243bd83bfa58b8f30d7d6615bad79d85c9883e6a82fc6387c7e32bb0c46a`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
@@ -325,6 +339,7 @@ against what was actually pasted.
 | label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
 | annotation targeting (pre-registered, 42 cells): at a fifth of the annotation the subset choice moves the mean 0.0373 F1, ordering identical in both seeds, one subset best on 7 of 7 segments; the disagreement rule loses by 0.017/0.024; benefit retained 70.8% → 82.9% at a smaller budget | `runs/ink9um_scorecard/annotarget_matrix.csv` + `annotarget_summary.json` + `annotation_candidates.json`, `docs/20` |
 | arm A: spectrum matching gains +0.005 F1, median 9.1% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
+| the aligned advantage resists four pre-registered attempts: spectrum matching +0.005; noise stopped by calibration (native smoother in 24 of 24 cells); blur strength stopped (calibrated 0.78 already inside the recipe's 0.5–3.0); blur exposure 2.7% → 50% run and returning −0.012, seeds disagreeing in sign | `runs/ink9um_scorecard/representation_noise.json`, `blur_calibration.json`, `blurexp_matrix.csv` (16 cells) + `blurexp_summary.json`, `docs/21`–`docs/23` |
 | arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
 | arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
 | arm D (transductive): +0.046 F1, 14 of 14 cells, 14.3% of the gap, AUC 0.659 → 0.742; pre-registered at +5–30% | `runs/ink9um_scorecard/armD_pseudoT_matrix.csv` (18 cells) + `armD_pseudoT_summary.json` + `armD_rank_check_w01_s42.json`, `docs/18` |
