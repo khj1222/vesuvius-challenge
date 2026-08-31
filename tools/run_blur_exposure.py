@@ -60,8 +60,23 @@ def run(command: list[str], *, cwd: Path, log_path: Path) -> int:
         return subprocess.run(command, cwd=cwd, stdout=handle, stderr=subprocess.STDOUT).returncode
 
 
-def train_until_step(seed: int, *, driver) -> bool:
-    """Start training and stop it once the scored checkpoint is written and stable."""
+def train_until_step(seed: int, *, driver, attempts: int = 4) -> bool:
+    """Start training and stop it once the scored checkpoint is written and stable.
+
+    Retried, because a worker importing torch while the previous run is still tearing down
+    hits WinError 1455 -- the system commit limit, not a fault of this configuration. A
+    settle delay before each attempt makes that race much less likely.
+    """
+    for attempt in range(1, attempts + 1):
+        if attempt > 1:
+            log(f"seed {seed}: waiting 120 s for memory to settle before attempt {attempt}", driver)
+            time.sleep(120)
+        if _train_once(seed, driver=driver, attempt=attempt, attempts=attempts):
+            return True
+    return False
+
+
+def _train_once(seed: int, *, driver, attempt: int, attempts: int) -> bool:
     config = REPO / "configs" / f"ink9um_blurexp_s{seed}.json"
     out_dir = REPO / "runs" / f"ink9um_blurexp_s{seed}"
     target = out_dir / f"ckpt_{STEP}.pth"
@@ -71,7 +86,7 @@ def train_until_step(seed: int, *, driver) -> bool:
 
     log_path = LOGS / f"train_s{seed}.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    log(f"seed {seed}: training until {target.name}", driver)
+    log(f"seed {seed}: attempt {attempt}/{attempts}, training until {target.name}", driver)
     started = time.perf_counter()
     with log_path.open("a", encoding="utf-8") as handle:
         process = subprocess.Popen(
@@ -79,8 +94,17 @@ def train_until_step(seed: int, *, driver) -> bool:
             cwd=RUN_TREE, stdout=handle, stderr=subprocess.STDOUT,
         )
         previous = -1
+        last_size, last_change = log_path.stat().st_size, time.time()
         while True:
             if process.poll() is not None:
+                break
+            size_now = log_path.stat().st_size
+            if size_now != last_size:
+                last_size, last_change = size_now, time.time()
+            elif time.time() - last_change > 600 and not target.exists():
+                log(f"seed {seed}: no log output for 10 min and no checkpoint, killing the run",
+                    driver)
+                process.kill()
                 break
             if target.exists():
                 size = target.stat().st_size
@@ -97,7 +121,8 @@ def train_until_step(seed: int, *, driver) -> bool:
             time.sleep(20)
     minutes = (time.perf_counter() - started) / 60
     ok = target.exists()
-    log(f"seed {seed}: training finished after {minutes:.1f} min, checkpoint present={ok}", driver)
+    log(f"seed {seed}: attempt {attempt} finished after {minutes:.1f} min, "
+        f"checkpoint present={ok}", driver)
     return ok
 
 
