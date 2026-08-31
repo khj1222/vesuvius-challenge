@@ -57,6 +57,4 @@ Two limits I would rather state than have found:
 - two different labels that compress to identical sizes under identical names are not distinguished. I could not construct such a case by editing a mask, but it is not impossible, and reading contents would cost the fast path more than the bug costs.
 - a tree whose files are rewritten with identical content and identical sizes still fingerprints the same, which is the wanted behaviour: a copied corpus hits the cache, as the table above shows.
 
-**Why this matters to me:** <!-- TO BE WRITTEN BY THE USER before opening: a couple of
-sentences on hitting this while iterating on held-out splits, and what the wrong numbers
-looked like before the cause was found. -->
+**Why this matters to me:** I was trying to see how much F1 changes with the way the held-out regions are split inside a single segment, so I rebuilt the mask several times as I went. The arm I ran with the new mask came out exactly the same as the previous one, and because there was no error and no warning, for a while I took that as the result rather than as something wrong with my setup.
