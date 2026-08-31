@@ -1,0 +1,497 @@
+{
+ "segment": "phercparis4-w00",
+ "level": 0,
+ "min_gap_px": 256.0,
+ "regions": 15,
+ "groups": 9,
+ "total_area": 5798902,
+ "predictions": [
+  "runs\\ink9um_scorecard\\preds\\phercparis4-w00_loso42_020000.tif",
+  "runs\\ink9um_scorecard\\preds\\phercparis4-w00_loso43_020000.tif"
+ ],
+ "target_keep": 0.2072,
+ "tolerance": 0.03,
+ "admissible_subsets": 28,
+ "group_stats": [
+  {
+   "group": 0,
+   "regions": [
+    1
+   ],
+   "area": 319351,
+   "ink": 86323,
+   "ink_density": 0.2703075925862139,
+   "mean_disagreement": 0.08216530829668045,
+   "mean_entropy": 0.9222171306610107,
+   "mean_probability": 0.3686608374118805
+  },
+  {
+   "group": 1,
+   "regions": [
+    2,
+    7,
+    9,
+    10
+   ],
+   "area": 1581265,
+   "ink": 307479,
+   "ink_density": 0.19445127793254136,
+   "mean_disagreement": 0.0851026251912117,
+   "mean_entropy": 0.912689745426178,
+   "mean_probability": 0.3748108446598053
+  },
+  {
+   "group": 2,
+   "regions": [
+    3
+   ],
+   "area": 373861,
+   "ink": 112637,
+   "ink_density": 0.30128042240297864,
+   "mean_disagreement": 0.0878797397017479,
+   "mean_entropy": 0.920441210269928,
+   "mean_probability": 0.40800580382347107
+  },
+  {
+   "group": 3,
+   "regions": [
+    4
+   ],
+   "area": 90704,
+   "ink": 27576,
+   "ink_density": 0.3040218733462692,
+   "mean_disagreement": 0.08649837225675583,
+   "mean_entropy": 0.9285854697227478,
+   "mean_probability": 0.38928404450416565
+  },
+  {
+   "group": 4,
+   "regions": [
+    5
+   ],
+   "area": 213356,
+   "ink": 95039,
+   "ink_density": 0.445447983651737,
+   "mean_disagreement": 0.08613814413547516,
+   "mean_entropy": 0.9272829294204712,
+   "mean_probability": 0.3993633985519409
+  },
+  {
+   "group": 5,
+   "regions": [
+    6
+   ],
+   "area": 116098,
+   "ink": 20359,
+   "ink_density": 0.17536047132594876,
+   "mean_disagreement": 0.10910752415657043,
+   "mean_entropy": 0.9196167588233948,
+   "mean_probability": 0.37291157245635986
+  },
+  {
+   "group": 6,
+   "regions": [
+    8,
+    12
+   ],
+   "area": 1714830,
+   "ink": 370359,
+   "ink_density": 0.215974178198422,
+   "mean_disagreement": 0.07931490242481232,
+   "mean_entropy": 0.9124587178230286,
+   "mean_probability": 0.3754221498966217
+  },
+  {
+   "group": 7,
+   "regions": [
+    11,
+    13
+   ],
+   "area": 608170,
+   "ink": 162854,
+   "ink_density": 0.2677771017971949,
+   "mean_disagreement": 0.07909191399812698,
+   "mean_entropy": 0.9040456414222717,
+   "mean_probability": 0.36418136954307556
+  },
+  {
+   "group": 8,
+   "regions": [
+    14,
+    15
+   ],
+   "area": 781267,
+   "ink": 152782,
+   "ink_density": 0.19555670468610603,
+   "mean_disagreement": 0.0830065906047821,
+   "mean_entropy": 0.9209460616111755,
+   "mean_probability": 0.39467528462409973
+  }
+ ],
+ "reference_groups": [
+  3,
+  4,
+  5,
+  8
+ ],
+ "selection": {
+  "disagree-min": {
+   "groups": [
+    0,
+    4,
+    7
+   ],
+   "area": 1140877,
+   "keep": 0.19674017598503993,
+   "ink_density": 0.3017117533266075,
+   "mean_disagreement": 0.08126992882340736
+  },
+  "disagree-max": {
+   "groups": [
+    0,
+    2,
+    3,
+    4,
+    5
+   ],
+   "area": 1113370,
+   "keep": 0.19199669178751425,
+   "ink_density": 0.3071162326989231,
+   "mean_disagreement": 0.0880079257671422
+  },
+  "random": {
+   "groups": [
+    2,
+    3,
+    5,
+    8
+   ],
+   "area": 1361930,
+   "keep": 0.23485997866492656,
+   "ink_density": 0.23008084115923727,
+   "mean_disagreement": 0.08680184083129659
+  }
+ },
+ "admissible": [
+  {
+   "groups": [
+    0,
+    2,
+    3,
+    4,
+    5
+   ],
+   "area": 1113370,
+   "keep": 0.19199669178751425,
+   "ink_density": 0.3071162326989231,
+   "mean_disagreement": 0.0880079257671422
+  },
+  {
+   "groups": [
+    2,
+    5,
+    8
+   ],
+   "area": 1271226,
+   "keep": 0.21921839686202663,
+   "ink_density": 0.22480503073411023,
+   "mean_disagreement": 0.0868234937974766
+  },
+  {
+   "groups": [
+    2,
+    3,
+    5,
+    8
+   ],
+   "area": 1361930,
+   "keep": 0.23485997866492656,
+   "ink_density": 0.23008084115923727,
+   "mean_disagreement": 0.08680184083129659
+  },
+  {
+   "groups": [
+    3,
+    4,
+    5,
+    8
+   ],
+   "area": 1201425,
+   "keep": 0.20718146297350773,
+   "ink_density": 0.24617100526458163,
+   "mean_disagreement": 0.08634855575579085
+  },
+  {
+   "groups": [
+    4,
+    5,
+    8
+   ],
+   "area": 1110721,
+   "keep": 0.19153988117060783,
+   "ink_density": 0.24144677196163572,
+   "mean_disagreement": 0.08633632139999536
+  },
+  {
+   "groups": [
+    2,
+    4,
+    5,
+    7
+   ],
+   "area": 1311485,
+   "keep": 0.22616091804965838,
+   "ink_density": 0.29805068300438053,
+   "mean_disagreement": 0.08540043684874322
+  },
+  {
+   "groups": [
+    0,
+    3,
+    5,
+    8
+   ],
+   "area": 1307420,
+   "keep": 0.22545992327513037,
+   "ink_density": 0.2195468938826085,
+   "mean_disagreement": 0.08536109061249315
+  },
+  {
+   "groups": [
+    2,
+    3,
+    5,
+    7
+   ],
+   "area": 1188833,
+   "keep": 0.20501001741364142,
+   "ink_density": 0.2720533497976587,
+   "mean_disagreement": 0.08535181173266754
+  },
+  {
+   "groups": [
+    0,
+    5,
+    8
+   ],
+   "area": 1216716,
+   "keep": 0.20981834147223044,
+   "ink_density": 0.21324943536536053,
+   "mean_disagreement": 0.0852763083015338
+  },
+  {
+   "groups": [
+    2,
+    5,
+    7
+   ],
+   "area": 1098129,
+   "keep": 0.1893684356107415,
+   "ink_density": 0.26941279212187275,
+   "mean_disagreement": 0.08525710735296634
+  },
+  {
+   "groups": [
+    2,
+    4,
+    8
+   ],
+   "area": 1368484,
+   "keep": 0.23599019262612128,
+   "ink_density": 0.263399499007661,
+   "mean_disagreement": 0.08482613407743891
+  },
+  {
+   "groups": [
+    2,
+    3,
+    8
+   ],
+   "area": 1245832,
+   "keep": 0.21483929199010435,
+   "ink_density": 0.23518018480822456,
+   "mean_disagreement": 0.08472319361184995
+  },
+  {
+   "groups": [
+    3,
+    4,
+    5,
+    7
+   ],
+   "area": 1028328,
+   "keep": 0.1773315017222226,
+   "ink_density": 0.2974031631930668,
+   "mean_disagreement": 0.08459590025081065
+  },
+  {
+   "groups": [
+    2,
+    8
+   ],
+   "area": 1155128,
+   "keep": 0.19919771018720442,
+   "ink_density": 0.22977453580901858,
+   "mean_disagreement": 0.08458380143729653
+  },
+  {
+   "groups": [
+    0,
+    3,
+    4,
+    5,
+    7
+   ],
+   "area": 1347679,
+   "keep": 0.2324024444627621,
+   "ink_density": 0.290982496573739,
+   "mean_disagreement": 0.08401993819223184
+  },
+  {
+   "groups": [
+    3,
+    4,
+    8
+   ],
+   "area": 1085327,
+   "keep": 0.18716077629868552,
+   "ink_density": 0.2537456453216404,
+   "mean_disagreement": 0.08391401693625195
+  },
+  {
+   "groups": [
+    0,
+    4,
+    5,
+    7
+   ],
+   "area": 1256975,
+   "keep": 0.21676086265986216,
+   "ink_density": 0.2900415680502794,
+   "mean_disagreement": 0.08384109304146227
+  },
+  {
+   "groups": [
+    0,
+    3,
+    5,
+    7
+   ],
+   "area": 1134323,
+   "keep": 0.1956099620238452,
+   "ink_density": 0.261928921480037,
+   "mean_disagreement": 0.0836215226199243
+  },
+  {
+   "groups": [
+    0,
+    5,
+    7
+   ],
+   "area": 1043619,
+   "keep": 0.17996838022094527,
+   "ink_density": 0.25827049909976724,
+   "mean_disagreement": 0.0833714871477269
+  },
+  {
+   "groups": [
+    2,
+    3,
+    4,
+    7
+   ],
+   "area": 1286091,
+   "keep": 0.22178181317773607,
+   "ink_density": 0.30954730264032637,
+   "mean_disagreement": 0.08333778475879333
+  },
+  {
+   "groups": [
+    0,
+    4,
+    8
+   ],
+   "area": 1313974,
+   "keep": 0.2265901372363251,
+   "ink_density": 0.25430031340041737,
+   "mean_disagreement": 0.08331060833170818
+  },
+  {
+   "groups": [
+    2,
+    4,
+    7
+   ],
+   "area": 1195387,
+   "keep": 0.20614023137483614,
+   "ink_density": 0.30996656312976467,
+   "mean_disagreement": 0.08309796457636272
+  },
+  {
+   "groups": [
+    0,
+    3,
+    8
+   ],
+   "area": 1191322,
+   "keep": 0.20543923660030813,
+   "ink_density": 0.22385299692274632,
+   "mean_disagreement": 0.08304692748816549
+  },
+  {
+   "groups": [
+    2,
+    3,
+    7
+   ],
+   "area": 1072735,
+   "keep": 0.18498933073881918,
+   "ink_density": 0.2825180496581169,
+   "mean_disagreement": 0.08278082197192488
+  },
+  {
+   "groups": [
+    0,
+    8
+   ],
+   "area": 1100618,
+   "keep": 0.1897976547974082,
+   "ink_density": 0.21724612899298393,
+   "mean_disagreement": 0.08276248743149713
+  },
+  {
+   "groups": [
+    0,
+    2,
+    7
+   ],
+   "area": 1301382,
+   "keep": 0.22441869167645875,
+   "ink_density": 0.27802290180746314,
+   "mean_disagreement": 0.08237067215523901
+  },
+  {
+   "groups": [
+    0,
+    3,
+    4,
+    7
+   ],
+   "area": 1231581,
+   "keep": 0.21238175778793986,
+   "ink_density": 0.30188189002590976,
+   "mean_disagreement": 0.08165499544361216
+  },
+  {
+   "groups": [
+    0,
+    4,
+    7
+   ],
+   "area": 1140877,
+   "keep": 0.19674017598503993,
+   "ink_density": 0.3017117533266075,
+   "mean_disagreement": 0.08126992882340736
+  }
+ ]
+}

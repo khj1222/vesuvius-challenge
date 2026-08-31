@@ -106,3 +106,53 @@ were wrong: entropy minimisation was predicted to recover 10–40% of the gap an
 Per-arm and per-segment cells as CSV, the subset each rule chose with its area and density,
 the group disagreement scores, and the summary with the verdict — under
 `runs/ink9um_scorecard/`, alongside the label-efficiency matrix this extends.
+
+---
+
+## What the selection produced
+
+Recorded after running the selection and before training any arm. These are inputs, not
+results. Raw numbers: `runs/ink9um_scorecard/annotation_candidates.json`.
+
+Group disagreement, averaged over each group's supervised pixels, spans **0.0791 to 0.1091**
+across the nine groups — a narrow band. At the subset level the four arms span 0.0813 to
+0.0880, so the ranking is working with a weak signal. That is worth knowing before the
+result arrives: if the arms come out inside noise, "the ranking had little to rank on" is a
+live explanation alongside "where you annotate does not matter".
+
+| arm | groups | area kept | ink density | mean disagreement |
+|---|---|---|---|---|
+| `density` (published) | 3, 4, 5, 8 | 20.72% | 0.2462 | — |
+| `disagree-max` | 0, 2, 3, 4, 5 | 19.20% | 0.3071 | 0.0880 |
+| `random` | 2, 3, 5, 8 | 23.49% | 0.2301 | 0.0868 |
+| `disagree-min` | 0, 4, 7 | 19.67% | 0.3017 | 0.0813 |
+
+⚠️ **A confound the ±3 pp tolerance introduced, stated before the result.** The arms do not
+spend identical budgets: `disagree-max` keeps 19.20% of the annotated area while `random`
+keeps 23.49% — 22% more annotation. The tolerance was fixed in advance and stays fixed, but
+the reading has to account for it:
+
+- if `disagree-max` wins, the budget difference worked **against** it, and the finding is
+  stronger than it looks;
+- if `disagree-max` loses, the budget difference is a live alternative explanation and will
+  be reported as one rather than buried.
+
+Ink density also varies with the subset (0.2301–0.3071); the published `density` arm is the
+only one selected to match the segment's global 0.2303, which is exactly why it is in the
+comparison.
+
+## Reproducing
+
+```bash
+python tools/score_annotation_candidates.py     data/ink_9um/labels/aligned-scrollprizeorg-21slices/phercparis4-w00     --predictions runs/ink9um_scorecard/preds/phercparis4-w00_loso42_020000.tif                   runs/ink9um_scorecard/preds/phercparis4-w00_loso43_020000.tif     --target-keep 0.2072 --tolerance 0.03 --reference-groups 3 4 5 8     --out runs/ink9um_scorecard/annotation_candidates.json
+
+python tools/make_label_budget.py <segment_dir> --out-root data/ink_9um/labels/annotarget     --groups 0 2 3 4 5 --name disagreemax          # and the other two arms
+
+python tools/run_annotation_targeting.py --phase all
+```
+
+The scoring path was checked against a published cell before any arm ran: rescoring
+`keep0250` seed 42 on `phercparis4-w01` at step 2,500 reproduces the label-efficiency matrix
+row exactly — F1 0.7731 at threshold 122, precision 0.7927, recall 0.7545, over the same
+8,268,843 scored and 2,163,941 ink pixels. The two matrices are therefore comparable cell
+for cell.

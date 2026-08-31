@@ -1,0 +1,129 @@
+{
+  "description": "Annotation targeting (docs/20): LOSO-noParis4 ckpt_020000 fine-tuned on groups [0, 2, 3, 4, 5] of w00's annotation -- the admissible subset with the HIGHEST mean seed disagreement; 0.1920 of the annotated area, ink density 0.3071; eval on the other 7 Paris4 segments.",
+  "mode": "flat",
+  "model_type": "vesuvius_unet_3d_stem_2d",
+  "model_config": {
+    "autoconfigure": true,
+    "basic_encoder_block": "BasicBlockD",
+    "basic_decoder_block": "ConvBlock",
+    "stem_channels": 16,
+    "z_projection_mode": "none"
+  },
+  "targets": {
+    "ink": {
+      "activation": "none",
+      "out_channels": 1,
+      "z_projection_mode": "none"
+    }
+  },
+  "in_channels": 1,
+  "patch_size": [
+    17,
+    128,
+    128
+  ],
+  "patch_overlap": 0.25,
+  "patch_min_labeled_coverage": 0.0,
+  "flat_z_window_jitter": {
+    "enabled": true,
+    "window_depth": 17,
+    "max_offset": 2,
+    "probability": 1.0,
+    "padding": "forbidden"
+  },
+  "image_normalization": {
+    "mode": "robust_mad",
+    "percentile_lower": 1.0,
+    "percentile_upper": 99.0
+  },
+  "augmentation_preset": "default",
+  "augmentation_rotation_axes": [
+    0
+  ],
+  "loss": {
+    "bce_label_smoothing": 0.5,
+    "dice_label_smoothing": 0.0
+  },
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "weight_decay": 3e-05,
+  "scheduler": {
+    "name": "diffusers_cosine_warmup"
+  },
+  "warmup_steps": 1000,
+  "grad_clip": 1.0,
+  "mixed_precision": "fp16",
+  "batch_size": 64,
+  "num_iterations": 10000,
+  "seed": 43,
+  "sampling_strategy": "fixed_scroll_prior_stratified",
+  "fixed_scroll_prior": {
+    "seed": 43,
+    "target_batch_counts": {
+      "Paris4": 64
+    }
+  },
+  "sampling_audit_every": 200,
+  "best_checkpoint_metric": "val_balanced_accuracy",
+  "save_every": 2500,
+  "val_every": 1000000,
+  "val_steps": 32,
+  "val_preview_batches": 1,
+  "log_every": 50,
+  "dataloader_workers": 12,
+  "pin_memory": true,
+  "verify_finite_gradients_steps": 0,
+  "max_amp_overflow_events": 0,
+  "out_dir": "D:/vesuvius-challenge/runs/ink9um_at_disagreemax_s43",
+  "datasets": [
+    {
+      "segments_path": "D:/vesuvius-challenge/data/ink_9um/labels/annotarget/disagreemax",
+      "segments": [
+        "phercparis4-w00"
+      ],
+      "surface_volume_paths": {
+        "phercparis4-w00": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w00.zarr"
+      },
+      "volume_scale": 0,
+      "sampling_scroll": "Paris4",
+      "sampling_physical_segment_keys": {
+        "phercparis4-w00": "Paris4:w00"
+      },
+      "sampling_representation_keys": {
+        "phercparis4-w00": "public_2p4_level2_zmean4:phercparis4-w00"
+      }
+    }
+  ],
+  "held_out_representations": [
+    "pherc0139-w016",
+    "pherc0139-w017",
+    "pherc0139-w028",
+    "pherc0139-w029",
+    "pherc0139-w035",
+    "pherc0139-w039",
+    "pherc0139-w040",
+    "pherc0139-w041",
+    "pherc0139-w043",
+    "pherc0814-46527",
+    "pherc1667-w013",
+    "pherc1667-w018",
+    "pherc1667-w023",
+    "pherc1667-w028",
+    "pherc1667-w029",
+    "pherc1667-w031",
+    "phercparis4-w01",
+    "phercparis4-w02",
+    "phercparis4-w03",
+    "phercparis4-w05",
+    "phercparis4-w06",
+    "phercparis4-w07",
+    "phercparis4-w09",
+    "w035",
+    "w039",
+    "w040",
+    "w041",
+    "w044"
+  ],
+  "checkpoint": "D:/vesuvius-challenge/runs/ink9um_loso_noParis4_s43/ckpt_020000.pth",
+  "weights_only": true
+}

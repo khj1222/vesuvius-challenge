@@ -134,17 +134,27 @@ def main(argv=None) -> int:
                     help="Segment folder holding <name>_supervision_mask.zarr")
     ap.add_argument("--out-root", type=Path, required=True,
                     help="Where the reduced label trees are written")
-    ap.add_argument("--keep", type=float, nargs="+", required=True,
+    ap.add_argument("--keep", type=float, nargs="+", default=None,
                     help="Retained annotation fractions, descending (e.g. 0.5 0.25 0.125)")
     ap.add_argument("--level", type=int, default=0,
                     help="Pyramid level used to plan the split. Default: 0")
     ap.add_argument("--min-gap", type=float, default=256,
                     help="Regions closer than this (planning-level px) stay together. Default: 256")
+    ap.add_argument("--groups", type=int, nargs="+", default=None,
+                    help="Write one tree from exactly these group indices instead of "
+                         "searching a nested chain. Requires --name.")
+    ap.add_argument("--name", default=None,
+                    help="Arm name for --groups (the directory written under --out-root)")
     ap.add_argument("--dry-run", action="store_true", help="Plan and report, write nothing")
     args = ap.parse_args(argv)
 
-    targets = sorted(args.keep, reverse=True)
-    if targets != list(args.keep):
+    if args.groups is not None and not args.name:
+        ap.error("--groups requires --name")
+    if args.groups is None and not args.keep:
+        ap.error("either --keep or --groups is required")
+
+    targets = sorted(args.keep, reverse=True) if args.keep else []
+    if args.keep and targets != list(args.keep):
         print(f"note: reordering --keep to descending {targets}")
 
     seg = args.segment_dir.resolve()
@@ -165,7 +175,25 @@ def main(argv=None) -> int:
     print(f"annotated regions: {count}  ->  {len(groups)} groups (merged below {args.min_gap:g} px)")
     print(f"annotated area   : {total_area:,} px, ink density {global_density:.4f}")
 
-    chain = nested_subsets(stats, targets, total_area=total_area, global_density=global_density)
+    if args.groups is not None:
+        by_group = {s["group"]: s for s in stats}
+        unknown = [g for g in args.groups if g not in by_group]
+        if unknown:
+            sys.exit(f"error: no such group(s) {unknown}; this segment has {sorted(by_group)}")
+        chosen = sorted(set(args.groups))
+        area = sum(by_group[g]["area"] for g in chosen)
+        ink_area = sum(by_group[g]["ink"] for g in chosen)
+        chain = [{
+            "target_keep": area / total_area,
+            "groups": chosen,
+            "regions": sorted(r for g in chosen for r in by_group[g]["regions"]),
+            "area": area,
+            "ink": ink_area,
+            "achieved_keep": area / total_area,
+            "ink_density": ink_area / max(1, area),
+        }]
+    else:
+        chain = nested_subsets(stats, targets, total_area=total_area, global_density=global_density)
     previous = set(s["group"] for s in stats)
     for arm in chain:
         assert set(arm["groups"]) <= previous, "subsets must nest"
@@ -192,7 +220,7 @@ def main(argv=None) -> int:
         "arms": [],
     }
     for arm in chain:
-        name = f"keep{int(round(arm['target_keep'] * 1000)):04d}"
+        name = args.name or f"keep{int(round(arm['target_keep'] * 1000)):04d}"
         dst = args.out_root.resolve() / name / seg.name
         keep2d = np.isin(labels, arm["regions"])
         print(f"\nwriting {dst}")
@@ -203,7 +231,8 @@ def main(argv=None) -> int:
         manifest["arms"].append({**arm, "name": name, "path": str(dst), "voxels": report})
 
     args.out_root.mkdir(parents=True, exist_ok=True)
-    out_json = args.out_root.resolve() / f"{seg.name}_label_budget.json"
+    suffix = f"_{args.name}" if args.name else ""
+    out_json = args.out_root.resolve() / f"{seg.name}_label_budget{suffix}.json"
     out_json.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(f"\nmanifest -> {out_json}")
     return 0
