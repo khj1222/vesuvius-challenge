@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 11,603 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,475 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -132,15 +132,15 @@ best everywhere, and two released seeds that disagree by 0.22 F1 at the final st
 
 That yardstick had to be checked itself, because everything honest here rests on three
 masks — and all three split their annotation within connected regions, so 23% to 59% of
-their held-out pixels sit inside one 128px training patch of pixels the model trained on.
-Whether that adjacency pays needed no new training: the released checkpoints trained on
-those segments while my leave-one-scroll-out arms never saw the scrolls, so scoring both
-over the same distance strata separates proximity from difficulty. The control comes out
-nearly flat while the trained model gains +0.14 and +0.07 F1 more on the pixels nearest
-its training data. I filed that as villa #1638; the research lead closed it the same day,
-because the masks are disjoint and an intra-segment held-out number is legitimate provided
-it is named that. He is right, and the framing was mine to fix — which is why the
-0.74–0.77 above is an intra-segment ceiling, not a claim about generalisation (docs/17).
+their held-out pixels sit inside one training patch of pixels the model trained on. Whether
+that adjacency pays needed no new training: the released checkpoints saw those segments and
+my leave-one-scroll-out arms never saw the scrolls, so scoring both over the same distance
+strata separates proximity from difficulty. The control comes out nearly flat while the
+trained model gains +0.14 and +0.07 F1 more on the pixels nearest its training data. I filed
+that as villa #1638 and the research lead closed it the same day: the masks are disjoint, and
+an intra-segment held-out number is legitimate provided it is named that. He is right, and
+the framing was mine to fix — which is why the 0.74–0.77 above is an intra-segment ceiling,
+not a claim about generalisation (docs/17).
 
 Then the measurement (docs/15, parts 1–2): leave-one-scroll-out, three times. I retrained
 the released recipe six times — the only change being one scroll removed and the per-batch
@@ -222,13 +222,12 @@ Every stage carries an expected value measured here, and re-verifying any propos
 improvement costs one config line and about three GPU hours.
 
 I then ran that playbook on a scroll nobody has read. PHerc1447 ships no rendered surface
-volume for any of its fifteen segments, so I rendered the largest (7.40 cm²) from its mesh
-in twenty-five minutes of streaming and fed the result to the released checkpoints
-unmodified. Nothing readable came out, and it fails the way the margins predict: the four
-checkpoints disagree threefold on how much surface is strong ink, none reaches full
-confidence, and at full resolution the output is rounded patches rather than connected
-strokes. So step two scouts only in the weak sense — it says the model has nothing, not
-where to annotate — and unsupervised adaptation has to precede step three (docs/16).
+volume at all, so I rendered its largest segment (7.40 cm²) from the mesh and fed the result
+to the released checkpoints unmodified. Nothing readable came out, and it fails the way the
+margins predict: the four checkpoints disagree threefold on how much surface is strong ink,
+none reaches full confidence, and at full resolution the output is rounded patches rather
+than connected strokes. So step two scouts only in the weak sense — it says the model has
+nothing, not where to annotate (docs/16).
 
 So I pre-registered the other ways out too — design, prediction and decision rule pushed
 publicly before each run. Parameter space: test-time entropy minimisation on the only
@@ -314,7 +313,7 @@ Field hashes at this revision, over the block body plus one trailing newline —
 convention the August entry uses:
 
 - field 4 — 2,015 chars, `39a669d5c4f87e8afd8ce62f78f590caa4fb60553593dda3750d1f9728acfbac`
-- field 5 — 11,603 chars, `7317a79b58dfdba06d7d1601aee1eb0daec56034e58c7c1534671d99131bc563`
+- field 5 — 11,475 chars, `ea82e5959e84f0e32be654454c537da10f896c7608ae4012cd144f769ad606cd`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
