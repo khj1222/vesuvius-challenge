@@ -602,6 +602,16 @@ measurements that were never taken cannot be.
 
 Raw reports: `runs/pyramid/*_pooling.json` (three segments, 18 windows).
 
+**Refined 2026-08-31, and it matters for anyone acting on this.** The 64-voxel averaging above
+is a fact of construction, and this document was careful not to turn it into an SNR ratio. A
+later measurement ([docs/21](21_snr_augmentation.md)) shows why that caution was right: after
+the trainer's own normalisation, the native input carries *less* high-frequency energy than
+the aligned one, on all four paired segments and in 24 of 24 cells across two normalisations
+and three scales. So the difference the model sees is that native is **smoother**, not
+noisier. "Aligned wins because it has less noise" is the wrong shape of explanation, and an
+intervention built on it -- adding noise during training so the model tolerates native input
+-- was stopped by its own calibration before it consumed a GPU hour.
+
 ```bash
 python tools/check_pyramid_pooling.py   https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc0139/segments/20260317000000-w035_2026031718/surface-volumes/2.399um-0.22m-78keV-volume-20260102150214.zarr   --out runs/pyramid/pherc0139-w035_pooling.json
 ```
