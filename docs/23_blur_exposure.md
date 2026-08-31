@@ -98,3 +98,23 @@ Two failure modes worth naming in advance so they are not read as success:
 The config, the augmentation patch, the per-segment and per-representation cells as CSV, and
 the summary with the verdict — under `configs/`, `submission/` and
 `runs/ink9um_scorecard/`.
+
+---
+
+## Deviation recorded during the run (2026-08-31)
+
+`dataloader_workers` was lowered from the baseline's **12 to 6**, for **both** arm seeds.
+
+At 12 the run dies with `WinError 1455` — the Windows commit limit — twice on this box: once
+at start-up while the previous seed's process was still tearing down, and once at about
+10,200 steps inside a DataLoader worker's shared-memory allocation for collation. It is the
+same failure this repository has recorded before on a 12-worker run of this recipe.
+
+It is an I/O parameter and does not change what the model is trained on, but it is not
+nothing: worker RNG is seeded per worker, so the augmentation draws differ between a 6-worker
+and a 12-worker run. That is why **both** seeds were restarted with 6 rather than only the
+one that failed — the two arm seeds stay comparable to each other, and the difference against
+the published baseline applies uniformly to the arm rather than to half of it.
+
+Stated here rather than in the result, because it was decided before the arm's numbers
+existed.

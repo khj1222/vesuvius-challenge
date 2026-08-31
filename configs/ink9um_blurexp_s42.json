@@ -1,5 +1,5 @@
 {
-  "description": "Blur-exposure arm (docs/23): the published leave-0139-out configuration plus a dedicated GaussianBlurTransform at sigma 0.39-1.16 (docs/22's calibration) with probability 0.5, raising calibrated-strength blur exposure from 2.7% of patches to 50%. Scored at step 20,000 on the four paired PHerc0139 segments in both representations.",
+  "description": "Blur-exposure arm (docs/23): the published leave-0139-out configuration plus a dedicated GaussianBlurTransform at sigma 0.39-1.16 (docs/22's calibration) with probability 0.5, raising calibrated-strength blur exposure from 2.7% of patches to 50%. Scored at step 20,000 on the four paired PHerc0139 segments in both representations. dataloader_workers lowered from the baseline's 12 to 6 for both seeds: at 12 a worker's shared-memory allocation dies with WinError 1455 on this box, twice tonight. It is an I/O parameter, and it is the same for both arm seeds so they stay comparable to each other.",
   "mode": "flat",
   "model_type": "vesuvius_unet_3d_stem_2d",
   "model_config": {
@@ -72,7 +72,7 @@
   "val_steps": 32,
   "val_preview_batches": 1,
   "log_every": 50,
-  "dataloader_workers": 12,
+  "dataloader_workers": 6,
   "pin_memory": true,
   "verify_finite_gradients_steps": 0,
   "max_amp_overflow_events": 0,
