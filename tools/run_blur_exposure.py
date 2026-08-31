@@ -60,17 +60,45 @@ def run(command: list[str], *, cwd: Path, log_path: Path) -> int:
         return subprocess.run(command, cwd=cwd, stdout=handle, stderr=subprocess.STDOUT).returncode
 
 
-def train_until_step(seed: int, *, driver, attempts: int = 4) -> bool:
+FREE_GB_REQUIRED = 25.0
+FREE_WAIT_MINUTES = 45
+
+
+def wait_for_memory(seed: int, *, driver) -> float:
+    """Hold until the box has room, because the failures come from other processes.
+
+    Every failure of this arm has been WinError 1455 -- the system commit limit -- raised by
+    a DataLoader worker while something else on this machine held the memory. Retrying
+    immediately just spends 45 minutes to fail the same way, so wait for the room first and
+    start anyway after a bounded wait rather than never starting.
+    """
+    import psutil
+
+    deadline = time.time() + FREE_WAIT_MINUTES * 60
+    while True:
+        free_gb = psutil.virtual_memory().available / (1 << 30)
+        if free_gb >= FREE_GB_REQUIRED:
+            return free_gb
+        if time.time() > deadline:
+            log(f"seed {seed}: only {free_gb:.1f} GB free after {FREE_WAIT_MINUTES} min, "
+                f"starting anyway", driver)
+            return free_gb
+        log(f"seed {seed}: {free_gb:.1f} GB free, waiting for {FREE_GB_REQUIRED:.0f} GB", driver)
+        time.sleep(180)
+
+
+def train_until_step(seed: int, *, driver, attempts: int = 8) -> bool:
     """Start training and stop it once the scored checkpoint is written and stable.
 
-    Retried, because a worker importing torch while the previous run is still tearing down
-    hits WinError 1455 -- the system commit limit, not a fault of this configuration. A
-    settle delay before each attempt makes that race much less likely.
+    Retried, because the failures are external: a worker hits WinError 1455 when another
+    process on this box is holding the commit charge. Each attempt waits for memory first.
     """
     for attempt in range(1, attempts + 1):
         if attempt > 1:
-            log(f"seed {seed}: waiting 120 s for memory to settle before attempt {attempt}", driver)
+            log(f"seed {seed}: attempt {attempt - 1} failed, settling before the next", driver)
             time.sleep(120)
+        free_gb = wait_for_memory(seed, driver=driver)
+        log(f"seed {seed}: starting attempt {attempt}/{attempts} with {free_gb:.1f} GB free", driver)
         if _train_once(seed, driver=driver, attempt=attempt, attempts=attempts):
             return True
     return False
