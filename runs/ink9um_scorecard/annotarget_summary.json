@@ -1,0 +1,193 @@
+{
+ "step": "002500",
+ "segments": [
+  "phercparis4-w01",
+  "phercparis4-w02",
+  "phercparis4-w03",
+  "phercparis4-w05",
+  "phercparis4-w06",
+  "phercparis4-w07",
+  "phercparis4-w09"
+ ],
+ "noise_floor": 0.03,
+ "per_arm": {
+  "density": {
+   "per_seed_mean": {
+    "42": 0.7045,
+    "43": 0.7386
+   },
+   "mean": 0.7216,
+   "seed_abs_diff": 0.0341
+  },
+  "disagree-max": {
+   "per_seed_mean": {
+    "42": 0.7233,
+    "43": 0.754
+   },
+   "mean": 0.7387,
+   "seed_abs_diff": 0.0307
+  },
+  "disagree-min": {
+   "per_seed_mean": {
+    "42": 0.7397,
+    "43": 0.7781
+   },
+   "mean": 0.7589,
+   "seed_abs_diff": 0.0384
+  },
+  "random": {
+   "per_seed_mean": {
+    "42": 0.721,
+    "43": 0.7522
+   },
+   "mean": 0.7366,
+   "seed_abs_diff": 0.0312
+  }
+ },
+ "per_segment": {
+  "phercparis4-w01": {
+   "density": 0.788,
+   "disagree-max": 0.7996,
+   "disagree-min": 0.8106,
+   "random": 0.8084
+  },
+  "phercparis4-w02": {
+   "density": 0.7094,
+   "disagree-max": 0.7434,
+   "disagree-min": 0.7691,
+   "random": 0.7281
+  },
+  "phercparis4-w03": {
+   "density": 0.7266,
+   "disagree-max": 0.7373,
+   "disagree-min": 0.7583,
+   "random": 0.742
+  },
+  "phercparis4-w05": {
+   "density": 0.6663,
+   "disagree-max": 0.6948,
+   "disagree-min": 0.7252,
+   "random": 0.672
+  },
+  "phercparis4-w06": {
+   "density": 0.7022,
+   "disagree-max": 0.731,
+   "disagree-min": 0.7455,
+   "random": 0.7304
+  },
+  "phercparis4-w07": {
+   "density": 0.6905,
+   "disagree-max": 0.7079,
+   "disagree-min": 0.728,
+   "random": 0.7067
+  },
+  "phercparis4-w09": {
+   "density": 0.7678,
+   "disagree-max": 0.7564,
+   "disagree-min": 0.776,
+   "random": 0.7682
+  }
+ },
+ "selection": {
+  "disagree-min": {
+   "groups": [
+    0,
+    4,
+    7
+   ],
+   "keep": 0.19674017598503993,
+   "ink_density": 0.3017117533266075,
+   "mean_disagreement": 0.08126992882340736
+  },
+  "disagree-max": {
+   "groups": [
+    0,
+    2,
+    3,
+    4,
+    5
+   ],
+   "keep": 0.19199669178751425,
+   "ink_density": 0.3071162326989231,
+   "mean_disagreement": 0.0880079257671422
+  },
+  "random": {
+   "groups": [
+    2,
+    3,
+    5,
+    8
+   ],
+   "keep": 0.23485997866492656,
+   "ink_density": 0.23008084115923727,
+   "mean_disagreement": 0.08680184083129659
+  }
+ },
+ "segment_wins": {
+  "density": 0,
+  "disagree-max": 0,
+  "disagree-min": 7,
+  "random": 0
+ },
+ "arm_facts": {
+  "density": {
+   "keep": 0.2072,
+   "ink_density": 0.2462,
+   "mean_disagreement": null,
+   "mean_f1": 0.7216
+  },
+  "disagree-max": {
+   "keep": 0.19199669178751425,
+   "ink_density": 0.3071162326989231,
+   "mean_disagreement": 0.0880079257671422,
+   "mean_f1": 0.7387
+  },
+  "disagree-min": {
+   "keep": 0.19674017598503993,
+   "ink_density": 0.3017117533266075,
+   "mean_disagreement": 0.08126992882340736,
+   "mean_f1": 0.7589
+  },
+  "random": {
+   "keep": 0.23485997866492656,
+   "ink_density": 0.23008084115923727,
+   "mean_disagreement": 0.08680184083129659,
+   "mean_f1": 0.7366
+  }
+ },
+ "confound_checks": {
+  "ordered_by_f1": [
+   "disagree-min",
+   "disagree-max",
+   "random",
+   "density"
+  ],
+  "ordered_by_keep": [
+   "random",
+   "density",
+   "disagree-min",
+   "disagree-max"
+  ],
+  "ordered_by_ink_density": [
+   "disagree-max",
+   "disagree-min",
+   "density",
+   "random"
+  ],
+  "most_annotation_arm": "random",
+  "best_arm": "disagree-min"
+ },
+ "spread": 0.0373,
+ "ordering": [
+  "disagree-min",
+  "disagree-max",
+  "random",
+  "density"
+ ],
+ "disagree_max_minus_min_per_seed": {
+  "42": -0.0165,
+  "43": -0.0241
+ },
+ "acquisition_effect_claimed": false,
+ "verdict": "The choice matters (spread 0.0373) but our ranking does not capture it: the disagree-max minus disagree-min gap is {'42': -0.0165, '43': -0.0241}, which does not clear 0.03 in both seeds."
+}

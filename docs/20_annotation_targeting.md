@@ -156,3 +156,83 @@ The scoring path was checked against a published cell before any arm ran: rescor
 row exactly — F1 0.7731 at threshold 122, precision 0.7927, recall 0.7545, over the same
 8,268,843 scored and 2,163,941 ink pixels. The two matrices are therefore comparable cell
 for cell.
+
+---
+
+## Result
+
+42 cells, six fine-tunes, no failed run and no retry. Raw numbers:
+`runs/ink9um_scorecard/annotarget_matrix.csv` and `annotarget_summary.json`; the `density`
+row is the published `keep0250` arm, unchanged, read from the label-efficiency matrix.
+
+| arm | keep | ink density | disagreement | seed 42 | seed 43 | **mean** | best on |
+|---|---|---|---|---|---|---|---|
+| `disagree-min` | 19.67% | 0.3017 | 0.0813 | 0.7397 | 0.7781 | **0.7589** | **7 of 7** |
+| `disagree-max` | 19.20% | 0.3071 | 0.0880 | 0.7233 | 0.7540 | 0.7387 | 0 |
+| `random` | 23.49% | 0.2301 | 0.0868 | 0.7210 | 0.7522 | 0.7366 | 0 |
+| `density` (published) | 20.72% | 0.2462 | — | 0.7045 | 0.7386 | 0.7216 | 0 |
+
+**By the pre-registered rule: the choice matters, and our ranking does not capture it.**
+The spread is **0.0373**, above the 0.03 floor. The acquisition test fails and fails with a
+consistent sign reversal — `disagree-max` minus `disagree-min` is **−0.0165** (seed 42) and
+**−0.0241** (seed 43): the subset the model was *least* unsure about won. Both gaps are
+inside the floor, so by the rule this is reported as "not captured", not as a proven reverse
+effect.
+
+What carries the result is not its size but its consistency: **the ordering is identical in
+both seeds, and `disagree-min` is the best arm on all seven segments.** The seed-to-seed
+difference within an arm (0.031–0.038) is as large as the spread between arms, so any single
+cell here is noise; the four-arm ordering repeating twice, and one arm sweeping 7 of 7, is
+not.
+
+### The two confounds, checked as promised
+
+Both were named before the run, and both resolve in the direction that strengthens the
+finding rather than explaining it away:
+
+- **Budget.** The arm with the *most* annotation, `random` at 23.49%, came third. The winner
+  spent **19.67%** — less than the published `density` arm's 20.72%. More annotation did not
+  win, so the ±3 pp tolerance is not what produced the ordering.
+- **Ink density.** The two arms above 0.30 took the top two places; the two near 0.23–0.25
+  took the bottom two. This is the one factor that tracks the ordering.
+
+### What we did not set out to measure
+
+That density observation is **post-hoc**. This experiment was not designed to test it: the
+arms were chosen by disagreement, and their densities came along for the ride. Two of the
+four arms are consistent with "annotate the denser regions", and within each pair the
+ordering inverts, which is exactly the pattern a two-point coincidence produces. It is a
+hypothesis for its own pre-registered test, not a finding, and it is not claimed here.
+
+### The number that changes
+
+The published label-efficiency curve says a fifth of the annotation retains **70.8%** of what
+the full annotation buys. That was measured with the density-matched subset. On the same
+scale — the same base (0.5029) and the same full-annotation arm (0.8118) — `disagree-min`'s
+subset retains **82.9%**, while spending slightly *less* annotation:
+
+| subset at ~20% of the annotation | mean F1 | benefit retained |
+|---|---|---|
+| `density` (published) | 0.7216 | 70.8% |
+| `random` | 0.7366 | 75.7% |
+| `disagree-max` | 0.7387 | 76.3% |
+| `disagree-min` | 0.7589 | **82.9%** |
+
+So the honest correction to our own published figure is that **70.8% was a property of that
+subset, not of that budget**. At a fifth of one segment's annotation the achievable range is
+at least 70.8% to 82.9%, and the published curve sits at the bottom of it. Anyone reading
+docs/15 part 5 as "a fifth of the annotation costs you 30% of the benefit" is reading one
+draw from a spread we had not measured.
+
+### Predictions, scored
+
+| committed | outcome |
+|---|---|
+| spread 0.02–0.06 | **0.0373** — inside the range |
+| `disagree-max` beats `density`, about 50% | **yes** (+0.0171), though not by the floor |
+| an ordering surviving both seeds at ≥ 0.03 | **no** — the ordering survived both seeds, but the acquisition gap was −0.017/−0.024 |
+
+The one thing the design got right in advance was its own weakness: docs/20 recorded before
+training that the disagreement band across groups was narrow (0.0791–0.1091) and that the
+ranking therefore had little to rank on. It did not have enough to rank on, and what little
+it had pointed the wrong way.
