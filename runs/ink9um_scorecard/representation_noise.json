@@ -1,0 +1,293 @@
+{
+ "samples_per_segment": 24,
+ "patch": 128,
+ "seed": 0,
+ "method": "std of (patch - gaussian_blur(patch, sigma=1)) after robust-MAD normalisation",
+ "segments": {
+  "pherc0139-w035": {
+   "aligned": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\pherc0139-w035.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.18426,
+    "sigma_hf_p25": 0.15826,
+    "sigma_hf_p75": 0.23798
+   },
+   "native": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\native9\\w035\\9.362um-1.2m-113keV-volume-20250728140407.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.10541,
+    "sigma_hf_p25": 0.09588,
+    "sigma_hf_p75": 0.1281
+   },
+   "sigma_extra": 0.0,
+   "variance_extra": 0.0,
+   "native_over_aligned": 0.572
+  },
+  "pherc0139-w039": {
+   "aligned": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\pherc0139-w039.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.21962,
+    "sigma_hf_p25": 0.19271,
+    "sigma_hf_p75": 0.28741
+   },
+   "native": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\native9\\w039\\9.362um-1.2m-113keV-volume-20250728140407.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.12056,
+    "sigma_hf_p25": 0.09968,
+    "sigma_hf_p75": 0.14682
+   },
+   "sigma_extra": 0.0,
+   "variance_extra": 0.0,
+   "native_over_aligned": 0.549
+  },
+  "pherc0139-w040": {
+   "aligned": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\pherc0139-w040.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.21358,
+    "sigma_hf_p25": 0.18868,
+    "sigma_hf_p75": 0.2818
+   },
+   "native": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\native9\\w040\\9.362um-1.2m-113keV-volume-20250728140407.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.10983,
+    "sigma_hf_p25": 0.08956,
+    "sigma_hf_p75": 0.14248
+   },
+   "sigma_extra": 0.0,
+   "variance_extra": 0.0,
+   "native_over_aligned": 0.514
+  },
+  "pherc0139-w041": {
+   "aligned": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\aligned9\\pherc0139-w041.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.27964,
+    "sigma_hf_p25": 0.18528,
+    "sigma_hf_p75": 0.37672
+   },
+   "native": {
+    "path": "D:\\vesuvius-challenge\\data\\ink_9um\\surface-volumes\\native9\\w041\\9.362um-1.2m-113keV-volume-20250728140407.zarr",
+    "planes": 24,
+    "sigma_hf_median": 0.12697,
+    "sigma_hf_p25": 0.09675,
+    "sigma_hf_p75": 0.16299
+   },
+   "sigma_extra": 0.0,
+   "variance_extra": 0.0,
+   "native_over_aligned": 0.454
+  }
+ },
+ "sigma_extra_median": 0.0,
+ "variance_extra_median": 0.0,
+ "recipe_variance_range_in_use": [
+  0.012403473458920844,
+  0.027729677693590096
+ ],
+ "inside_range_already_used": false,
+ "robustness_check": {
+  "cells": [
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "robust_mad",
+    "blur_sigma": 0.5,
+    "aligned": 0.0656,
+    "native": 0.0329,
+    "ratio": 0.501
+   },
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "robust_mad",
+    "blur_sigma": 1.0,
+    "aligned": 0.1945,
+    "native": 0.1158,
+    "ratio": 0.595
+   },
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "robust_mad",
+    "blur_sigma": 2.0,
+    "aligned": 0.3443,
+    "native": 0.2567,
+    "ratio": 0.746
+   },
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "unit_std",
+    "blur_sigma": 0.5,
+    "aligned": 0.0729,
+    "native": 0.0372,
+    "ratio": 0.51
+   },
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "unit_std",
+    "blur_sigma": 1.0,
+    "aligned": 0.2179,
+    "native": 0.1324,
+    "ratio": 0.608
+   },
+   {
+    "segment": "pherc0139-w035",
+    "normalisation": "unit_std",
+    "blur_sigma": 2.0,
+    "aligned": 0.3804,
+    "native": 0.2832,
+    "ratio": 0.745
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "robust_mad",
+    "blur_sigma": 0.5,
+    "aligned": 0.0936,
+    "native": 0.0354,
+    "ratio": 0.378
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "robust_mad",
+    "blur_sigma": 1.0,
+    "aligned": 0.2747,
+    "native": 0.1249,
+    "ratio": 0.455
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "robust_mad",
+    "blur_sigma": 2.0,
+    "aligned": 0.4526,
+    "native": 0.2618,
+    "ratio": 0.578
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "unit_std",
+    "blur_sigma": 0.5,
+    "aligned": 0.0862,
+    "native": 0.0356,
+    "ratio": 0.413
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "unit_std",
+    "blur_sigma": 1.0,
+    "aligned": 0.252,
+    "native": 0.1244,
+    "ratio": 0.494
+   },
+   {
+    "segment": "pherc0139-w039",
+    "normalisation": "unit_std",
+    "blur_sigma": 2.0,
+    "aligned": 0.4208,
+    "native": 0.261,
+    "ratio": 0.62
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "robust_mad",
+    "blur_sigma": 0.5,
+    "aligned": 0.077,
+    "native": 0.0398,
+    "ratio": 0.517
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "robust_mad",
+    "blur_sigma": 1.0,
+    "aligned": 0.2266,
+    "native": 0.1394,
+    "ratio": 0.615
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "robust_mad",
+    "blur_sigma": 2.0,
+    "aligned": 0.387,
+    "native": 0.2974,
+    "ratio": 0.768
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "unit_std",
+    "blur_sigma": 0.5,
+    "aligned": 0.072,
+    "native": 0.0366,
+    "ratio": 0.509
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "unit_std",
+    "blur_sigma": 1.0,
+    "aligned": 0.21,
+    "native": 0.1282,
+    "ratio": 0.611
+   },
+   {
+    "segment": "pherc0139-w040",
+    "normalisation": "unit_std",
+    "blur_sigma": 2.0,
+    "aligned": 0.3549,
+    "native": 0.2686,
+    "ratio": 0.757
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "robust_mad",
+    "blur_sigma": 0.5,
+    "aligned": 0.0906,
+    "native": 0.0338,
+    "ratio": 0.373
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "robust_mad",
+    "blur_sigma": 1.0,
+    "aligned": 0.2663,
+    "native": 0.1191,
+    "ratio": 0.447
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "robust_mad",
+    "blur_sigma": 2.0,
+    "aligned": 0.4566,
+    "native": 0.2475,
+    "ratio": 0.542
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "unit_std",
+    "blur_sigma": 0.5,
+    "aligned": 0.0795,
+    "native": 0.0376,
+    "ratio": 0.473
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "unit_std",
+    "blur_sigma": 1.0,
+    "aligned": 0.2333,
+    "native": 0.1334,
+    "ratio": 0.572
+   },
+   {
+    "segment": "pherc0139-w041",
+    "normalisation": "unit_std",
+    "blur_sigma": 2.0,
+    "aligned": 0.3921,
+    "native": 0.2938,
+    "ratio": 0.749
+   }
+  ],
+  "n": 24,
+  "ratio_min": 0.373,
+  "ratio_max": 0.768,
+  "cells_with_native_smoother": 24,
+  "conclusion": "native carries less high-frequency energy than aligned in every cell, so the extra noise needed to make aligned look native is zero; the direction points at blur, not noise"
+ },
+ "verdict": "pre-registered exit: the calibrated sigma_extra is 0, so the arm does not run"
+}

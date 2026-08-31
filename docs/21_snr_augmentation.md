@@ -115,3 +115,63 @@ between nothing and a tenth of it.
 
 The calibration measurement, the arm's per-segment and per-representation cells as CSV, the
 summary with the verdict, and the config, under `runs/ink9um_scorecard/` and `configs/`.
+
+---
+
+## Calibration result: the arm does not run
+
+The exit written into this document before the measurement was made has fired. Raw numbers:
+`runs/ink9um_scorecard/representation_noise.json`.
+
+Measured on the four paired segments, after the trainer's own robust-MAD normalisation, the
+noise proxy is **smaller in the native rendering than in the aligned one, in every segment**:
+
+| segment | aligned sigma_hf | native sigma_hf | native / aligned | sigma_extra |
+|---|---|---|---|---|
+| w035 | 0.1843 | 0.1054 | 0.57 | **0** |
+| w039 | 0.2196 | 0.1206 | 0.55 | **0** |
+| w040 | 0.2136 | 0.1098 | 0.51 | **0** |
+| w041 | 0.2796 | 0.1270 | 0.45 | **0** |
+
+The extra noise an aligned patch needs to look like a native one is zero, because the native
+patch is the smoother of the two. Adding noise to aligned inputs would not move them towards
+native; it would move them away from both.
+
+**This is not an artefact of the proxy.** Repeating it across two normalisations
+(robust-MAD, unit-variance) and three blur scales (0.5, 1.0, 2.0) gives **24 of 24 cells with
+the native input smoother**, ratio 0.37 to 0.77, never above 1.
+
+### What this says about the mechanism
+
+[docs/15](15_loso_cross_scroll.md) appendix 3 established a fact of construction: the
+published pyramids are 2x2 means and the preparer averages four z-planes, so one aligned voxel
+is the mean of 64 acquired voxels. That remains true, and we were careful there not to claim
+an SNR ratio, because noise independence was never measured.
+
+This measurement adds the part that matters for anyone trying to act on it: **the difference
+the model actually sees is not that native is noisier, it is that native is smoother.** The
+native scan is a genuinely coarser acquisition, and averaging a 2.4 µm volume down to 9.6 µm
+keeps more fine structure per unit contrast than acquiring at 9.362 µm does. So "aligned wins
+because it has less noise" is the wrong shape of explanation to build an intervention on.
+
+### And the intervention this points at is already in the recipe
+
+If the direction is smoothness rather than noise, the augmentation that would make a model
+tolerate native input is a **blur**, not added noise. `create_training_transforms` already
+applies `GaussianBlurTransform(blur_sigma=(0.5, 3.0))` — in the same `OneOfTransform` as the
+noise, at probability 0.2. So the intervention in the correct direction is already present in
+the recipe that produced the 0.0534 gap.
+
+That does not prove a stronger blur would not help; it does mean the cheap version of this
+idea is already spent, and a blur arm would be a new experiment with its own pre-registration
+rather than a rescue of this one.
+
+### Predictions, scored
+
+| committed | outcome |
+|---|---|
+| native gain 0.00–0.03, rule fires with probability ~30% | **not tested** — the arm was stopped by its own calibration |
+| aligned cost 0.00 to −0.02 | not tested |
+
+The design's most useful clause turned out to be the exit condition. It cost about ten GPU
+hours to write and nothing to obey.
