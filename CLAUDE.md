@@ -170,6 +170,18 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 - ✅ **채점 경로를 밤새 돌리기 전에 검증**: 발표된 라벨예산 셀을 재채점해 **필드 단위 완전 일치**(F1 0.7731 @122, P 0.7927, R 0.7545, 8,268,843/2,163,941). 두 매트릭스는 셀 대 셀로 비교 가능.
 - 신규 도구: `tools/score_annotation_candidates.py`(라벨 없는 후보 순위), `tools/run_annotation_targeting.py`(재시도 드라이버), `make_label_budget.py`에 `--groups/--name` 추가(기존 체인은 **동일 재현** 확인).
 
+#### 2026-08-31 (밤) — ✅ **코멘트 3건 게시 완료(사용자 직접), 게시본 = 초안 일치**
+
+12:54~12:55 UTC 게시. **머리말(HTML 주석) 유출 0** — #1580·#1582 때 raw에 남았던 문제 재발 없음. 본문도 공백 정규화 기준 초안과 일치 확인(`scratchpad/compare_posted3.py`).
+
+| 스레드 | 게시본 | 내용 |
+|---|---|---|
+| [#1471](https://github.com/ScrollPrize/villa/pull/1471#issuecomment-5478665794) | 11,145자 | 저쪽 요청(08-27)대로 우리 하네스로 odd-extent 검증 → **42/42 동일 + 1행 스트립 크래시 발견·수정 검증**, 피라미드 read-back 트레이드 실측 |
+| [#1611](https://github.com/ScrollPrize/villa/issues/1611#issuecomment-5478672201) | 3,963자 | 현재 빌드에서 **정지 재현 안 됨(3/3 완주)** → **우리 이슈를 닫자고 우리가 제안** |
+| [#1231](https://github.com/ScrollPrize/villa/issues/1231#issuecomment-5478677042) | 3,428자 | 평가 진입점을 원하는지 **만들기 전에 질의**(F5) |
+
+**남은 사용자 몫 = PR 3건 개설**(F2 `66c7e19` · F3 `df799c4` · F4 `b3288a5`, 전부 fork에 푸시됨). base는 **`merge-ink-pipelines`**, 연 뒤 본문 덮어쓰기, 각 본문 하단 "Why this matters to me"는 사람이 작성(CONTRIBUTING 요구, #1434가 이걸로 닫힘).
+
 #### 2026-08-31 (밤) — 블러 arm(docs/22): **또 중단 조건 발동, GPU 0시간**
 
 사전등록 `docs/22_blur_augmentation.md`(커밋 `31c4d5b`, 계산 전) → 보정 결과 **중단**.
