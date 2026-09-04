@@ -157,6 +157,49 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — 🔴 **우리 문안의 한 주장이 main에서는 거짓이었다** (문안 v20), 그리고 **교체가 실제로 통했다**
+
+**1. 🟢 main으로 옮긴 PR에 리뷰어가 붙었다 — 몇 시간 만에.**
+`#1701`·`#1703` **reviewers=['jrudolph','bruniss']**. `merge-ink-pipelines`에 있던 우리 PR 5건은
+**몇 주간 0명**이었다(#1608은 지금도 0명). 09-04의 가설("배정 0의 절반은 죽은 base 탓")이 실측으로 확인됐고,
+**교체는 옳았다.** ⚠️ `#1705`는 **draft라 자동 리뷰 요청이 안 간다**(reviewers=[]) → 슬롯 나는 즉시 ready로.
+
+**2. 🔴 field 5의 레시피 주장이 `main` 기준으로 거짓이었다 (v20에서 교체).**
+문안: *"the released recipe does not run as published — its datasets block is a **single placeholder**
+while the 29 representations live in a **separate contract file**"*.
+
+| ref | 레시피 경로 | `datasets` |
+|---|---|---|
+| `merge-ink-pipelines` | `ink-detection/configs/aligned21_hybrid_3d2d.json` | **1 entry · 1 segment** ← 참 |
+| **`main`** | `vesuvius/src/vesuvius/ink_detection/configs/aligned21_hybrid_3d2d.json` | **5 entries · 29 reps 전부 펼쳐짐** ← **거짓** |
+
+main 쪽은 **루트 경로만** `/path/to/`이고, 그 상태가 **`960d76a`(2026-08-14, "add the vesuvius
+ink-detection pipeline (#1456)")**부터다 — **우리가 #1608을 연 08-26보다 12일 전.** 우리는 작업 브랜치만
+보고 **main의 사본을 한 번도 안 열었다.** 심사자는 30초면 연다.
+- **교체한 주장(양쪽에서 참이고 검증 가능)**: *"Nothing in the tree turns the released recipe into a
+  leave-one-scroll-out probe"* — `exclude_scroll` 검색 **0건**, `renormalise`·`holdout config` 히트는
+  전부 volume-cartographer·spiral-fitting. **exclusion + 쿼터 재정규화는 여전히 #1608뿐**이고,
+  이 제출물이 실제로 딛고 선 것도 그쪽이다.
+- 같은 과장을 field 4 위의 **내부 후보 설명**에서도 제거. **field 4 블록 자체는 링크뿐이라 해시 불변.**
+- ⚠️ **일반 규칙**: **작업 브랜치에서 참인 것이 배포 브랜치에서도 참인지 따로 확인할 것.** 우리가 무언가
+  "없다/안 된다"고 쓸 때 그 근거 파일을 **심사자가 볼 ref에서** 다시 열어야 한다.
+
+**3. ✅ Core Requirements 두 문장 삽입(v20)** — 상금 페이지가 명시한 1③("기존 해법 대비 이점")과
+3(Technical Integration)을 우리가 충족하면서 안 쓰고 있던 것. field 5 마지막 두 문장:
+출력이 파이프라인 자기 포맷으로 나온다(라벨 계약 · `infer`가 적응 ckpt 무수정 로드 · zarr/TIFF) +
+**개선 대상이 부재다**(공개 ckpt에 보고된 정확도 없음 · 스크롤을 뺄 방법 없음 · 오픈문제 #7에 수치 없음).
+
+**새 해시**(본문+개행 1개 규약, 헤더·해시블록·실제 블록 3자 일치 확인):
+- field 4 — 2,015자 `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a` **불변**
+- field 5 — **11,803자** `42864edd975b18365b2b4b8db8c24ed8549176ec98add435f09c97976d259149`
+
+**4. 사용자 결정(09-05): #1608은 그대로 둔다.** 09-23에 봇이 닫지만 재개설하지 않는다 — 정책 회피로
+읽히고, Bullo27 리뷰 이력이 거기 있고, 닫혀도 링크는 남는다. **Step 3에 그 날짜와 결정을 명시**했고
+28일 규칙도 반영. main으로 옮기는 안은 기각(main에선 "레시피를 돌아가게 만든다"는 절반이 이미 해결돼
+holdout 생성 하나로만 서야 하고, `ink-detection/scripts/`가 main에 없어 자리도 새로 정해야 함).
+
+**5. ✅ `🤖 Generated with Claude Code` 푸터를 #1701·#1703에도 붙여 3건 통일.** 셋 다 Disclosure 문단 유지.
+
 #### 2026-09-05 — ✅ **F2 교체 완료: [#1703](https://github.com/ScrollPrize/villa/pull/1703) 열림, #1662 닫힘.** 그리고 **PR 본문의 저자 표기 원칙이 정해졌다**
 
 - **#1703**: base **`main`**, OPEN·non-draft·**mergeable**, head `fix/eager-fallback-at-first-forward`, 2파일 **+121 −5**.

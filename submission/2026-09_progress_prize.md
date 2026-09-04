@@ -320,13 +320,14 @@ opens; the layout above assumes August's.
 Everything below the fold is already done and verified; this is the short list to run
 before pasting.
 
-0. **⚠️ A full read-through is owed, and has not been done since 2026-09-01.** Field 5 grew
+0. ~~**A full read-through is owed.**~~ **Done 2026-09-05** (v18/v19): it found only stale
+   counts and style, changed no claim, and the corrections are recorded above. Field 5 grew
    from 9,822 to 11,475 characters in one day as three results landed (the invited #1471
    check, the annotation-targeting arm, and four attempts on the aligned-over-native gap).
    Two trimming passes removed 1,037 characters of restatement and one stale promise, and
    then stopped: what remains would cost claims, not words. Before submitting, read the
-   whole field once end to end for order and repetition — it has been edited in five places
-   without anyone reading it as a single piece since the 08-31 trim.
+   whole field once end to end for order and repetition — v20 has since touched two more
+   places (the recipe claim and the closing two sentences).
 1. **Get September's form** from https://scrollprize.org/prizes. Do not reuse August's
    link — each round issues a new form and closes the previous one. Check the question
    count: August had six (email, name, team, URL, description, terms). If September adds
@@ -334,9 +335,15 @@ before pasting.
 2. **Check the four upstream links still say what field 4 says they say** — #1608 (open,
    one review round), #1638 (closed and locked, and field 4 labels it as such), #1249
    (merged). If **#1608 merges**, relabel it "merged" in field 4 and in field 5's
-   second-to-last paragraph. ⚠️ **This repository auto-closes a PR after 14 days without
-   activity** — that is how #1535 died on 2026-09-03, unreviewed — so check the state of
-   every PR cited here on the day, not from memory.
+   second-to-last paragraph. ⚠️ **This repository closes PRs on two clocks: 14 days without
+   activity, and 28 days since opening no matter what** — that is how #1535 died on
+   2026-09-03, unreviewed and by a bot. **#1608 is therefore due to close on 2026-09-23, before
+   this deadline, and no comment can stop it** (`keep-open` exempts a PR, but we have no triage
+   permission to apply it). The decision on 2026-09-05 was to leave it and say so plainly rather
+   than reopen it as a fresh number, which reads as working around the policy. Its successors
+   #1701/#1703/#1705 were opened on 09-04 and cap out on 10-02, after this deadline. Check the
+   state of every PR cited here on the day, not from memory — `python tools/upstream_sweep.py`
+   answers it in one command.
 3. **`git push`** and confirm `git status` is clean. Every field-4 link must resolve for a
    judge who is not logged in.
 4. **Re-run the two verifiers** if anything in `runs/` changed since 2026-08-30:
