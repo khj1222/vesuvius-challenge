@@ -1,0 +1,18 @@
+{
+ "platform": "Windows-11-10.0.26200-SP0",
+ "python": "3.12.13",
+ "torch": "2.10.0+cu128",
+ "cuda_available": true,
+ "triton_importable": false,
+ "triton_import_error": "ModuleNotFoundError",
+ "compile_returned_without_raising": true,
+ "maybe_compile_model_flag": true,
+ "wrapper_type": "_CompiledWithEagerFallback",
+ "first_forward_matches_eager": true,
+ "second_forward_matches_eager": true,
+ "fell_back": true,
+ "warnings": [
+  "torch.compile failed on the first forward (RuntimeError: Compiler: cl is not found.\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n); continuing eagerly"
+ ],
+ "compiled_dropped_after_failure": true
+}

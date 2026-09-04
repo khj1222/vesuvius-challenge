@@ -1,0 +1,10 @@
+{
+ "device": "cuda",
+ "cuda": true,
+ "compile_returned_without_raising": true,
+ "first_matches_eager": true,
+ "second_matches_eager": true,
+ "fell_back": true,
+ "error_class_in_warning": "Cannot find a working triton installation. Either the packag",
+ "mentions_triton": true
+}
