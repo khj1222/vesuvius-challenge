@@ -1,83 +1,99 @@
 <!--
-PR body draft — F3 rewritten against `main`.
+PR body draft — F3 against `main`, written to villa's pull_request_template.md.
 
   head:  khj1222:fix/retry-staged-publish-on-windows  (8ce9725, pushed)
   base:  main   ← NOT merge-ink-pipelines
   diff:  2 files, +205 −3
 
-⚠️ Two things before opening this:
+⚠️ Structure matters here. CONTRIBUTING.md points at .github/pull_request_template.md and
+   #1434 was closed for CONTRIBUTING non-compliance. The seven template fields below are the
+   template's own, in its order, including its checkbox — which is NOT the issue template's
+   "I personally encountered or reproduced this".
 
-1. **"Why this matters to me" is left blank on purpose.** villa/CONTRIBUTING.md asks for
-   human commentary on an LLM-assisted PR, and #1434 was closed partly over it. I do not
-   write that paragraph — the user does, in their own words.
+⚠️ TWO THINGS THE USER SUPPLIES, and I do not write either:
+   1. **Why / where this is useful** — CONTRIBUTING: "Any LLM generated PR must be accompanied
+      by human-written commentary explaining why this PR is relevant or useful."
+   2. **The screenshots** in Proof — CONTRIBUTING: "Any bugfix PR must be accompanied by a
+      screenshot of the error ... and the script/tool running without error afterward."
+      Drag the two PNGs into the GitHub editor and replace the two IMAGE placeholders.
 
-2. **This supersedes our own #1663**, which fixes the same failure inline in one script on
-   `merge-ink-pipelines`. Do not leave both open silently; the body says so and offers to
-   close #1663. If the maintainers prefer the other branch, close this one instead.
+⚠️ Do not tick the checkbox until the screenshots are attached and you have looked at them.
 
-⚠️ GitHub prefills a new PR body from the commit message plus the template. Overwrite it
-   after opening, and keep the template's checkbox line — #1638 lost the template that way.
-
-Evidence: runs/f3_main/ (committed). Every number below comes from
-runs/f3_main/real_windows_conditions.json and pytest.txt.
+Supersedes our own #1663. Evidence: runs/f3_main/.
 
 POST ONLY WHAT IS BELOW THE --- LINE.
 -->
 
 ---
 
-- [x] I personally encountered or reproduced this, and the change is verified rather than assumed.
+**In one sentence:** Preprocessing outputs no longer throw away a finished conversion when
+Windows refuses to rename the directory they were staged in.
 
-`publish_staged_output` renames a finished stage onto its output path. POSIX renames
-regardless of who holds the path; Windows refuses while anything does, and one open file
-inside a staged directory is enough. Measured against the patched module on Windows, so the
-codes are what the OS actually raises rather than what a mock asserts:
+**One real example:** Starting with the public 2.399 µm surface volumes for PHerc. 0139 in
+`ink_9um`, I ran `prepare_9um_isotropic_input` to build the 9.6 µm inputs the released recipe
+expects. Every tile was written and the array was complete; the run then died renaming
+`<output>.zarr.partial` onto `<output>.zarr`, with `PermissionError: [WinError 5]`.
+
+**Before:** a `pathlib` traceback after all the work was done. The output path did not exist,
+a `.partial` directory sat next to it, and nothing said which of those two facts mattered — so
+the reasonable reading was that the conversion had to be run again. I re-ran it.
+
+**After this PR:** the rename is retried with backoff, which clears it whenever the handle was
+transient. If it never clears, the error carries the fact that decides what to do next: the
+staged output is complete, nothing needs recomputing, and renaming it by hand finishes the job.
+The staged directory is always left in place; the output path is never partially created.
+
+**Proof:** measured on Windows 11 against the patched function, so the codes are what the OS
+actually raises rather than what a test asserts:
 
 | condition | result |
 |---|---|
 | nothing holding the staged directory | publishes, 0.0 s |
-| one file inside it open for read | `PermissionError` **WinError 5** |
-| the process working directory inside it | `PermissionError` **WinError 32** |
+| one file inside it open for read | `PermissionError` **WinError 5** → retried |
+| the process working directory inside it | `PermissionError` **WinError 32** → retried |
 | a handle released 0.4 s in | retries, then publishes |
+| a handle never released | gives up, **staged tree intact, no output created** |
 
-The refusal is transient. The cost of treating it as fatal is not, because all four callers
-stage a completed output and rename it last, so the failure lands after the work is done —
-for `prepare_9um_isotropic_input`, after every tile of a multi-gigabyte conversion is already
-on disk. What surfaced was a bare `pathlib` traceback, which reads like the conversion has to
-be run again. It does not: the output is complete, under the staged name.
+![staged publish, before and after](https://raw.githubusercontent.com/khj1222/vesuvius-challenge/main/runs/f3_main/f3_console.png)
 
-**The change.** Retry a sharing violation with backoff. Raise every other `PermissionError`
-on the first attempt, so POSIX takes exactly the path it takes today — the retry is gated on
-`winerror`, which does not exist off Windows. If it never clears, attach a note saying the
-staged output is complete and naming both paths, so what is finished gets renamed instead of
-recomputed. The staged tree is left in place; `output_path` is never partially created.
+*Console output of the script linked below: the rename Windows refuses, the same case publishing once the handle clears, and the message when it never does.*
 
-It sits in `staged_write.py` rather than in a caller because `clean_labels`,
-`composite_from_zarr`, `merge_predictions` and `prepare_9um_isotropic_input` all publish
-through it — one function, four tools. `attempts` and `retry_delay` are keyword-only with
-defaults, so every existing call site is unchanged.
+Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/runs/f3_main (`f3_shot.py`, `f3_console.txt`, `real_windows_conditions.json`)
 
-**Tests**: eight, in `vesuvius/tests/ink_detection/test_staged_write.py`. They cover
-publishing a file and a directory, retry-until-clear for both winerror codes, an immediate
-raise for any other `PermissionError` with no sleep at all (the POSIX guarantee), the give-up
-path asserting the note names both paths while the staged bytes survive and the output does
-not appear, and — `skipif` off Windows — a real open handle released by another thread.
+**Why / where this is useful:**
 
-**What I left out on purpose.** An earlier version of this fix also dropped the script's own
-zarr handles before renaming. I could not show that those handles were the cause in the
-failure I hit, and an unmeasured change does not belong in a fix for a measured one, so it is
-not here.
+<!-- USER WRITES THIS. Do not draft it. In your own words: what it cost you when 24 input
+     preparations died this way, and why "the data is fine, just rename it" is the sentence you
+     wanted to see at 2am. Two or three sentences is plenty. -->
 
-**This supersedes [#1663](https://github.com/ScrollPrize/villa/pull/1663)**, which I opened
-against `merge-ink-pipelines`, where this code has no shared module and the rename is inline
-in `prepare_9um_isotropic_input`. That version fixes one script; this one fixes four callers
-in three fewer lines of change. I will close #1663 if you take this — say the word, or close
-this one if the other branch is where you want it. I have also asked on
-[#1608](https://github.com/ScrollPrize/villa/pull/1608) which branch ink-detection work
-should target now; this PR is my answer for the case where it is `main`.
+- [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
-## Why this matters to me
+## Details
 
-<!-- USER WRITES THIS PARAGRAPH. Do not draft it. Suggested substance, in your own words:
-     the 24 input preparations this ate, what the traceback looked like at the time, and
-     why "the data is fine, just rename it" is the sentence you wanted to see. -->
+The change is in `ink_detection/preprocessing/staged_write.py::publish_staged_output`, which
+**four** preprocessing tools call — `clean_labels`, `composite_from_zarr`, `merge_predictions`
+and `prepare_9um_isotropic_input` — so one function covers all of them. `attempts` and
+`retry_delay` are keyword-only with defaults, so no call site changes.
+
+The retry is gated on `winerror` being 5 or 32. That attribute only exists on Windows, so on
+POSIX every `PermissionError` is raised on the first attempt exactly as it is today; nothing
+about the current behaviour there changes. On give-up the original exception is re-raised with
+`add_note`, rather than a new one, so callers that catch `PermissionError` are unaffected —
+three of the four catch it and discard the stage, which stays correct because for them the
+staged file is a disposable temporary.
+
+Eight tests in `vesuvius/tests/ink_detection/test_staged_write.py`: publishing a file and a
+directory, retry-until-clear for both error codes, an immediate raise with no sleep for any
+other `PermissionError` (the POSIX guarantee), the give-up path asserting the note names both
+paths while the staged bytes survive and no output appears, and — skipped off Windows — a real
+open handle released by another thread.
+
+An earlier version of this fix also released the script's own zarr handles before renaming. I
+could not show those handles were the cause in the failure I hit, so that part is not here.
+
+This supersedes [#1663](https://github.com/ScrollPrize/villa/pull/1663), which patches the same
+rename inline in one script against `merge-ink-pipelines`, where this helper does not exist. I
+will close that one. I asked on [#1608](https://github.com/ScrollPrize/villa/pull/1608) which
+branch ink-detection work should target; this is the `main` answer.
+
+Tested at `5479453` (`main`), Python 3.12 and 3.14, Windows 11.

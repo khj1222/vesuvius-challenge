@@ -1,0 +1,24 @@
+﻿  device=cuda   torch=2.10.0+cu128   triton importable=False
+
+==============================================================================
+ BEFORE  --  main today: torch.compile(), then the first forward
+==============================================================================
+  torch.compile() returned without raising  <- the except in maybe_compile_model
+                                               guards THIS call, and it did not fail
+  first forward raised:
+    torch._inductor.exc.TritonMissing
+    Cannot find a working triton installation. Either the package is not installed or it is too old. More information on installing Triton can be found at: https://github.com/triton-lang/triton
+  -> inference stops here, part way through a run
+
+==============================================================================
+ AFTER   --  this PR: the first forward is guarded
+==============================================================================
+  maybe_compile_model -> _CompiledWithEagerFallback, compile set up = True
+  WARNING  torch.compile failed on the first forward (Cannot find a working triton installation. Either the package is not installed or it is too old. More information on installing Triton can be found at: https://github.com/triton-lang/triton
+
+Set TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS="+dynamo"
+); continuing eagerly
+  forward 1 matches uncompiled output : True
+  forward 2 matches uncompiled output : True
+  compiled module dropped after the failure : True
+  -> the run continues

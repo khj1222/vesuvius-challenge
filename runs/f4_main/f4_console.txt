@@ -1,0 +1,15 @@
+﻿==============================================================================
+ BEFORE  --  main today: the cache is keyed on label PATHS
+==============================================================================
+  real asset copied: 3,459 files from w00_20231016151002_inklabels.zarr
+  discovery cached  : 2 patches
+  edited IN PLACE   : removed 40 chunks, same path, same name
+  cache lookup      : still returns 2 patches  <-- STALE
+
+==============================================================================
+ AFTER   --  this PR: the labels are fingerprinted too
+==============================================================================
+  real asset copied: 3,459 files from w00_20231016151002_inklabels.zarr
+  discovery cached  : 2 patches
+  edited IN PLACE   : removed 40 chunks, same path, same name
+  cache lookup      : REJECTED -> rediscovery runs against the labels that exist

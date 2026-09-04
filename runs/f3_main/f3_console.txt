@@ -1,0 +1,21 @@
+﻿==============================================================================
+ BEFORE  --  main today:  staged.replace(output)
+==============================================================================
+  PermissionError: [WinError 5] 액세스가 거부되었습니다   (errno 13: Permission denied)
+  output exists? False      staged left behind? True
+  -> every chunk was already written; the traceback does not say so
+
+==============================================================================
+ AFTER   --  this PR:  publish_staged_output(), handle released 0.4s in
+==============================================================================
+  published after 0.59s
+  output exists? True      chunk intact? b'a completed chunk'
+
+==============================================================================
+ AFTER   --  handle never released: it says the work is not lost
+==============================================================================
+  PermissionError: [WinError 5]
+    The staged output is complete and nothing needs recomputing; it could not be published because something still holds it. Renaming it finishes the job:
+      D:\shots\tmp\f3shot.r3bj1vp4\never.zarr.partial
+      -> D:\shots\tmp\f3shot.r3bj1vp4\never.zarr
+  staged intact? True      output created? False
