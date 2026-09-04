@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 11,503 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,422 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -167,7 +167,7 @@ none of them worked. Filtering the native input to match aligned spectra recover
 Training with noise calibrated to the difference was stopped by its own calibration: measured
 after the trainer's normalisation, the native input carries *less* high-frequency energy than
 the aligned one in 24 of 24 cells, so the correction points at blur rather than noise. The
-blur version was stopped too -- the sigma the gap calls for, 0.78, is already inside the range
+blur version was stopped too — the sigma the gap calls for, 0.78, is already inside the range
 the recipe samples. Only exposure was left, so I raised the share of patches seeing a
 calibrated-strength blur from 2.7% to 50% and ran it: native -0.012, the wrong sign, inside
 the noise floor, and the two seeds disagreeing by more than the effect. Two attempts ran and
@@ -208,7 +208,7 @@ step 5,000. So "annotate one segment" now says annotate half of one.
 
 Then a pre-registered follow-up refuted the reading of that curve, including my own
 hypothesis for it. Holding the budget at a fifth and changing only *which* regions are
-annotated -- four subsets chosen by rules fixed before the runs -- moves the mean by 0.0373
+annotated — four subsets chosen by rules fixed before the runs — moves the mean by 0.0373
 F1, above the noise floor, with the ordering identical in both seeds and one subset best on
 all seven scored segments. The rule I expected to win lost: ranking candidate regions by the
 model's own disagreement picked the wrong ones in both seeds, so I report uncertainty
@@ -240,29 +240,30 @@ stopping rule built on it could have caught this. Label space: self-training on 
 own confident pixels is the rung that helps, most when it labels the sheets it is about to
 read — +0.046 F1, all fourteen cells improving, 14.3% of the gap. That prices the annotation:
 base, recipe and step count fixed, a human's labels on one segment buy +0.32 where the
-model's own guesses buy +0.046, so A HUMAN ANNOTATION IS WORTH ABOUT SEVEN TIMES the best
-label-free method. And because that method needs no labels I pointed it at PHerc1447 itself
-under three criteria fixed beforehand; it met none — the patches stay rounded, the seeds
-agree no more on where the ink is, the output collapses to one mode. Self-training amplifies
-what a model already believes, and there it believes nothing. None of it crosses to the
-second scroll either: on 1667 arm C never leaves the noise floor at any step and arm D is
-negative at every step, where on Paris4 it improved 14 of 14 cells. What survives the
-crossing is the ordering and the saturation point; what does not is any magnitude
-(docs/18).
+model's own guesses buy +0.046, so a human annotation is worth about seven times the best
+label-free method.
+
+And because that method needs no labels I pointed it at PHerc1447 itself under three
+criteria fixed beforehand; it met none — the patches stay rounded, the seeds agree no more
+on where the ink is, the output collapses to one mode. Self-training amplifies what a model
+already believes, and there it believes nothing. None of it crosses to the second scroll
+either: on 1667 arm C never leaves the noise floor at any step and arm D is negative at
+every step, where on Paris4 it improved 14 of 14 cells (docs/18).
 
 The apparatus went upstream as well as the numbers. The released recipe does not run as
-published — its datasets block is a single placeholder while the 29 representations live
-in a separate contract file — so the join, and the holdout flags that turn it into this
-probe, are villa PR #1608; it regenerates my three arm configs byte-for-byte. Both have
-survived outside hands: one contributor pulled the raw 0139 matrix and recomputed every
-published figure, confirming the margins hold under four selection rules, and the same
+published — its datasets block is a single placeholder while the 29 representations live in
+a separate contract file — so the join, and the holdout flags that turn it into this probe,
+are villa PR #1608; it regenerates my three arm configs byte-for-byte. Numbers and apparatus
+have both survived outside hands: one contributor pulled the raw 0139 matrix and recomputed
+every published figure, confirming the margins hold under four selection rules, and the same
 person then reviewed the generator and found a crash on a batch smaller than the surviving
-scroll count, fixed two days later. The traffic went the other way too: the author of villa PR #1471 asked for this harness to
-be pointed at their striped-TIFF streaming path, at the odd extents their own testing did
-not cover. It reproduces their output exactly on 42 of 42 variants and crashes on any image
-whose height leaves a strip of exactly one row, which converts fine today; the fix is
-verified against the same matrix. Being reproduced, being corrected, and being asked to
-check someone else's work are the three things a measurement of an open problem needs.
+scroll count, fixed two days later. The traffic went the other way too: the author of villa
+PR #1471 asked for this harness to be pointed at their striped-TIFF streaming path, at the
+odd extents their own testing did not cover. It reproduces their output exactly on 42 of 42
+variants and crashes on any image whose height leaves a strip of exactly one row, which
+converts fine today; the fix is verified against the same matrix. Being reproduced, being
+corrected, and being asked to check someone else's work are the three things a measurement
+of an open problem needs.
 
 Everything is MIT, documented end to end (docs/14–18 and docs/20–23, plus 135
 committed evidence files under runs/), and continuous with the July harness and the
@@ -331,10 +332,16 @@ field 4's scored cells 1,720 → **1,778** and evidence files 33 → **40** (blu
 cells and annotation-targeting's 42 arrived after the last recount), and field 5's closing
 `docs/14–18` → `docs/14–18 and docs/20–23` (it cites docs/20 in the body and rests on
 docs/21–23; there is no docs/19) with the unreproducible "100 committed evidence files"
-replaced by the 135 files actually committed under `runs/`:
+replaced by the 135 files actually committed under `runs/`. The same read then fixed style and
+structure: the three `--` left by the two latest paragraphs became em dashes, the field's only
+all-caps phrase was lowered (the +0.32-against-+0.046 comparison in front of it already carries
+the emphasis, and shouting once undercuts a text whose credibility is its evenness), the
+longest paragraph was split after the seven-times claim, the closing moral that the 1667
+paragraph had already made was cut, and "Both have survived outside hands" now names its
+antecedent:
 
 - field 4 — 2,015 chars, `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a`
-- field 5 — 11,503 chars, `7ccf1ca287f0fb5dcab298c985e4e0a823f19978ee716f96bbd3d06df655e418`
+- field 5 — 11,422 chars, `554d07d18594759925b0d6bafc16f3f5d26bbb05b6ccb60720e33bf936d58977`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
