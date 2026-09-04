@@ -35,11 +35,15 @@ US = "khj1222"
 
 # threads we opened, were asked into, or commented on
 THREADS = [
-    (1535, "our PR: flat_depth_targets"),
+    (1701, "our PR: patch cache fingerprint (F4, on main)"),
+    (1703, "our PR: eager fallback (F2, on main)"),
+    (1705, "our PR: staged publish (F3, on main, draft)"),
     (1608, "our PR: holdout config generator"),
-    (1661, "our PR: patch cache fingerprint (F4)"),
-    (1662, "our PR: compile fallback (F2)"),
-    (1663, "our PR: staged publish (F3)"),
+    # superseded or closed, still worth watching for a late maintainer word
+    (1535, "our PR: flat_depth_targets (auto-closed)"),
+    (1661, "our PR: F4 (superseded by 1701)"),
+    (1662, "our PR: F2 (superseded by 1703)"),
+    (1663, "our PR: F3 (superseded by 1705)"),
     (1231, "our issue: no validation mask"),
     (1611, "our issue: renderer stall"),
     (1638, "our issue: held-out audit (closed, locked)"),
