@@ -1,0 +1,236 @@
+From 596e8653c38d63b182ede14f9d611fa778734201 Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Sat, 5 Sep 2026 00:54:36 +0900
+Subject: [PATCH] patch_cache: notice a label that changed under the same path
+
+A cached split is keyed by the label paths it was found under. That catches
+pointing a run at a different tree and misses regenerating a mask in place: the
+cache is reused against labels it no longer describes, and nothing looks wrong,
+because the patch count and the bounding boxes are the old ones. Training then
+continues over supervision that has been deleted.
+
+Fingerprint each label asset by the relative names and sizes of its files, and
+carry that in the record and in the lookup key, so the rejection path that
+already exists does the work -- no new invalidation logic. Rewriting a zarr
+changes chunk sizes, and dropping annotation deletes chunks outright when the
+store does not write empty ones, so the digest moves for the changes that matter.
+
+It reads no chunk contents. On this repository's real w00 label assets, 12,619
+files across the ink labels and the supervision mask, the fingerprint costs
+22.5-32.4 ms over five runs; the same thing built on Path.stat() costs
+187.4-270.5 ms, because os.scandir carries the size along on Windows and Linux
+alike.
+
+Two limits, deliberate: two different labels that compress to identical sizes
+under identical names are indistinguishable, and a byte-identical copy of a tree
+fingerprints the same as its source, which is the wanted behaviour. A cache
+written before this change has no fingerprint, so it misses once and is rebuilt.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+---
+ .../ink_detection/data/patch_cache.py         | 70 ++++++++++++++++++-
+ .../ink_detection/test_data_foundation.py     | 62 ++++++++++++++++
+ 2 files changed, 131 insertions(+), 1 deletion(-)
+
+diff --git a/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py b/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
+index 423802a53..fada91062 100644
+--- a/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
++++ b/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
+@@ -2,7 +2,9 @@
+ 
+ from __future__ import annotations
+ 
++import hashlib
+ import json
++import os
+ from pathlib import Path
+ from typing import Iterable, Mapping
+ 
+@@ -13,6 +15,61 @@ from vesuvius.ink_detection.types import Patch, Segment
+ _CACHE_VERSION = "v6"
+ 
+ 
++def label_asset_fingerprint(paths: Iterable[Path | str | None]) -> str:
++    """Return a short digest of the label assets' on-disk layout.
++
++    A cached split is identified by the label *paths* it was found under, which catches
++    pointing a run at a different tree and misses regenerating a mask in place. The split
++    is then reused against labels it no longer describes, and nothing looks wrong: the
++    patch count and the bounding boxes are the old ones, so training continues over
++    supervision that has been deleted.
++
++    Hashing each asset's relative file names and sizes catches that, because rewriting a
++    zarr changes chunk sizes and dropping annotation deletes chunks outright when the
++    store does not write empty ones. It reads no chunk contents, so it costs one
++    directory walk -- ``os.scandir`` carries the size on Windows and Linux alike -- and it
++    cannot tell apart two different labels that compress to identical sizes under
++    identical names. A byte-identical copy of a tree fingerprints the same as its source,
++    which is the wanted behaviour.
++    """
++
++    digest = hashlib.sha256()
++    for path in sorted(str(value) for value in paths if value):
++        root = Path(path)
++        digest.update(root.name.encode())
++        if not root.exists():
++            digest.update(b"\0missing")
++            continue
++        entries: list[tuple[str, int]] = []
++        stack = [("", str(root))]
++        while stack:
++            relative, current = stack.pop()
++            try:
++                children = sorted(os.scandir(current), key=lambda entry: entry.name)
++            except OSError:
++                continue
++            for child in children:
++                name = f"{relative}/{child.name}" if relative else child.name
++                if child.is_dir(follow_symlinks=False):
++                    stack.append((name, child.path))
++                    continue
++                try:
++                    size = child.stat().st_size
++                except OSError:
++                    size = -1
++                entries.append((name, size))
++        for name, size in sorted(entries):
++            digest.update(name.encode())
++            digest.update(str(size).encode())
++    return digest.hexdigest()[:16]
++
++
++def _segment_label_fingerprint(segment: Segment) -> str:
++    return label_asset_fingerprint(
++        (segment.inklabels, segment.supervision_mask, segment.validation_mask)
++    )
++
++
+ def patch_finding_cache_token(config: InkDataConfig) -> str:
+     """Return the v6 token including every patch-semantic input."""
+     finding = config.patch_finding
+@@ -59,8 +116,14 @@ def save_patch_cache(path: str | Path, patches: Iterable[Patch]) -> None:
+     path = Path(path)
+     path.parent.mkdir(parents=True, exist_ok=True)
+     records = []
++    fingerprints: dict[tuple[int, str, int, str, str, str], str] = {}
+     for patch in patches:
+         segment = patch.segment
++        fingerprint = fingerprints.get(segment.cache_key)
++        if fingerprint is None:
++            fingerprint = fingerprints.setdefault(
++                segment.cache_key, _segment_label_fingerprint(segment)
++            )
+         records.append(
+             {
+                 "dataset_idx": segment.dataset_idx,
+@@ -73,6 +136,7 @@ def save_patch_cache(path: str | Path, patches: Iterable[Patch]) -> None:
+                 "validation_mask_path": (
+                     "" if segment.validation_mask is None else str(segment.validation_mask)
+                 ),
++                "label_fingerprint": fingerprint,
+                 "active_supervision_mask_path": (
+                     "" if patch.supervision_mask is None else str(patch.supervision_mask)
+                 ),
+@@ -99,7 +163,10 @@ def load_patch_cache(
+         records = json.load(stream)
+     if not isinstance(records, list):
+         raise ValueError(f"patch cache {path} must contain a JSON array")
+-    segments_by_key = {segment.cache_key: segment for segment in segments}
++    segments_by_key = {
++        (*segment.cache_key, _segment_label_fingerprint(segment)): segment
++        for segment in segments
++    }
+     expected_token = patch_finding_cache_token(config)
+     patches: list[Patch] = []
+     for record in records:
+@@ -114,6 +181,7 @@ def load_patch_cache(
+             str(record.get("inklabels_path", "")),
+             str(record.get("supervision_mask_path", "")),
+             str(record.get("validation_mask_path", "")),
++            str(record.get("label_fingerprint", "")),
+         )
+         segment = segments_by_key.get(key)
+         if segment is None:
+diff --git a/vesuvius/tests/ink_detection/test_data_foundation.py b/vesuvius/tests/ink_detection/test_data_foundation.py
+index 1a86a117f..1d2213bc7 100644
+--- a/vesuvius/tests/ink_detection/test_data_foundation.py
++++ b/vesuvius/tests/ink_detection/test_data_foundation.py
+@@ -19,6 +19,7 @@ from vesuvius.ink_detection.data.geometry import (
+     select_flat_pixels_via_stored_resolution,
+ )
+ from vesuvius.ink_detection.data.patch_cache import (
++    label_asset_fingerprint,
+     load_patch_cache,
+     patch_finding_cache_token,
+     save_patch_cache,
+@@ -382,6 +383,67 @@ def test_v6_patch_cache_round_trip_and_stale_rejection(tmp_path):
+     assert load_patch_cache(path, config=changed, segments=[segment]) is None
+ 
+ 
++def _write_mask(path: Path, chunks: dict[str, bytes]) -> None:
++    path.mkdir(parents=True, exist_ok=True)
++    for name, payload in chunks.items():
++        (path / name).write_bytes(payload)
++
++
++def test_patch_cache_is_rejected_when_a_label_changes_under_the_same_path(tmp_path):
++    """Paths alone cannot see a mask regenerated in place, which is how a split goes stale."""
++
++    config = _config(tmp_path)
++    mask = tmp_path / "supervision.zarr"
++    _write_mask(mask, {".zarray": b"{}", "0.0.0": b"chunk-one", "0.0.1": b"chunk-two"})
++    segment = replace(_segment(config, tmp_path), supervision_mask=mask)
++    path = tmp_path / "patches.json"
++    save_patch_cache(path, [Patch(segment=segment, bbox=(1, 2, 3, 4, 5, 6))])
++
++    assert load_patch_cache(path, config=config, segments=[segment]) is not None
++
++    # regenerated in place: same path, one chunk fewer
++    (mask / "0.0.1").unlink()
++    assert load_patch_cache(path, config=config, segments=[segment]) is None
++
++    # restored, then rewritten to a different size under the same name
++    _write_mask(mask, {"0.0.1": b"chunk-two"})
++    assert load_patch_cache(path, config=config, segments=[segment]) is not None
++    (mask / "0.0.1").write_bytes(b"chunk-two-but-longer")
++    assert load_patch_cache(path, config=config, segments=[segment]) is None
++
++
++def test_patch_cache_still_hits_when_nothing_changed(tmp_path):
++    """The fingerprint must not cost the fast path: an untouched tree keeps hitting."""
++
++    config = _config(tmp_path)
++    mask = tmp_path / "supervision.zarr"
++    _write_mask(mask, {".zarray": b"{}", "0.0.0": b"chunk"})
++    segment = replace(_segment(config, tmp_path), supervision_mask=mask)
++    path = tmp_path / "patches.json"
++    save_patch_cache(path, [Patch(segment=segment, bbox=(1, 2, 3, 4, 5, 6))])
++
++    for _ in range(3):
++        loaded = load_patch_cache(path, config=config, segments=[segment])
++        assert loaded is not None and len(loaded) == 1
++
++
++def test_label_fingerprint_is_stable_and_notices_each_asset(tmp_path):
++    ink = tmp_path / "ink.zarr"
++    supervision = tmp_path / "supervision.zarr"
++    _write_mask(ink, {"0.0.0": b"a"})
++    _write_mask(supervision, {"0.0.0": b"b"})
++
++    baseline = label_asset_fingerprint([ink, supervision])
++    assert baseline == label_asset_fingerprint([supervision, ink]), "order must not matter"
++    assert baseline == label_asset_fingerprint([ink, supervision, None])
++
++    (ink / "0.0.0").write_bytes(b"aa")
++    assert label_asset_fingerprint([ink, supervision]) != baseline
++
++    missing = label_asset_fingerprint([tmp_path / "absent.zarr"])
++    assert missing and missing != label_asset_fingerprint([ink])
++
++
+ def test_unlabeled_coverage_key_is_rejected_and_cache_token_stays_compatible(tmp_path):
+     unlabeled = _config(
+         tmp_path,
+-- 
+2.53.0.windows.2
+

@@ -1,0 +1,12 @@
+platform win32 -- Python 3.12.13, pytest-9.0.2, pluggy-1.6.0 -- D:\vesuvius-challenge\external\villa\ink-detection\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\bluek\AppData\Local\Temp\claude\D--vesuvius-challenge\828bc408-0cc8-4f52-8d5c-26b5a7f99050\scratchpad\f4main
+plugins: anyio-4.13.0, napari-0.7.0, napari-plugin-engine-0.2.1, npe2-0.8.1
+collecting ... collected 4 items
+
+test_patch_cache.py::test_v6_patch_cache_round_trip_and_stale_rejection PASSED [ 25%]
+test_patch_cache.py::test_patch_cache_is_rejected_when_a_label_changes_under_the_same_path PASSED [ 50%]
+test_patch_cache.py::test_patch_cache_still_hits_when_nothing_changed PASSED [ 75%]
+test_patch_cache.py::test_label_fingerprint_is_stable_and_notices_each_asset PASSED [100%]
+
+============================== 4 passed in 0.16s ==============================

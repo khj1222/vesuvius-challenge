@@ -1,0 +1,43 @@
+{
+ "files_per_asset": {
+  "w00_20231016151002_inklabels.zarr": 3459,
+  "w00_20231016151002_supervision_mask.zarr": 9160
+ },
+ "repeats": 5,
+ "fingerprint_ms_range": [
+  22.5,
+  32.4
+ ],
+ "path_stat_equivalent_ms_range": [
+  187.4,
+  270.5
+ ],
+ "runs": [
+  {
+   "fingerprint_ms": 22.5,
+   "path_stat_equivalent_ms": 192.2
+  },
+  {
+   "fingerprint_ms": 22.5,
+   "path_stat_equivalent_ms": 187.4
+  },
+  {
+   "fingerprint_ms": 25.4,
+   "path_stat_equivalent_ms": 270.5
+  },
+  {
+   "fingerprint_ms": 32.4,
+   "path_stat_equivalent_ms": 253.3
+  },
+  {
+   "fingerprint_ms": 31.2,
+   "path_stat_equivalent_ms": 254.1
+  }
+ ],
+ "files_total": 12619,
+ "fingerprint_ms": 34.5,
+ "path_stat_equivalent_ms": 262.2,
+ "digest": "5cf89967a6fe0f6f",
+ "stable_across_calls": true,
+ "order_independent": true
+}
