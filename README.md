@@ -305,16 +305,41 @@ labels — which is what turns "render aligned" from a preference into an instru
   2026-08-14** (review round: derive the 2D pyramid in memory, 114.5s -> 66.5s).
 - **[PR #1535](https://github.com/ScrollPrize/villa/pull/1535)** —
   `flat_depth_targets`, opening up label-depth experiments that the flat loop
-  otherwise makes impossible, plus `--z-window` at inference. Awaiting review.
-  (Its predecessor [#1434](https://github.com/ScrollPrize/villa/pull/1434) was
-  closed on 2026-08-18 asking for `CONTRIBUTING.md` compliance and for the
-  never-measured `mean` reduction to be dropped; both were addressed.)
+  otherwise makes impossible, plus `--z-window` at inference. **Closed
+  2026-09-03 without review**, automatically: this repository closes a pull
+  request after 14 days without activity. (Its predecessor
+  [#1434](https://github.com/ScrollPrize/villa/pull/1434) was closed on
+  2026-08-18 asking for `CONTRIBUTING.md` compliance and for the never-measured
+  `mean` reduction to be dropped; both were addressed.)
 - **[PR #1608](https://github.com/ScrollPrize/villa/pull/1608)** —
   `make_holdout_config.py`. The published ink_9um recipe does not run as
   shipped: its `datasets` field holds a single `/path/to/` placeholder while the
   29 representations live in a separate contract file. This joins the two and
-  adds `--exclude-scroll` / `--exclude-segment`. Under review, and the review
-  found a real crash, since fixed.
+  adds `--exclude-scroll` / `--exclude-segment`. Reviewed by another
+  contributor, whose review found a real crash, since fixed.
+
+Three fixes for friction met while running the September study, all opened
+2026-08-31 against `merge-ink-pipelines`:
+
+- **[PR #1661](https://github.com/ScrollPrize/villa/pull/1661)** — the patch
+  cache keys on paths, so regenerating a mask in place leaves training on
+  supervision that no longer exists: 1,266 patches found before and after a mask
+  was halved under it, against 1,162 in a fresh directory. Fingerprints the
+  label assets by name and size, which costs 8 ms per 6,429-file array and keeps
+  the warm path at 0.03 s.
+- **[PR #1662](https://github.com/ScrollPrize/villa/pull/1662)** — `infer`
+  crashes on native Windows because `torch.compile` returns lazily and Triton
+  has no Windows build, so `TritonMissing` is raised at the first forward, past
+  the `except` meant to catch it. Falls back at the first forward instead.
+- **[PR #1663](https://github.com/ScrollPrize/villa/pull/1663)** —
+  `prepare_9um_isotropic_input` dies on the final directory rename when anything
+  holds a handle (`WinError 5`), discarding a completed conversion. Retries, and
+  if it still cannot publish, says so and keeps the staged output.
+- **[PR #1471](https://github.com/ScrollPrize/villa/pull/1471)** — not ours. Its
+  author asked for this repository's striped masks to be run against their
+  branch; that check found the outputs identical to the in-memory path across 42
+  variants and 9.7 billion voxels, and found one crash the branch introduces —
+  a strip of exactly one row — with a fix verified against the parent tree.
 - **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — asking
   whether the missing `_validation_mask` on published segments is intended.
   Triaged and assigned; no reply yet.
@@ -327,7 +352,10 @@ labels — which is what turns "render aligned" from a preference into an instru
   voxels from the independently observed surface.
 - **[Issue #1611](https://github.com/ScrollPrize/villa/issues/1611)** — the
   renderer waits forever when remote streaming stalls, with a workaround and the
-  evidence that it finishes the job.
+  evidence that it finishes the job. Retested on 2026-08-31 against the current
+  release build, where the stall did not reproduce in three runs against four of
+  four on the build originally reported, so we recommended closing our own issue
+  — while noting the unbounded waits are still in the source.
 
 ---
 
