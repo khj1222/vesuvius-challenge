@@ -45,7 +45,29 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 11,422 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+🔴 **v20 (2026-09-05) — a claim of ours was already false when we wrote it.** Field 5 said the
+released recipe "does not run as published — its datasets block is a single placeholder while
+the 29 representations live in a separate contract file". That is true of
+`ink-detection/configs/aligned21_hybrid_3d2d.json` on `merge-ink-pipelines`, the branch this
+work was built on, and **false of `main`**, where the same recipe has carried all 29
+representations expanded across five dataset entries since `960d76a` on **2026-08-14** — twelve
+days before #1608 was opened. Only the root paths are placeholders there. We never opened
+main's copy. A judge would have, in about thirty seconds. The sentence now claims only what
+survives on both branches and is checkable: **nothing anywhere in the repository turns the
+recipe into a leave-one-scroll-out probe** (searched: `exclude_scroll` 0 hits, and the
+`renormalise`/`holdout config` hits are all volume-cartographer and spiral-fitting). The
+exclusions and the quota renormalisation they force are still #1608's alone. The same overreach
+was removed from the internal candidate description above field 4; field 4 itself is links only,
+so its hash is unchanged.
+
+**v20 also folds in the two Core Requirements the prize page names and this text never stated** —
+"significant advantages over existing solutions" and Technical Integration — as the closing two
+sentences: the outputs stay in the pipeline's own formats (label contract, `infer` loading the
+adapted checkpoints unmodified, zarr and TIFF), and what the work improves on is an absence
+(no reported accuracy on the published checkpoints, no way to hold a scroll out, no number on
+open problem #7).
+
+**Field 5 is 11,803 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -67,9 +89,9 @@ standalone PR checkbox, leaving six questions.
 ## Step 1 — the pull request ✅ done
 
 **[#1608](https://github.com/ScrollPrize/villa/pull/1608)** — `ink-detection/scripts/make_holdout_config.py`,
-opened 2026-08-26 against `merge-ink-pipelines`, 1 file. It is candidate 1 below: the join
-that makes the released recipe runnable, plus the `--exclude-scroll` / `--exclude-segment`
-flags that turn it into the cross-scroll probe this submission is about. Body follows
+opened 2026-08-26 against `merge-ink-pipelines`, 1 file. It is candidate 1 below: the
+`--exclude-scroll` / `--exclude-segment` flags, and the quota renormalisation they force,
+that turn the released recipe into the cross-scroll probe this submission is about. Body follows
 `villa/CONTRIBUTING.md` including the human "why this matters to me" paragraph
 (`submission/pr1608_body.md`). One round of outside review already closed: Bullo27
 reproduced the quota arithmetic, found a crash when `batch_size` is below the surviving
@@ -259,10 +281,10 @@ already believes, and there it believes nothing. None of it crosses to the secon
 either: on 1667 arm C never leaves the noise floor at any step and arm D is negative at
 every step, where on Paris4 it improved 14 of 14 cells (docs/18).
 
-The apparatus went upstream as well as the numbers. The released recipe does not run as
-published — its datasets block is a single placeholder while the 29 representations live in
-a separate contract file — so the join, and the holdout flags that turn it into this probe,
-are villa PR #1608; it regenerates my three arm configs byte-for-byte. Numbers and apparatus
+The apparatus went upstream as well as the numbers. Nothing in the tree turns the released
+recipe into a leave-one-scroll-out probe — the exclusions, and the per-batch quota
+renormalisation that has to follow them, are villa PR #1608; it regenerates my three arm
+configs byte-for-byte. Numbers and apparatus
 have both survived outside hands: one contributor pulled the raw 0139 matrix and recomputed
 every published figure, confirming the margins hold under four selection rules, and the same
 person then reviewed the generator and found a crash on a batch smaller than the surviving
@@ -276,7 +298,12 @@ of an open problem needs.
 
 Everything is MIT, documented end to end (docs/14–18 and docs/20–23, plus 135
 committed evidence files under runs/), and continuous with the July harness and the
-August #192 verdict — one apparatus, three months of answered questions.
+August #192 verdict — one apparatus, three months of answered questions. Nothing here asks
+the pipeline to change shape around it: pseudo-labels are written to the corpus's own label
+contract, adapted checkpoints load in `infer` unmodified, and scores come back as the same
+zarr and TIFF the released tools already emit. And what it improves on is an absence — the
+published checkpoints carried no reported accuracy, the recipe had no way to hold a scroll
+out, and open problem #7 had no number attached to it.
 ```
 
 **6. Terms and Conditions** → check "Yes, I agree"
@@ -350,7 +377,7 @@ paragraph had already made was cut, and "Both have survived outside hands" now n
 antecedent:
 
 - field 4 — 2,015 chars, `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a`
-- field 5 — 11,422 chars, `554d07d18594759925b0d6bafc16f3f5d26bbb05b6ccb60720e33bf936d58977`
+- field 5 — 11,803 chars, `42864edd975b18365b2b4b8db8c24ed8549176ec98add435f09c97976d259149`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
