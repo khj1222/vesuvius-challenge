@@ -36,7 +36,7 @@ open the link. What is kept is the measurement, reframed as what it always was: 
 the intra-versus-inter distinction he says one should always make. Reply draft for the thread:
 [`issue1638_reply_pmh47.md`](issue1638_reply_pmh47.md).
 
-**Field 5 is 11,475 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,503 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -101,7 +101,7 @@ https://github.com/khj1222/vesuvius-challenge
 Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
-Raw numbers (1,720 scored cells, 33 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
+Raw numbers (1,778 scored cells, 40 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
@@ -264,9 +264,9 @@ whose height leaves a strip of exactly one row, which converts fine today; the f
 verified against the same matrix. Being reproduced, being corrected, and being asked to
 check someone else's work are the three things a measurement of an open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 plus 100 committed evidence
-files), and continuous with the July harness and the August #192 verdict — one
-apparatus, three months of answered questions.
+Everything is MIT, documented end to end (docs/14–18 and docs/20–23, plus 135
+committed evidence files under runs/), and continuous with the July harness and the
+August #192 verdict — one apparatus, three months of answered questions.
 ```
 
 **6. Terms and Conditions** → check "Yes, I agree"
@@ -324,11 +324,17 @@ closed by the inactivity bot on 09-03. Five further replies are drafted and unpo
 `pr1471_reply_hendrikschilling.md` (the maintainer is deciding whether to close that PR),
 `pr1608_base_branch_question.md`, and the three `pr166x_*_followup.md`.
 
-Field hashes at this revision, over the block body plus one trailing newline — the
-convention the August entry uses:
+Field hashes at this revision (2026-09-05, after the straight-through read of field 5), over
+the block body plus one trailing newline — the convention the August entry uses. The read
+found four counts that had gone stale as later results landed and were corrected here:
+field 4's scored cells 1,720 → **1,778** and evidence files 33 → **40** (blur-exposure's 16
+cells and annotation-targeting's 42 arrived after the last recount), and field 5's closing
+`docs/14–18` → `docs/14–18 and docs/20–23` (it cites docs/20 in the body and rests on
+docs/21–23; there is no docs/19) with the unreproducible "100 committed evidence files"
+replaced by the 135 files actually committed under `runs/`:
 
-- field 4 — 2,015 chars, `39a669d5c4f87e8afd8ce62f78f590caa4fb60553593dda3750d1f9728acfbac`
-- field 5 — 11,475 chars, `ea82e5959e84f0e32be654454c537da10f896c7608ae4012cd144f769ad606cd`
+- field 4 — 2,015 chars, `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a`
+- field 5 — 11,503 chars, `7ccf1ca287f0fb5dcab298c985e4e0a823f19978ee716f96bbd3d06df655e418`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
