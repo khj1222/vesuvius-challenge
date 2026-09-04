@@ -4,17 +4,26 @@
 Fetch September's from https://scrollprize.org/prizes when the round opens
 (August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
 **Deadline:** 2026-09-30 23:59 PT
-**Status:** DRAFT v12 (2026-08-31, trimmed). Arm D — the transductive variant of arm C, pre-registered
-at commit `923895d` before it ran — landed at **14.3% of the gap**, and was then pointed at
-PHerc1447 itself under criteria fixed at `1da7685`, where it met none of them. Then the whole
-Paris4 comparison was replicated on 1667 (pre-registered at `cd07b16`, step curve at
-`5468ac5`) and **three of its four commitments were refuted**: the annotation buys 24% there
-rather than 82%, and the label-free arms do not cross. All three results are in the ladder
-and repair-price paragraphs and the evidence table. v8 was the full pre-submission audit. The adaptation ladder
-is finished: arms B and C were pre-registered and run, so the PHerc1447 paragraph reports
-three closed routes rather than one. Also folded in: the pyramid-pooling measurement that
-settles the mechanism behind the domain-match retraction (docs/15 appendix 3), prompted by a
-reviewer's question on villa #1582.
+**Status:** DRAFT v19 (2026-09-05). **Both submitted fields are final and hash-recorded
+below.** The work they report is finished and nothing is waiting on a run: the four-part
+cross-scroll study (docs/15), the adaptation ladder through arm D (docs/18), the 1667
+replication that refuted this draft's own headline, the targeting test that corrected its own
+published label-efficiency curve (docs/20), and four pre-registered attempts on the
+aligned-over-native gap, two of them stopped by their own calibrations before reaching a GPU
+(docs/21–23). Every arm's design, prediction and decision rule went into a public commit
+before that arm ran; those hashes are in the documents, not repeated here.
+
+**v18 and v19 discharged Step 3's open item 0** — the straight-through read of field 5, owed
+since the field was edited in five places in a single day and never read as one piece. v18
+corrected four counts that later results had outrun: field 4's scored cells (1,720 → 1,778)
+and evidence files (33 → 40), and field 5's document range and evidence total. v19 was style
+and structure: dashes, the field's one all-caps phrase, a split of the longest paragraph, one
+conclusion the 1667 paragraph had already drawn, one ambiguous antecedent. **No claim, number
+or citation was changed in either pass**, and all 37 artifact-backed figures were verified
+still present afterwards.
+
+Outstanding before submission: the September form has not been issued yet (see below), and
+Step 3's day-of checklist.
 
 **Audit, 2026-08-30 — every artifact-backed number in field 5 was re-derived from the
 committed CSV/JSON.** All reproduce except two, both now fixed at source rather than in the
