@@ -157,6 +157,44 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — 🔵 **Discord에 처음 들어가서, 막혀 있던 것 두 개가 한 번에 풀렸다**
+
+서버 = `discord.gg/V4fJhvtaQn`(scrollprize.org·prizes 양쪽에 있는 공식 링크). ⚠️ **우리 `docs/06`이 7월에
+이미 "메인 협업 허브, 조기공유·채택신호 확보 채널"이라고 적어놓고 석 달을 GitHub만 썼다.** 첫 열람에서
+한 달 묵은 답 두 개를 찾았다.
+
+**1. base 브랜치 질문은 한 달 전에 공개로 답이 나와 있었다.** `err`(= erdpx, 우리 #1234를 머지한 사람),
+2026-08-10 #ink-detection: *"sorry about that, we're **merging the ink pipeline into main this week**"*
+→ **`merge-ink-pipelines`는 방치된 게 아니라 흡수된 것**이고, 마지막 커밋이 08-14인 건 작업이 옮겨갔기
+때문이다. **우리가 git 메타데이터로 3주간 추론한 게 채팅 한 줄이었다.** F2/F3/F4를 main으로 옮긴 판단은
+맞았고, **#1608의 답을 기다릴 필요가 없다.**
+
+**2. 9월 폼도 어제 답이 나왔다.** `FrankTheRope`가 09-04 22:45에 우리와 똑같은 질문(폼이 8월 것이고 닫혔다,
+9월 건 언제?)을 했고 **Paul(admin)이 23:01에**: *"it's not available yet, **will be up once august prizes
+are announced**"*. 그리고 09-03에 Paul: *"in a few days. **we've got almost 100 of them to review!**"*
+→ **메일 불필요, 트리거 설정 불필요.** 8월 결과 발표와 함께 폼이 뜨고, 자리는 **#announcements**다.
+
+**3. 전략적으로 큰 것 — `err`의 ink_9um 공개 글(08-10)**: 그 모델들이 *"far from optimized"*이고
+***"improving them would make a great Progress Prize submission"***, 나아가 **$50,000 First Letters**의
+좋은 출발점이며 *"you're still early"*라고 명시. **우리 9월 제출물이 정확히 그 모델들을 측정·진단·가격매김한
+것**이다.
+
+**4. 경쟁 밀도**: 8월 제출이 **~100건**(7월 수상 13명). 그리고 `FrankTheRope`(09-04 신규)가 **ScrollScout** —
+잉크 예측의 4cm² 창을 순위매기는 CPU 툴 — 을 만드는 중이라 **우리 주석 타겟팅(docs/20)과 인접**하다.
+
+🔴 **규칙 2개(반드시 지킬 것)**:
+- **#rules, Paul 2026-07-30**: *"Please don't post **AI-generated answers in place of your own reasoning
+  or participation**... The only exception is #robots"* → **Claude는 Discord 메시지 초안을 쓰지 않는다.**
+  (이 규칙을 읽기 전에 초안 제안을 했다가 철회함.) 읽고 보고하는 것까지가 역할.
+- 서버에 올리는 모든 것은 **CC BY-NC 4.0**으로 라이선스되고 *"경쟁자가 Grand Prize 시도에 쓸 수 있음"*이 명시돼 있다.
+
+⚠️ **운영 함정**: Discord는 **메시지 입력창이 포커스를 쉽게 가져간다** — 검색창 클릭이 빗나가면 타이핑이
+채널로 들어간다. 09-05에 실제로 그럴 뻔했고(**게시된 것은 없음, 입력창 비어 있음 확인**), 이후 **Discord에서
+키보드 입력은 하지 않기로** 했다.
+
+**못 읽고 남긴 것**: `chriski`가 08-27 #general에서 *"PR이 14일 워크플로로 자동종료되면 제출 폼에 적어도
+상금 대상이 되나?"*를 물었다. 답은 확인 못 했고, 서버에서 한 번만 열어보면 된다.
+
 #### 2026-09-05 — 🟢 **F4도 `main` 기준으로 재작성**: 캐시 정체성이 한 모듈에 모여 있다
 
 `main`엔 **`data/patch_cache.py`** 한 모듈이 캐시 정체성을 전부 갖고 있다(mip은 `common/common.py` ·
