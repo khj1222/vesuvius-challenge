@@ -157,6 +157,38 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — ✅ **F2 교체 완료: [#1703](https://github.com/ScrollPrize/villa/pull/1703) 열림, #1662 닫힘.** 그리고 **PR 본문의 저자 표기 원칙이 정해졌다**
+
+- **#1703**: base **`main`**, OPEN·non-draft·**mergeable**, head `fix/eager-fallback-at-first-forward`, 2파일 **+121 −5**.
+  검증 전항 통과(템플릿 순서·Why 문단·고지 문단·이미지 1·주석 유출 0·게시본=로컬 일치).
+  **#1662**는 대체 코멘트와 함께 닫고 [번호를 링크](https://github.com/ScrollPrize/villa/pull/1662#issuecomment-5544129545).
+- 현재 열린 non-draft = **#1608 · #1701 · #1703 (3/3 상한)**. **28일 상한: #1701·#1703 = 10-02**(마감 이후, 안전) ·
+  **#1608 = 09-23**(마감 전 사망) · #1663 = 09-28(draft, 어차피 F3로 교체 예정).
+
+🔴 **저자 표기 — 사용자가 두 번 교정했고, 착지점은 "1인칭이되 지어내지 않는다"**
+
+1. 처음 내가 쓴 본문은 **내가 한 일을 사용자가 한 것처럼** 1인칭으로 서술했다(*"I went looking at the mask writer"*,
+   *"the note I left myself that week"*). 사용자 지적: **"내가 실행한 적이 없는데 뭘, 너가 맨날 실행해서 나온 이슈인데."**
+   → 그런 **내면 서사·구체적 행동 묘사는 전부 제거**.
+2. 그러자 내가 과교정해 1인칭을 통째로 걷어냈고, 사용자가 다시: **"너무 사람이 작성 안 한 것처럼 하기도 그렇지 않아,
+   차라리 1인칭으로 쓰고 나는 쓰면서 이런 문제라서, 적으면 되는 거 아니야."**
+   → **착지점**: 프로젝트가 실제로 한 일(재현·수정·측정)은 **1인칭 유지**, 사용자가 직접 하지 않은 **개인적 디버깅 장면은 안 씀**,
+   그리고 **고지 문단으로 사실을 명시**한다.
+- **고지 문단(3건 본문 전부 동일 형태)**:
+  > **Disclosure:** most of the work in this project, including this reproduction, the change and the tests,
+  > is done with an AI coding assistant. The problem, the data and the decisions are mine; the failure above
+  > is one my project hit while …
+  CONTRIBUTING이 요구하는 건 **사람이 쓴 코멘터리**이지 "AI를 안 썼다"가 아니다 → 숨기는 대신 적고, `Why` 한 줄은 여전히 사람이 쓴다.
+- **`Why / where this is useful`는 사용자가 사실을 주고 내가 문장으로만 옮긴다.** 실제 입력:
+  F4 = *"하루 / 마스크 줄였는데 패치 수 그대로여서 수정이 안 먹은 줄 알았음"* + *"검증 split 만드는 사람은 다 이렇게 당함, 7월에 하루 먹었음"* /
+  F2 = *"윈도우에서 튜토리얼 따라하면 예측 한 장 보기 전에 이거부터 만남"*.
+- 🔴 **체크박스(`I personally verified…`)는 사용자가 그 스크립트를 실제로 돌린 PR만 켠다.** #1701은 사용자가 `f4_shot.py`를
+  직접 돌려 출력을 붙였으므로 켰고, **#1703은 미실행이라 꺼둔 채로 열었다.** 켜려면:
+  `cd D:\vw9; git checkout -q fix/eager-fallback-at-first-forward; cd D:\shots; uv run --project D:\vesuvius-challenge\external\villa\ink-detection python f2_shot.py`
+
+**남은 것 = F3 하나.** 본문 `submission/pr_f3_main_staged_write.md`는 `<<<WHY>>>` 한 칸만 비어 있다.
+⚠️ **draft는 3건 상한에 안 걸리므로 F3는 지금도 draft로 열 수 있다**(개설일 09-05 → 28일 상한 10-03, 마감 이후).
+
 #### 2026-09-05 — ✅ **F4 교체 완료: [#1701](https://github.com/ScrollPrize/villa/pull/1701) 열림, #1661 닫힘**
 
 `gh` 인증 후 첫 실행. **#1661 닫기 → #1701 열기 → 링크 코멘트 → 검증**까지 한 번에.
@@ -166,7 +198,7 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
   **게시본 = 로컬 초안 일치**. ⚠️ **체크박스는 일부러 안 켬** — *"I personally verified…"*는 사용자가
   본문과 이미지를 보고 직접 켜야 참이 된다.
 - **#1661**은 "main 기준 버전으로 대체, 지금 열고 링크하겠다" 코멘트와 함께 닫고 [번호 링크](https://github.com/ScrollPrize/villa/pull/1661#issuecomment-5543948873)를 달았다.
-- 현재 열린 non-draft = **#1608 · #1662 · #1701 (3/3 상한)**. F2·F3는 각각 #1662·#1663을 닫아야 자리가 난다.
+- (당시) 열린 non-draft = **#1608 · #1662 · #1701**. 같은 날 #1662가 #1703으로 교체됨 — 최신 상태는 위 절.
 
 🔴 **PR 본문을 전부 다시 썼다 — 우리 것이 저쪽 템플릿을 하나도 안 지키고 있었다.**
 `CONTRIBUTING.md`가 `.github/pull_request_template.md`를 가리키는데, 내가 처음 쓴 main용 본문 3건은
