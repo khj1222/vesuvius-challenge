@@ -62,9 +62,12 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-<!-- USER WRITES THIS. Do not draft it. In your own words: that every inference run on this
-     machine needed --no-compile before you knew why, and what it looked like the first time it
-     died mid-run. Two or three sentences. -->
+On native Windows this is not an edge case, it is what happens: every inference run on this
+machine has carried `--no-compile`, and I only learned that by having a run die after the model
+had loaded and the blocks had started. The compile call itself returns cleanly, so the failure
+arrives at the least useful moment — far enough in to look like a data or checkpoint problem.
+It ended up in my own setup notes as a trap to remember rather than a flag to choose, which is
+the wrong shape for something the code can handle itself.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 

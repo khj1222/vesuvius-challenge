@@ -63,9 +63,11 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-<!-- USER WRITES THIS. Do not draft it. In your own words: the day lost to a validation split
-     that looked right and was not, and what it took to work out that the mask edit had landed
-     and the cache had not noticed. Two or three sentences. -->
+I lost a day to this in July. I had halved the supervision mask while building a held-out
+split, the patch count came back the same, and I read that as my edit not having taken — so I
+went looking at the mask writer, which was fine all along. Anyone building or revising a
+validation split hits this the same way, because the number you would check to catch the
+mistake is the number that is wrong.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 

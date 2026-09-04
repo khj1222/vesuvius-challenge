@@ -157,6 +157,41 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — ✅ **F4 교체 완료: [#1701](https://github.com/ScrollPrize/villa/pull/1701) 열림, #1661 닫힘**
+
+`gh` 인증 후 첫 실행. **#1661 닫기 → #1701 열기 → 링크 코멘트 → 검증**까지 한 번에.
+
+- **#1701**: base **`main`**, OPEN·non-draft·**mergeable**, head `fix/patch-cache-fingerprints-labels`(`596e865`).
+  검증 전항 통과 — 템플릿 6필드 **순서 일치**, HTML 주석 유출 **0**, 이미지 인라인 1개, Why 문단 존재,
+  **게시본 = 로컬 초안 일치**. ⚠️ **체크박스는 일부러 안 켬** — *"I personally verified…"*는 사용자가
+  본문과 이미지를 보고 직접 켜야 참이 된다.
+- **#1661**은 "main 기준 버전으로 대체, 지금 열고 링크하겠다" 코멘트와 함께 닫고 [번호 링크](https://github.com/ScrollPrize/villa/pull/1661#issuecomment-5543948873)를 달았다.
+- 현재 열린 non-draft = **#1608 · #1662 · #1701 (3/3 상한)**. F2·F3는 각각 #1662·#1663을 닫아야 자리가 난다.
+
+🔴 **PR 본문을 전부 다시 썼다 — 우리 것이 저쪽 템플릿을 하나도 안 지키고 있었다.**
+`CONTRIBUTING.md`가 `.github/pull_request_template.md`를 가리키는데, 내가 처음 쓴 main용 본문 3건은
+템플릿 항목 **0/7**이었고 체크박스도 **이슈 템플릿 것**을 잘못 넣었다(이미 열려 있던 #1608·#1661·#1662·
+#1663은 7/7 준수). **그대로 붙여넣었으면 GitHub이 미리 채워준 템플릿을 지우고 준수를 깨뜨렸을 것**이고,
+#1434가 닫힌 사유가 정확히 CONTRIBUTING 미준수다. 필수 순서 =
+`In one sentence → One real example → Before → After this PR → Proof → Why / where this is useful → 체크박스 → ## Details`.
+- CONTRIBUTING의 다른 조항도 반영: **"real scroll data, 합성/토이 예시 불가"** → 예시를 실제 세그먼트로
+  다시 씀(F2 = w00에 `infer`, F3 = PHerc0139 9.6µm 입력 준비, F4 = `phercparis4-w00` 1,266 vs 1,162).
+  **"버그픽스엔 에러 스크린샷 + 이후 정상 동작"** → 아래 증거 이미지.
+- ⚠️ **`Why / where this is useful` 문단은 사람이 써야 한다**(*"Any LLM generated PR must be accompanied by
+  human-written commentary"*). F4는 **사용자가 사실 2개("하루" / "패치 수가 그대로여서 수정이 안 먹은 줄
+  알았다")를 주고 내가 문장으로 옮겼다** — #1661 때와 같은 방식.
+
+**증거 이미지 3장(`runs/f{2,3,4}_main/f*_console.png`, 커밋 `b3b63a6`)** — ⚠️ **화면 캡처가 아니라 실제
+실행 출력을 렌더링한 것**이고 본문에도 "console output"으로 명시했다(템플릿이 `image, video, output, or
+benchmark`를 허용). 이렇게 한 이유 두 가지: ①computer-use 스크린샷에서 콘솔 창이 **검은 사각형으로
+마스킹**된다(cmd·터미널 둘 다 허용해도 — 실제 창 주인이 `conhost.exe`라 이름으로 허용 불가)
+②**사용자 계정명·경로·`claude` 문자열이 프레임에 안 들어간다**. 작업 경로를 `D:\shots`로, 임시 디렉터리를
+`D:\shots	mp`로 옮겨 출력 자체에도 개인정보 0건(스캔 확인). 스크립트와 원문 텍스트도 이미지 옆에 커밋.
+
+⚠️ **함정**: PowerShell 5.1엔 `&&`가 없고 `/d/vw9` 같은 POSIX 경로도 안 먹는다 — 사용자에게 명령을 줄 땐
+**PowerShell 문법으로**(`;` 구분, `D:w9`). 그리고 `Out-File -Encoding utf8`은 **BOM을 붙인다** → 파이썬에서
+읽을 땐 `utf-8-sig`.
+
 #### 2026-09-05 — 🔴 **stale 워크플로 원문 확인: 규칙이 둘이었고, 우리 PR 4건은 전부 마감 전에 죽는다**
 
 `gh`가 생겨 `.github/workflows/pr-time-limits.yml`을 직접 읽었다. **매일 00:00 America/Los_Angeles 실행**,
@@ -276,9 +311,12 @@ base **`main`**, 2파일 **+121 −5**, fork 푸시됨. 본문 = `submission/pr_
   → 기존 `except`는 잡으려던 실패를 **구조적으로 못 본다**. 수정 후 두 경로 모두 **양쪽 forward가
   eager와 정확히 일치**(allclose 1e-6), 정상 백엔드는 3/3 컴파일 경로·경고 0, **저장소의 기존
   컴파일 테스트는 무수정 통과**. 테스트 3개 추가(총 4 passed).
-- ⚠️ **우리 기록 정정**: CUDA 실패는 **`TritonMissing`이라는 예외 클래스가 아니라** Triton을 언급하는
-  `RuntimeError`다. 이전 메모(docs/08 계열 서술 포함)가 클래스명처럼 적어 왔으니 인용 시 주의.
-  코드 주석에서도 클래스명을 빼고 조건으로 서술했다.
+- 🔴 **내 "정정"이 틀렸고 원래 기록이 맞았다(2026-09-05 재확인).** CUDA 실패의 예외는 **정말로
+  `torch._inductor.exc.TritonMissing`**이고, 그게 동시에 RuntimeError의 서브클래스다
+  (`TritonMissing ← ShortenTraceback ← TorchDynamoException ← RuntimeError`). 내가 경고 **메시지 문자열**만
+  보고 "클래스가 아니다"라고 단정해 **맞는 docs/08 기록을 틀리게 고쳤고**, 그 오류를 커밋 메시지·문서·메모리에
+  퍼뜨렸다. 전부 되돌렸다(F2 커밋 메시지 amend + force-push, PR 본문 수정). **교훈: 예외의 정체는
+  메시지가 아니라 `type(e).__mro__`로 확인할 것.**
 - **일부러 안 한 것 2가지(본문에 명시)**: ①**합성 warmup 텐서 안 씀** — 실패를 기존 `try` 안으로
   옮길 수 있지만 shape을 찍어야 하고 잘못 찍으면 **정상 리눅스에서 컴파일이 조용히 꺼진다**
   ②**`models/training/train.py::_maybe_compile_model`은 안 건드림** — 같은 모양이지만 크래시는

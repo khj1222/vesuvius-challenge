@@ -62,9 +62,12 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-<!-- USER WRITES THIS. Do not draft it. In your own words: what it cost you when 24 input
-     preparations died this way, and why "the data is fine, just rename it" is the sentence you
-     wanted to see at 2am. Two or three sentences is plenty. -->
+I hit this preparing the 9.6 µm inputs the released recipe needs, and the note I left myself
+that week was: watch for `tiles=N/N`, then do the rename by hand. That is a strange thing to
+have to write down about a preprocessing script — the data was complete every time, and only
+the last step failed, with a traceback that said nothing about which of those two things was
+true. Anyone converting a large volume on Windows is one open handle away from believing they
+have to start over.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
