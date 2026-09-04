@@ -186,8 +186,17 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
   직접 돌려 출력을 붙였으므로 켰고, **#1703은 미실행이라 꺼둔 채로 열었다.** 켜려면:
   `cd D:\vw9; git checkout -q fix/eager-fallback-at-first-forward; cd D:\shots; uv run --project D:\vesuvius-challenge\external\villa\ink-detection python f2_shot.py`
 
-**남은 것 = F3 하나.** 본문 `submission/pr_f3_main_staged_write.md`는 `<<<WHY>>>` 한 칸만 비어 있다.
-⚠️ **draft는 3건 상한에 안 걸리므로 F3는 지금도 draft로 열 수 있다**(개설일 09-05 → 28일 상한 10-03, 마감 이후).
+✅ **F3까지 완료 — [#1705](https://github.com/ScrollPrize/villa/pull/1705) 열림, #1663 닫힘(2026-09-05).**
+base **`main`**, **draft**, `mergeable=true`(`unstable`의 원인은 늘 그렇듯 Vercel 배포권한 봇 하나), head
+`fix/retry-staged-publish-on-windows`, 2파일 **+205 −3**. 검증 전항 통과(템플릿 순서·Why·고지 문단·이미지 1·주석
+유출 0·게시본=로컬 일치·체크박스 미체크). #1663은 대체 사유 코멘트 + [번호 링크](https://github.com/ScrollPrize/villa/pull/1663#issuecomment-5547688155)로 닫음.
+- **draft로 연 이유**: 비-draft 3건(#1608·#1701·#1703)이 상한이고 **draft는 상한에 안 걸린다.** 하나가 머지/종료되면 ready로 올릴 것.
+- 사용자 제공 사실 = *"9.6µm 입력 24개 준비하면서 계속 만났음, 데이터는 멀쩡한데"*.
+- ⚠️ **#1705에만 `🤖 Generated with Claude Code` 푸터가 있다**(세션 지침이 바뀐 뒤 연 첫 PR). #1701·#1703엔 없다 —
+  셋 다 고지 문단은 있으므로 내용상 누락은 아니지만, 통일하려면 앞의 둘 본문에 한 줄 추가하면 됨(사용자 판단).
+
+**🔄 PR 교체 3건 전부 완료**: F4 #1661→#1701 · F2 #1662→#1703 · F3 #1663→#1705. **28일 상한이 전부 10-02**로
+9/30 마감 이후. 남은 시한 문제는 **#1608(09-23 사망)** 하나뿐이고 main에 대체본이 없다.
 
 #### 2026-09-05 — ✅ **F4 교체 완료: [#1701](https://github.com/ScrollPrize/villa/pull/1701) 열림, #1661 닫힘**
 

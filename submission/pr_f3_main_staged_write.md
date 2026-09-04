@@ -36,7 +36,7 @@ expects. Every tile was written and the array was complete; the run then died re
 
 **Before:** a `pathlib` traceback after all the work was done. The output path did not exist,
 a `.partial` directory sat next to it, and nothing said which of those two facts mattered — so
-the reasonable reading was that the conversion had to be run again. I re-ran it.
+the reasonable reading was that the conversion had to be run again.
 
 **After this PR:** the rename is retried with backoff, which clears it whenever the handle was
 transient. If it never clears, the error carries the fact that decides what to do next: the
@@ -62,12 +62,8 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-I hit this preparing the 9.6 µm inputs the released recipe needs, and the note I left myself
-that week was: watch for `tiles=N/N`, then do the rename by hand. That is a strange thing to
-have to write down about a preprocessing script — the data was complete every time, and only
-the last step failed, with a traceback that said nothing about which of those two things was
-true. Anyone converting a large volume on Windows is one open handle away from believing they
-have to start over.
+I hit this on most of the twenty-four 9.6 µm inputs I prepared for this corpus. Every
+time the data was already complete — only the rename had failed.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
@@ -98,5 +94,9 @@ This supersedes [#1663](https://github.com/ScrollPrize/villa/pull/1663), which p
 rename inline in one script against `merge-ink-pipelines`, where this helper does not exist. I
 will close that one. I asked on [#1608](https://github.com/ScrollPrize/villa/pull/1608) which
 branch ink-detection work should target; this is the `main` answer.
+
+**Disclosure:** most of the work in this project, including this reproduction, the change and
+the tests, is done with an AI coding assistant. The problem, the data and the decisions are
+mine; the failure above is one my project hit while preparing the 9.6 µm inputs for the ink_9um corpus.
 
 Tested at `5479453` (`main`), Python 3.12 and 3.14, Windows 11.
