@@ -157,6 +157,38 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — 🟢 **F2도 `main` 기준으로 재작성**: 첫 forward를 지킨다
+
+`main`에선 컴파일 정책이 **`inference/inference_runtime.py::maybe_compile_model`**에 공용으로 있고
+**추론 명령 두 개**(`infer.py`, `infer_full3d_tifxyz.py`)가 `prepare_model_for_inference`로 공유한다
+(mip에선 `infer.py` 인라인). 브랜치 **`khj1222:fix/eager-fallback-at-first-forward`**(`3365213`),
+base **`main`**, 2파일 **+121 −5**, fork 푸시됨. 본문 = `submission/pr_f2_main_eager_fallback.md`,
+증거 = `runs/f2_main/`.
+
+- 🔑 **실측이 결론이다** — `torch.compile`은 **예외 없이 반환**하고 첫 forward에서 터진다:
+  **CUDA `Cannot find a working triton installation`**, **CPU `Compiler: cl is not found.`**
+  → 기존 `except`는 잡으려던 실패를 **구조적으로 못 본다**. 수정 후 두 경로 모두 **양쪽 forward가
+  eager와 정확히 일치**(allclose 1e-6), 정상 백엔드는 3/3 컴파일 경로·경고 0, **저장소의 기존
+  컴파일 테스트는 무수정 통과**. 테스트 3개 추가(총 4 passed).
+- ⚠️ **우리 기록 정정**: CUDA 실패는 **`TritonMissing`이라는 예외 클래스가 아니라** Triton을 언급하는
+  `RuntimeError`다. 이전 메모(docs/08 계열 서술 포함)가 클래스명처럼 적어 왔으니 인용 시 주의.
+  코드 주석에서도 클래스명을 빼고 조건으로 서술했다.
+- **일부러 안 한 것 2가지(본문에 명시)**: ①**합성 warmup 텐서 안 씀** — 실패를 기존 `try` 안으로
+  옮길 수 있지만 shape을 찍어야 하고 잘못 찍으면 **정상 리눅스에서 컴파일이 조용히 꺼진다**
+  ②**`models/training/train.py::_maybe_compile_model`은 안 건드림** — 같은 모양이지만 크래시는
+  추론에서 관측했고 검증도 추론에서 했다.
+- `maybe_compile_model`의 bool 의미가 "컴파일 **성공**"에서 "컴파일 **설정됨**"으로 바뀐다(백엔드가
+  나중에 도니 원래 그 뜻일 수밖에 없다). docstring에 명시. 호출자 2곳은 무변경.
+- **#1662를 대체한다.** 본문에 명시. 🔴 **PR은 draft로 열어야 한다**(비-draft 3건 상한).
+
+⚠️ **함정(오늘 밟음): 워크트리에서 브랜치를 만든 뒤 그대로 다음 수정을 커밋하면 앞 수정 위에 얹힌다.**
+F2를 F3 브랜치 위에 커밋해 버렸고, `git checkout -b <새브랜치> origin/main` + `cherry-pick` +
+`git branch -f <앞브랜치> <원래sha>`로 분리했다. → **수정마다 반드시 `origin/main`에서 브랜치를 딸 것.**
+현재 두 브랜치는 각각 `origin/main` 위 커밋 **1개**씩이고 둘 다 fork에 있다.
+
+**main 기준 재작성 현황**: F3 ✅ · F2 ✅ · F4는 미작성(`data/segment.py`가 main에도 있으나 204 vs 253줄로
+갈려 재작성 필요). 남은 것은 **사용자의 PR 개설 2건(둘 다 draft)**과 #1608 답변.
+
 #### 2026-09-05 — 🟢 **F3를 `main` 기준으로 재작성**: 스크립트 한 개가 아니라 공용 함수 하나
 
 주말 안건 §2.2 실행. `merge-ink-pipelines`엔 그 rename이 `prepare_9um_isotropic_input` 안에 인라인이지만,
