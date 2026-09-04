@@ -470,4 +470,29 @@ arm B: float and uint8 agreed to 0.001, and the AUC had fallen from 0.66 to 0.48
 
 ---
 
+## `upstream_sweep.py` — has anything moved upstream?
+
+Reads every thread this repository is involved in — our pull requests and issues, plus the
+ones we were invited into — and prints one status line each, followed by only the comments and
+reviews from **other people** since a cutoff. It answers "is anything waiting on us?" in one
+command instead of thirteen browser tabs.
+
+```bash
+python tools/upstream_sweep.py --hours 48
+```
+
+It uses the `gh` CLI when that is installed and logged in, which raises the API budget from 60
+requests an hour to 5,000; without it the unauthenticated path still works, but one sweep costs
+30–40 of the hour's 60 calls. The header line says which one ran and how much budget is left.
+`--no-gh` forces the unauthenticated path.
+
+**Edited comments are reported as well as new ones.** Filtering on creation time alone misses a
+comment revised in place, which is exactly what happened on villa #1547: the thread's
+`updated_at` moved, the sweep found nothing, and the author had edited an older comment rather
+than adding one. Those now appear as `comment EDITED (posted <date>)` at the time of the edit.
+
+`--since 2026-08-31T12:00:00Z` · `--hours` · `--no-gh`
+
+---
+
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
