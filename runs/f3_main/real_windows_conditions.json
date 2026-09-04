@@ -1,0 +1,24 @@
+{
+ "platform": "win32",
+ "cases": [
+  {
+   "case": "handle never released",
+   "winerror": 5,
+   "entered_retry_gate": true,
+   "seconds": 0.14,
+   "note": "The staged output is complete and nothing needs recomputing; it could not be published because something still holds it. Renaming it finishes the job:\n  C:\\Users\\bluek\\AppData\\Local\\Temp\\f3main.qrexicim\\v.zarr.partial\n  -> C:\\Users\\bluek\\AppData\\Local\\Temp\\f3main.qrexicim\\v.zarr",
+   "staged_intact": true,
+   "output_absent": true
+  },
+  {
+   "case": "after the handle closes",
+   "published": true,
+   "seconds": 0.0
+  },
+  {
+   "case": "cwd inside",
+   "winerror": 32,
+   "entered_retry_gate": true
+  }
+ ]
+}

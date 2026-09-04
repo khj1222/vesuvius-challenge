@@ -1,0 +1,14 @@
+cachedir: .pytest_cache
+rootdir: C:\Users\bluek\AppData\Local\Temp\claude\D--vesuvius-challenge\828bc408-0cc8-4f52-8d5c-26b5a7f99050\scratchpad\f3main
+collecting ... collected 8 items
+
+test_staged_write.py::test_staged_file_round_trips_through_create_and_publish PASSED [ 12%]
+test_staged_write.py::test_publish_moves_a_staged_directory PASSED       [ 25%]
+test_staged_write.py::test_publish_retries_a_sharing_violation_until_it_clears[5] PASSED [ 37%]
+test_staged_write.py::test_publish_retries_a_sharing_violation_until_it_clears[32] PASSED [ 50%]
+test_staged_write.py::test_publish_raises_other_permission_errors_at_once PASSED [ 62%]
+test_staged_write.py::test_publish_gives_up_saying_the_stage_is_complete PASSED [ 75%]
+test_staged_write.py::test_publish_survives_a_real_open_handle_on_windows PASSED [ 87%]
+test_staged_write.py::test_discard_removes_an_unpublished_stage PASSED   [100%]
+
+============================== 8 passed in 0.63s ==============================

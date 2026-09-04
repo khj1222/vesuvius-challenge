@@ -1,0 +1,267 @@
+From 8ce9725ad7e7ede5e6a5353d4137113ed706464f Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Sat, 5 Sep 2026 00:34:49 +0900
+Subject: [PATCH] staged_write: retry a publish Windows refuses, and say the
+ stage is complete
+
+publish_staged_output renames a finished stage onto the output path. POSIX
+renames whatever holds the path; Windows raises PermissionError while anything
+does, and one open file inside a staged directory is enough. Measured here:
+renaming a staged zarr succeeds with nothing held, fails with WinError 5 with a
+single file inside opened for read, and fails with WinError 32 when the process
+working directory is inside it.
+
+That refusal is transient and the cost of treating it as fatal is not. The four
+callers stage a completed output and rename it last, so the failure arrives
+after all the work: for prepare_9um_isotropic_input, after every tile of a
+multi-gigabyte conversion is already on disk. What the user saw was a bare
+pathlib traceback, which reads like the conversion has to be repeated.
+
+Retry a sharing violation with backoff, and if it never clears attach a note
+saying the staged output is complete and naming both paths, so the finished work
+is renamed rather than recomputed. Any other PermissionError is raised on the
+first attempt, so POSIX behaviour is unchanged.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+---
+ .../preprocessing/staged_write.py             |  43 ++++-
+ .../tests/ink_detection/test_staged_write.py  | 165 ++++++++++++++++++
+ 2 files changed, 205 insertions(+), 3 deletions(-)
+ create mode 100644 vesuvius/tests/ink_detection/test_staged_write.py
+
+diff --git a/vesuvius/src/vesuvius/ink_detection/preprocessing/staged_write.py b/vesuvius/src/vesuvius/ink_detection/preprocessing/staged_write.py
+index 4697cc02e..fa4be53ec 100644
+--- a/vesuvius/src/vesuvius/ink_detection/preprocessing/staged_write.py
++++ b/vesuvius/src/vesuvius/ink_detection/preprocessing/staged_write.py
+@@ -4,6 +4,13 @@ from __future__ import annotations
+ 
+ from pathlib import Path
+ import tempfile
++import time
++
++# Windows refuses to rename a path that anything still holds: ERROR_ACCESS_DENIED
++# when a file inside a staged directory is open, ERROR_SHARING_VIOLATION when the
++# path itself is in use. Both clear on their own; any other PermissionError means
++# the rename is not going to start working, so it is raised at once.
++_SHARING_VIOLATION_WINERRORS = frozenset({5, 32})
+ 
+ 
+ def create_staged_output(output_path: Path) -> Path:
+@@ -18,10 +25,40 @@ def create_staged_output(output_path: Path) -> Path:
+         return Path(stream.name)
+ 
+ 
+-def publish_staged_output(staged_path: Path, output_path: Path) -> None:
+-    """Atomically replace an output with a completed same-filesystem stage."""
++def publish_staged_output(
++    staged_path: Path,
++    output_path: Path,
++    *,
++    attempts: int = 6,
++    retry_delay: float = 0.5,
++) -> None:
++    """Atomically replace an output with a completed same-filesystem stage.
++
++    POSIX renames regardless of who holds the path and returns on the first pass.
++    Windows raises PermissionError while anything holds the stage — one open file
++    inside a staged directory is enough, and after a large write something holding
++    a handle for a moment is ordinary — so a sharing violation is retried with
++    backoff. If it never clears, the error carries the fact that matters: the
++    staged output is finished, so nothing has to be computed again.
++    """
+ 
+-    staged_path.replace(output_path)
++    for attempt in range(1, attempts + 1):
++        try:
++            staged_path.replace(output_path)
++            return
++        except PermissionError as exc:
++            if getattr(exc, "winerror", None) not in _SHARING_VIOLATION_WINERRORS:
++                raise
++            if attempt == attempts:
++                exc.add_note(
++                    "The staged output is complete and nothing needs recomputing; "
++                    "it could not be published because something still holds it. "
++                    "Renaming it finishes the job:\n"
++                    f"  {staged_path}\n"
++                    f"  -> {output_path}"
++                )
++                raise
++            time.sleep(retry_delay * 2 ** (attempt - 1))
+ 
+ 
+ def discard_staged_output(staged_path: Path) -> None:
+diff --git a/vesuvius/tests/ink_detection/test_staged_write.py b/vesuvius/tests/ink_detection/test_staged_write.py
+new file mode 100644
+index 000000000..56567c48d
+--- /dev/null
++++ b/vesuvius/tests/ink_detection/test_staged_write.py
+@@ -0,0 +1,165 @@
++from __future__ import annotations
++
++import os
++from pathlib import Path
++import threading
++import time
++
++import pytest
++
++from vesuvius.ink_detection.preprocessing.staged_write import (
++    create_staged_output,
++    discard_staged_output,
++    publish_staged_output,
++)
++
++
++def _sharing_violation(winerror: int) -> PermissionError:
++    """A PermissionError shaped like the one Windows raises, on any platform."""
++
++    error = PermissionError(13, "held open")
++    error.winerror = winerror
++    return error
++
++
++def test_staged_file_round_trips_through_create_and_publish(tmp_path: Path) -> None:
++    output = tmp_path / "result.tif"
++    staged = create_staged_output(output)
++    staged.write_bytes(b"payload")
++
++    publish_staged_output(staged, output)
++
++    assert output.read_bytes() == b"payload"
++    assert not staged.exists()
++
++
++def test_publish_moves_a_staged_directory(tmp_path: Path) -> None:
++    output = tmp_path / "volume.zarr"
++    staged = output.with_name(output.name + ".partial")
++    staged.mkdir()
++    (staged / "0.0.0").write_bytes(b"chunk")
++
++    publish_staged_output(staged, output)
++
++    assert (output / "0.0.0").read_bytes() == b"chunk"
++    assert not staged.exists()
++
++
++@pytest.mark.parametrize("winerror", [5, 32])
++def test_publish_retries_a_sharing_violation_until_it_clears(
++    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, winerror: int
++) -> None:
++    output = tmp_path / "volume.zarr"
++    staged = output.with_name(output.name + ".partial")
++    staged.mkdir()
++    real_replace = Path.replace
++    calls: list[float] = []
++    slept: list[float] = []
++
++    def flaky(self: Path, target) -> Path:
++        calls.append(time.monotonic())
++        if len(calls) < 3:
++            raise _sharing_violation(winerror)
++        return real_replace(self, target)
++
++    monkeypatch.setattr(Path, "replace", flaky)
++    monkeypatch.setattr(
++        "vesuvius.ink_detection.preprocessing.staged_write.time.sleep", slept.append
++    )
++
++    publish_staged_output(staged, output)
++
++    assert output.is_dir() and not staged.exists()
++    assert len(calls) == 3
++    assert slept == [0.5, 1.0]  # backoff doubles
++
++
++def test_publish_raises_other_permission_errors_at_once(
++    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
++) -> None:
++    """POSIX has no winerror, so its behaviour is unchanged: no retry, no delay."""
++
++    output = tmp_path / "volume.zarr"
++    staged = output.with_name(output.name + ".partial")
++    staged.mkdir()
++    calls: list[int] = []
++    slept: list[float] = []
++
++    def denied(self: Path, target) -> Path:
++        calls.append(1)
++        raise PermissionError(13, "permission denied")
++
++    monkeypatch.setattr(Path, "replace", denied)
++    monkeypatch.setattr(
++        "vesuvius.ink_detection.preprocessing.staged_write.time.sleep", slept.append
++    )
++
++    with pytest.raises(PermissionError):
++        publish_staged_output(staged, output)
++
++    assert calls == [1]
++    assert slept == []
++
++
++def test_publish_gives_up_saying_the_stage_is_complete(
++    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
++) -> None:
++    output = tmp_path / "volume.zarr"
++    staged = output.with_name(output.name + ".partial")
++    staged.mkdir()
++    (staged / "0.0.0").write_bytes(b"chunk")
++    slept: list[float] = []
++
++    def held(self: Path, target) -> Path:
++        raise _sharing_violation(32)
++
++    monkeypatch.setattr(Path, "replace", held)
++    monkeypatch.setattr(
++        "vesuvius.ink_detection.preprocessing.staged_write.time.sleep", slept.append
++    )
++
++    with pytest.raises(PermissionError) as raised:
++        publish_staged_output(staged, output, attempts=3)
++
++    note = "\n".join(raised.value.__notes__)
++    assert "nothing needs recomputing" in note
++    assert str(staged) in note and str(output) in note
++    assert len(slept) == 2
++    # the finished work is still on disk, under the staged name
++    assert (staged / "0.0.0").read_bytes() == b"chunk"
++    assert not output.exists()
++
++
++@pytest.mark.skipif(os.name != "nt", reason="only Windows refuses the rename")
++def test_publish_survives_a_real_open_handle_on_windows(tmp_path: Path) -> None:
++    output = tmp_path / "volume.zarr"
++    staged = output.with_name(output.name + ".partial")
++    staged.mkdir()
++    chunk = staged / "0.0.0"
++    chunk.write_bytes(b"chunk")
++    released = threading.Event()
++
++    def hold() -> None:
++        with chunk.open("rb"):
++            time.sleep(0.4)
++        released.set()
++
++    holder = threading.Thread(target=hold)
++    holder.start()
++    try:
++        publish_staged_output(staged, output, retry_delay=0.2)
++    finally:
++        holder.join()
++
++    assert released.is_set()
++    assert (output / "0.0.0").read_bytes() == b"chunk"
++
++
++def test_discard_removes_an_unpublished_stage(tmp_path: Path) -> None:
++    output = tmp_path / "result.tif"
++    staged = create_staged_output(output)
++
++    discard_staged_output(staged)
++    discard_staged_output(staged)  # idempotent
++
++    assert not staged.exists()
+-- 
+2.53.0.windows.2
+
