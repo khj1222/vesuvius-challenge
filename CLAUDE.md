@@ -157,6 +157,38 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 0도 실재하는 가능성**. ①~③를 다 해도 $2.5k 확률이 오르는 정도지 $10k대로는 안 간다. 그쪽은
 **새로 읽히는 글자**가 필요하고, 우리가 가진 유일한 문이 ①이다.
 
+#### 2026-09-05 — 🟢 **F3를 `main` 기준으로 재작성**: 스크립트 한 개가 아니라 공용 함수 하나
+
+주말 안건 §2.2 실행. `merge-ink-pipelines`엔 그 rename이 `prepare_9um_isotropic_input` 안에 인라인이지만,
+**`main`엔 `vesuvius/src/vesuvius/ink_detection/preprocessing/staged_write.py`가 있고 `publish_staged_output`을
+네 개가 import**한다(`clean_labels` · `composite_from_zarr` · `merge_predictions` · `prepare_9um_isotropic_input`).
+→ **한 함수로 툴 4개**, diff는 더 작다.
+
+- 브랜치 **`khj1222:fix/retry-staged-publish-on-windows`**(`8ce9725`, fork 푸시됨), base **`main`**(`5479453`), 2파일 **+205 −3**.
+  워크트리 **`D:/vw9`**(sparse `vesuvius`, 21MB). PR 본문 = `submission/pr_f3_main_staged_write.md`, 증거 = `runs/f3_main/`.
+- **설계**: 재시도를 **`winerror ∈ {5, 32}`로 게이트** → 그 속성이 Windows에만 있으므로 **POSIX 동작은 완전 불변**.
+  끝내 안 풀리면 `add_note`로 "staging은 완성, 재계산 불필요 + 두 경로"를 붙이고 **원 예외를 그대로** 올린다
+  (라이브러리라 기존 브랜치의 `SystemExit`은 부적절 — 호출자 3개가 실패 시 `discard_staged_output`을 부르는 구조).
+  `attempts`/`retry_delay`는 keyword-only 기본값이라 **기존 호출부 4곳 무변경**.
+- **실측(목이 아니라 진짜 Windows 실패)**: 안의 파일 열림 → **WinError 5**, cwd가 트리 안 → **WinError 32**, 둘 다
+  게이트 진입. 끝내 안 풀리면 **staging 온전 · 출력 미생성**. 핸들 닫히면 **0.0초 발행**. 테스트 8개 전부 통과
+  (실제 핸들을 다른 스레드가 0.4초 뒤 놓는 Windows 전용 케이스 포함).
+- ⚠️ **기존 브랜치의 `del target, group`(핸들 선해제)은 뺐다** — **원인으로 측정된 적이 없다**. 측정된 문제의 수정에
+  측정 안 된 변경을 끼우는 게 정확히 #1434가 지적받은 지점이라, 본문에도 "일부러 뺐다"로 명시.
+- **#1663을 대체한다.** 본문에 그렇게 쓰고 "이쪽을 받으면 #1663을 닫겠다 / 저쪽을 원하면 이걸 닫으라"까지 명시.
+  #1608의 base 질의에 대해 **"답이 main일 경우"의 답**이기도 하다.
+- 🔴 **PR 개설은 사용자 몫이고, non-draft 3건 상한이라 draft로 열어야 한다.**
+
+⚠️ **새 함정 3종**:
+1. **`import vesuvius`가 우리 환경에서 안 된다** — 패키지 `__init__`이 `data`/`install`을 끌고 오고 그게 **`nrrd`**를
+   요구한다(sparse checkout 문제가 아님). 해결 = **부모 패키지 3개를 빈 모듈로 스텁하고 대상 모듈만 파일 경로로 로드**하는
+   conftest. **커밋할 테스트 파일 자체는 손대지 않고** import 경로만 스텁 → `runs/f3_main/pytest_conftest_stub.py`.
+2. **로컬 기본 파이썬 3.10으론 `add_note` 경로를 못 돌린다**(3.11+). 저장소는 `requires-python = ">=3.14,<3.15"`.
+   → **`uv run --python 3.12 --with pytest --no-project`**로 검증. ⚠️ `--python 3.14`는 uv가
+   *"Missing expected target directory for Python minor version link"*로 **실패**한다.
+3. **`cd`한 뒤 상대경로로 저장소에 쓰면 깨진다** — 스크래치패드로 `cd`한 상태에서 `runs/f3_main/`에 복사하려다 실패.
+   길게 이어붙인 명령에서는 **저장소 경로를 절대경로로** 쓸 것.
+
 #### 2026-09-05 — ✅ **field 5 전체 통독 = Step 3의 0번 빚 해소** (v18·v19, 그리고 Status 문단 재작성)
 
 08-31 트림 이후 아무도 한 덩어리로 안 읽었던 field 5를 통독. **구조는 멀쩡했다** — 도입부가 약속한 네 가지
