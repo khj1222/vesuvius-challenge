@@ -71,8 +71,10 @@ Kept in reserve if a second PR is wanted:
 2. **scrollprize.org community-projects entry update** on top of merged
    [#1249](https://github.com/ScrollPrize/villa/pull/1249) — add the cross-scroll study
    line next to the harness entry (small, safe, same pattern as July).
-3. Not [#1535](https://github.com/ScrollPrize/villa/pull/1535) — it technically satisfies
-   "submitted", but it is August's story and August already cites it.
+3. Not [#1535](https://github.com/ScrollPrize/villa/pull/1535) — it is August's story and
+   August already cites it, and in any case it is no longer open: a bot closed it on
+   2026-09-03 under the repository's 14-day inactivity policy, with no reviewer having
+   looked at it.
 
 ---
 
@@ -294,8 +296,10 @@ before pasting.
    back the "Pull request submitted!" checkbox, #1608 is the answer.
 2. **Check the four upstream links still say what field 4 says they say** — #1608 (open,
    one review round), #1638 (closed and locked, and field 4 labels it as such), #1249
-   (merged), #1535 (open, August's story). If **#1608 merges**, relabel it "merged" in
-   field 4 and in field 5's second-to-last paragraph.
+   (merged). If **#1608 merges**, relabel it "merged" in field 4 and in field 5's
+   second-to-last paragraph. ⚠️ **This repository auto-closes a PR after 14 days without
+   activity** — that is how #1535 died on 2026-09-03, unreviewed — so check the state of
+   every PR cited here on the day, not from memory.
 3. **`git push`** and confirm `git status` is clean. Every field-4 link must resolve for a
    judge who is not logged in.
 4. **Re-run the two verifiers** if anything in `runs/` changed since 2026-08-30:
@@ -313,8 +317,12 @@ Submit when something moves upstream, with the last weekend (09-26/27) as the ba
 was run and added to fields 4 and 5; 100 committed evidence files; every cited path in this
 file resolves in the repository (23 of 23), which was not true of the August text until
 today — its evidence table pointed at nine `runs/*.json` that lived only in an untracked
-tree, and those files are now committed at the cited paths. One reply is drafted and
-waiting on the user to post: `pr1471_reply_jaideepsaipadhi.md`.
+tree, and those files are now committed at the cited paths.
+
+**Update 2026-09-04**: `pr1471_reply_jaideepsaipadhi.md` was posted on 08-31. #1535 was
+closed by the inactivity bot on 09-03. Five further replies are drafted and unposted —
+`pr1471_reply_hendrikschilling.md` (the maintainer is deciding whether to close that PR),
+`pr1608_base_branch_question.md`, and the three `pr166x_*_followup.md`.
 
 Field hashes at this revision, over the block body plus one trailing newline — the
 convention the August entry uses:
@@ -380,7 +388,8 @@ every quoted figure.)
   (docs/16); if more segments get rendered before submitting, update the count there
   ②upstream replies that touch the framing — #1231 still silent; **stantheman0128's scoring
   of our depth band landed 2026-08-25 and belongs to August, not here** (it is folded into
-  the August form's field 5; do not repeat it); #1535 still unreviewed; **two replies were
+  the August form's field 5; do not repeat it); #1535 was auto-closed unreviewed on
+  2026-09-03; **two replies were
   drafted 2026-08-30 and are waiting on the user to post them** (`issue1582_reply_nerln.md`,
   `issue1611_reply_bullo27_round2.md`) — if either draws an answer that changes the framing,
   it belongs here ③✅ done — the label-efficiency curve (docs/15 part 5) and the full
