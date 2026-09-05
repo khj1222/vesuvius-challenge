@@ -155,3 +155,79 @@ not *pseudo-label validation misranks in general*.
 positive, p ≤ 0.4 negative, middle discarded, from the released base) on this corpus. A
 different construction — different thresholds, iterated rounds, a stronger base — could produce
 a better proxy. Nothing here measures the swarm's labels, which are not published.
+
+---
+
+# Stage 2 result (2026-09-05) — the registered prediction is refuted, and the test that refuted it had little power
+
+30 cells: arm D's 1667 checkpoints at three steps, two seeds, five segments, each prediction
+scored **twice from one inference**. Raw numbers: `runs/ink9um_scorecard/pseudo_rank_matrix.csv`
+(60 rows), verdict `pseudo_rank_summary.json`.
+
+**Faithfulness check first.** Every truth score reproduces the committed `r1667_matrix.csv` value
+to four decimals and the same threshold — e.g. `D,42,pherc1667-w013,002500` gives 0.5685 @ 67
+either way. The re-inference is the same experiment, so any difference below is the yardstick.
+
+## The registered verdict: agree, 5 of 5 segments
+
+| segment | seed 42 | seed 43 |
+|---|---|---|
+| w013 | truth 5,000 / pseudo 10,000, penalty **+0.0017** | same pick, **0.0000** |
+| w023 | same pick, 0.0000 | same pick, 0.0000 |
+| w028 | truth 2,500 / pseudo 10,000, **+0.0013** | truth 2,500 / pseudo 10,000, **+0.0185** |
+| w029 | same pick, 0.0000 | truth 5,000 / pseudo 10,000, **+0.0086** |
+| w031 | same pick, 0.0000 | same pick, 0.0000 |
+
+Every penalty is under 0.03. **I predicted disagreement on 1667 and I was wrong.**
+
+## But the failure mode named in advance is exactly what happened
+
+docs/24 said before the run: *"the pseudo-labels are frozen … an adapted model drifting toward
+them raises the pseudo score trivially. A rising pseudo score therefore shows nothing on its
+own."* Both halves of that are visible in the data:
+
+- **Pseudo picks step 10,000 in 10 of 10 cells**, because its score rises monotonically in every
+  cell without exception (0.89 → 0.94 typical). It is not selecting a model; it is reporting how
+  far self-training has gone.
+- **Truth barely varies across these steps**: spread 0.0027–0.0388, mean **0.0166**, and above
+  the 0.03 noise floor in **1 of 10 cells**.
+
+So the two agree because **there was almost nothing to get wrong**. A proxy that always answers
+"the last one" is nearly free when the truth curve is flat. The registered verdict stands as a
+verdict — it is a finding *for* the practice, as docs/24 committed to reporting — but it is a
+weak one, and reading it as "pseudo-label validation selects models correctly" would be reading
+more than this design can carry.
+
+## The observation that is not weak, and was not registered
+
+⚠️ **Not part of the pre-registered rule.** It was noticed after the verdict and is reported as
+an observation, not a test. Raw numbers: `runs/ink9um_scorecard/pseudo_threshold_cost.json`.
+
+The two yardsticks choose **very different operating thresholds**, and unlike the step choice
+this is not close:
+
+| | value |
+|---|---|
+| pseudo threshold − truth threshold | **+45.3 mean** (min +18, max +71) |
+| cells where the gap is positive | **30 / 30** |
+| cost in true F1 of adopting pseudo's threshold | **0.066 mean** (0.005 – 0.139) |
+| cells where that cost exceeds the 0.03 noise floor | **25 / 30** |
+
+A model agrees with its own pseudo-labels at 0.89–0.97, so the threshold that maximises that
+agreement sits far above the one that maximises agreement with the annotation. Someone with no
+labels sets the threshold from the only score they have, and pays about **twice the noise floor**
+for it — a larger effect than most of the interventions this project has measured.
+
+⚠️ **The cost figure is approximate.** The saved reports carry a 32-point sweep and the
+predictions were deleted after scoring, so truth's F1 is read at the nearest sampled threshold
+(grid spacing 8) rather than exactly at pseudo's. The bound is the curve's change over four grey
+levels; at more than twice the noise floor, the sign and magnitude do not turn on it.
+
+## What Stage 2 leaves standing
+
+- **Which checkpoint**: the two agree here, on a stretch where truth is flat enough that the
+  question barely has an answer. Registered, honoured, and weak.
+- **Which threshold**: they disagree in every cell, in the same direction, at twice the noise
+  floor. Not registered, so it is a hypothesis for someone to test properly, not a result.
+- And the Stage 1 constraint still binds everything: this is **our** pseudo-label recipe on
+  **this** corpus. Nothing here measures the labels behind the published cross-scroll number.

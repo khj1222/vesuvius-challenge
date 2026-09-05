@@ -1,0 +1,259 @@
+{
+ "rule": "docs/24: penalty > 0.03 in both seeds -> disagree; matching picks or penalty < 0.03 -> agree; otherwise not captured",
+ "noise_floor": 0.03,
+ "cells_complete": 30,
+ "cells_expected": 30,
+ "missing_cells": [],
+ "per_segment": [
+  {
+   "segment": "pherc1667-w013",
+   "seeds": {
+    "42": {
+     "truth_pick": "005000",
+     "pseudo_pick": "010000",
+     "same_pick": false,
+     "penalty_in_truth_f1": 0.0017,
+     "truth_f1_by_step": {
+      "002500": 0.5685,
+      "005000": 0.5712,
+      "010000": 0.5695
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.8976,
+      "005000": 0.917,
+      "010000": 0.9361
+     },
+     "threshold_gap": {
+      "002500": 57,
+      "005000": 50,
+      "010000": 49
+     }
+    },
+    "43": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.5575,
+      "005000": 0.5624,
+      "010000": 0.5963
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.8909,
+      "005000": 0.9082,
+      "010000": 0.936
+     },
+     "threshold_gap": {
+      "002500": 40,
+      "005000": 31,
+      "010000": 50
+     }
+    }
+   },
+   "verdict": "agree"
+  },
+  {
+   "segment": "pherc1667-w023",
+   "seeds": {
+    "42": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.4511,
+      "005000": 0.45,
+      "010000": 0.4558
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.8964,
+      "005000": 0.9055,
+      "010000": 0.925
+     },
+     "threshold_gap": {
+      "002500": 59,
+      "005000": 50,
+      "010000": 49
+     }
+    },
+    "43": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.4428,
+      "005000": 0.4467,
+      "010000": 0.4639
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.8904,
+      "005000": 0.9195,
+      "010000": 0.9448
+     },
+     "threshold_gap": {
+      "002500": 40,
+      "005000": 30,
+      "010000": 48
+     }
+    }
+   },
+   "verdict": "agree"
+  },
+  {
+   "segment": "pherc1667-w028",
+   "seeds": {
+    "42": {
+     "truth_pick": "002500",
+     "pseudo_pick": "010000",
+     "same_pick": false,
+     "penalty_in_truth_f1": 0.0013,
+     "truth_f1_by_step": {
+      "002500": 0.5079,
+      "005000": 0.5026,
+      "010000": 0.5066
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9341,
+      "005000": 0.9503,
+      "010000": 0.9685
+     },
+     "threshold_gap": {
+      "002500": 62,
+      "005000": 71,
+      "010000": 18
+     }
+    },
+    "43": {
+     "truth_pick": "002500",
+     "pseudo_pick": "010000",
+     "same_pick": false,
+     "penalty_in_truth_f1": 0.0185,
+     "truth_f1_by_step": {
+      "002500": 0.5488,
+      "005000": 0.5263,
+      "010000": 0.5303
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9393,
+      "005000": 0.9568,
+      "010000": 0.9667
+     },
+     "threshold_gap": {
+      "002500": 43,
+      "005000": 42,
+      "010000": 49
+     }
+    }
+   },
+   "verdict": "agree"
+  },
+  {
+   "segment": "pherc1667-w029",
+   "seeds": {
+    "42": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.5662,
+      "005000": 0.5693,
+      "010000": 0.5811
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9426,
+      "005000": 0.9588,
+      "010000": 0.9701
+     },
+     "threshold_gap": {
+      "002500": 49,
+      "005000": 45,
+      "010000": 50
+     }
+    },
+    "43": {
+     "truth_pick": "005000",
+     "pseudo_pick": "010000",
+     "same_pick": false,
+     "penalty_in_truth_f1": 0.0086,
+     "truth_f1_by_step": {
+      "002500": 0.599,
+      "005000": 0.6047,
+      "010000": 0.5961
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9355,
+      "005000": 0.9599,
+      "010000": 0.973
+     },
+     "threshold_gap": {
+      "002500": 32,
+      "005000": 34,
+      "010000": 49
+     }
+    }
+   },
+   "verdict": "agree"
+  },
+  {
+   "segment": "pherc1667-w031",
+   "seeds": {
+    "42": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.5274,
+      "005000": 0.5486,
+      "010000": 0.5556
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9097,
+      "005000": 0.928,
+      "010000": 0.9561
+     },
+     "threshold_gap": {
+      "002500": 55,
+      "005000": 48,
+      "010000": 44
+     }
+    },
+    "43": {
+     "truth_pick": "010000",
+     "pseudo_pick": "010000",
+     "same_pick": true,
+     "penalty_in_truth_f1": 0.0,
+     "truth_f1_by_step": {
+      "002500": 0.5459,
+      "005000": 0.5478,
+      "010000": 0.5639
+     },
+     "pseudo_f1_by_step": {
+      "002500": 0.9043,
+      "005000": 0.9366,
+      "010000": 0.9568
+     },
+     "threshold_gap": {
+      "002500": 36,
+      "005000": 32,
+      "010000": 48
+     }
+    }
+   },
+   "verdict": "agree"
+  }
+ ],
+ "verdict_by_segment": [
+  "agree",
+  "agree",
+  "agree",
+  "agree",
+  "agree"
+ ],
+ "segments_disagreeing": 0,
+ "segments_agreeing": 5,
+ "segments_not_captured": 0
+}
