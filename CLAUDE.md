@@ -159,10 +159,15 @@ Requirements 대조 + 링크 재확인 + 검증 스크립트 재실행. 새 실�
 
 #### 2026-09-05 — 🔴 **우리 문안의 한 주장이 main에서는 거짓이었다** (문안 v20), 그리고 **교체가 실제로 통했다**
 
-**1. 🟢 main으로 옮긴 PR에 리뷰어가 붙었다 — 몇 시간 만에.**
-`#1701`·`#1703` **reviewers=['jrudolph','bruniss']**. `merge-ink-pipelines`에 있던 우리 PR 5건은
-**몇 주간 0명**이었다(#1608은 지금도 0명). 09-04의 가설("배정 0의 절반은 죽은 base 탓")이 실측으로 확인됐고,
-**교체는 옳았다.** ⚠️ `#1705`는 **draft라 자동 리뷰 요청이 안 간다**(reviewers=[]) → 슬롯 나는 즉시 ready로.
+**1. 🟡 main PR에 리뷰어가 붙었다 — 그런데 사람이 고른 게 아니라 CODEOWNERS다. (자진 정정)**
+`#1701`·`#1703` **reviewers=['jrudolph','bruniss']**. 처음엔 이걸 "교체가 통했다"는 증거로 적었는데,
+**타임라인을 열어보니 `review_requested`가 PR 생성 1초 뒤(17:07:58 → 17:07:59)에 actor=`khj1222`로 기록**돼 있다
+= `.github/CODEOWNERS`(main에만 존재)에 의한 **자동 배정**이고, **두 사람 다 열린 PR 26건씩의 리뷰어**다.
+- **살아남는 것**: main 경로는 CODEOWNERS 안이라 담당자에게 **통지는 간다**. `merge-ink-pipelines`의 우리 PR
+  5건은 몇 주간 그것조차 없었다(#1608은 지금도 reviewers 0).
+- **죽는 것**: **"사람이 우리 것을 보기 시작했다"는 읽기.** 26건 중 하나일 뿐이고, 열린 PR 54건이라는
+  이미 아는 부하 그대로다. 기대치는 올리지 말 것.
+⚠️ `#1705`는 **draft라 자동 리뷰 요청조차 안 간다**(reviewers=[]) → 슬롯 나는 즉시 ready로.
 
 **2. 🔴 field 5의 레시피 주장이 `main` 기준으로 거짓이었다 (v20에서 교체).**
 문안: *"the released recipe does not run as published — its datasets block is a **single placeholder**
