@@ -60,6 +60,21 @@ exclusions and the quota renormalisation they force are still #1608's alone. The
 was removed from the internal candidate description above field 4; field 4 itself is links only,
 so its hash is unchanged.
 
+**v23 (2026-09-05) — the straight-through read that v22 made necessary.** Field 5 grew from
+11,422 to 13,129 characters today across three separate edits (v20, v21, v22) and nobody had read
+it whole since the morning — the exact debt the 09-05 read-through had just cleared. Reading it
+end to end found three things, all created by today's edits and none of them a claim:
+① **the closing paragraph repeated what v22 now measures.** Its third "absence" said the
+open-problems cross-scroll number is a Dice on pseudo-labels — written in v20, before docs/24
+existed, and now a weaker restatement of a paragraph that proves it with 30 cells. Cut; two
+absences remain and the sentence is tighter. ② the v20 edit had left a **mid-sentence line break**
+at an odd column in the upstream paragraph. ③ **"until now there was no systematic number"** is
+defensible but imprecise now that the text engages their number directly, so it reads
+**"no systematic number *scored against withheld annotation*"** — the same lesson as v20 and v21,
+applied before anyone else has to point it out. Word-level diff confirms nothing else moved and
+**no numeric token was lost**; the opening paragraph was re-wrapped to the field's own 95-column
+width with words verified identical before and after. −123 characters.
+
 **v22 (2026-09-05) — the yardstick study goes in, labelled as what it is.** docs/24 ran both
 stages the day it was written. The new paragraph (field 5, after the PHerc1447 one) carries
 three things and separates them by strength: the pseudo-labels agree with withheld annotation at
@@ -95,7 +110,7 @@ adapted checkpoints unmodified, zarr and TIFF), and what the work improves on is
 (no reported accuracy on the published checkpoints, no way to hold a scroll out, no number on
 open problem #7).
 
-**Field 5 is 13,129 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 13,006 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -179,11 +194,11 @@ Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-sc
 
 ```
 Reading a complete scroll means running an ink model on a scroll nobody has labeled. Open
-problem #7 asks how well today's models survive that jump; until now there was no
-systematic number, and the official 9 µm models released on 2026-08-14 ship with no
-evaluation at all. I measured the jump, diagnosed why it fails, priced what it costs to
-fix, and then checked whether that price holds on a second scroll — all on that release,
-with the held-out methodology that won July's Progress Prize and settled villa #192 in
+problem #7 asks how well today's models survive that jump; until now there was no systematic
+number scored against withheld annotation, and the official 9 µm models released on 2026-08-14
+ship with no evaluation at all. I measured the jump, diagnosed why it fails, priced what it
+costs to fix, and then checked whether that price holds on a second scroll — all on that
+release, with the held-out methodology that won July's Progress Prize and settled villa #192 in
 August.
 
 Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on the three
@@ -328,8 +343,8 @@ experiment, not as a result.
 The apparatus went upstream as well as the numbers. Nothing in the tree turns the released
 recipe into a leave-one-scroll-out probe — the exclusions, and the per-batch quota
 renormalisation that has to follow them, are villa PR #1608; it regenerates my three arm
-configs byte-for-byte. Numbers and apparatus
-have both survived outside hands: one contributor pulled the raw 0139 matrix and recomputed
+configs byte-for-byte. Numbers and apparatus have both survived outside hands: one
+contributor pulled the raw 0139 matrix and recomputed
 every published figure, confirming the margins hold under four selection rules, and the same
 person then reviewed the generator and found a crash on a batch smaller than the surviving
 scroll count, fixed two days later. The traffic went the other way too: the author of villa
@@ -346,9 +361,8 @@ August #192 verdict — one apparatus, three months of answered questions. Nothi
 the pipeline to change shape around it: pseudo-labels are written to the corpus's own label
 contract, adapted checkpoints load in `infer` unmodified, and scores come back as the same
 zarr and TIFF the released tools already emit. And what it improves on is an absence — the
-published checkpoints carried no reported accuracy, the recipe had no way to hold a scroll
-out, and the cross-scroll result on the open-problems page is a Dice computed on
-pseudo-labels, where every number here is scored against annotations withheld from training.
+published checkpoints carried no reported accuracy, and the recipe had no way to hold a
+scroll out at all.
 ```
 
 **6. Terms and Conditions** → check "Yes, I agree"
@@ -429,7 +443,7 @@ paragraph had already made was cut, and "Both have survived outside hands" now n
 antecedent:
 
 - field 4 — 2,170 chars, `7da1a2843f0baf9a5f7e39d0602ed95fa755abe0a9d0726d0abb3a114994d573`
-- field 5 — 13,129 chars, `d53efc56ee9069dfe14ad359708b9959cada4cbf06cd1e910737a729b57061d7`
+- field 5 — 13,006 chars, `3136e527fe67057b332b3ed1f97176288febd7b6776cf30a4a66cd32a307d78b`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
