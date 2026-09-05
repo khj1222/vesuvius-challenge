@@ -60,6 +60,19 @@ exclusions and the quota renormalisation they force are still #1608's alone. The
 was removed from the internal candidate description above field 4; field 4 itself is links only,
 so its hash is unchanged.
 
+🔴 **v21 (2026-09-05, same day) — and the Core-Requirements sentence I had just written was
+itself wrong.** It closed with "open problem #7 had no number attached to it". The
+open-problems page carries one: *"an autonomous agent swarm ... found a configuration that
+nearly doubled the validation Dice score (computed on pseudo-labels) on PHerc. 1667 while
+training only on PHerc. 139 data."* That is **our exact axis** — train 0139, evaluate 1667 —
+and **we had never recorded that paragraph anywhere**, having taken only the problem titles off
+that page during the August scouting. The clause now says what is actually true and is the
+sharper claim anyway: their published cross-scroll number is a Dice against **pseudo-labels**,
+where every number here is scored against **annotations withheld from training**. ⚠️ Two
+corrections to the same field in one day, both from claims about the outside world that nobody
+re-read at the source. **Any sentence about what someone else has or has not published must be
+re-opened at the source before submitting, not recalled.**
+
 **v20 also folds in the two Core Requirements the prize page names and this text never stated** —
 "significant advantages over existing solutions" and Technical Integration — as the closing two
 sentences: the outputs stay in the pipeline's own formats (label contract, `infer` loading the
@@ -67,7 +80,7 @@ adapted checkpoints unmodified, zarr and TIFF), and what the work improves on is
 (no reported accuracy on the published checkpoints, no way to hold a scroll out, no number on
 open problem #7).
 
-**Field 5 is 11,803 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 11,922 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -303,7 +316,8 @@ the pipeline to change shape around it: pseudo-labels are written to the corpus'
 contract, adapted checkpoints load in `infer` unmodified, and scores come back as the same
 zarr and TIFF the released tools already emit. And what it improves on is an absence — the
 published checkpoints carried no reported accuracy, the recipe had no way to hold a scroll
-out, and open problem #7 had no number attached to it.
+out, and the cross-scroll result on the open-problems page is a Dice computed on
+pseudo-labels, where every number here is scored against annotations withheld from training.
 ```
 
 **6. Terms and Conditions** → check "Yes, I agree"
@@ -384,7 +398,7 @@ paragraph had already made was cut, and "Both have survived outside hands" now n
 antecedent:
 
 - field 4 — 2,015 chars, `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a`
-- field 5 — 11,803 chars, `42864edd975b18365b2b4b8db8c24ed8549176ec98add435f09c97976d259149`
+- field 5 — 11,922 chars, `76da4610b2ce30bb3b8c97ec0d60239e3835daf2d8752c2f0c3ac665d9b5fd1c`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
