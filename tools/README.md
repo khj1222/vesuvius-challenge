@@ -5,16 +5,71 @@ Small, self-contained CLIs that sit next to the official
 pipeline. Nothing here forks or patches it — each tool produces or consumes an
 artifact the pipeline already understands.
 
+**Start here:** you have a segment (a surface volume plus its label pyramids) and a checkpoint.
+`make_validation_mask.py` carves a held-out region out of the segment, `eval_validation.py`
+scores a prediction inside it, and `sweep_checkpoints.py` does that for every checkpoint of a
+run. Everything else below is a variation on those three.
+
+### Look at a prediction
+
 | Tool | What it's for |
 |---|---|
 | [`ink_viz.py`](ink_viz.py) | Turn a prediction TIFF into images you can actually read |
+
+### Hold something out, and score against it
+
+| Tool | What it's for |
+|---|---|
 | [`make_validation_mask.py`](make_validation_mask.py) | Carve a reproducible held-out validation region out of a segment |
 | [`eval_validation.py`](eval_validation.py) | Score a prediction inside that region (F1/IoU/balanced acc, DRD, pseudo-F-measure) |
 | [`sweep_checkpoints.py`](sweep_checkpoints.py) | Score every checkpoint of a run and plot the curve |
 | [`run_cv_folds.py`](run_cv_folds.py) | Run the whole k-fold protocol unattended and report the spread |
+| [`audit_holdout_masks.py`](audit_holdout_masks.py) | Ask whether a corpus's own held-out masks are really held out |
+
+### Ask where the ink is in depth
+
+| Tool | What it's for |
+|---|---|
 | [`depth_profile.py`](depth_profile.py) | Ask a trained model *where along z* it takes its ink evidence |
 | [`depth_contrast.py`](depth_contrast.py) | Ask the raw CT the same question, with no model in the loop |
 | [`make_3d_labels.py`](make_3d_labels.py) | Turn the one-plane ink annotation into a measured 3D label |
+| [`make_label_version.py`](make_label_version.py) | Package a band as a label *version* the pipeline already knows how to load |
+| [`export_depth_anchors.py`](export_depth_anchors.py) | Hand the measured band to someone else's independent scan |
+
+### Cross-scroll generalisation
+
+| Tool | What it's for |
+|---|---|
+| [`make_ink9um_config.py`](make_ink9um_config.py) | Turn the released recipe into a leave-one-scroll-out probe |
+| [`tent_adapt.py`](tent_adapt.py) | Adapt to a scroll you have no labels for (entropy minimisation) |
+| [`make_pseudo_labels.py`](make_pseudo_labels.py) | Turn a model's own predictions into a label tree |
+| [`score_pseudo_labels.py`](score_pseudo_labels.py) | Ask how well those pseudo-labels agree with the truth they stand in for |
+| [`run_pseudo_ranking.py`](run_pseudo_ranking.py) | Score one prediction with both yardsticks, to see if they rank alike |
+
+### How much annotation, and where
+
+| Tool | What it's for |
+|---|---|
+| [`make_label_budget.py`](make_label_budget.py) | How much of this segment do you have to annotate? |
+| [`score_annotation_candidates.py`](score_annotation_candidates.py) | Choose *where* to annotate, using no labels |
+| [`summarise_annotation_targeting.py`](summarise_annotation_targeting.py) | Apply the decision rule that was fixed before the arms ran |
+
+### Look at the data itself
+
+| Tool | What it's for |
+|---|---|
+| [`spectrum_match.py`](spectrum_match.py) | What does this volume look like at each spatial frequency? |
+| [`measure_representation_noise.py`](measure_representation_noise.py) | Is the aligned advantage a noise advantage? (it is not) |
+| [`check_pyramid_pooling.py`](check_pyramid_pooling.py) | Is this pyramid averaged or decimated? |
+| [`float_rank_check.py`](float_rank_check.py) | Did the model change, or only the scale it is written on? |
+
+### Run things unattended, and keep track
+
+| Tool | What it's for |
+|---|---|
+| [`run_annotation_targeting.py`](run_annotation_targeting.py) | Drive the annotation-targeting arms, retrying what this machine breaks |
+| [`run_blur_exposure.py`](run_blur_exposure.py) | Drive the blur-exposure arm, waiting for memory before each attempt |
+| [`upstream_sweep.py`](upstream_sweep.py) | Has anything moved on the upstream threads we are in? |
 
 ## Run them
 
@@ -512,6 +567,128 @@ trivial all-positive floor `2p/(1+p)`, which is how every number in this project
 
 On the ink_9um corpus this returns F1 0.40–0.46 against floors of 0.27–0.49: **11 of 24 cells do
 not beat marking every pixel as ink.** No GPU.
+
+## `make_ink9um_config.py` — turn the released recipe into a generalisation probe
+
+The released recipe (villa `configs/aligned21_hybrid_3d2d.json`, plus the sampling contract in
+`aligned21_fixed_scroll_prior.json`) trains on all 29 representations across four scrolls, so
+every annotated pixel of every segment is training data and there is nothing left to score on.
+Dropping a scroll turns the same recipe into a probe: nothing on the held-out scroll is ever
+seen, which makes its **whole supervision mask** honest held-out ground truth for
+`eval_validation.py --region-kind supervision_mask`.
+
+```bash
+python tools/make_ink9um_config.py --exclude-scroll Paris4 --out configs/ink9um_no_paris4.json
+python tools/make_ink9um_config.py --exclude-segment pherc0139-w035 pherc0139-w039 \
+    --out configs/ink9um_segloso.json
+```
+
+Removing scrolls leaves the per-batch scroll quotas summing to less than the batch, so they are
+**renormalised** over the survivors; that arithmetic, not the exclusion, is the part worth
+reading. This generated every arm behind [docs/15](../docs/15_loso_cross_scroll.md) and
+[docs/18](../docs/18_uda_design.md), and it went upstream as villa
+[#1608](https://github.com/ScrollPrize/villa/pull/1608).
+
+⚠️ A quota that rounds to zero is rejected by the sampler, so a batch smaller than the number of
+surviving scrolls has no valid configuration and the tool says so rather than emitting one.
+
+## `score_annotation_candidates.py` — choose where to annotate, using no labels
+
+Step one of [docs/20](../docs/20_annotation_targeting.md). Ranks candidate annotation subsets by
+**the model's own disagreement**, so the choice can be made on a scroll nobody has labelled.
+
+```bash
+python tools/score_annotation_candidates.py --segment phercparis4-w00 \
+    --predictions runs/.../seed42.tif runs/.../seed43.tif \
+    --budget 0.207 --tolerance 0.03 --out runs/ink9um_scorecard/annotation_candidates.json
+```
+
+It rebuilds the segment's annotated regions and their groups exactly as `make_label_budget.py`
+does — **regions closer than one training patch stay together**, because splitting them leaks
+across the boundary — then takes the per-pixel disagreement `|p_a − p_b|` between two seeds of a
+base model that never saw this scroll, averages it inside each group, and enumerates every
+subset within the budget. **No GPU**: the predictions are already on disk.
+
+## `summarise_annotation_targeting.py` — apply the rule that was fixed before the arms ran
+
+```bash
+python tools/summarise_annotation_targeting.py --out runs/ink9um_scorecard/annotarget_summary.json
+```
+
+Reads `annotarget_matrix.csv` and applies docs/20's pre-registered decision rule verbatim:
+spread below 0.03 means the choice of regions did not change the result; at or above it, report
+the ordering, and claim an *acquisition* effect only if `disagree-max` beats `disagree-min` in
+**both** seeds by at least 0.03. **It refuses to render a verdict on an incomplete matrix**,
+which is the point of writing the rule down first.
+
+## `measure_representation_noise.py` — is the aligned advantage a noise advantage?
+
+The calibration of [docs/21](../docs/21_snr_augmentation.md), and the reason that arm was never
+run. For each segment present in both representations it estimates the noise proxy **the trainer
+would see** — after the same robust-MAD normalisation, on the high-frequency residual — and
+reports the extra noise an aligned patch would need to match a native one.
+
+```bash
+python tools/measure_representation_noise.py \
+    --segments pherc0139-w035 pherc0139-w039 pherc0139-w040 pherc0139-w041 \
+    --out runs/ink9um_scorecard/representation_noise.json
+```
+
+It answered **zero**, in all 24 cells: native is the *smoother* of the two, not the noisier, so
+there was no noise to add and the hypothesis died before any GPU was spent.
+
+## `run_annotation_targeting.py` · `run_blur_exposure.py` — unattended arm drivers
+
+One command per pre-registered experiment: train each (arm, seed), score the held-out segments,
+write the matrix.
+
+```bash
+python tools/run_annotation_targeting.py --phase all
+python tools/run_annotation_targeting.py --phase score --only disagreemin
+python tools/run_blur_exposure.py --phase all
+```
+
+Both **retry**, because on this machine training dies for reasons that have nothing to do with
+the experiment: another process's CUDA worker (`CUDA error: resource already mapped`) and
+Windows' commit limit (`WinError 1455`). `run_blur_exposure.py` additionally **waits for free
+memory** before each attempt, which is what finally made that arm complete. Both stop a run once
+the pre-registered checkpoint exists while leaving `num_iterations` at the recipe's value, so the
+learning-rate schedule still matches the baseline being compared against.
+
+## `run_pseudo_ranking.py` — do the two yardsticks rank the same checkpoints?
+
+Stage 2 of [docs/24](../docs/24_pseudo_label_validation.md). Re-infers a set of checkpoints and
+scores **each prediction twice** — once against the withheld annotation, once against the
+pseudo-labels of the same segment — so that one inference serves both and any disagreement is
+the yardstick rather than the model.
+
+```bash
+python tools/run_pseudo_ranking.py            # add --keep-predictions to keep the TIFFs
+```
+
+The two scorings run on different supports by construction, since pseudo-labels only have an
+opinion where the base model was confident. That is not a flaw to correct: it is the situation
+anyone validating without annotation is in. Both supports are recorded in the matrix.
+
+## `export_depth_anchors.py` — hand the measured band to someone else's scanner
+
+Turns the per-pixel band in `<seg>_inkdepth.zarr` back into native resolution — one record per
+measured 64 px cell — and attaches what an external depth-validation pipeline needs to score it
+against an independent scan (villa [#192](https://github.com/ScrollPrize/villa/issues/192)): the
+cell's position on the segment grid, the band centre and half-width in surface-volume layers,
+and the scroll-space base point and surface normal from the segment's `x/y/z.tif` coordinate
+maps.
+
+```bash
+python tools/export_depth_anchors.py data/ink-dataset/phercparis4/w00_20231016151002 \
+    --out submission/depth_anchors
+```
+
+**Composition into 3D points is deliberately left to the consumer** —
+`P(layer) = base + (layer − annotation_plane) · step · normal_hat` — because the normal's sign
+and the layer step are conventions, and guessing them silently is how two pipelines agree on
+numbers that mean different things. The sidecar states every assumption instead.
+
 
 ---
 
