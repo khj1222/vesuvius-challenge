@@ -60,6 +60,21 @@ exclusions and the quota renormalisation they force are still #1608's alone. The
 was removed from the internal candidate description above field 4; field 4 itself is links only,
 so its hash is unchanged.
 
+**v22 (2026-09-05) — the yardstick study goes in, labelled as what it is.** docs/24 ran both
+stages the day it was written. The new paragraph (field 5, after the PHerc1447 one) carries
+three things and separates them by strength: the pseudo-labels agree with withheld annotation at
+**F1 0.39–0.46, below a trivial all-positive classifier in 11 of 24 cells**, while being the
+same labels that improved 14 of 14 — training signal and yardstick are different objects; the
+**pre-registered prediction was refuted**, the two sticks choosing the same checkpoint in 5 of 5
+segments, and the text says why that refutation is weak (pseudo rises monotonically so it always
+answers "the latest", and truth varies by less than the noise floor in 9 of 10 cells); and the
+**unregistered observation** that the two pick operating thresholds **45 grey levels apart in all
+30 cells**, costing **0.066 F1** — stated as the shape of the next experiment, not a result.
+⚠️ That last clause is not decoration. It was noticed after the verdict, and a reader who cannot
+tell which of our numbers were promised in advance cannot trust any of them. Counts refreshed
+from the artifacts: **1,838 scored cells, 47 scorecard files, 171 under `runs/`**; docs/24 added
+to field 4 and to the closing document range. **Both hashes change.**
+
 🔴 **v21 (2026-09-05, same day) — and the Core-Requirements sentence I had just written was
 itself wrong.** It closed with "open problem #7 had no number attached to it". The
 open-problems page carries one: *"an autonomous agent swarm ... found a configuration that
@@ -80,7 +95,7 @@ adapted checkpoints unmodified, zarr and TIFF), and what the work improves on is
 (no reported accuracy on the published checkpoints, no way to hold a scroll out, no number on
 open problem #7).
 
-**Field 5 is 11,922 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
+**Field 5 is 13,129 characters**, trimmed 2026-08-31 from 12,294 to 9,822 after three results landed
 in one day (arm D, PHerc1447, the 1667 replication). Every number survived the trim — 43 key
 figures checked — and what went was detail that lives in the linked documents: arm A's
 spectral numbers, the pooling method, the #1638 narrative, and the PHerc1447 render's
@@ -145,11 +160,12 @@ https://github.com/khj1222/vesuvius-challenge
 Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
-Raw numbers (1,778 scored cells, 40 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
+Raw numbers (1,838 scored cells, 47 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
 Dataset and models measured: https://huggingface.co/scrollprize/ink_9um (models), hf://buckets/scrollprize/datasets/ink_9um (labels)
 Audit of the corpus's own held-out masks: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/17_holdout_audit.md
 Audit tool: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/audit_holdout_masks.py
 Pre-registered adaptation study, three arms, all run: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/18_uda_design.md
+Pre-registered check of the yardstick itself (both stages run): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/24_pseudo_label_validation.md
 Pre-registered targeting test (where to annotate, and the published curve it corrects): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/20_annotation_targeting.md
 Four pre-registered attempts on the aligned-over-native gap, two stopped by their own calibrations: https://github.com/khj1222/vesuvius-challenge/blob/main/docs/23_blur_exposure.md
 Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-challenge/tree/main/tools
@@ -294,6 +310,21 @@ already believes, and there it believes nothing. None of it crosses to the secon
 either: on 1667 arm C never leaves the noise floor at any step and arm D is negative at
 every step, where on Paris4 it improved 14 of 14 cells (docs/18).
 
+The page that names this open problem reports its own step forward as a validation Dice
+computed on pseudo-labels, so I measured what that instrument reads (docs/24, pre-registered
+before the numbers). Scored against the annotation withheld from the runs that consumed them,
+my pseudo-labels agree at F1 0.39-0.46 and lose to marking every pixel as ink in 11 of 24
+cells — while being the very labels that improved 14 of 14 above. Training signal and
+yardstick are not the same object. Then, scoring one inference with both sticks across 30
+cells, the two choose the same checkpoint in 5 of 5 segments: I predicted disagreement and I
+was wrong. It is a weak refutation and the pre-registration says why — the pseudo score rises
+monotonically, so it always answers “the latest”, and truth varies by less than the noise
+floor in 9 of 10 cells, leaving little to get wrong. One thing I did not register: the two
+pick operating thresholds 45 grey levels apart, in the same direction in all 30 cells, and
+adopting the pseudo-chosen one costs 0.066 F1 against the annotation, twice the noise floor.
+That is an observation rather than a test, and I report it as the shape of the next
+experiment, not as a result.
+
 The apparatus went upstream as well as the numbers. Nothing in the tree turns the released
 recipe into a leave-one-scroll-out probe — the exclusions, and the per-batch quota
 renormalisation that has to follow them, are villa PR #1608; it regenerates my three arm
@@ -309,7 +340,7 @@ converts fine today; the fix is verified against the same matrix. Being reproduc
 corrected, and being asked to check someone else's work are the three things a measurement
 of an open problem needs.
 
-Everything is MIT, documented end to end (docs/14–18 and docs/20–23, plus 135
+Everything is MIT, documented end to end (docs/14–18 and docs/20–24, plus 171
 committed evidence files under runs/), and continuous with the July harness and the
 August #192 verdict — one apparatus, three months of answered questions. Nothing here asks
 the pipeline to change shape around it: pseudo-labels are written to the corpus's own label
@@ -397,8 +428,8 @@ longest paragraph was split after the seven-times claim, the closing moral that 
 paragraph had already made was cut, and "Both have survived outside hands" now names its
 antecedent:
 
-- field 4 — 2,015 chars, `ff5eb3d3ec8bea2b4fbfc32ced261f4608f05baa5727b76198dfd4752a6f4c9a`
-- field 5 — 11,922 chars, `76da4610b2ce30bb3b8c97ec0d60239e3835daf2d8752c2f0c3ac665d9b5fd1c`
+- field 4 — 2,170 chars, `7da1a2843f0baf9a5f7e39d0602ed95fa755abe0a9d0726d0abb3a114994d573`
+- field 5 — 13,129 chars, `d53efc56ee9069dfe14ad359708b9959cada4cbf06cd1e910737a729b57061d7`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
