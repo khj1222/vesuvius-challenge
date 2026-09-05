@@ -66,6 +66,7 @@ def score(prediction: Path, label_dir: Path, tag: str, driver) -> dict | None:
     report = PREDS / f"{tag}.json"
     code = run(uv(str(REPO / "tools" / "eval_validation.py"), str(prediction), str(label_dir),
                   "--region-kind", "supervision_mask", "--json", str(report),
+                  "--no-regions",
                   "--no-image-metrics", "--label", tag),
                cwd=REPO, log_path=LOGS / "eval.log")
     if code != 0 or not report.exists():
@@ -87,6 +88,22 @@ def score(prediction: Path, label_dir: Path, tag: str, driver) -> dict | None:
         "precision": round(precision, 4) if precision is not None else None,
         "recall": round(recall, 4) if recall is not None else None,
     }
+
+
+def row_from_report(path: Path) -> dict | None:
+    """Rebuild a scored row from a report already on disk, so a restart costs nothing."""
+    if not path.exists():
+        return None
+    try:
+        d = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    best = d.get("best_f1")
+    if not isinstance(best, dict):
+        return None
+    return {"scored_px": d.get("scored_pixels"), "ink_px": d.get("ink_pixels"),
+            "best_f1": round(best["f1"], 4), "best_threshold": best["threshold"],
+            "precision": round(best["precision"], 4), "recall": round(best["recall"], 4)}
 
 
 def main(argv=None) -> int:
@@ -117,6 +134,20 @@ def main(argv=None) -> int:
                     done += 1
                     tag = f"s{seed}_{segment}_{step}"
                     prediction = PREDS / f"{tag}.tif"
+                    cached = {y: row_from_report(PREDS / f"{tag}_{y}.json")
+                              for y in ("truth", "pseudo")}
+                    if all(cached.values()):
+                        for yard, got in cached.items():
+                            rows.append({"seed": seed, "segment": segment, "step": step,
+                                         "yardstick": yard, **got})
+                        log(f"[{done}/{total}] {tag}: already scored, reusing reports", driver)
+                        if prediction.exists():
+                            prediction.unlink()
+                        with OUT_CSV.open("w", newline="", encoding="utf-8") as handle:
+                            writer = csv.DictWriter(handle, fieldnames=FIELDS)
+                            writer.writeheader()
+                            writer.writerows(rows)
+                        continue
                     if not prediction.exists():
                         started = time.perf_counter()
                         code = run(uv("-m", "koine_machines.inference.infer",

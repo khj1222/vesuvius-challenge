@@ -251,6 +251,13 @@ def main(argv=None) -> int:
     parser.add_argument("--no-image-metrics", dest="image_metrics", action="store_false",
                         help="Skip DRD / pseudo-F-measure (they are the slow part).")
     parser.add_argument("--label", default=None, help="Free-form tag stored in the JSON report.")
+    parser.add_argument("--no-regions", dest="per_region", action="store_false",
+                        help="Skip the per-region breakdown. The headline numbers come "
+                             "from the first pass and do not change; this drops only the "
+                             "second pass, which costs one threshold sweep per connected "
+                             "component and is pathological on a thinned mask -- a "
+                             "pseudo-label tree can have tens of thousands of components "
+                             "where an annotation has eight.")
     parser.add_argument("--region-kind", default="validation_mask",
                         choices=("validation_mask", "supervision_mask"),
                         help="Which mask pyramid delimits the scored regions. Use "
@@ -317,6 +324,10 @@ def main(argv=None) -> int:
 
     # Second pass: per-region metrics at the chosen threshold (+ image metrics).
     tiles: list[np.ndarray] = []
+
+    if not args.per_region:
+        print(f"\nper region: skipped (--no-regions); {len(regions):,} components")
+        regions = []
 
     print(f"\nper region (threshold {threshold}):")
     header = f"  {'region':>6}  {'px':>10}  {'ink%':>6}  {'F1':>7}  {'prec':>6}  {'rec':>6}"
