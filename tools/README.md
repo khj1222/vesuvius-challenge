@@ -45,6 +45,7 @@ run. Everything else below is a variation on those three.
 | [`make_pseudo_labels.py`](make_pseudo_labels.py) | Turn a model's own predictions into a label tree |
 | [`score_pseudo_labels.py`](score_pseudo_labels.py) | Ask how well those pseudo-labels agree with the truth they stand in for |
 | [`run_pseudo_ranking.py`](run_pseudo_ranking.py) | Score one prediction with both yardsticks, to see if they rank alike |
+| [`summarise_pseudo_ranking.py`](summarise_pseudo_ranking.py) | Apply that study's pre-registered rule, and refuse a verdict on a partial matrix |
 
 ### How much annotation, and where
 
@@ -669,6 +670,20 @@ python tools/run_pseudo_ranking.py            # add --keep-predictions to keep t
 The two scorings run on different supports by construction, since pseudo-labels only have an
 opinion where the base model was confident. That is not a flaw to correct: it is the situation
 anyone validating without annotation is in. Both supports are recorded in the matrix.
+
+## `summarise_pseudo_ranking.py` — the verdict, applied mechanically
+
+```bash
+python tools/summarise_pseudo_ranking.py
+```
+
+Reads `pseudo_rank_matrix.csv` and applies docs/24's rule as written: for each segment and seed,
+let each yardstick pick its best step, and measure **what truth says you lost by taking pseudo's
+pick**. Above 0.03 in both seeds is *disagree*; matching picks or under 0.03 is *agree*;
+anything else is reported as **not captured**, because a split result is not a result.
+
+**It refuses to render the verdict on an incomplete matrix.** A rule applied to whichever cells
+happened to finish is a different rule from the one that was registered.
 
 ## `export_depth_anchors.py` — hand the measured band to someone else's scanner
 
