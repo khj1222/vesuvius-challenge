@@ -21,9 +21,9 @@ this repository.**
 - **Entry task**: ink detection — an ink-labelled surface volume goes in, a
   segmentation model comes out, and the output is an ink probability map. The
   official framing is "one weekend from download to first prediction".
-- **Prize tiers (monthly)**: $500 / $1,000 (Papyrus) / $2,500 (Sestertius) /
-  $5,000 / $10,000 (Denarius) / $20,000 (Gold Aureus), with "best submission of
-  the month, $20,000" guaranteed every month.
+- **Prize tiers (monthly)**: $500 / $1,000 / $2,500 / $5,000 / $10,000 /
+  $20,000, with "best submission of the month, $20,000" guaranteed every month
+  and multiple submissions and awards permitted per month.
 - **Submission**: one Google Form per round, linked from
   https://scrollprize.org/prizes. Note that **the form URL is specific to the
   round and the previous one closes**, so fetch it fresh each month.
@@ -384,7 +384,8 @@ vesuvius-challenge/
 │                           10 depth localisation · 11 3D labels · 12 depth training
 │                           13 September scouting · 14 ink_9um scorecard
 │                           15 cross-scroll LOSO · 16 First Letters render
-│                           17 held-out mask audit
+│                           17 held-out mask audit · 18 adaptation ladder
+│                           20 annotation targeting · 21-23 the aligned-gap attempts
 │   └── images/          <- before/after figures
 ├── configs/             <- training configs where validation actually runs
 ├── tools/               <- ink_viz, the validation harness, depth measurement,
@@ -401,7 +402,7 @@ vesuvius-challenge/
 - [x] Orientation docs (verified against scrollprize.org, 2026-07-19)
 - [x] **Pipeline reproduced end to end** (2026-07-21) — Greek legible in the first prediction
 - [x] **Held-out validation harness** (2026-07-25) — validation patches 0 -> 1,337
-- [x] **July round submitted** (2026-07-26) -> **Progress Prize, $1,000 Papyrus**
+- [x] **July round submitted** (2026-07-26) -> **Progress Prize, $1,000**
 - [x] **#192 3D-label experiment** (2026-08-09) — 3 arms x 3 folds, a negative result
 - [x] **Robustness** (2026-08-15/16) — 30k extension holds the gap; `w02` replicates it wider
 - [x] **Two upstream PRs merged** — #1249 (2026-07-31), #1234 (2026-08-14)
