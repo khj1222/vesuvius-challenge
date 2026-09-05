@@ -386,6 +386,7 @@ vesuvius-challenge/
 │                           15 cross-scroll LOSO · 16 First Letters render
 │                           17 held-out mask audit · 18 adaptation ladder
 │                           20 annotation targeting · 21-23 the aligned-gap attempts
+│                           24 pseudo-label validation
 │   └── images/          <- before/after figures
 ├── configs/             <- training configs where validation actually runs
 ├── tools/               <- ink_viz, the validation harness, depth measurement,

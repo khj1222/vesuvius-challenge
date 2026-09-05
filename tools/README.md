@@ -493,6 +493,26 @@ than adding one. Those now appear as `comment EDITED (posted <date>)` at the tim
 
 `--since 2026-08-31T12:00:00Z` · `--hours` · `--no-gh`
 
+## `score_pseudo_labels.py` — how good is the yardstick?
+
+Stage 1 of [docs/24](../docs/24_pseudo_label_validation.md). Scores a pseudo-label tree against
+the annotation that was withheld from the run which consumed it, so that a validation score
+computed on pseudo-labels can be read for what it is: agreement with an object of some measured
+quality.
+
+```bash
+uv run --project external/villa/ink-detection python tools/score_pseudo_labels.py     data/ink_9um/labels/pseudo1667D_s42     data/ink_9um/labels/aligned-scrollprizeorg-21slices     --out runs/ink9um_scorecard/pseudo_quality_1667_s42.json
+```
+
+Agreement is computed **only where both supervision masks are defined** — pseudo-labels have an
+opinion where the base model was confident, annotations exist where somebody annotated — and the
+size and positive rate of that intersection are reported beside the score, because agreement
+over a differently shaped support is a different quantity. Every segment is also given its
+trivial all-positive floor `2p/(1+p)`, which is how every number in this project is read.
+
+On the ink_9um corpus this returns F1 0.40–0.46 against floors of 0.27–0.49: **11 of 24 cells do
+not beat marking every pixel as ink.** No GPU.
+
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
