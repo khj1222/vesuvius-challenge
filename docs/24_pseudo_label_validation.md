@@ -93,3 +93,65 @@ them raises the pseudo score *trivially*. **A rising pseudo score therefore show
 own.** The result is only interesting if the two scorings **rank the checkpoints differently**.
 If the pseudo score rises monotonically and the ranking still agrees with truth, that is a
 finding *for* the practice, and it is reported as such.
+
+---
+
+# Stage 1 result (2026-09-05) — the proxy is worse than I predicted, on both scrolls, and the ordering is reversed
+
+24 cells: two scrolls × two seeds × their scored segments, each pseudo-label tree scored against
+the annotation withheld from the run that consumed it, on the intersection of the two
+supervision masks. Raw numbers: `runs/ink9um_scorecard/pseudo_quality_{1667,paris4}_s4{2,3}.json`.
+
+| scroll | mean F1 | mean trivial floor | mean margin | cells below the floor |
+|---|---|---|---|---|
+| PHerc. 1667 | 0.4347 | 0.3421 | **+0.093** | 1 / 10 |
+| PHerc. Paris 4 | 0.3958 | 0.4101 | **−0.014** | **10 / 14** |
+
+**Both predictions missed, both downward, and the order between the scrolls is inverted.** I
+wrote 0.55–0.80 for 1667 and 0.70–0.90 for Paris 4, reasoning that the base model is stronger on
+Paris 4 so its confident pixels should be better. The measured values are 0.406–0.464 and
+0.390–0.402: lower on both, and **lower on the scroll I expected to be higher**. Eleven of the
+24 cells do not beat marking every pixel as ink.
+
+**The failure has a shape: precision 0.33–0.93 against recall 0.007–0.587.** Restricted to
+pixels the pseudo-labeller had an opinion about, it is reasonably right when it says *ink* and
+badly wrong when it says *background* — it confidently labels most of the ink as empty. That is
+not an artifact of the sparse support, which this comparison already excludes by scoring only
+where both masks are defined.
+
+**Seed instability on the same segment.** `pherc1667-w023` scores **0.3475 under seed 42 and
+0.0144 under seed 43** — a spread of 0.333, from two seeds of the same released base model, with
+recall collapsing to 0.007. Which segment's pseudo-labels are usable is not a property of the
+segment.
+
+## The thing worth carrying out of Stage 1
+
+These are not arbitrary label trees. `pseudoT_s42/43` are **exactly** the labels of arm D on
+Paris 4 (`armD_pseudoT_matrix.csv`, same seven segments, 14 cells), and arm D **improved 14 of
+14 cells** against withheld annotation, recovering 14.3% of the cross-scroll gap (docs/18).
+
+So on Paris 4: **training on labels that lose to a trivial classifier in 10 of 14 cells still
+improved the model against the truth in 14 of 14.** Whatever makes a pseudo-label *useful for
+training* is not what F1 against the annotation measures. The two uses of the same object come
+apart, and that is the finding:
+
+- as **training signal**, these labels work — measured, twice, on two scrolls (docs/18);
+- as a **yardstick**, they agree with the truth at roughly the level of guessing.
+
+A validation score computed against them is therefore agreement with an object of that quality.
+This says nothing about whether any particular configuration found that way is good — only that
+the measurement cannot distinguish that case from its opposite without the annotation it
+replaces.
+
+## What the pre-registered rule now requires
+
+Both means are below 0.50, which is the band the pre-registration marked **"the proxy is poor —
+Stage 2 is warranted, but any ranking conclusion is *weaker*, not stronger, and must be reported
+that way."** That constraint is binding and carried forward: if Stage 2 finds the two scorings
+choosing different checkpoints, the honest reading is *this proxy, at this quality, misranks* —
+not *pseudo-label validation misranks in general*.
+
+⚠️ **The caveat that survives regardless of Stage 2**: this is our pseudo-label recipe (p ≥ 0.6
+positive, p ≤ 0.4 negative, middle discarded, from the released base) on this corpus. A
+different construction — different thresholds, iterated rounds, a stronger base — could produce
+a better proxy. Nothing here measures the swarm's labels, which are not published.
