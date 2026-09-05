@@ -62,12 +62,7 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-On native Windows this is not an edge case, it is what happens: every inference run on this
-machine has carried `--no-compile`, and I only learned that by having a run die after the model
-had loaded and the blocks had started. The compile call itself returns cleanly, so the failure
-arrives at the least useful moment — far enough in to look like a data or checkpoint problem.
-It ended up in my own setup notes as a trap to remember rather than a flag to choose, which is
-the wrong shape for something the code can handle itself.
+Follow the tutorial on Windows and you meet this before you see a single prediction.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
@@ -101,4 +96,10 @@ I will close that one. Same question as on
 [#1608](https://github.com/ScrollPrize/villa/pull/1608) about which branch to target; this is
 the `main` answer.
 
+**Disclosure:** most of the work in this project, including this reproduction, the change and
+the tests, is done with an AI coding assistant. The problem, the data and the decisions are
+mine; the failure above is one my project hit while running inference over the ink_9um corpus on native Windows.
+
 Tested at `5479453` (`main`).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)

@@ -100,3 +100,5 @@ the tests, is done with an AI coding assistant. The problem, the data and the de
 mine; the failure above is one my project hit while preparing the 9.6 µm inputs for the ink_9um corpus.
 
 Tested at `5479453` (`main`), Python 3.12 and 3.14, Windows 11.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)

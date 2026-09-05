@@ -28,14 +28,14 @@ POST ONLY WHAT IS BELOW THE --- LINE.
 of handing back a split that describes labels that no longer exist.
 
 **One real example:** Starting with `phercparis4-w00` from `ink_9um`, I ran patch discovery and
-it found **1,266** patches. I then halved that segment's supervision mask **in place**, at the
-same path, and re-ran against the same `out_dir`: **1,266 again, with identical bounding
-boxes.** The truth, from a fresh directory, is **1,162**.
+it found **1,266** patches. I halved that segment's supervision mask **in place**, at the same
+path, and re-ran against the same `out_dir`: **1,266 again, with identical bounding boxes**. A
+fresh directory gives **1,162**.
 
 **Before:** 104 patches kept training on supervision that had been deleted, and nothing in the
-run looked wrong — the count matched, so the natural reading was that my mask edit had not
-taken effect. That is what a held-out split looks like while you are building it, and it cost
-me a day of believing a validation number that was measuring the wrong pixels.
+run looked wrong — the count matched, so the natural reading was that the mask edit had not
+taken effect. That is what a held-out split looks like while you are building one, and it cost
+a day in July before the cache was the suspect.
 
 **After this PR:** the second run rejects the cache and rediscovers, returning 1,162 — the same
 answer as the fresh directory.
@@ -63,13 +63,9 @@ Script and raw output: https://github.com/khj1222/vesuvius-challenge/tree/main/r
 
 **Why / where this is useful:**
 
-I lost a day to this in July. I had halved the supervision mask while building a held-out
-split, the patch count came back the same, and I read that as my edit not having taken — so I
-went looking at the mask writer, which was fine all along. Anyone building or revising a
-validation split hits this the same way, because the number you would check to catch the
-mistake is the number that is wrong.
+Anyone building a validation split gets caught by this the same way. It cost me a day in July.
 
-- [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
+- [x] I personally verified that the example and proof above were produced by this PR on the stated data.
 
 ## Details
 
@@ -98,4 +94,11 @@ thing across three files against `merge-ink-pipelines`, where this identity is n
 place. I will close that one. Same branch question as on
 [#1608](https://github.com/ScrollPrize/villa/pull/1608).
 
+**Disclosure:** most of the work in this project, including this reproduction, the change and
+the tests, is done with an AI coding assistant. The problem, the data and the decisions are
+mine; the failure above is one my project hit while building held-out splits over the
+`ink_9um` corpus.
+
 Tested at `5479453` (`main`), Python 3.12, Windows 11.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
