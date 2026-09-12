@@ -156,7 +156,7 @@ curl -s "https://vesuvius-challenge-open-data.s3.amazonaws.com/?list-type=2&deli
 
 # 2) render (container, remote streaming). The --timeout + --resume chain is
 #    required, because a stall otherwise waits forever.
-docker run --rm -e OMP_NUM_THREADS=4 -v D:/vesuvius-challenge/data/first_letters:/work \
+docker run --rm -e OMP_NUM_THREADS=4 -v E:/vesuvius-challenge/data/first_letters:/work \
   ghcr.io/scrollprize/villa/volume-cartographer:edge \
   vc_render_tifxyz -v /work/cache/1447.zarr \
     --remote-url https://vesuvius-challenge-open-data.s3.amazonaws.com/PHerc1447/volumes/20250521151220-8.640um-1.2m-116keV-masked.zarr \
@@ -166,7 +166,7 @@ docker run --rm -e OMP_NUM_THREADS=4 -v D:/vesuvius-challenge/data/first_letters
 
 # 3) inference (paths in Windows form!)
 cd D:/vw2/ink-detection
-uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python \
+uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python \
   -m koine_machines.inference.infer \
   D:/.../render/<SEG>.zarr D:/.../models/hybrid_3d2d-seed42/step-020000.pth D:/.../pred.tif \
   --overlap 0.5 --blend-mode hann --no-compile

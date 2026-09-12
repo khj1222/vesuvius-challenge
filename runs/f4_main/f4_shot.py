@@ -6,7 +6,7 @@ import os
 BASE = os.environ.get("SHOT_TMP", r"D:/shots/tmp")
 
 VW9 = r"D:/vw9/vesuvius/src/vesuvius"
-REAL = Path(r"D:/vesuvius-challenge/data/ink-dataset/phercparis4/w00_20231016151002")
+REAL = Path(r"E:/vesuvius-challenge/data/ink-dataset/phercparis4/w00_20231016151002")
 ASSET = REAL / "w00_20231016151002_inklabels.zarr"
 
 def build(tag, patch_cache_source):

@@ -1,4 +1,4 @@
-platform win32 -- Python 3.12.13, pytest-9.0.2, pluggy-1.6.0 -- D:\vesuvius-challenge\external\villa\ink-detection\.venv\Scripts\python.exe
+platform win32 -- Python 3.12.13, pytest-9.0.2, pluggy-1.6.0 -- E:\vesuvius-challenge\external\villa\ink-detection\.venv\Scripts\python.exe
 cachedir: .pytest_cache
 rootdir: C:\Users\bluek\AppData\Local\Temp\claude\D--vesuvius-challenge\828bc408-0cc8-4f52-8d5c-26b5a7f99050\scratchpad\f2main
 plugins: anyio-4.13.0, napari-0.7.0, napari-plugin-engine-0.2.1, npe2-0.8.1

@@ -74,15 +74,15 @@
   "pin_memory": true,
   "verify_finite_gradients_steps": 0,
   "max_amp_overflow_events": 0,
-  "out_dir": "D:/vesuvius-challenge/runs/ink9um_at_disagreemax_s43",
+  "out_dir": "E:/vesuvius-challenge/runs/ink9um_at_disagreemax_s43",
   "datasets": [
     {
-      "segments_path": "D:/vesuvius-challenge/data/ink_9um/labels/annotarget/disagreemax",
+      "segments_path": "E:/vesuvius-challenge/data/ink_9um/labels/annotarget/disagreemax",
       "segments": [
         "phercparis4-w00"
       ],
       "surface_volume_paths": {
-        "phercparis4-w00": "D:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w00.zarr"
+        "phercparis4-w00": "E:/vesuvius-challenge/data/ink_9um/surface-volumes/aligned9/phercparis4-w00.zarr"
       },
       "volume_scale": 0,
       "sampling_scroll": "Paris4",
@@ -124,6 +124,6 @@
     "w041",
     "w044"
   ],
-  "checkpoint": "D:/vesuvius-challenge/runs/ink9um_loso_noParis4_s43/ckpt_020000.pth",
+  "checkpoint": "E:/vesuvius-challenge/runs/ink9um_loso_noParis4_s43/ckpt_020000.pth",
   "weights_only": true
 }

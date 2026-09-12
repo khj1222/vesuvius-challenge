@@ -40,7 +40,7 @@ these images.
 - **git**, and roughly **90 GB free disk** for one segment.
 
 All commands below are **PowerShell**, run from a working root we'll call
-`D:\vesuvius-challenge`.
+`E:\vesuvius-challenge`.
 
 ---
 
@@ -83,7 +83,7 @@ torchvision = [{ index = "pytorch-cu128" }]
 Then:
 
 ```powershell
-cd D:\vesuvius-challenge\external\villa\ink-detection
+cd E:\vesuvius-challenge\external\villa\ink-detection
 uv sync
 ```
 
@@ -109,7 +109,7 @@ One ink‑labelled segment is enough for a first result.
 ```powershell
 hf buckets sync `
   hf://buckets/scrollprize/datasets/ink/phercparis4/w00_20231016151002 `
-  D:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002
+  E:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002
 ```
 
 > ⚠️ **Trap — data size.** The tutorial says ~25 GB. The real segment is
@@ -148,7 +148,7 @@ pyramid is what makes the visualisations in step 6 cheap.
   "val_every": 500,
   "save_every": 1000,
   "datasets": [
-    { "segments_path": "D:/vesuvius-challenge/data/ink-dataset/phercparis4", "volume_scale": "0" }
+    { "segments_path": "E:/vesuvius-challenge/data/ink-dataset/phercparis4", "volume_scale": "0" }
   ]
 }
 ```
@@ -183,7 +183,7 @@ iterations (20 of them, ~1.08 GB each); training previews in
 ```powershell
 uv run --directory external\villa\ink-detection `
   python -m koine_machines.inference.infer `
-  D:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002\w00_20231016151002.zarr `
+  E:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002\w00_20231016151002.zarr `
   runs/ink_tutorial/ckpt_020000.pth `
   predictions/w00_20231016151002.tif `
   --batch-size 4 --no-compile
@@ -214,7 +214,7 @@ range sits near zero. Use [`tools/ink_viz.py`](../tools/ink_viz.py) (in this rep
 to make it readable. It runs in the same `uv` environment:
 
 ```powershell
-$T = "D:\vesuvius-challenge\tools\ink_viz.py"
+$T = "E:\vesuvius-challenge\tools\ink_viz.py"
 $P = "external\villa\ink-detection\predictions\w00_20231016151002.tif"
 $Z = "data\ink-dataset\phercparis4\w00_20231016151002\w00_20231016151002.zarr"
 

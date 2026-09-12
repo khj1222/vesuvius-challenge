@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import numpy as np
 
 # TODO(week0): 다운로드한 fragment 루트로 교체
-DATA_ROOT = os.environ.get("VESUVIUS_DATA", r"D:\vesuvius-challenge\data")
+DATA_ROOT = os.environ.get("VESUVIUS_DATA", r"E:\vesuvius-challenge\data")
 
 
 @dataclass

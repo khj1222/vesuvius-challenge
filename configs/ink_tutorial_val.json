@@ -24,7 +24,7 @@
 
   "datasets": [
     {
-      "segments_path": "D:/vesuvius-challenge/data/ink-dataset/phercparis4",
+      "segments_path": "E:/vesuvius-challenge/data/ink-dataset/phercparis4",
       "volume_scale": "0"
     }
   ]

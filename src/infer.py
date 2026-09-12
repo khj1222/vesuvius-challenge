@@ -49,4 +49,4 @@ def predict_fragment(frag_id: str = "1", out_png: str | None = None) -> np.ndarr
 
 if __name__ == "__main__":
     # 데이터+학습 후: python -m src.infer
-    predict_fragment(out_png=r"D:\vesuvius-challenge\submission\ink_pred.png")
+    predict_fragment(out_png=r"E:\vesuvius-challenge\submission\ink_pred.png")

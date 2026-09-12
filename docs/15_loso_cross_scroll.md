@@ -96,7 +96,7 @@ python tools/make_ink9um_config.py --exclude-scroll Paris4 \
 #    Running from the external/villa checkout finds zero segments: it predates
 #    the ink_9um config schema.
 cd D:/vw2/ink-detection
-uv run --project D:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.training.train D:/vesuvius-challenge/configs/ink9um_loso_noParis4_s42.json
+uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m koine_machines.training.train E:/vesuvius-challenge/configs/ink9um_loso_noParis4_s42.json
 # 3) score (the whole segment is held out, so score the supervision regions)
 python tools/eval_validation.py <pred.tif> <labels>/phercparis4-w00 \
   --region-kind supervision_mask --no-image-metrics

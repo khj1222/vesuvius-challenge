@@ -15,7 +15,7 @@ _load("vesuvius.ink_detection.config", f"{ROOT}/ink_detection/config.py")
 _load("vesuvius.ink_detection.types", f"{ROOT}/ink_detection/types.py")
 pc=_load("vesuvius.ink_detection.data.patch_cache", f"{ROOT}/ink_detection/data/patch_cache.py")
 
-seg = Path(r"D:/vesuvius-challenge/data/ink-dataset/phercparis4/w00_20231016151002")
+seg = Path(r"E:/vesuvius-challenge/data/ink-dataset/phercparis4/w00_20231016151002")
 assets = [seg/"w00_20231016151002_inklabels.zarr", seg/"w00_20231016151002_supervision_mask.zarr"]
 counts = {a.name: sum(1 for _ in a.rglob("*") if _.is_file()) for a in assets}
 

@@ -20,7 +20,7 @@ Diff: 1 file, +54 −8.
 2. Push the branch from the existing local clone:
 
 ```bash
-cd D:/vesuvius-challenge/external/villa
+cd E:/vesuvius-challenge/external/villa
 git remote add fork https://github.com/<your-gh-user>/villa.git
 git push fork fix/stream-untiled-label-images
 ```
