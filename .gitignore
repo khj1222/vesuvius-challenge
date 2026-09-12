@@ -47,3 +47,10 @@ runs/*
 # from the submission links, and docs/05 was cleaned of exactly this kind of
 # content on 2026-08-29 for that reason.
 planning/
+
+# AGENTS.md is the working handoff: a superset of CLAUDE.md whose extra 102 lines
+# are the same prize-strategy material as planning/ -- August's non-selection, the
+# prize scenarios, notes on other contributors' PRs -- and it indexes into planning/
+# itself. Untracked on purpose; this line states that intent, so that a stray
+# `git add -A` cannot publish it to a repo the submission links point at.
+AGENTS.md
