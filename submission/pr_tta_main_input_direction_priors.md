@@ -1,5 +1,6 @@
 <!--
-PR body draft — Copy direction priors through TTA, against `main`.
+PR body — Copy direction priors through TTA, against `main`.
+  OPENED 2026-09-15 as DRAFT: https://github.com/ScrollPrize/villa/pull/1796 (promote to ready once #1608 closes on 09-19).
 
   head:  khj1222:fix/tta-transform-input-direction-priors  (079bc58, pushed to fork)
   base:  main (4b3c728)
