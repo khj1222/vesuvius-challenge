@@ -318,28 +318,38 @@ labels — which is what turns "render aligned" from a preference into an instru
   adds `--exclude-scroll` / `--exclude-segment`. Reviewed by another
   contributor, whose review found a real crash, since fixed.
 
-Three fixes for friction met while running the September study, all opened
-2026-08-31 against `merge-ink-pipelines`:
+Three fixes for friction met while running the September study were first opened
+2026-08-31 against `merge-ink-pipelines`. After the pipeline moved on `main`, the
+old PRs were closed and current-main replacements were opened on 2026-09-04:
 
 - **[PR #1661](https://github.com/ScrollPrize/villa/pull/1661)** — the patch
   cache keys on paths, so regenerating a mask in place leaves training on
   supervision that no longer exists: 1,266 patches found before and after a mask
   was halved under it, against 1,162 in a fresh directory. Fingerprints the
   label assets by name and size, which costs 8 ms per 6,429-file array and keeps
-  the warm path at 0.03 s.
+  the warm path at 0.03 s. **Closed and replaced by current-main
+  [#1701](https://github.com/ScrollPrize/villa/pull/1701), open as of 2026-09-10.**
 - **[PR #1662](https://github.com/ScrollPrize/villa/pull/1662)** — `infer`
   crashes on native Windows because `torch.compile` returns lazily and Triton
   has no Windows build, so `TritonMissing` is raised at the first forward, past
   the `except` meant to catch it. Falls back at the first forward instead.
+  **Closed and replaced by current-main
+  [#1703](https://github.com/ScrollPrize/villa/pull/1703), open as of 2026-09-10.**
 - **[PR #1663](https://github.com/ScrollPrize/villa/pull/1663)** —
   `prepare_9um_isotropic_input` dies on the final directory rename when anything
   holds a handle (`WinError 5`), discarding a completed conversion. Retries, and
-  if it still cannot publish, says so and keeps the staged output.
+  if it still cannot publish, says so and keeps the staged output. **Closed and
+  replaced by current-main draft
+  [#1705](https://github.com/ScrollPrize/villa/pull/1705), open as of 2026-09-10.**
 - **[PR #1471](https://github.com/ScrollPrize/villa/pull/1471)** — not ours. Its
   author asked for this repository's striped masks to be run against their
   branch; that check found the outputs identical to the in-memory path across 42
   variants and 9.7 billion voxels, and found one crash the branch introduces —
   a strip of exactly one row — with a fix verified against the parent tree.
+  The author incorporated and credited that fix, and the PR **merged to `main`
+  on 2026-09-10**. Its final source-chunk-major rewrite passed upstream CI but
+  was not re-tested by this project; the 42/42 result belongs to the earlier
+  revision actually tested here.
 - **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — asking
   whether the missing `_validation_mask` on published segments is intended.
   Triaged and assigned; no reply yet.
@@ -407,6 +417,8 @@ vesuvius-challenge/
 - [x] **#192 3D-label experiment** (2026-08-09) — 3 arms x 3 folds, a negative result
 - [x] **Robustness** (2026-08-15/16) — 30k extension holds the gap; `w02` replicates it wider
 - [x] **Two upstream PRs merged** — #1249 (2026-07-31), #1234 (2026-08-14)
+- [x] **An invited external review reached `main`** — third-party #1471 incorporated
+      this project's one-row-strip fix and 55-variant verification, then merged 2026-09-10
 - [x] **September track measured** (2026-08-22/26) — ink_9um scorecard, three LOSO arms,
       fine-tune cost curve, the render path on an unseen scroll
 - [x] **August round submitted** (2026-08-29)

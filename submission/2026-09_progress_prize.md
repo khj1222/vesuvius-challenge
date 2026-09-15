@@ -1,9 +1,22 @@
 # September 2026 Progress Prize — submission package (DRAFT)
 
-**Form:** TBD — each round has its own Google Form and the previous one closes.
-Fetch September's from https://scrollprize.org/prizes when the round opens
-(August's was https://docs.google.com/forms/d/e/1FAIpQLSev2vJobu521iB6OuyehDktzYTEo131F4iUGwt3Qxa9a1fk6A/viewform).
+**Form:** https://docs.google.com/forms/d/e/1FAIpQLScNBMj25FMnphngRG1Ciryv_2_Mkdq2YPJOD9WqPfZExII2iQ/viewform
+Verified through https://scrollprize.org/prizes on 2026-09-10; title:
+"September 2026 Progress Prizes". Recheck the link on submission day.
 **Deadline:** 2026-09-30 23:59 PT
+**Current status: DRAFT v25 (2026-09-10), not submitted.** The user authorized this local
+update. PR #1471, which incorporated and credited this project's one-row-strip fix and
+55-variant verification, merged into villa `main` on 2026-09-10 as `43f93f4`. The final
+implementation also rewrote the streaming loop and removed an unenforced memory-budget
+path after review; this project did not re-test that final revision. Earlier matrix results
+describe the tested 2026-08-31 revision only. The adoption claim remains limited to the
+incorporated fix and verification. Also retained the narrower #192 study claim, the
+scoring-selection caveat, and September's actual form layout. No experiment was rerun and
+no external post, commit, push or form submission was made. The current field hashes below
+supersede the historical revision notes that follow.
+
+### Historical revision notes (through 2026-09-05)
+
 **Status:** DRAFT v19 (2026-09-05). **Both submitted fields are final and hash-recorded
 below.** The work they report is finished and nothing is waiting on a run: the four-part
 cross-scroll study (docs/15), the adaptation ladder through arm D (docs/18), the 1667
@@ -169,6 +182,10 @@ Hyojun Kwon
 Individual submission — no team.
 ```
 
+**Discord display name (optional, between team and URL on September's form)**
+Use the user's actual server display name if they choose to supply it; otherwise leave blank.
+The field-4/field-5 labels below are retained as the document's stable references.
+
 **4. URL to your open source / publicly available contribution**
 ```
 https://github.com/khj1222/vesuvius-challenge
@@ -187,6 +204,9 @@ Adaptation and audit tools written for it: https://github.com/khj1222/vesuvius-c
 Upstream PR (this round, the arm generator): https://github.com/ScrollPrize/villa/pull/1608
 Upstream issue (held-out audit; filed and closed by the research lead — the concession is in docs/17): https://github.com/ScrollPrize/villa/issues/1638
 Invited check of another contributor's PR (found a crash, verified a fix): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/pr1471_striped_check
+Author incorporated and credited the one-row-strip fix (2026-09-08; merged into villa main 2026-09-10): https://github.com/ScrollPrize/villa/pull/1471#issuecomment-5586571289
+Incorporating commit: https://github.com/ScrollPrize/villa/commit/29d2863878a751e37d6d1d0a02f2847101c8c5a0
+Final merge commit: https://github.com/ScrollPrize/villa/commit/43f93f4b5aa2fd093673ac74e8a6d923d2f7833d
 Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-scroll ink generalization)
 ```
 
@@ -194,15 +214,15 @@ Open problem addressed: https://scrollprize.org/2026_open_problems (#7, cross-sc
 
 ```
 Reading a complete scroll means running an ink model on a scroll nobody has labeled. Open
-problem #7 asks how well today's models survive that jump; until now there was no systematic
-number scored against withheld annotation, and the official 9 µm models released on 2026-08-14
-ship with no evaluation at all. I measured the jump, diagnosed why it fails, priced what it
-costs to fix, and then checked whether that price holds on a second scroll — all on that
-release, with the held-out methodology that won July's Progress Prize and settled villa #192 in
-August.
+problem #7 asks how well models survive that jump. I measured it against withheld annotation
+using the official 9 µm models released on 2026-08-14, investigated the failures, measured
+what target-scroll annotation buys, and checked whether that benefit holds on a second scroll.
+I used the held-out methodology that won July's Progress Prize and was used in August to
+test one proposed depth-label approach to villa #192.
 
-Groundwork first (docs/14): scoring all 14 released hybrid_3d2d checkpoints on the three
-segments that ship validation masks puts the honest within-scroll ceiling at F1 0.74–0.77
+Previously submitted groundwork (August, docs/14): scoring all 14 released hybrid_3d2d
+checkpoints on the three segments that ship validation masks puts the honest within-scroll
+ceiling at F1 0.74–0.77
 — the best value any released checkpoint reaches is 0.755, 0.758 and 0.765, one per
 segment — against 0.98+ on training pixels: a 0.22–0.45 memorisation gap, no step that is
 best everywhere, and two released seeds that disagree by 0.22 F1 at the final step.
@@ -261,6 +281,11 @@ a single Paris4 segment lifts the seven segments it has never seen from mean F1 
 about seven minutes on one consumer GPU. Cross-scroll performance peaks at 10–20k steps in
 all six LOSO runs and fine-tuning at 2.5k: no held-out axis anywhere justifies the
 released 75k schedule.
+
+These F1 values use per-prediction threshold sweeps; the LOSO and fine-tuning summaries also
+select the best checkpoint per segment. They measure attainable performance under those rules,
+not a fixed-threshold deployment on an unread scroll. The recovery denominator is the
+train-pixel reference, not an independent generalisation ceiling (docs/15).
 
 Then I checked whether that 82% is a fact about the method or about Paris4, because a
 single-scroll headline is exactly the kind of thing that gets quoted without its scroll.
@@ -349,15 +374,19 @@ every published figure, confirming the margins hold under four selection rules, 
 person then reviewed the generator and found a crash on a batch smaller than the surviving
 scroll count, fixed two days later. The traffic went the other way too: the author of villa
 PR #1471 asked for this harness to be pointed at their striped-TIFF streaming path, at the
-odd extents their own testing did not cover. It reproduces their output exactly on 42 of 42
-variants and crashes on any image whose height leaves a strip of exactly one row, which
-converts fine today; the fix is verified against the same matrix. Being reproduced, being
-corrected, and being asked to check someone else's work are the three things a measurement
-of an open problem needs.
+odd extents their own testing did not cover. On the revision tested in August, 42 of 42
+comparable variants matched the parent at all six levels; a strip of exactly one row
+crashed the new path, and I supplied a verified fix. On September 8 the author incorporated
+that fix as `_decoded_block_to_2d` in commit 29d2863 and explicitly credited this project's
+55-variant matrix in the commit and their follow-up comment (linked in field 4). On September
+10 the contributor's PR merged into villa `main` as 43f93f4. Its final implementation also
+decodes each source chunk once and removed an unenforced memory-budget path after review; I
+have not re-tested that final rewrite. The adoption claim is limited to the incorporated
+one-row-strip fix and verification, not a pass verdict on every later implementation change.
 
 Everything is MIT, documented end to end (docs/14–18 and docs/20–24, plus 171
 committed evidence files under runs/), and continuous with the July harness and the
-August #192 verdict — one apparatus, three months of answered questions. Nothing here asks
+August depth-label study — one apparatus, three months of measured questions. Nothing here asks
 the pipeline to change shape around it: pseudo-labels are written to the corpus's own label
 contract, adapted checkpoints load in `infer` unmodified, and scores come back as the same
 zarr and TIFF the released tools already emit. And what it improves on is an absence — the
@@ -367,9 +396,9 @@ scroll out at all.
 
 **6. Terms and Conditions** → check "Yes, I agree"
 
-⚠️ **August's form had six questions, not seven** — the standalone "Pull request submitted!"
-checkbox is gone, so the PR is evidenced through field 4 alone. Check September's form when it
-opens; the layout above assumes August's.
+**September form checked 2026-09-10:** email, name, team, optional Discord display name,
+contribution URLs, contribution description, and terms. There is no standalone
+"Pull request submitted!" checkbox. Supply the optional Discord name separately if desired.
 (Award acceptance requires permissive open-sourcing; the repo is already MIT.)
 
 ---
@@ -387,10 +416,9 @@ before pasting.
    then stopped: what remains would cost claims, not words. Before submitting, read the
    whole field once end to end for order and repetition — v20 has since touched two more
    places (the recipe claim and the closing two sentences).
-1. **Get September's form** from https://scrollprize.org/prizes. Do not reuse August's
-   link — each round issues a new form and closes the previous one. Check the question
-   count: August had six (email, name, team, URL, description, terms). If September adds
-   back the "Pull request submitted!" checkbox, #1608 is the answer.
+1. **Recheck September's form** from https://scrollprize.org/prizes against the verified
+   link at the top. It includes an optional Discord display name between team and URL;
+   the other answers remain in the fenced blocks. Do not reuse August's link.
 2. **Check the four upstream links still say what field 4 says they say** — #1608 (open,
    one review round), #1638 (closed and locked, and field 4 labels it as such), #1249
    (merged). If **#1608 merges**, relabel it "merged" in field 4 and in field 5's
@@ -403,11 +431,19 @@ before pasting.
    #1701/#1703/#1705 were opened on 09-04 and cap out on 10-02, after this deadline. Check the
    state of every PR cited here on the day, not from memory — `python tools/upstream_sweep.py`
    answers it in one command.
-3. **`git push`** and confirm `git status` is clean. Every field-4 link must resolve for a
-   judge who is not logged in.
+   Also reopen [#1471](https://github.com/ScrollPrize/villa/pull/1471): the author incorporated
+   and credited the one-row-strip fix in 29d2863 on 2026-09-08, then the PR merged into
+   villa `main` as 43f93f4 on 2026-09-10. Keep the merged label unless the commit disappears,
+   but do not apply the old matrix's pass verdict to the final streaming rewrite.
+   The promised multipage issue is now [#1738](https://github.com/ScrollPrize/villa/issues/1738);
+   ge-al linked a main-only fix branch. It is their separate work, not ours to claim.
+3. **Publish only the intended submission changes when authorized.** Every field-4 link
+   must resolve for a judge who is not logged in. Use explicit file paths when staging:
+   `runs/` has 135 existing archived-file deletions that must not enter the commit. A clean
+   working tree is not required and must not be obtained by staging or restoring those files.
 4. **Re-run the two verifiers** if anything in `runs/` changed since 2026-08-30:
    they re-derive every artifact-backed number in field 5 from the committed CSV/JSON.
-5. **Paste fields 1–5 from the fenced blocks above, tick Terms, submit.** Then sync this
+5. **Paste fields 1–5 from the fenced blocks above, optionally supply Discord, tick Terms, submit.** Then sync this
    file to exactly what was submitted and freeze it, as the July and August files were.
 6. **Record the field-5 sha256 over the block body plus one trailing newline** — that is
    the convention the August entry uses, and checking it any other way looks like a
@@ -427,23 +463,15 @@ closed by the inactivity bot on 09-03. Five further replies are drafted and unpo
 `pr1471_reply_hendrikschilling.md` (the maintainer is deciding whether to close that PR),
 `pr1608_base_branch_question.md`, and the three `pr166x_*_followup.md`.
 
-Field hashes at this revision (2026-09-05, after the straight-through read of field 5), over
-the block body plus one trailing newline — the convention the August entry uses. The read
-found four counts that had gone stale as later results landed and were corrected here:
-field 4's scored cells 1,720 → **1,778** and evidence files 33 → **40** (blur-exposure's 16
-cells and annotation-targeting's 42 arrived after the last recount), and field 5's closing
-`docs/14–18` → `docs/14–18 and docs/20–23` (it cites docs/20 in the body and rests on
-docs/21–23; there is no docs/19) with the unreproducible "100 committed evidence files"
-replaced by the 135 files actually committed under `runs/`. The same read then fixed style and
-structure: the three `--` left by the two latest paragraphs became em dashes, the field's only
-all-caps phrase was lowered (the +0.32-against-+0.046 comparison in front of it already carries
-the emphasis, and shouting once undercuts a text whose credibility is its evenness), the
-longest paragraph was split after the seven-times claim, the closing moral that the 1667
-paragraph had already made was cut, and "Both have survived outside hands" now names its
-antecedent:
+**Update 2026-09-10**: #1471 was not closed; after two implementation review rounds it
+merged into villa `main` as 43f93f4. The one-row-strip fix and attribution remain in the
+merged commit history. The final source-chunk-major rewrite was not re-tested here.
 
-- field 4 — 2,170 chars, `7da1a2843f0baf9a5f7e39d0602ed95fa755abe0a9d0726d0abb3a114994d573`
-- field 5 — 13,006 chars, `3136e527fe67057b332b3ed1f97176288febd7b6776cf30a4a66cd32a307d78b`
+Current field hashes (v25, 2026-09-10), calculated over each fenced block body
+with LF line endings and exactly one trailing newline:
+
+- field 4 — 2,557 chars, `3c70bd20e598d35950d212cbf17d8821261b8f2428ae3e7cefc9b17cc364f0e4`
+- field 5 — 13,763 chars, `633bbca97bfd28109936b18739d7e88729b16245acf16feb91a1eaad44c91b72`
 
 If either field is edited before submitting, recompute these and record the new pair
 against what was actually pasted.
@@ -483,6 +511,7 @@ against what was actually pasted.
 | independent recomputation of the 0139 table, margins hold under 4 selection rules | Bullo27 on villa #1580, 2026-08-24 |
 | generator upstreamed, reviewed, crash fixed | villa #1608 (`dc9edb6`), `submission/pr1608_body.md` + `pr1608_reply_bullo27.md` |
 | invited check of villa #1471: 42/42 variants identical at six levels (9,661,092,220 voxels); a one-row strip crashes the new path (`rowsperstrip == 1` or `height % rowsperstrip == 1`) and the fix is verified 18/18; on a real 32249×51380 mask the read-back design costs 3.0x wall for 2.2x peak RSS | `runs/pr1471_striped_check/` (matrix, targeted re-run, real-file timings, and `verify_numbers.py` re-deriving all 38 figures), `submission/pr1471_reply_jaideepsaipadhi.md` |
+| #1471 author incorporated and credited the one-row-strip fix on 2026-09-08; PR merged into villa `main` on 2026-09-10; final source-chunk-major rewrite not re-tested by this project | [author confirmation](https://github.com/ScrollPrize/villa/pull/1471#issuecomment-5586571289), [commit 29d2863](https://github.com/ScrollPrize/villa/commit/29d2863878a751e37d6d1d0a02f2847101c8c5a0), [merge 43f93f4](https://github.com/ScrollPrize/villa/commit/43f93f4b5aa2fd093673ac74e8a6d923d2f7833d) |
 
 (Checkpoints and prediction TIFFs stay untracked; the committed CSV/JSON files reproduce
 every quoted figure.)

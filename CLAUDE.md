@@ -2,6 +2,63 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
+## 드라이브 이전 — 이제 `E:\vesuvius-challenge` (2026-09-12, 경로가 바뀌었으니 최우선)
+
+- 트리 전체를 `D:\vesuvius-challenge` → **`E:\vesuvius-challenge`**로 옮겼다(323.1GB).
+  D: 여유가 27.9GB까지 떨어졌고 10월 대형주력에서 vesuvius가 미선정이라 공간을 비웠다.
+  검증 후 D: 원본 삭제 → **D: 여유 27.5 → 352GB**. E:는 별도 NVMe(C·D는 disk 0 공유)라
+  학습 I/O가 OS 디스크에서 분리되는 부수 효과도 있다.
+- 🔴 **안 움직인 것**: `D:\vw2`~`D:\vw9`(villa 워크트리 8개)·`D:\shots`·`D:\docker`.
+  워크트리의 `.git` 포인터만 E:로 재지정했고, villa 쪽 `worktrees/*/gitdir`는
+  `D:/vwN/.git` 그대로가 맞다. **문서의 `D:/vw*` 표기는 고치지 말 것.**
+- **지우기 전 검증 = 기록 재현.** E:에서 `runs/ink_holdout_20k/ckpt_020000`으로 w00
+  검증마스크 추론(166블록, 60초) → **F1 0.823208 @ threshold 146**으로 7월 기록과
+  6개 지표 전부 소수점 6자리 일치. 두 사본 차이 509개도 **508개가 드라이브 문자뿐**임을
+  확인(나머지 1개는 파이썬이 재생성한 `.pyc`).
+- 경로 치환 커밋 = **`3b33f6c`**(53파일, 393줄 교체 393줄, 추가 줄에 D: 경로 0).
+  ⚠️ **`CLAUDE.md`·`README.md`·`submission/2026-09_progress_prize.md`는 제외** — 09-10의
+  미커밋 작업이 섞여 있고, 뒤 둘은 애초에 D:/E: 경로가 0개라 치환 대상도 아니었다.
+- **`AGENTS.md`를 `.gitignore`에 추가**(`f74c18d`). 전 ref 통틀어 커밋 0회인데 gitignore에도
+  없어 "의도"와 "실수 누락"이 구분되지 않았다. CLAUDE.md의 상위집합이고 고유 102줄이
+  `planning/`과 같은 부류(8월 미선정·상금 시나리오·타 기여자 PR 메모·9월 폼 URL)라
+  공개 저장소에 올리면 안 되는 쪽이 맞다.
+- **백업**: `AGENTS.md` + `planning/`(1.713GB·385 dirs·2,660 files)을
+  **`Z:\아카이브\vesuvius-local-only\`**에 복사(robocopy 대조 exit 0, AGENTS.md SHA-256 일치,
+  복구 안내 README 포함). 둘 다 gitignore라 그전까지 **사본이 이 기계뿐**이었다.
+  `runs/`는 옆의 `Z:\아카이브\vesuvius-runs\`.
+- Claude Code 프로젝트 키가 `D--vesuvius-challenge` → **`E--vesuvius-challenge`**로 복사됐고
+  (메모리·세션기록 73MB), Codex `config.toml`에 `[projects.'e:\vesuvius-challenge']` trust
+  엔트리를 추가했다. Codex `memories/`·`memories_1.sqlite`는 **비어 있어** 손댈 것이 없었다.
+- ⚠️ **함정 1 (오늘 세 번 밟음)**: 셸 heredoc으로 정규식을 넘기면 `[\\/]`가 `[\/]`로 뭉개지고,
+  파이썬 문자 클래스에서 그건 **슬래시만** 뜻한다. 그래서 "검증 통과"라고 보고한 패스가
+  백슬래시 경로 301곳과 `data/` 히트 전부를 놓쳤다. 같은 뭉개짐이 `\v`를 **수직탭(0x0B)**으로
+  바꿔 메모리 색인 한 줄을 깨뜨렸다. → **경로 작업은 리터럴 바이트(`bytes([0x5C])`)로 하고,
+  검증도 같은 리터럴로 할 것. 정규식을 heredoc에 태우지 말 것.**
+- ⚠️ **함정 2**: venv는 재생성이 불필요했지만 **`.venv`의 editable-install finder가 D:를 물고
+  있어 `import koine_machines`가 옛 트리로 갔다.** `import torch`가 되는 것만으로는 안 잡힌다
+  → 이사 검증은 **`koine_machines.__file__`**을 확인할 것.
+- ⚠️ **함정 3**: 패치 캐시 40개가 **절대경로로 키를 잡는다**(총 30만 곳). 안 고쳤으면 모든
+  캐시가 조용히 무효화됐을 것. 경로 치환의 실질 대부분이 여기였다.
+- 오늘 남긴 것: 워킹트리에 `D 135`(Z: 아카이브한 `runs/`, 그대로 두는 게 맞음)와
+  `M 3`(위 세 문서). **`git commit -a` / `git add -A`는 계속 금지.**
+
+
+## 최신 재개 안내 (2026-09-10, #1471 병합 후)
+
+아래의 과거 기록보다 **`AGENTS.md` 최상단과 `planning/2026-09-10_handoff.md`를 우선**한다.
+사용자는 오늘은 여기까지 문서·메모리만 갱신하고 종료하며, 추천 순서의 실제 착수는
+**이번 주말에 다시 논의**하기로 했다. 이는 자동 실행·예약 요청이 아니다.
+사용자 요청으로 GitHub 최신 상태와 **9월 신규 업무 후보**를 정리했다. 후보 정본은
+`planning/2026-09_new_work_candidates.md`이고, 추천 순서는 Copy 방향 벡터 TTA →
+`render_ink.py --scale-segmentation` 전달 → PHerc.1667 예제 `/255` 수정이다.
+후보 실행·학습·추론·게시·예약은 주말 재개 전까지 시작하지 않는다.
+9월 제출 문안은 `submission/2026-09_progress_prize.md` v25로 로컬 보완됐고 아직 미제출이다.
+#1471은 우리 한 행 strip 수정안과 55-variant 검증을 반영한 채 09-10 villa `main`에
+`43f93f4`로 병합됐다. 최종 source-chunk-major rewrite는 우리가 재검증하지 않았다.
+8월 공개 수상자 명단에 우리 이름이 없고 심사 이유는 미공개다. 원인·9월 전망은
+`planning/2026-09-10_prize_review/assessment.md`의 제한된 추정으로만 읽을 것.
+기존 runs135삭제·external 수정·8월 제출 원본은 보존한다. 오늘 commit·push·외부 게시 없음.
+
 ## 이 프로젝트가 뭔가
 
 Vesuvius Challenge **Progress Prizes** 트랙 진입 프로젝트. 헤르쿨라네움 탄화 두루마리 CT→판독을 돕는 오픈소스 기여로 월간 상금($1k~$20k)을 노림. 2026-07-19 착수(사용자가 후보 5개 중 Vesuvius 선택 — 롤링이라 9월 병목 파이프라인에 안 얹힘이 결정 이유).
@@ -359,7 +416,7 @@ holdout 생성 하나로만 서야 하고, `ink-detection/scripts/`가 main에 �
   F2 = *"윈도우에서 튜토리얼 따라하면 예측 한 장 보기 전에 이거부터 만남"*.
 - 🔴 **체크박스(`I personally verified…`)는 사용자가 그 스크립트를 실제로 돌린 PR만 켠다.** #1701은 사용자가 `f4_shot.py`를
   직접 돌려 출력을 붙였으므로 켰고, **#1703은 미실행이라 꺼둔 채로 열었다.** 켜려면:
-  `cd D:\vw9; git checkout -q fix/eager-fallback-at-first-forward; cd D:\shots; uv run --project D:\vesuvius-challenge\external\villa\ink-detection python f2_shot.py`
+  `cd D:\vw9; git checkout -q fix/eager-fallback-at-first-forward; cd D:\shots; uv run --project E:\vesuvius-challenge\external\villa\ink-detection python f2_shot.py`
 
 ✅ **F3까지 완료 — [#1705](https://github.com/ScrollPrize/villa/pull/1705) 열림, #1663 닫힘(2026-09-05).**
 base **`main`**, **draft**, `mergeable=true`(`unstable`의 원인은 늘 그렇듯 Vercel 배포권한 봇 하나), head
@@ -1265,9 +1322,9 @@ uv run --project external/villa/ink-detection python tools/run_cv_folds.py data/
 - **환경**: 네이티브 Windows에 torch cu128·5090 검증됨. `uv`·`hf` CLI 설치됨. **WSL2는 배포판 미설치**(공식 파이프라인 = `wsl --install` 필요; 5090=sm_120이라 WSL 안에서도 cu128 torch 필요).
 - **데이터**: 학습 세그먼트 `w00_20231016151002`를 `data/ink-dataset/phercparis4/`로 다운로드(HF buckets, 익명 접근 OK). ⚠️ **실측 ~86GB**(`hf buckets ls -R`로 85.7GB/147,785파일 확인 — 표면볼륨 `<seg>.zarr` 하나가 85GB, `preds/`는 0.37GB). **튜토리얼의 "25GB"는 오류.** **2026-07-20 세션 종료 시점 ~77GB/86GB(89%) 받음(부분)** — 사용자가 PC 종료해 일시중단(전날 ~31GB에서 이어받아 여기까지). `hf buckets sync`는 **idempotent/이어받기 가능** → 재실행하면 남은 ~9GB 이어받음. 파일: `<seg>.zarr`+`_inklabels.zarr`/`_supervision_mask.zarr`(+각 .tif)+`x/y/z.tif`+`meta.json`.
 - **경로 결정(2026-07-19)**: **(a) 공식 villa/uv 파이프라인 채택.** 5090 함정 없음 확인(`pyproject.toml`이 `torch==2.10.0` 핀). **네이티브 Windows 먼저** 시도(`uv sync` → CPU휠이면 `uv pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cu128` 오버라이드), deps/POSIX 막히면 WSL2 폴백. villa는 `external/villa`(gitignore)에 **`merge-ink-pipelines`(복수!)** 브랜치로 클론(튜토리얼의 단수 표기는 오타). 자작 개조(b)는 폐기(작업량 HIGH·채택 크레딧 손실).
-- **셋업 완료 & 검증(2026-07-19)**: `external/villa/ink-detection`에 `uv sync` 성공(네이티브 Windows, uv가 CPython 3.12 자동 fetch, napari/pyqt6/imagecodecs 등 169개 설치). `pyproject.toml`에 `[[tool.uv.index]] pytorch-cu128` 박아 재sync → **`torch 2.10.0+cu128` · CUDA True · RTX 5090 · sm_120 검증**. config `configs/ink_tutorial.json` 작성(2.5D flat, `segments_path=D:/vesuvius-challenge/data/ink-dataset/phercparis4`, `patch_size=[64,256,256]`, batch 2, 20k iter, `save_every=1000`→`runs/ink_tutorial/ckpt_0XXXXX.pth`, `val_every=500`, fp16). `dataloader_workers`가 `spawn` 컨텍스트라 Windows-safe. **WSL 불필요.** **2026-07-20 재확인**: villa 디렉터리·`uv`·config 파일 전부 그대로 존재·정합 → 다운로드만 끝나면 학습 즉시 시작 가능.
+- **셋업 완료 & 검증(2026-07-19)**: `external/villa/ink-detection`에 `uv sync` 성공(네이티브 Windows, uv가 CPython 3.12 자동 fetch, napari/pyqt6/imagecodecs 등 169개 설치). `pyproject.toml`에 `[[tool.uv.index]] pytorch-cu128` 박아 재sync → **`torch 2.10.0+cu128` · CUDA True · RTX 5090 · sm_120 검증**. config `configs/ink_tutorial.json` 작성(2.5D flat, `segments_path=E:/vesuvius-challenge/data/ink-dataset/phercparis4`, `patch_size=[64,256,256]`, batch 2, 20k iter, `save_every=1000`→`runs/ink_tutorial/ckpt_0XXXXX.pth`, `val_every=500`, fp16). `dataloader_workers`가 `spawn` 컨텍스트라 Windows-safe. **WSL 불필요.** **2026-07-20 재확인**: villa 디렉터리·`uv`·config 파일 전부 그대로 존재·정합 → 다운로드만 끝나면 학습 즉시 시작 가능.
 - **재현법(2026-07-21 실측 완료, 순서대로)**:
-  1. ✅ **데이터**: `hf buckets sync hf://buckets/scrollprize/datasets/ink/phercparis4/w00_20231016151002 D:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002` → 85.7GB/147,785파일 완료.
+  1. ✅ **데이터**: `hf buckets sync hf://buckets/scrollprize/datasets/ink/phercparis4/w00_20231016151002 E:\vesuvius-challenge\data\ink-dataset\phercparis4\w00_20231016151002` → 85.7GB/147,785파일 완료.
   2. ✅ **학습**: `uv run --directory external/villa/ink-detection python -m koine_machines.training.train configs/ink_tutorial.json` (20k iter, 5090서 ~1h31m @ ~3.4 it/s; OOM이면 `batch_size`→1 or `patch_size`→[64,128,128]). ckpt 20개 저장(`runs/ink_tutorial/ckpt_0XXXXX.pth`). 프리뷰: `runs/ink_tutorial/train_previews/`.
   3. ✅ **추론**: `uv run --directory external/villa/ink-detection python -m koine_machines.inference.infer <abs>/w00_20231016151002/w00_20231016151002.zarr runs/ink_tutorial/ckpt_020000.pth predictions/w00_20231016151002.tif --batch-size 4 --no-compile` (9425블록 ~23분 @ ~6.7 block/s). ⚠️ **`--no-compile` 필수**: infer는 기본으로 `torch.compile(reduce-overhead)`를 켜는데 inductor가 **Triton**을 요구하고 Triton은 **네이티브 Windows 미지원**이라 없으면 첫 forward에서 `TritonMissing` 크래시(학습은 compile 안 써서 무관).
 - ✅ **기여 "한 겹" 제작 완료(2026-07-21)**: (②) `tools/ink_viz.py` — 예측 TIFF 시각화 재사용 CLI(`stats`/`preview`/`surface`/`overlay`, +`tools/README.md`). (③) `docs/08_windows_reproduction.md` — 네이티브 Windows 재현 워크스루 + 실측 함정 7종 표. before/after 이미지 `docs/images/{w00_surface,w00_ink_preview,w00_overlay}.png` 생성. 루트 `README.md` 갱신(죽은 src/ 빠른시작 → 실제 파이프라인·결과·산출물 링크). 툴·문서는 **영어**(커뮤니티 채택 축). `.gitignore`가 docs/images는 커밋·data/external/tif/pth는 제외.
