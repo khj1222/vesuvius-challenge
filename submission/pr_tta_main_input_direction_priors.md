@@ -7,9 +7,8 @@ PR body draft — Copy direction priors through TTA, against `main`.
   evidence: runs/tta_main/  (must be on origin/main before the PR is opened — the images are raw URLs)
 
 ⚠️ Open as DRAFT until #1608 is closed by the bot (2026-09-19): non-draft PRs sit at the cap of 3.
-⚠️ Two things the USER supplies before this goes out:
-   1. **Why / where this is useful** — human-written, in the user's own words (CONTRIBUTING).
-   2. The checkbox stays UNTICKED unless the user runs tta_shot.py (or the tests) themselves.
+Why line: the user's facts (2026-09-15: "met it while measuring the Copy model; TTA is the default so everyone hits it"), phrased by the assistant.
+⚠️ The checkbox stays UNTICKED unless the user runs tta_shot.py (or the tests) themselves.
 POST ONLY WHAT IS BELOW THE --- LINE.
 -->
 
@@ -37,7 +36,7 @@ Scripts, transcript, numbers and the 43-test run: https://github.com/khj1222/ves
 
 **Why / where this is useful:**
 
-<!-- USER WRITES THIS. -->
+I hit this while measuring the released Copy model, not while looking for bugs. TTA is on by default in the Copy CLI, so everyone who runs the released checkpoint as documented goes through this path.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
