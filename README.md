@@ -350,6 +350,21 @@ old PRs were closed and current-main replacements were opened on 2026-09-04:
   on 2026-09-10**. Its final source-chunk-major rewrite passed upstream CI but
   was not re-tested by this project; the 42/42 result belongs to the earlier
   revision actually tested here.
+- **[PR #1796](https://github.com/ScrollPrize/villa/pull/1796)** (draft, `main`) —
+  Copy-model TTA flips and rotates the input volume but left the two direction-prior
+  vectors' components alone, so each variant saw a prior pointing the wrong way.
+  Transports the components; a model returning its own priors now gets them back
+  (max error 3.6e-7 against 3.04 before). Real-data effect on six manually labelled
+  Paris 4 cubes is mixed and is not claimed as a gain. Evidence: `runs/tta_main/`.
+- **[PR #1803](https://github.com/ScrollPrize/villa/pull/1803)** (draft, `main`) —
+  `render_ink.py` could not pass `--scale-segmentation` to the renderer, so a mesh in
+  a coarser frame rendered an all-black strip and exited 0 (villa #1660). Adds the
+  opt-in flag, default 1.0, no auto-detection. Evidence: `runs/render_scale_main/`.
+- **Six Hugging Face PRs** on `scrollprize/PHerc.1667-iteration-{0..5}` — the model
+  cards describe the input convention three different ways and all three saturate the
+  model (villa #1659, found by jonmarrs); the transform the paper names computes
+  `clip(x, 0, 200) / 255`. Card and docstring only, weights untouched. Evidence:
+  `runs/hf1667_input_example/`.
 - **[Issue #1231](https://github.com/ScrollPrize/villa/issues/1231)** — asking
   whether the missing `_validation_mask` on published segments is intended.
   Triaged and assigned; no reply yet.
