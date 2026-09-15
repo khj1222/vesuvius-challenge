@@ -1,0 +1,4 @@
+strict load: <All keys matched successfully>
+torch.Size([1, 1, 64, 64])
+input range after scaling: [0.0000, 0.7843]   (raw uint8 clipped to 200 -> max 200/255 = 0.7843)
+prob range on this synthetic tensor: [0.336, 0.498]   (shape check only; noise input says nothing about ink)

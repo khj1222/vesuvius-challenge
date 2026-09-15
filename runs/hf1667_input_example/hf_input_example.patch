@@ -1,0 +1,39 @@
+--- a/README.md
++++ b/README.md
+@@ -62,10 +62,12 @@
+ ).eval().cuda()
+ 
+ # Input: float32, shape (B, 1, D=62, H=256, W=256).
+-# Intensity should already be in roughly [0, 1] (the training pipeline
+-# clipped raw uint8 layers to [0, 200] then applied Normalize(mean=0, std=1)
+-# which keeps the magnitude small).
+-x = torch.randn(1, 1, 62, 256, 256, device="cuda")
++# Explicitly reproduce clipping followed by Albumentations'
++# Normalize(mean=0, std=1, max_pixel_value=255): clip(raw, 0, 200) / 255.
++# This is intensity scaling, not per-tile z-score normalization.
++# This synthetic tensor demonstrates the call shape only, not ink quality.
++raw = torch.randint(0, 256, (1, 1, 62, 256, 256), device="cuda")
++x = raw.float().clamp(0, 200) / 255.0
+ 
+ with torch.no_grad():
+     out = model(x)
+@@ -104,6 +106,8 @@
+             if np.any(fmask[y:y+WINDOW, x:x+WINDOW] == 0):
+                 continue
+             tile = image[y:y+WINDOW, x:x+WINDOW]            # (256,256,62)
++            # Apply the same input scaling as the quick start; keep image unchanged.
++            tile = np.clip(tile.astype(np.float32), 0, 200) / 255.0
+             t = torch.from_numpy(tile).permute(2, 0, 1)     # (62,256,256)
+             t = t.unsqueeze(0).unsqueeze(0).float().cuda()  # (1,1,62,256,256)
+             logits = model(t).logits                        # (1,1,64,64)
+--- a/modeling_inkdetection.py
++++ b/modeling_inkdetection.py
+@@ -10,7 +10,7 @@
+     )
+ 
+ Input: float32 tensor of shape `(B, 1, D, H, W)` or `(B, D, H, W)`,
+-       where D = 62, H = W = 256 (intensity already z-score normalised).
++       where D = 62, H = W = 256 (raw uint8 clipped to [0, 200] and divided by 255; not z-score normalised).
+ Output: `ModelOutput(logits=<sigmoid logits, shape (B, 1, H/4, W/4)>)`.
+ """
+ from dataclasses import dataclass

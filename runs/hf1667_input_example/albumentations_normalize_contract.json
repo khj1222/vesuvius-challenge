@@ -1,0 +1,24 @@
+{
+  "albumentations_version": "2.0.8",
+  "normalize_signature": "(mean: 'tuple[float, ...] | float | None' = (0.485, 0.456, 0.406), std: 'tuple[float, ...] | float | None' = (0.229, 0.224, 0.225), max_pixel_value: 'float | None' = 255.0, normalization: \"Literal['standard', 'image', 'image_per_channel', 'min_max', 'min_max_per_channel']\" = 'standard', p: 'float' = 1.0)",
+  "input": [
+    0.0,
+    100.0,
+    200.0,
+    255.0
+  ],
+  "actual": [
+    0.0,
+    0.3921568989753723,
+    0.7843137979507446,
+    1.0
+  ],
+  "expected_div255": [
+    0.0,
+    0.3921568691730499,
+    0.7843137383460999,
+    1.0
+  ],
+  "max_abs_difference": 5.960464477539063e-08,
+  "requirements_sha256": "481f0ebc5fdaac01ae1ea1ecbea491787a168137a006804010abba41e8918dd3"
+}
