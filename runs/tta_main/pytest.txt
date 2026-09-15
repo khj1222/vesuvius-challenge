@@ -1,0 +1,52 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.13, pytest-9.0.2, pluggy-1.6.0 -- E:\vesuvius-challenge\external\villa\ink-detection\.venv\Scripts\python.exe
+rootdir: D:\vw10\vesuvius
+configfile: pytest.ini
+plugins: anyio-4.13.0, napari-plugin-engine-0.2.1, npe2-0.8.1
+collecting ... collected 43 items
+
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_transported_priors_survive_tta[mirror] PASSED [  2%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_transported_priors_survive_tta[rotate3] PASSED [  4%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_untransported_priors_do_not_survive_tta[mirror] PASSED [  6%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_untransported_priors_do_not_survive_tta[rotate3] PASSED [  9%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_no_vector_channels_is_a_no_op PASSED [ 11%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_scalar_channels_are_left_alone PASSED [ 13%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_flip_negates_only_the_flipped_component PASSED [ 16%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_out_of_range_vector_group_is_rejected[-1] PASSED [ 18%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_out_of_range_vector_group_is_rejected[6] PASSED [ 20%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_out_of_range_vector_group_is_rejected[8] PASSED [ 23%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_predict_displacement_transports_priors_for_direction_conditioned_checkpoints PASSED [ 25%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_predict_displacement_leaves_other_checkpoints_unchanged PASSED [ 27%]
+tests/neural_tracing/test_displacement_tta_input_vectors.py::test_predict_displacement_does_not_guess_a_layout_for_other_widths PASSED [ 30%]
+tests/neural_tracing/test_displacement_scale.py::test_no_flag_with_matching_voxel_size_is_silent_and_unscaled PASSED [ 32%]
+tests/neural_tracing/test_displacement_scale.py::test_no_flag_with_mismatched_voxel_size_stays_unscaled_but_warns PASSED [ 34%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_derives_scale_from_checkpoint_metadata PASSED [ 37%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_without_enough_information_raises[config0-7.91] PASSED [ 39%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_without_enough_information_raises[None-7.91] PASSED [ 41%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_without_enough_information_raises[config2-None] PASSED [ 44%]
+tests/neural_tracing/test_displacement_scale.py::test_missing_metadata_keeps_legacy_scale_silently PASSED [ 46%]
+tests/neural_tracing/test_displacement_scale.py::test_missing_config_keeps_legacy_scale_silently PASSED [ 48%]
+tests/neural_tracing/test_displacement_scale.py::test_metadata_without_inference_voxel_size_keeps_legacy_scale_silently PASSED [ 51%]
+tests/neural_tracing/test_displacement_scale.py::test_explicit_scale_wins_without_warning_when_consistent PASSED [ 53%]
+tests/neural_tracing/test_displacement_scale.py::test_explicit_scale_wins_but_warns_on_metadata_mismatch PASSED [ 55%]
+tests/neural_tracing/test_displacement_scale.py::test_explicit_scale_without_metadata_is_silent PASSED [ 58%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_explicit_scale_raises[0.0] PASSED [ 60%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_explicit_scale_raises[-1.0] PASSED [ 62%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_explicit_scale_raises[nan] PASSED [ 65%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_explicit_scale_raises[inf] PASSED [ 67%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_metadata_voxel_size_is_ignored[0.0] PASSED [ 69%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_metadata_voxel_size_is_ignored[-4.8] PASSED [ 72%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_metadata_voxel_size_is_ignored[nan] PASSED [ 74%]
+tests/neural_tracing/test_displacement_scale.py::test_invalid_metadata_voxel_size_is_ignored[not-a-number] PASSED [ 76%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_rejects_invalid_metadata_voxel_size[0.0] PASSED [ 79%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_rejects_invalid_metadata_voxel_size[-4.8] PASSED [ 81%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_rejects_invalid_metadata_voxel_size[nan] PASSED [ 83%]
+tests/neural_tracing/test_displacement_scale.py::test_auto_rejects_invalid_metadata_voxel_size[not-a-number] PASSED [ 86%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[auto-True] PASSED [ 88%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[AUTO-True] PASSED [ 90%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[  auto  -True] PASSED [ 93%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[0.6-False0] PASSED [ 95%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[0.6-False1] PASSED [ 97%]
+tests/neural_tracing/test_displacement_scale.py::test_is_auto_displacement_scale[None-False] PASSED [100%]
+
+============================= 43 passed in 3.95s ==============================

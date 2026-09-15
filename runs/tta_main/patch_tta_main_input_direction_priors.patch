@@ -1,0 +1,272 @@
+From 079bc588534b97466167704784253f112ab98107 Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Tue, 15 Sep 2026 20:01:36 +0900
+Subject: [PATCH] displacement_tta: transport Copy direction-prior components
+ with the spatial transform
+
+Mirror and rotate3 TTA transform every input channel spatially and, on the
+way back, negate or reorder the *output* displacement components so the
+variants agree in the original frame. The two ZYX direction priors in the
+Copy model's 8-channel input (channels 2:5 and 5:8) are vectors too, but
+their components were left alone: after a z flip the prior still pointed
++z in a volume that now runs the other way, so each variant answered a
+different question and the merge averaged them.
+
+run_model_tta gains `input_vector_channel_starts`, empty by default, and
+predict_displacement passes (2, 5) only when the checkpoint config has
+use_triplet_direction_priors and the input is the 8-channel layout. Every
+other caller is byte-for-byte unchanged.
+
+Tests: a model that returns its own input priors now comes back with
+those priors after TTA in both modes (max error 2.4e-7 against 3.04 and
+2.45 before); scalar channels, the input tensor, unconfigured callers and
+other channel widths are untouched; out-of-range groups are rejected.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+---
+ .../inference/displacement_helpers.py         |   6 +
+ .../inference/displacement_tta.py             |  36 ++++-
+ .../test_displacement_tta_input_vectors.py    | 148 ++++++++++++++++++
+ 3 files changed, 188 insertions(+), 2 deletions(-)
+ create mode 100644 vesuvius/tests/neural_tracing/test_displacement_tta_input_vectors.py
+
+diff --git a/vesuvius/src/vesuvius/neural_tracing/inference/displacement_helpers.py b/vesuvius/src/vesuvius/neural_tracing/inference/displacement_helpers.py
+index 580a120c2..6b6a23c4b 100644
+--- a/vesuvius/src/vesuvius/neural_tracing/inference/displacement_helpers.py
++++ b/vesuvius/src/vesuvius/neural_tracing/inference/displacement_helpers.py
+@@ -121,6 +121,12 @@ def predict_displacement(args, model_state, model_inputs, use_tta=None, profiler
+             outlier_drop_min_keep=getattr(args, "tta_outlier_drop_min_keep", 4),
+             tta_batch_size=getattr(args, "tta_batch_size", 2),
+             profiler=profiler,
++            input_vector_channel_starts=(
++                (2, 5)
++                if model_state.get("model_config", {}).get("use_triplet_direction_priors", False)
++                and int(model_inputs.shape[1]) == 8
++                else ()
++            ),
+         )
+ 
+     return run_single_model_pass(model, model_inputs, amp_enabled, amp_dtype)
+diff --git a/vesuvius/src/vesuvius/neural_tracing/inference/displacement_tta.py b/vesuvius/src/vesuvius/neural_tracing/inference/displacement_tta.py
+index 22d912bf1..fe0a32552 100644
+--- a/vesuvius/src/vesuvius/neural_tracing/inference/displacement_tta.py
++++ b/vesuvius/src/vesuvius/neural_tracing/inference/displacement_tta.py
+@@ -275,6 +275,30 @@ def _drop_tta_outlier_variants(disp_stack, thresh, min_keep=4):
+     return disp_stack[keep_mask]
+ 
+ 
++def _transform_input_vector_channels(
++    inputs, *, vector_channel_starts=(), flip_dims=(), axis_perm=None,
++):
++    """Transform vector components after the input's spatial transform.
++
++    CT and conditioning masks are scalar channels. Copy direction priors
++    contain two ZYX vectors, whose components must follow the spatial map.
++    Empty starts preserve legacy behavior for callers without vector inputs.
++    """
++    if not vector_channel_starts:
++        return inputs
++    output = inputs.clone()
++    for start in vector_channel_starts:
++        start = int(start)
++        if start < 0 or start + 3 > inputs.shape[1]:
++            raise ValueError(f"Invalid input vector channel start: {start}")
++        if axis_perm is not None:
++            channels = [start + int(axis) for axis in axis_perm]
++            output[:, start:start + 3] = inputs[:, channels]
++        for dim in flip_dims:
++            output[:, start + FLIP_DIM_TO_CHANNEL[dim]] *= -1
++    return output
++
++
+ def run_model_tta(
+     model,
+     inputs,
+@@ -287,6 +311,7 @@ def run_model_tta(
+     outlier_drop_min_keep=4,
+     tta_batch_size=2,
+     profiler=None,
++    input_vector_channel_starts=(),
+ ):
+     """Run TTA on a batch, returning merged displacement."""
+     if inputs.ndim != 5:
+@@ -317,13 +342,20 @@ def run_model_tta(
+                     x = inputs
+                     for d in flip_dims:
+                         x = x.flip(d)
++                    x = _transform_input_vector_channels(
++                        x, vector_channel_starts=input_vector_channel_starts,
++                        flip_dims=flip_dims,
++                    )
+                     tta_inputs.append(x)
+             else:
+                 transform_chunk = TTA_ROTATE3_PERMS[chunk_start:chunk_start + tta_batch_size]
+                 for perm in transform_chunk:
+-                    tta_inputs.append(
+-                        inputs.permute(0, 1, 2 + perm[0], 2 + perm[1], 2 + perm[2])
++                    x = inputs.permute(0, 1, 2 + perm[0], 2 + perm[1], 2 + perm[2])
++                    x = _transform_input_vector_channels(
++                        x, vector_channel_starts=input_vector_channel_starts,
++                        axis_perm=perm,
+                     )
++                    tta_inputs.append(x)
+             tta_inputs = torch.cat(tta_inputs, dim=0)
+         with _profile_section(profiler, "iter_tta_forward_chunk"):
+             disp_all = get_displacement_result(model, tta_inputs, amp_enabled, amp_dtype)
+diff --git a/vesuvius/tests/neural_tracing/test_displacement_tta_input_vectors.py b/vesuvius/tests/neural_tracing/test_displacement_tta_input_vectors.py
+new file mode 100644
+index 000000000..9f8ff18f7
+--- /dev/null
++++ b/vesuvius/tests/neural_tracing/test_displacement_tta_input_vectors.py
+@@ -0,0 +1,148 @@
++import pytest
++import torch
++
++from vesuvius.neural_tracing.inference.displacement_helpers import predict_displacement
++from vesuvius.neural_tracing.inference.displacement_tta import (
++    TTA_FLIP_COMBOS,
++    TTA_ROTATE3_PERMS,
++    _transform_input_vector_channels,
++    run_model_tta,
++)
++
++
++# Copy checkpoints with direction priors take 8 input channels:
++# [volume, conditioning, +normal (z, y, x), -normal (z, y, x)].
++PRIOR_STARTS = (2, 5)
++
++
++class ReturnPriors:
++    """A stand-in model whose "displacement" is the two input direction priors.
++
++    If TTA transports the prior components together with the spatial transform,
++    every variant maps back to the untransformed priors and the merge returns
++    them unchanged. If it does not, the variants disagree and the merge drifts.
++    """
++
++    def __call__(self, inputs):
++        return inputs[:, 2:8]
++
++
++def _forward(model, inputs, amp_enabled, amp_dtype):
++    return model(inputs)
++
++
++def _inputs():
++    torch.manual_seed(205)
++    return torch.randn(1, 8, 5, 5, 5)
++
++
++@pytest.mark.parametrize("mode", ["mirror", "rotate3"])
++def test_transported_priors_survive_tta(mode):
++    x = _inputs()
++    saved = x.clone()
++    out = run_model_tta(
++        ReturnPriors(), x, False, torch.float32, _forward,
++        transform_mode=mode, tta_batch_size=1,
++        input_vector_channel_starts=PRIOR_STARTS,
++    )
++    torch.testing.assert_close(out, x[:, 2:8], rtol=1e-5, atol=1e-5)
++    torch.testing.assert_close(x, saved, rtol=0, atol=0)
++
++
++@pytest.mark.parametrize("mode", ["mirror", "rotate3"])
++def test_untransported_priors_do_not_survive_tta(mode):
++    # The behaviour this change fixes: without component transport the merged
++    # "displacement" is not the prior that went in.
++    x = _inputs()
++    out = run_model_tta(
++        ReturnPriors(), x, False, torch.float32, _forward,
++        transform_mode=mode, tta_batch_size=1,
++    )
++    assert float((out - x[:, 2:8]).abs().max()) > 0.5
++
++
++def test_no_vector_channels_is_a_no_op():
++    x = _inputs()
++    assert _transform_input_vector_channels(x) is x
++    assert _transform_input_vector_channels(x, vector_channel_starts=()) is x
++
++
++def test_scalar_channels_are_left_alone():
++    x = _inputs()
++    for flip_dims in TTA_FLIP_COMBOS:
++        y = _transform_input_vector_channels(x, vector_channel_starts=PRIOR_STARTS, flip_dims=flip_dims)
++        torch.testing.assert_close(y[:, :2], x[:, :2], rtol=0, atol=0)
++    for perm in TTA_ROTATE3_PERMS:
++        y = _transform_input_vector_channels(x, vector_channel_starts=PRIOR_STARTS, axis_perm=perm)
++        torch.testing.assert_close(y[:, :2], x[:, :2], rtol=0, atol=0)
++
++
++def test_flip_negates_only_the_flipped_component():
++    x = _inputs()
++    y = _transform_input_vector_channels(x, vector_channel_starts=PRIOR_STARTS, flip_dims=(-3,))
++    # dim -3 is depth (z): channel 0 of each vector group flips sign, the rest are untouched.
++    torch.testing.assert_close(y[:, 2], -x[:, 2], rtol=0, atol=0)
++    torch.testing.assert_close(y[:, 3:5], x[:, 3:5], rtol=0, atol=0)
++    torch.testing.assert_close(y[:, 5], -x[:, 5], rtol=0, atol=0)
++    torch.testing.assert_close(y[:, 6:8], x[:, 6:8], rtol=0, atol=0)
++
++
++@pytest.mark.parametrize("start", [-1, 6, 8])
++def test_out_of_range_vector_group_is_rejected(start):
++    x = _inputs()
++    with pytest.raises(ValueError, match="vector channel start"):
++        _transform_input_vector_channels(x, vector_channel_starts=(start,), flip_dims=(-1,))
++
++
++class ReturnPriorsAsDict:
++    def __call__(self, inputs):
++        return {"displacement": inputs[:, 2:8]}
++
++
++def _model_state(model_config):
++    return {
++        "model": ReturnPriorsAsDict(),
++        "amp_enabled": False,
++        "amp_dtype": torch.float32,
++        "model_config": model_config,
++    }
++
++
++class _Args:
++    tta = True
++    tta_batch_size = 1
++
++
++def test_predict_displacement_transports_priors_for_direction_conditioned_checkpoints():
++    x = _inputs()
++    out = predict_displacement(_Args(), _model_state({"use_triplet_direction_priors": True}), x)
++    torch.testing.assert_close(out, x[:, 2:8], rtol=1e-5, atol=1e-5)
++
++
++def test_predict_displacement_leaves_other_checkpoints_unchanged():
++    x = _inputs()
++    legacy = run_model_tta(ReturnPriors(), x, False, torch.float32, _forward, tta_batch_size=1)
++    out = predict_displacement(_Args(), _model_state({}), x)
++    torch.testing.assert_close(out, legacy, rtol=0, atol=0)
++
++
++def test_predict_displacement_does_not_guess_a_layout_for_other_widths():
++    # Direction priors are enabled but the tensor is not the 8-channel layout:
++    # nothing is transported rather than transporting the wrong channels.
++    torch.manual_seed(205)
++    x = torch.randn(1, 6, 5, 5, 5)
++
++    class ReturnTail:
++        def __call__(self, inputs):
++            return {"displacement": inputs[:, 3:6]}
++
++    state = _model_state({"use_triplet_direction_priors": True})
++    state["model"] = ReturnTail()
++    out = predict_displacement(_Args(), state, x)
++
++    class ReturnTailPlain:
++        def __call__(self, inputs):
++            return inputs[:, 3:6]
++
++    legacy = run_model_tta(ReturnTailPlain(), x, False, torch.float32, _forward, tta_batch_size=1)
++    torch.testing.assert_close(out, legacy, rtol=0, atol=0)
+-- 
+2.53.0.windows.2
+

@@ -1,0 +1,12 @@
+  torch=2.10.0+cu128  device=cpu  input=[1,8,5,5,5]  channels: 0 volume, 1 cond, 2:5 +n (z,y,x), 5:8 -n (z,y,x)
+
+  1) constant prior n = (1,2,3)/sqrt(14) = (0.267, 0.535, 0.802), model returns its input priors, mirror TTA x8
+     main     merged +n at the centre voxel = (+0.000, +0.000, +0.000)   max |merged - input| = 8.02e-01
+     this PR  merged +n at the centre voxel = (+0.267, +0.535, +0.802)   max |merged - input| = 5.96e-08
+     -> on main the eight variants disagree about which way the sheet faces and the merge cancels them out
+
+  2) random priors (seed 205), max |merged - input priors|
+     mode     variants         main      this PR     PR, no starts (legacy)
+     mirror          8    6.081e+00    3.576e-07          identical to main
+     rotate3         3    2.453e+00    2.384e-07          identical to main
+     input tensor unchanged by TTA: True

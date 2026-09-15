@@ -1,0 +1,91 @@
+{
+  "source": "planning/october_b (local), summary.json + audit.json matched_context",
+  "model": "scrollprize/copy_displacement_latest @ 4da532350f40d84347991731fc25124fc07afbc1",
+  "tta": "mirror, 8 variants, vector_geomedian, tta_batch_size=1",
+  "crops": "128^3 initial run; 128x256x256 enlarged run (common start points only)",
+  "per_cube_initial_correct_area_pct": {
+    "02000_02256_04816": {
+      "main": 19.47,
+      "pr": 18.24
+    },
+    "01744_02512_04048": {
+      "main": 17.4,
+      "pr": 5.82
+    },
+    "09168_02512_02768": {
+      "main": 12.13,
+      "pr": 32.0
+    },
+    "07376_03024_04304": {
+      "main": 2.7,
+      "pr": 14.01
+    },
+    "10192_04304_03024": {
+      "main": 10.71,
+      "pr": 19.08
+    },
+    "10192_03024_02768": {
+      "main": 13.2,
+      "pr": 38.09
+    }
+  },
+  "pooled_initial_correct_area_pct": {
+    "all": {
+      "main": 13.72,
+      "pr": 17.74,
+      "points": 9475
+    },
+    "dev": {
+      "main": 14.23,
+      "pr": 22.3,
+      "points": 4582
+    },
+    "holdout": {
+      "main": 13.27,
+      "pr": 13.69,
+      "points": 4893
+    }
+  },
+  "pooled_initial_wrong_sheet_pct": {
+    "all": {
+      "main": 35.19,
+      "pr": 24.3
+    },
+    "holdout": {
+      "main": 28.93,
+      "pr": 22.47
+    }
+  },
+  "pooled_initial_off_material_pct": {
+    "all": {
+      "main": 51.09,
+      "pr": 57.96
+    },
+    "holdout": {
+      "main": 57.8,
+      "pr": 63.83
+    }
+  },
+  "matched_start_points_correct_area_pct": {
+    "official": {
+      "all": {
+        "initial": 12.21,
+        "wide": 3.61
+      },
+      "holdout": {
+        "initial": 13.29,
+        "wide": 4.92
+      }
+    },
+    "transport_priors": {
+      "all": {
+        "initial": 12.83,
+        "wide": 18.8
+      },
+      "holdout": {
+        "initial": 8.1,
+        "wide": 14.01
+      }
+    }
+  }
+}
