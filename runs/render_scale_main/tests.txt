@@ -1,0 +1,22 @@
+# python -m unittest tests.test_render_ink -v   (spiral-fitting/, Python 3.12, Windows)
+# The one FAIL below is pre-existing and Windows-only: test_default_lasagna_dir_is_sibling_of_spiral_fitting
+# compares against a POSIX absolute path; upstream CI is ubuntu. It fails identically on unpatched main.
+
+test_default_lasagna_dir_is_sibling_of_spiral_fitting (tests.test_render_ink.RenderInkPathTests.test_default_lasagna_dir_is_sibling_of_spiral_fitting) ... FAIL
+test_failed_full_scroll_flatten_fails_when_no_strips_are_rendered (tests.test_render_ink.RenderInkPathTests.test_failed_full_scroll_flatten_fails_when_no_strips_are_rendered) ... ok
+test_default_keeps_the_renderer_default (tests.test_render_ink.ScaleSegmentationPassThroughTests.test_default_keeps_the_renderer_default) ... ok
+test_explicit_scale_segmentation_is_passed_to_the_renderer (tests.test_render_ink.ScaleSegmentationPassThroughTests.test_explicit_scale_segmentation_is_passed_to_the_renderer) ... ok
+test_nonpositive_or_nonfinite_scale_fails_before_anything_is_rendered (tests.test_render_ink.ScaleSegmentationPassThroughTests.test_nonpositive_or_nonfinite_scale_fails_before_anything_is_rendered) ... ok
+
+======================================================================
+FAIL: test_default_lasagna_dir_is_sibling_of_spiral_fitting (tests.test_render_ink.RenderInkPathTests.test_default_lasagna_dir_is_sibling_of_spiral_fitting)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\vw11\spiral-fitting\tests\test_render_ink.py", line 25, in test_default_lasagna_dir_is_sibling_of_spiral_fitting
+    self.assertEqual(actual, Path("/checkout/lasagna"))
+AssertionError: WindowsPath('D:/checkout/lasagna') != WindowsPath('/checkout/lasagna')
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.525s
+
+FAILED (failures=1)

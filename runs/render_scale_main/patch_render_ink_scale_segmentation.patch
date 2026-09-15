@@ -1,0 +1,171 @@
+From da482dc5b2b5e37af6aa00f4a3abc9ba6051bc79 Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Tue, 15 Sep 2026 20:18:36 +0900
+Subject: [PATCH] render_ink: pass --scale-segmentation through to
+ vc_render_tifxyz
+
+render_ink assumes the fitted mesh is already in the ink volume's level-0
+frame. When it is not, the renderer samples the wrong coordinates, writes
+an all-black strip and exits 0 (villa #1660). vc_render_tifxyz already has
+--scale-segmentation for exactly this; render_ink had no way to pass it,
+so the only route was a wrapper binary via --vc-render-bin.
+
+Add --scale-segmentation (default 1.0, so nothing changes for anyone who
+does not pass it), refuse non-finite or non-positive values before any
+render starts, and forward the value to the renderer command. The scale
+is meant to come from metadata (mesh working lattice vs volume pyramid
+level); render_ink does not try to infer it from the image.
+
+Tests drive the strip path with the renderer stubbed and check the
+command: explicit 4 arrives as 4.0, the default arrives as 1.0, and
+0/-1/nan/inf fail with no renderer call.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+---
+ spiral-fitting/render_ink.py            | 13 ++++-
+ spiral-fitting/tests/test_render_ink.py | 77 +++++++++++++++++++++++++
+ 2 files changed, 89 insertions(+), 1 deletion(-)
+
+diff --git a/spiral-fitting/render_ink.py b/spiral-fitting/render_ink.py
+index b5b19c46c..a0ccc1113 100644
+--- a/spiral-fitting/render_ink.py
++++ b/spiral-fitting/render_ink.py
+@@ -331,6 +331,10 @@ def max_composite(tif_paths):
+ @click.option('--remote-url', default='', help='Remote OME-Zarr URL for --volume, passed through to vc_render_tifxyz as --remote-url. Required when --volume is a not-yet-populated local cache dir for a scroll that only exists remotely; omit once the cache already records the URL (vc_render_tifxyz --help)')
+ @click.option('--vc-render-bin', default='vc_render_tifxyz', show_default=True, help='Path to the vc_render_tifxyz binary')
+ @click.option('--scale', type=float, default=0.25, show_default=True)
++@click.option('--scale-segmentation', type=float, default=1.0, show_default=True,
++              help='Multiply tifxyz coordinates before sampling the volume. '
++                   'Use only a mesh-to-volume frame scale established from metadata; '
++                   'this is independent of --scale, which controls output resolution.')
+ @click.option('--group-idx', type=int, default=1, show_default=True)
+ @click.option('--num-slices', type=int, default=5, show_default=True)
+ @click.option('--num-processes', '-j', type=int, default=1, show_default=True, help='Number of meshes to render (and flatten) concurrently')
+@@ -357,12 +361,18 @@ def max_composite(tif_paths):
+ @click.option('--lasagna-config', default='', help='Base lasagna flatten config json. Default: <lasagna-dir>/configs/flatten_fast_nofilter.json')
+ @click.option('--lasagna-fit-script', default='', help='Lasagna fit entrypoint run for the full-scroll flatten. Default: _run_flatten_threaded.py if present, else fit.py')
+ @click.option('--lasagna-device', default='cuda', show_default=True, help='--device passed to the lasagna flattener for the full-scroll flatten')
+-def main(meshes_dir, volume, remote_url, vc_render_bin, scale, group_idx, num_slices, num_processes,
++def main(meshes_dir, volume, remote_url, vc_render_bin, scale, scale_segmentation,
++         group_idx, num_slices, num_processes,
+          flatten, flatboi_bin, tifxyz2obj_bin, obj2tifxyz_bin, uv_lift_bin, flatten_keep,
+          flatten_iters, flatten_energy, flatten_tol, flatten_inpaint, pre_erode,
+          keep_largest, flatboi_threads,
+          openblas_coretype, strips, full_scroll, max_strip_width, full_scroll_trim,
+          tifxyz_trim_bin, lasagna_dir, lasagna_config, lasagna_fit_script, lasagna_device):
++    if not np.isfinite(scale_segmentation) or scale_segmentation <= 0:
++        raise click.BadParameter(
++            'must be finite and greater than zero',
++            param_hint='--scale-segmentation',
++        )
+     meshes = sorted(
+         (winding_idx(name), name)
+         for name in os.listdir(meshes_dir)
+@@ -524,6 +534,7 @@ def main(meshes_dir, volume, remote_url, vc_render_bin, scale, group_idx, num_sl
+             vc_render_bin,
+             '--segmentation', concat_path,
+             '--scale', str(scale),
++            '--scale-segmentation', str(scale_segmentation),
+             '--group-idx', str(group_idx),
+             '--volume', volume,
+             '--tif-output', per_mesh_ink,
+diff --git a/spiral-fitting/tests/test_render_ink.py b/spiral-fitting/tests/test_render_ink.py
+index 6704afcc5..8165eb587 100644
+--- a/spiral-fitting/tests/test_render_ink.py
++++ b/spiral-fitting/tests/test_render_ink.py
+@@ -1,9 +1,12 @@
+ import json
+ import subprocess
+ import sys
++import tempfile
+ import unittest
+ from pathlib import Path
+ 
++import numpy as np
++import tifffile
+ from click.testing import CliRunner
+ 
+ 
+@@ -52,5 +55,79 @@ class RenderInkPathTests(unittest.TestCase):
+         self.assertIn("render produced no ink strip images", result.output)
+ 
+ 
++class ScaleSegmentationPassThroughTests(unittest.TestCase):
++    """--scale-segmentation reaches vc_render_tifxyz unchanged, and nothing else moves.
++
++    The strip path is driven with concat/save/render stubbed out, so what is
++    checked is the renderer command render_ink builds, not the renderer.
++    """
++
++    def _render_strip(self, extra_args):
++        commands = []
++        with tempfile.TemporaryDirectory() as td:
++            meshes_dir = Path(td) / "meshes"
++            mesh = meshes_dir / "w010_spliced"
++            mesh.mkdir(parents=True)
++            (mesh / "meta.json").write_text(json.dumps({
++                "format": "tifxyz", "scale": [1.0, 1.0], "area_cm2": 1.0, "area_vx2": 1.0,
++            }))
++
++            original_concat = render_ink.concat_meshes
++            original_save = render_ink.save_tifxyz
++            original_run = render_ink.subprocess.run
++            try:
++                render_ink.concat_meshes = lambda _paths: np.zeros((2, 2, 3), np.float32)
++
++                def fake_save(_zyxs, out_dir, *, uuid, **_kwargs):
++                    (Path(out_dir) / uuid).mkdir(parents=True, exist_ok=True)
++
++                def fake_run(cmd, check=True, **_kwargs):
++                    commands.append([str(part) for part in cmd])
++                    out = Path(cmd[cmd.index("--tif-output") + 1])
++                    out.mkdir(parents=True, exist_ok=True)
++                    tifffile.imwrite(out / "00.tif", np.ones((2, 2), np.uint8))
++
++                render_ink.save_tifxyz = fake_save
++                render_ink.subprocess.run = fake_run
++                result = CliRunner().invoke(render_ink.main, [
++                    str(meshes_dir), "--volume", "ink.zarr", "--vc-render-bin", "fake-renderer",
++                    "--strips", "--no-full-scroll", "--no-flatten",
++                    "--pre-erode", "0", "--no-keep-largest",
++                    *extra_args,
++                ])
++            finally:
++                render_ink.concat_meshes = original_concat
++                render_ink.save_tifxyz = original_save
++                render_ink.subprocess.run = original_run
++        return result, commands
++
++    def test_explicit_scale_segmentation_is_passed_to_the_renderer(self):
++        result, commands = self._render_strip(["--scale-segmentation", "4"])
++
++        self.assertEqual(result.exit_code, 0, result.output)
++        self.assertEqual(len(commands), 1)
++        command = commands[0]
++        self.assertEqual(command[0], "fake-renderer")
++        self.assertEqual(command[command.index("--scale-segmentation") + 1], "4.0")
++        # --scale is the output density and is a different knob.
++        self.assertEqual(command[command.index("--scale") + 1], "0.25")
++
++    def test_default_keeps_the_renderer_default(self):
++        result, commands = self._render_strip([])
++
++        self.assertEqual(result.exit_code, 0, result.output)
++        command = commands[0]
++        self.assertEqual(command[command.index("--scale-segmentation") + 1], "1.0")
++
++    def test_nonpositive_or_nonfinite_scale_fails_before_anything_is_rendered(self):
++        for value in ("0", "-1", "nan", "inf"):
++            with self.subTest(value=value):
++                result, commands = self._render_strip(["--scale-segmentation", value])
++
++                self.assertNotEqual(result.exit_code, 0)
++                self.assertIn("must be finite and greater than zero", result.output)
++                self.assertEqual(commands, [])
++
++
+ if __name__ == "__main__":
+     unittest.main()
+-- 
+2.53.0.windows.2
+

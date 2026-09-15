@@ -1,0 +1,381 @@
+{
+  "scope": "public substitute mesh; reporter's exact handwritten scroll JSON recovered, exact fitted concat unavailable",
+  "coordinate_chain": {
+    "ct_l0_shape_zyx": [
+      75784,
+      32693,
+      32693
+    ],
+    "ink_l0_shape_zyx": [
+      75784,
+      32693,
+      32693
+    ],
+    "ct_l2_shape_zyx": [
+      18946,
+      8174,
+      8174
+    ],
+    "ink_l1_shape_zyx": [
+      37892,
+      16347,
+      16347
+    ],
+    "mesh_shape_yx": [
+      46,
+      15
+    ],
+    "mesh_scale_cells_per_voxel": [
+      0.05000000074505806,
+      0.05000000074505806
+    ],
+    "mesh_meta_explicit_coordinate_frame": false,
+    "author_scroll_voxel_size_um": 9.6,
+    "valid_vertices": 690,
+    "baseline_group1_formula": "mesh_xyz * scale_segmentation(1) * ds_scale(0.5)",
+    "corrected_group1_formula": "mesh_xyz * scale_segmentation(4) * ds_scale(0.5) = mesh_xyz * 2",
+    "baseline_vertices_in_bounds": 690,
+    "corrected_vertices_in_bounds": 690,
+    "vertex_denominator": 690,
+    "common_cell_support": 572,
+    "baseline_cells_in_bounds": 572,
+    "corrected_cells_in_bounds": 572,
+    "baseline_nonzero_on_common_support": 0,
+    "corrected_nonzero_on_common_support": 567
+  },
+  "render_dimensions": {
+    "formula": "round(input_grid * render_scale / tifxyz_meta_scale)",
+    "baseline": "render_scale=0.25*1*0.5=0.125; 15x46 -> 37x115 (meta scale is float32-adjacent 0.050000000745)",
+    "corrected": "render_scale=0.25*4*0.5=0.5; 15x46 -> 150x460",
+    "common_support_runs": "Pg=0.1 at scale_seg=1 and Pg=0.025 at scale_seg=4 both give render_scale=0.05 and 15x46 output"
+  },
+  "real_render": {
+    "baseline": {
+      "slices": [
+        {
+          "file": "outputs/baseline/00.tif",
+          "shape_yx": [
+            115,
+            37
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 0,
+          "mean": 0.0,
+          "p95": 0.0,
+          "nonzero": 0,
+          "pixels": 4255,
+          "sha256": "70a6a5b67a829091f249411924b6fb78de4e00fc13ec14406cbe296d4a2fb48f"
+        },
+        {
+          "file": "outputs/baseline/01.tif",
+          "shape_yx": [
+            115,
+            37
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 0,
+          "mean": 0.0,
+          "p95": 0.0,
+          "nonzero": 0,
+          "pixels": 4255,
+          "sha256": "70a6a5b67a829091f249411924b6fb78de4e00fc13ec14406cbe296d4a2fb48f"
+        },
+        {
+          "file": "outputs/baseline/02.tif",
+          "shape_yx": [
+            115,
+            37
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 0,
+          "mean": 0.0,
+          "p95": 0.0,
+          "nonzero": 0,
+          "pixels": 4255,
+          "sha256": "70a6a5b67a829091f249411924b6fb78de4e00fc13ec14406cbe296d4a2fb48f"
+        },
+        {
+          "file": "outputs/baseline/03.tif",
+          "shape_yx": [
+            115,
+            37
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 0,
+          "mean": 0.0,
+          "p95": 0.0,
+          "nonzero": 0,
+          "pixels": 4255,
+          "sha256": "70a6a5b67a829091f249411924b6fb78de4e00fc13ec14406cbe296d4a2fb48f"
+        },
+        {
+          "file": "outputs/baseline/04.tif",
+          "shape_yx": [
+            115,
+            37
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 0,
+          "mean": 0.0,
+          "p95": 0.0,
+          "nonzero": 0,
+          "pixels": 4255,
+          "sha256": "70a6a5b67a829091f249411924b6fb78de4e00fc13ec14406cbe296d4a2fb48f"
+        }
+      ],
+      "max_composite": {
+        "file": "results/real_baseline_max.tif",
+        "shape_yx": [
+          115,
+          37
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 0,
+        "mean": 0.0,
+        "p95": 0.0,
+        "nonzero": 0,
+        "pixels": 4255,
+        "sha256": "0a237b5f114270b9f3426659cafe2e412a5a3b45c01da609ff7d4962a784592f"
+      }
+    },
+    "scaled4": {
+      "slices": [
+        {
+          "file": "outputs/scaled4/00.tif",
+          "shape_yx": [
+            460,
+            150
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 252,
+          "mean": 2.99136231884058,
+          "p95": 2.0,
+          "nonzero": 57069,
+          "pixels": 69000,
+          "sha256": "9e2f31b94943d2f702302f838f1c467a7fcf7af2dc6b3c3ef1ad2adc5c22e5b5"
+        },
+        {
+          "file": "outputs/scaled4/01.tif",
+          "shape_yx": [
+            460,
+            150
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 252,
+          "mean": 2.921376811594203,
+          "p95": 2.0,
+          "nonzero": 57071,
+          "pixels": 69000,
+          "sha256": "4a39341f0331aed9d4ee2a3ae7dd8d05d366b3c7e56c0219db01f56df0f4a36d"
+        },
+        {
+          "file": "outputs/scaled4/02.tif",
+          "shape_yx": [
+            460,
+            150
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 252,
+          "mean": 2.864971014492754,
+          "p95": 2.0,
+          "nonzero": 57048,
+          "pixels": 69000,
+          "sha256": "89de96adba901dd41a70769d38a41b65685db10e83aa2017574dca36d75dd09b"
+        },
+        {
+          "file": "outputs/scaled4/03.tif",
+          "shape_yx": [
+            460,
+            150
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 251,
+          "mean": 2.812840579710145,
+          "p95": 2.0,
+          "nonzero": 57040,
+          "pixels": 69000,
+          "sha256": "a1929ceacf9c2b501dadfc873b63f6076983724b818f5187554135da8894138b"
+        },
+        {
+          "file": "outputs/scaled4/04.tif",
+          "shape_yx": [
+            460,
+            150
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 252,
+          "mean": 2.7825217391304347,
+          "p95": 2.0,
+          "nonzero": 57034,
+          "pixels": 69000,
+          "sha256": "9148aed926f609338ba60ead3a1892be18155e60fa1b98974bcb32eb095ac55c"
+        }
+      ],
+      "max_composite": {
+        "file": "results/real_scaled4_max.tif",
+        "shape_yx": [
+          460,
+          150
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 252,
+        "mean": 3.8701739130434785,
+        "p95": 2.0,
+        "nonzero": 57192,
+        "pixels": 69000,
+        "sha256": "812eba9a1c06c0ecb7f71ceeafd96850356eac619709b168daeccc8749410534"
+      }
+    }
+  },
+  "real_fixed_cell_samples": [
+    {
+      "surface_row": 0,
+      "surface_col": 0,
+      "mesh_cell_center_x": 4572.6009521484375,
+      "mesh_cell_center_y": 4721.706298828125,
+      "mesh_cell_center_z": 15595.275634765625,
+      "baseline_group1_x": 2286.3004760742188,
+      "baseline_group1_y": 2360.8531494140625,
+      "baseline_group1_z": 7797.6378173828125,
+      "baseline_value": 0,
+      "scaled4_group1_x": 9145.201904296875,
+      "scaled4_group1_y": 9443.41259765625,
+      "scaled4_group1_z": 31190.55126953125,
+      "scaled4_value": 1
+    },
+    {
+      "surface_row": 22,
+      "surface_col": 6,
+      "mesh_cell_center_x": 4489.94287109375,
+      "mesh_cell_center_y": 4924.0419921875,
+      "mesh_cell_center_z": 15980.210205078125,
+      "baseline_group1_x": 2244.971435546875,
+      "baseline_group1_y": 2462.02099609375,
+      "baseline_group1_z": 7990.1051025390625,
+      "baseline_value": 0,
+      "scaled4_group1_x": 8979.8857421875,
+      "scaled4_group1_y": 9848.083984375,
+      "scaled4_group1_z": 31960.42041015625,
+      "scaled4_value": 1
+    },
+    {
+      "surface_row": 43,
+      "surface_col": 12,
+      "mesh_cell_center_x": 4403.2525634765625,
+      "mesh_cell_center_y": 5097.3807373046875,
+      "mesh_cell_center_z": 16362.392333984375,
+      "baseline_group1_x": 2201.6262817382812,
+      "baseline_group1_y": 2548.6903686523438,
+      "baseline_group1_z": 8181.1961669921875,
+      "baseline_value": 0,
+      "scaled4_group1_x": 8806.505126953125,
+      "scaled4_group1_y": 10194.761474609375,
+      "scaled4_group1_z": 32724.78466796875,
+      "scaled4_value": 1
+    }
+  ],
+  "synthetic_control": {
+    "physical_correspondence": "identity_frame_xyz == 4 * coarse_frame_xyz",
+    "correspondence_exact_components": 216,
+    "correspondence_components": 216,
+    "renderer_supported_cells": 42,
+    "coarse_scale4_equals_identity_scale1_all_output_pixels": true,
+    "coarse_scale4_matches_coordinate_formula": 42,
+    "coordinate_formula_denominator": 42,
+    "coarse_wrong_scale1_changed": 42,
+    "coarse_wrong_scale1_denominator": 42,
+    "identity_wrong_scale4_changed": 41,
+    "identity_wrong_scale4_denominator": 42,
+    "all_four_arms_nonzero_on_support": 42,
+    "all_four_arms_nonzero_denominator": 42,
+    "arms": {
+      "synthetic_v2_coarse_correct": {
+        "file": "outputs/synthetic_v2_coarse_correct/00.tif",
+        "shape_yx": [
+          8,
+          9
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 236,
+        "mean": 83.66666666666667,
+        "p95": 228.70000000000002,
+        "nonzero": 42,
+        "pixels": 72,
+        "sha256": "c060fe9ad6cf497ad0c032f395532477e2eee0006999432519fd7b8e5dce3a5a"
+      },
+      "synthetic_v2_coarse_wrong": {
+        "file": "outputs/synthetic_v2_coarse_wrong/00.tif",
+        "shape_yx": [
+          8,
+          9
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 54,
+        "mean": 26.34722222222222,
+        "p95": 51.0,
+        "nonzero": 42,
+        "pixels": 72,
+        "sha256": "27e5c7d68d331d3d1e2cecdff0a2bb1d9ae763bca47710dbd5a2139b86d33bbb"
+      },
+      "synthetic_v2_identity_correct": {
+        "file": "outputs/synthetic_v2_identity_correct/00.tif",
+        "shape_yx": [
+          8,
+          9
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 236,
+        "mean": 83.66666666666667,
+        "p95": 228.70000000000002,
+        "nonzero": 42,
+        "pixels": 72,
+        "sha256": "c060fe9ad6cf497ad0c032f395532477e2eee0006999432519fd7b8e5dce3a5a"
+      },
+      "synthetic_v2_identity_wrong": {
+        "file": "outputs/synthetic_v2_identity_wrong/00.tif",
+        "shape_yx": [
+          8,
+          9
+        ],
+        "dtype": "uint8",
+        "min": 0,
+        "max": 251,
+        "mean": 78.41666666666667,
+        "p95": 237.70000000000002,
+        "nonzero": 42,
+        "pixels": 72,
+        "sha256": "e6638b0c56e04244d63881fb611c283f8d5c1aa49b14135e2cb3367ddb43635e"
+      }
+    }
+  },
+  "source_urls": {
+    "public_mesh_bucket": "hf://buckets/scrollprize/datasets/spiral/PHercParis4/verified_patches/0000_w010_spliced_flatboi_sel_20260611_234312_1",
+    "ink_volume": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHercParis4/representations/predictions/ink-3d/20260411134726-ink3d-20260428123845-v3-78k-fullsup.zarr",
+    "base_ct": "https://vesuvius-challenge-open-data.s3.amazonaws.com/PHercParis4/volumes/20260411134726-2.400um-0.2m-78keV-masked.zarr",
+    "issue": "https://github.com/ScrollPrize/villa/issues/1660",
+    "current_main": "https://github.com/ScrollPrize/villa/commit/23adee047dea06526151d3a152a7d85de8da478b",
+    "current_render_ink": "https://raw.githubusercontent.com/ScrollPrize/villa/main/spiral-fitting/render_ink.py",
+    "spiral_dataset_bucket": "hf://buckets/scrollprize/datasets/spiral/PHercParis4",
+    "lasagna_surf_sdt_attrs": "hf://buckets/scrollprize/datasets/spiral/PHercParis4/lasagna_inputs/las_008_surf_sdt.ome.zarr/.zattrs",
+    "author_repository": "https://github.com/jonmarrs/vesuvius-autoresearch",
+    "author_pinned_tree": "https://github.com/jonmarrs/vesuvius-autoresearch/tree/c4f7f6ca8069a59a5ca3015f3099c6e180f97522",
+    "author_exact_scroll_json": "https://github.com/jonmarrs/vesuvius-autoresearch/blob/c4f7f6ca8069a59a5ca3015f3099c6e180f97522/repro/spiral_s1/spiral-scroll.json",
+    "author_render_repro": "https://github.com/jonmarrs/vesuvius-autoresearch/tree/c4f7f6ca8069a59a5ca3015f3099c6e180f97522/repro/spiral_render"
+  },
+  "note": "Copied from the local 2026-09-06 audit; per-slice TIFFs and the synthetic volume are not in this repository. Issue and main-commit fields reflect 2026-09-06."
+}

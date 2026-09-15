@@ -1,0 +1,10 @@
+Remote zarr streaming: https://vesuvius-challenge-open-data.s3.amazonaws.com/PHercParis4/representations/predictions/ink-3d/20260411134726-ink3d-20260428123845-v3-78k-fullsup.zarr
+zarr dataset size for group 1 [37892 16347 16347 ]
+Source dtype: uint8
+chunk shape [256 256 256 ]
+Voxel size: 1.0 (no metadata found; override with --voxel-size)
+Timeout: 10 minutes
+Rendering: /work/inputs/public_w010_spliced -> /work/outputs/baseline (tif)
+ds_level=1 ds_scale=0.5 sA=1 Pg=0.25 render_scale=0.125
+rendering 37x115 at scale 0.25 crop [37×115 from (0,0)]
+  band 1/1 (100%)  0.4 bands/s  0m02s  eta 0m00s
