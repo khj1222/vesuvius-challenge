@@ -1,5 +1,6 @@
 <!--
-PR body draft — render_ink.py --scale-segmentation pass-through, against `main`.
+PR body — render_ink.py --scale-segmentation pass-through, against `main`.
+  OPENED 2026-09-15 as DRAFT: https://github.com/ScrollPrize/villa/pull/1803 (promote to ready once a non-draft slot is free).
 
   head:  khj1222:fix/render-ink-scale-segmentation-passthrough  (pushed to fork)
   base:  main (4b3c728)
@@ -7,7 +8,7 @@ PR body draft — render_ink.py --scale-segmentation pass-through, against `main
   evidence: runs/render_scale_main/  (must be on origin/main before the PR is opened — the image is a raw URL)
 
 ⚠️ Open as DRAFT while non-draft PRs sit at the cap of 3 (#1608 closes 2026-09-19).
-⚠️ USER SUPPLIES: the **Why / where this is useful** paragraph, in their own words (CONTRIBUTING).
+Why line: the user's facts (2026-09-15: black strip with exit 0 on a public patch; renderer has the knob, render_ink does not expose it; #1660 reporter took the same detour), phrased by the assistant.
 ⚠️ The checkbox stays UNTICKED unless the user reproduces the render or runs the tests themselves.
 POST ONLY WHAT IS BELOW THE --- LINE.
 -->
@@ -39,7 +40,7 @@ Three surface cells fixed in advance (first, centre, last) show what each arm ac
 
 **Why / where this is useful:**
 
-<!-- USER WRITES THIS. -->
+I rendered a public spiral patch against the public ink volume and got a black strip with exit 0. The renderer already had `--scale-segmentation`; `render_ink.py` just did not expose it, so the only way through was a wrapper binary, which is the same detour the #1660 reporter took.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
