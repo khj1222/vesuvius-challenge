@@ -2,6 +2,16 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
+## 2026-09-19 (토) 오전 — 스카우팅 사전등록 커밋, 채점기 검증, 대조군 렌더 진행 중
+
+- ✅ **사전등록 = `docs/25_scouting_eligible_volumes.md`**, 커밋 `42947ad`(08:29 KST, 렌더 전) + 카운트 정정 `7947845`. 인벤토리: **23개 eligible 볼륨 중 공개 메시가 있는 건 3개**(PHerc0800 6세그 · PHerc1447 15세그(1개 기측정) · PHerc1203 raw GrowPatch 22패치) → **타깃 43, 신규 42**. 나머지 20개는 `representations/`(표면 예측)만 있어 GrowPatch(GUI)가 필요 → 범위 밖으로 명시. 2.4µm 볼륨은 0846A·1203만 있고 등록된 메시가 없어 "aligned 계열 렌더" 불가 → 전부 native ~9µm.
+- **판정**: docs/18 §6 기준 3개에 수치 프록시(C1 골격길이/등가지름 · C2 시드 간 top-decile IoU · C3 양끝 1/3 최소 점유)를 붙이고, **양성 대조군 = PHerc0139 w040을 같은 파이프라인으로 렌더 + leave-0139-out ckpt**(미학습 스크롤·실제 잉크, honest F1 0.68–0.70), 음성 참조 = 1447 기존 렌더. 임계 = 두 참조의 중간값 + 절대 하한. 2/3 통과면 First Letters 단계(별도 사전등록), 0이면 스코어카드 제출 후 중단. **예측: 통과 0.**
+- ✅ **`tools/score_scouting.py`**(`1da7f41`): 1447 참조에서 docs/18 수치(sheet 0.21048 · gt128 0.23042 · max 214 · median 100 · IoU 0.173) **전건 재현**. 참조 프록시: C1 4.89(⚠️ 하한 1.5를 이미 넘음 → C1은 중간값 규칙만 유효), C2 0.173/창 0.379, C3 0.059. `runs/scouting/scores/`.
+- 메시 44개(타깃 43 + 대조군) `data/first_letters/scouting/<scroll>/<seg>/tifxyz/`에 받음(15MB). `runs/scouting/targets.json`.
+- 🔄 **대조군 렌더 진행 중**: `tools/scouting_render_chain.sh`(Docker `:edge` + timeout/resume 체인, 08:35 시작), 로그 `logs/scouting_control_render.log`, 출력 `data/first_letters/scouting_render/control_PHerc0139_w040.zarr`.
+- ⚠️ **네이티브 바이너리(F6에서 쓴 VC3D-5479453)는 로컬에 없다**(E:/D:/C: 검색 0건). 릴리스 `latest`는 이제 **`VC3D-88d4aa8-2026-09-18-win64.zip`(155.7MB)** → 다운로드는 사용자 승인 사항. 승인 전까지는 Docker 체인(세그당 ~25분)으로 진행.
+- 크론(16:41 #1796 승격)은 살아 있음(CronList 확인).
+
 ## 2026-09-18 (금) 추가 — 메인테이너 첫 리뷰 반영, #1611 닫음, **10월 = 머지 달 + 스카우팅 결정**
 
 **사용자는 09-18 밤에 종료, 토요일(09-19) 재개.** 상세 인계 = `planning/2026-09-18_handoff.md`(이 절이 09-15 절보다 우선). 토요일 첫 작업 = **스카우팅 사전등록 커밋** → 16:41 크론(#1796 ready) 확인, 세션이 죽었으면 수동 → 인벤토리.
