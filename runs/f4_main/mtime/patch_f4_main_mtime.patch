@@ -1,0 +1,139 @@
+From 0c2ce57675ebb744fd16adb89742d74d0c132930 Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Fri, 18 Sep 2026 23:17:51 +0900
+Subject: [PATCH] patch_cache: fold modification time into the label
+ fingerprint
+
+Review on #1701 (hendrikschilling): the fingerprint hashed relative names and
+sizes, so a mask edited to the same size under the same name still returned
+the stale split. stat() is already called per file, so the mtime rides along.
+
+Hash st_mtime_ns next to st_size. On the real w00 label assets (12,619 files)
+the walk costs 24.2-27.3 ms over five runs against 22.9-25.7 ms for the
+size-only digest -- inside the run-to-run spread.
+
+The trade, stated: a copy of a tree fingerprints as its source only when the
+copy preserved modification times, and a label rewritten to the same bytes at
+a new time misses once. Both err towards rebuilding the split, which is the
+cheap side. Tests cover the same-size edit, the mtime-preserving copy and the
+touched copy.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+---
+ .../ink_detection/data/patch_cache.py         | 29 +++++++++++--------
+ .../ink_detection/test_data_foundation.py     | 21 +++++++++++++-
+ 2 files changed, 37 insertions(+), 13 deletions(-)
+
+diff --git a/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py b/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
+index fada91062..d7f63d8be 100644
+--- a/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
++++ b/vesuvius/src/vesuvius/ink_detection/data/patch_cache.py
+@@ -24,13 +24,16 @@ def label_asset_fingerprint(paths: Iterable[Path | str | None]) -> str:
+     patch count and the bounding boxes are the old ones, so training continues over
+     supervision that has been deleted.
+ 
+-    Hashing each asset's relative file names and sizes catches that, because rewriting a
+-    zarr changes chunk sizes and dropping annotation deletes chunks outright when the
+-    store does not write empty ones. It reads no chunk contents, so it costs one
+-    directory walk -- ``os.scandir`` carries the size on Windows and Linux alike -- and it
+-    cannot tell apart two different labels that compress to identical sizes under
+-    identical names. A byte-identical copy of a tree fingerprints the same as its source,
+-    which is the wanted behaviour.
++    Hashing each asset's relative file names, sizes and modification times catches that:
++    rewriting a zarr changes chunk sizes and stamps every chunk it writes, and dropping
++    annotation deletes chunks outright when the store does not write empty ones. It reads
++    no chunk contents, so it costs one directory walk -- ``os.scandir`` carries the stat
++    result on Windows and Linux alike, and the mtime rides along with the size for free.
++
++    The trade is that a copy of a tree fingerprints the same as its source only when the
++    copy preserved modification times; otherwise it misses once and the split is rebuilt.
++    A label rewritten to the same bytes at a new time misses the same way. Both err
++    towards rebuilding, which is the cheap side.
+     """
+ 
+     digest = hashlib.sha256()
+@@ -40,7 +43,7 @@ def label_asset_fingerprint(paths: Iterable[Path | str | None]) -> str:
+         if not root.exists():
+             digest.update(b"\0missing")
+             continue
+-        entries: list[tuple[str, int]] = []
++        entries: list[tuple[str, int, int]] = []
+         stack = [("", str(root))]
+         while stack:
+             relative, current = stack.pop()
+@@ -54,13 +57,15 @@ def label_asset_fingerprint(paths: Iterable[Path | str | None]) -> str:
+                     stack.append((name, child.path))
+                     continue
+                 try:
+-                    size = child.stat().st_size
++                    stat = child.stat()
++                    size, mtime_ns = stat.st_size, stat.st_mtime_ns
+                 except OSError:
+-                    size = -1
+-                entries.append((name, size))
+-        for name, size in sorted(entries):
++                    size, mtime_ns = -1, -1
++                entries.append((name, size, mtime_ns))
++        for name, size, mtime_ns in sorted(entries):
+             digest.update(name.encode())
+             digest.update(str(size).encode())
++            digest.update(str(mtime_ns).encode())
+     return digest.hexdigest()[:16]
+ 
+ 
+diff --git a/vesuvius/tests/ink_detection/test_data_foundation.py b/vesuvius/tests/ink_detection/test_data_foundation.py
+index 1d2213bc7..34622a1c8 100644
+--- a/vesuvius/tests/ink_detection/test_data_foundation.py
++++ b/vesuvius/tests/ink_detection/test_data_foundation.py
+@@ -2,8 +2,10 @@ from __future__ import annotations
+ 
+ from dataclasses import replace
+ from pathlib import Path
++import os
+ import pickle
+ import random
++import shutil
+ import warnings
+ 
+ import numpy as np
+@@ -405,12 +407,21 @@ def test_patch_cache_is_rejected_when_a_label_changes_under_the_same_path(tmp_pa
+     (mask / "0.0.1").unlink()
+     assert load_patch_cache(path, config=config, segments=[segment]) is None
+ 
+-    # restored, then rewritten to a different size under the same name
++    # rewritten to a different size under the same name
+     _write_mask(mask, {"0.0.1": b"chunk-two"})
++    save_patch_cache(path, [Patch(segment=segment, bbox=(1, 2, 3, 4, 5, 6))])
+     assert load_patch_cache(path, config=config, segments=[segment]) is not None
+     (mask / "0.0.1").write_bytes(b"chunk-two-but-longer")
+     assert load_patch_cache(path, config=config, segments=[segment]) is None
+ 
++    # rewritten to the same size under the same name: only the modification time moves
++    save_patch_cache(path, [Patch(segment=segment, bbox=(1, 2, 3, 4, 5, 6))])
++    assert load_patch_cache(path, config=config, segments=[segment]) is not None
++    chunk = mask / "0.0.1"
++    chunk.write_bytes(b"chunk-two-but-edited")
++    os.utime(chunk, ns=(0, os.stat(chunk).st_mtime_ns + 1_000_000_000))
++    assert load_patch_cache(path, config=config, segments=[segment]) is None
++
+ 
+ def test_patch_cache_still_hits_when_nothing_changed(tmp_path):
+     """The fingerprint must not cost the fast path: an untouched tree keeps hitting."""
+@@ -440,6 +451,14 @@ def test_label_fingerprint_is_stable_and_notices_each_asset(tmp_path):
+     (ink / "0.0.0").write_bytes(b"aa")
+     assert label_asset_fingerprint([ink, supervision]) != baseline
+ 
++    # a copy that kept modification times fingerprints as its source; a touch does not
++    copied = tmp_path / "elsewhere" / "ink.zarr"
++    shutil.copytree(ink, copied)
++    assert label_asset_fingerprint([copied]) == label_asset_fingerprint([ink])
++    stamp = os.stat(copied / "0.0.0").st_mtime_ns + 1_000_000_000
++    os.utime(copied / "0.0.0", ns=(stamp, stamp))
++    assert label_asset_fingerprint([copied]) != label_asset_fingerprint([ink])
++
+     missing = label_asset_fingerprint([tmp_path / "absent.zarr"])
+     assert missing and missing != label_asset_fingerprint([ink])
+ 
+-- 
+2.53.0.windows.2
+

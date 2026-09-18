@@ -2,6 +2,14 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
+## 2026-09-18 (금) 추가 — 메인테이너 첫 리뷰 반영, #1611 닫기 대기
+
+- **#1701(F4)에 hendrikschilling이 09-18 12:00Z 코멘트**: 지문에 **mtime도 넣으라**(stat을 이미 부르니 공짜, P2 "같은 크기 편집은 여전히 stale"). **반영 완료 = `0c2ce57` 푸시**(워크트리 `D:/vw9`, PR head 갱신 확인). 실측 12,619파일 **24.2–27.3 ms vs 크기만 22.9–25.7 ms**(노이즈 안). 테스트 4개 통과(같은 크기 편집·mtime 보존 복사 적중·touch 미스 추가). **PR 본문도 수정**(지문 설명·한계 문단·"Update after review" 블록, 게시본=로컬 대조 완료). 증거 `runs/f4_main/mtime/`. **트레이드 명시**: 바이트 동일 복사본이 캐시를 맞추던 성질은 mtime 보존 복사(`cp -p`/robocopy/copytree)에서만 유지.
+- **답글 초안 = `submission/pr1701_reply_hendrikschilling.md`** — 미게시, 사용자가 붙여넣기(`---` 아래만).
+- **#1611 닫기 조건 충족**: Bullo27이 rc 134 크래시를 **#1809**로 분리(09-16), TAUIL 동의. 닫는 코멘트 초안 = `submission/issue1611_close_comment.md`(미게시). 사용자가 게시 후 닫을 것.
+- HF PR 6건 답글 0, #1608은 아직 open(09-19 16:00 KST 봇 종료 예정, 그 뒤 `gh pr ready 1796`). 09-27~28 재터치·09-30 제출은 그대로.
+- ⚠️ 함정: `.venv`의 pytest가 napari 플러그인을 자동 로드하며 **D: 경로를 물고 죽는다**(numba 캐시 locator). `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 -p no:cacheprovider`로 우회. 지문은 **root.name도 해시**하므로 "복사본 동일" 테스트는 다른 디렉터리·같은 이름으로.
+
 ## 최신 재개 안내 (2026-09-15) — 후보 3건 전부 공개됨, 남은 건 시계 관리와 제출
 
 이 절이 아래의 09-12·09-10 안내보다 우선한다. 상세 인계 = `planning/2026-09-15_handoff.md`.
