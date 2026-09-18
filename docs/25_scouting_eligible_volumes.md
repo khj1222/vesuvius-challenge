@@ -21,7 +21,7 @@ Two results from this project's own measurements decide the shape of what follow
   is **a target the model already responds to**, because that is the only place a
   foothold annotation can start.
 - The docs/16 verdict was for one segment of one scroll. Between them, PHerc0800, PHerc1203
-  and PHerc1447 have 44 public segments or patches, and 43 have never been looked at this way.
+  and PHerc1447 have 43 public segments or patches, and 42 have never been looked at this way.
 
 **Question:** among the public segments of the eligible volumes, is there one on which the
 released ink models produce output that looks like ink by criteria fixed in advance — the
@@ -59,10 +59,10 @@ Per-segment numbers: `runs/scouting/eligible_segment_areas.json`,
 | scroll | volume | segments | form | area range (cm²) | note |
 |---|---|---|---|---|---|
 | PHerc0800 | 20250521135224, 8.640 µm | 6 | flattened tifxyz (`mesh/<id>-on-…-8.64um.tifxyz`) | 0.40 – 2.43 | small; the 0.40 one is below the 4 cm² prize window and is scouted anyway |
-| PHerc1447 | 20250521151220, 8.640 µm | 16 | flattened tifxyz | 2.52 – 8.38 | `20250703034159` already rendered and judged (docs/16); the other 15 are new, including `20251105093211-z_dbg_gen_00320` (682×411 grid, 10% valid) |
+| PHerc1447 | 20250521151220, 8.640 µm | 15 | flattened tifxyz | 2.52 – 8.38 | `20250703034159` already rendered and judged (docs/16); the other 14 are new, including `20251105093211-z_dbg_gen_00320` (682×411 grid, 10% valid) |
 | PHerc1203 | 20250820131727, 9.362 µm | 22 | **raw GrowPatch tifxyz** (`segments/raw/auto_grown_*`, not flattened) | 2.92 – 14.83 | 22 distinct bounding boxes but heavily overlapping (11 grown within 15 s of each other from nearby seeds); rendered individually, judged with overlap noted |
 
-**44 targets, 43 new.** Everything is rendered from the tifxyz that the bucket publishes;
+**43 targets, 42 new.** (Corrected from 44/43 in the same hour as the first commit, before any render: the bucket's `raw/` prefix had been counted as a sixteenth PHerc1447 segment.) Everything is rendered from the tifxyz that the bucket publishes;
 no mesh is edited, grown or re-flattened by this project.
 
 ## 3. Pipeline (fixed)
@@ -141,15 +141,15 @@ method, not on the scrolls.
   training starts. **No image of a candidate letter is published**; the First Letters
   rules require the discovery to stay private until announced, and that overrides this
   project's early-publication habit.
-- **0 targets pass**: the scorecard itself (44 targets × 4 checkpoints × 3 criteria, with
+- **0 targets pass**: the scorecard itself (43 targets × 4 checkpoints × 3 criteria, with
   the control and the reference) is published as a Progress Prize submission, and the bet
   stops. Its value is the map — which public segments the released models react to at all —
   not a finding.
 
 ## 7. Budget and what is not being done
 
-- Renders: 43 × ~5 min (native binary) ≈ 4 h unattended; inference 43 × 4 × ~1 min ≈ 3 h;
-  scoring seconds. **GPU under one day**, disk ≈ 43 × 400 MB ≈ 17 GB on E:.
+- Renders: 42 × ~5 min (native binary) ≈ 4 h unattended; inference 42 × 4 × ~1 min ≈ 3 h;
+  scoring seconds. **GPU under one day**, disk ≈ 42 × 400 MB ≈ 17 GB on E:.
 - Not done here: growing segments on the 20 mesh-less scrolls; rendering from 2.4 µm
   volumes (no registered mesh); any adaptation or training; any threshold chosen after
   seeing target output.
