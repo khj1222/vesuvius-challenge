@@ -1,0 +1,51 @@
+{
+ "name": "reference_pherc1447-20250703034159",
+ "render": "data\\first_letters\\render\\pherc1447-20250703034159.zarr",
+ "canvas": [
+  3700,
+  5460
+ ],
+ "sheet_share_of_canvas": 0.21048128898128898,
+ "primary": "seed42:020000",
+ "partner": "seed43:020000",
+ "otsu_threshold": 119.0,
+ "window_top_left": [
+  584,
+  1129
+ ],
+ "window_above_threshold_px": 118305,
+ "C1_stroke_ratio": 4.886693233926643,
+ "C1_components_used": 14,
+ "C2_top_decile_iou_sheet": 0.17304972440244173,
+ "C2_top_decile_iou_window": 0.37886944818304175,
+ "C3_thirds": {
+  "low": 0.2558688642409251,
+  "mid": 0.6854127436447929,
+  "high": 0.05871839211428214,
+  "min_outer": 0.05871839211428214
+ },
+ "C3_min_outer": 0.05871839211428214,
+ "guards": {
+  "seed42:010000": {
+   "gt128_share": 0.3226810575279336,
+   "max": 237,
+   "median": 113
+  },
+  "seed42:020000": {
+   "gt128_share": 0.23041934384615004,
+   "max": 214,
+   "median": 100
+  },
+  "seed43:010000": {
+   "gt128_share": 0.21993639442511695,
+   "max": 213,
+   "median": 103
+  },
+  "seed43:020000": {
+   "gt128_share": 0.10620386003010718,
+   "max": 211,
+   "median": 88
+  }
+ },
+ "guard_gt128_ratio_max_over_min": 3.0383176038654187
+}
