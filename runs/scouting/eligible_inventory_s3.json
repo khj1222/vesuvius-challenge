@@ -1,0 +1,332 @@
+{
+ "PHerc0125": {
+  "eligible_volume": "20250821151825",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151825-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0175A": {
+  "eligible_volume": "20250521115057",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521115057-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0175B": {
+  "eligible_volume": "20250521125822",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521125822-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0191": {
+  "eligible_volume": "20250821151635",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151635-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0211": {
+  "eligible_volume": "20250821151803",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151803-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0257": {
+  "eligible_volume": "20250821151750",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151750-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0268": {
+  "eligible_volume": "20251110183117",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20251110183117-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0306B": {
+  "eligible_volume": "20250521133212",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521133212-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0343": {
+  "eligible_volume": "20250521140437",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521140437-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0358": {
+  "eligible_volume": "20250821151737",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151737-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0483A": {
+  "eligible_volume": "20250521140913",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521140913-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0483B": {
+  "eligible_volume": "20251124083638",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20251124083638-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0490A": {
+  "eligible_volume": "20250521151210",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521151210-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0490B": {
+  "eligible_volume": "20250521151215",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521151215-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0800": {
+  "eligible_volume": "20250521135224",
+  "top": [
+   "photos/",
+   "representations/",
+   "segments/",
+   "volumes/"
+  ],
+  "n_segments": 6,
+  "segments": [
+   "20251028213516-auto_grown_20251028213516907",
+   "20251028220042-auto_grown_20251028220042762",
+   "20251028220955-auto_grown_20251028220955262",
+   "20251028222030-auto_grown_20251028222030940",
+   "20251028225813-auto_grown_20251028225813045",
+   "20251029010146-auto_grown_20251029010146642"
+  ],
+  "volumes": [
+   "20250521135224-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc0813": {
+  "eligible_volume": "20250821151723",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151723-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0826": {
+  "eligible_volume": "20250821151701",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151701-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc0846A": {
+  "eligible_volume": "20250728152254",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250728152254-9.362um-1.2m-113keV-masked.zarr/",
+   "20260319102732-2.403um-0.2m-77keV-masked.zarr/"
+  ]
+ },
+ "PHerc0846B": {
+  "eligible_volume": "20250804142305",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250804142305-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ },
+ "PHerc1203": {
+  "eligible_volume": "20250820131727",
+  "top": [
+   "photos/",
+   "representations/",
+   "segments/",
+   "volumes/"
+  ],
+  "n_segments": 1,
+  "segments": [
+   "raw"
+  ],
+  "volumes": [
+   "20250820131727-9.362um-1.2m-113keV-masked.zarr/",
+   "20260319130212-2.403um-0.2m-77keV-masked.zarr/"
+  ]
+ },
+ "PHerc1218": {
+  "eligible_volume": "20250521120456",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250521120456-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc1447": {
+  "eligible_volume": "20250521151220",
+  "top": [
+   "photos/",
+   "representations/",
+   "segments/",
+   "volumes/"
+  ],
+  "n_segments": 16,
+  "segments": [
+   "20250502180708-auto_grown_20250502160708188",
+   "20250502180748-auto_grown_20250502160748721",
+   "20250502182142-auto_grown_20250502161324419",
+   "20250502182456-auto_grown_20250502161202782",
+   "20250502183138-auto_grown_20250502162038685",
+   "20250502183421-auto_grown_20250502161744358",
+   "20250502184201-auto_grown_20250502163549332",
+   "20250502184658-auto_grown_20250502163923577",
+   "20250502184845-auto_grown_20250502164121265",
+   "20250502185519-auto_grown_20250502164303733",
+   "20250502205333-auto_grown_20250502181030065",
+   "20250702235910-auto_grown_20250702235910292",
+   "20250703025628-auto_grown_20250703025628283",
+   "20250703034159-auto_grown_20250703034159599",
+   "20251105093211-z_dbg_gen_00320",
+   "raw"
+  ],
+  "volumes": [
+   "20250521151220-8.640um-1.2m-116keV-masked.zarr/"
+  ]
+ },
+ "PHerc1545": {
+  "eligible_volume": "20250821151648",
+  "top": [
+   "photos/",
+   "representations/",
+   "volumes/"
+  ],
+  "n_segments": 0,
+  "segments": [],
+  "volumes": [
+   "20250821151648-9.362um-1.2m-113keV-masked.zarr/"
+  ]
+ }
+}

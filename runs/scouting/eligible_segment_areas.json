@@ -1,0 +1,212 @@
+[
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251028213516-auto_grown_20251028213516907",
+  "grid": [
+   108,
+   112
+  ],
+  "valid_share": 0.496,
+  "area_cm2": 1.79
+ },
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251028220042-auto_grown_20251028220042762",
+  "grid": [
+   102,
+   100
+  ],
+  "valid_share": 0.546,
+  "area_cm2": 1.66
+ },
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251028220955-auto_grown_20251028220955262",
+  "grid": [
+   105,
+   105
+  ],
+  "valid_share": 0.487,
+  "area_cm2": 1.6
+ },
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251028222030-auto_grown_20251028222030940",
+  "grid": [
+   129,
+   129
+  ],
+  "valid_share": 0.49,
+  "area_cm2": 2.43
+ },
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251028225813-auto_grown_20251028225813045",
+  "grid": [
+   115,
+   113
+  ],
+  "valid_share": 0.495,
+  "area_cm2": 1.92
+ },
+ {
+  "scroll": "PHerc0800",
+  "segment": "20251029010146-auto_grown_20251029010146642",
+  "grid": [
+   49,
+   49
+  ],
+  "valid_share": 0.557,
+  "area_cm2": 0.4
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502180708-auto_grown_20250502160708188",
+  "grid": [
+   133,
+   177
+  ],
+  "valid_share": 0.494,
+  "area_cm2": 3.47
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502180748-auto_grown_20250502160748721",
+  "grid": [
+   206,
+   112
+  ],
+  "valid_share": 0.457,
+  "area_cm2": 3.15
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502182142-auto_grown_20250502161324419",
+  "grid": [
+   188,
+   128
+  ],
+  "valid_share": 0.502,
+  "area_cm2": 3.61
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502182456-auto_grown_20250502161202782",
+  "grid": [
+   236,
+   162
+  ],
+  "valid_share": 0.5,
+  "area_cm2": 5.71
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502183138-auto_grown_20250502162038685",
+  "grid": [
+   161,
+   106
+  ],
+  "valid_share": 0.495,
+  "area_cm2": 2.52
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502183421-auto_grown_20250502161744358",
+  "grid": [
+   191,
+   193
+  ],
+  "valid_share": 0.488,
+  "area_cm2": 5.37
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502184201-auto_grown_20250502163549332",
+  "grid": [
+   179,
+   111
+  ],
+  "valid_share": 0.735,
+  "area_cm2": 4.36
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502184658-auto_grown_20250502163923577",
+  "grid": [
+   211,
+   143
+  ],
+  "valid_share": 0.591,
+  "area_cm2": 5.33
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502184845-auto_grown_20250502164121265",
+  "grid": [
+   231,
+   110
+  ],
+  "valid_share": 0.779,
+  "area_cm2": 5.91
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502185519-auto_grown_20250502164303733",
+  "grid": [
+   160,
+   133
+  ],
+  "valid_share": 0.729,
+  "area_cm2": 4.63
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250502205333-auto_grown_20250502181030065",
+  "grid": [
+   188,
+   129
+  ],
+  "valid_share": 0.58,
+  "area_cm2": 4.2
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250702235910-auto_grown_20250702235910292",
+  "grid": [
+   149,
+   162
+  ],
+  "valid_share": 0.594,
+  "area_cm2": 4.28
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250703025628-auto_grown_20250703025628283",
+  "grid": [
+   205,
+   213
+  ],
+  "valid_share": 0.546,
+  "area_cm2": 7.12
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20250703034159-auto_grown_20250703034159599",
+  "grid": [
+   181,
+   261
+  ],
+  "valid_share": 0.57,
+  "area_cm2": 8.03
+ },
+ {
+  "scroll": "PHerc1447",
+  "segment": "20251105093211-z_dbg_gen_00320",
+  "grid": [
+   682,
+   411
+  ],
+  "valid_share": 0.1,
+  "area_cm2": 8.38
+ }
+]
