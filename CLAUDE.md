@@ -8,6 +8,7 @@
 - ✅ **답글 게시 완료(09-18, 사용자 승인 후 gh)** = [issuecomment-5731352492](https://github.com/ScrollPrize/villa/pull/1701#issuecomment-5731352492), 게시본=초안 일치. 원본 `submission/pr1701_reply_hendrikschilling.md`.
 - ✅ **#1611 닫음(09-18, completed)**: Bullo27이 rc 134 크래시를 **#1809**로 분리(09-16), TAUIL 동의 → 닫는 코멘트 [issuecomment-5731353019](https://github.com/ScrollPrize/villa/issues/1611#issuecomment-5731353019) 게시(게시본=초안 일치) 후 닫음. 원본 `submission/issue1611_close_comment.md`.
 - HF PR 6건 답글 0, #1608은 아직 open(09-19 16:00 KST 봇 종료 예정, 그 뒤 `gh pr ready 1796`). 09-27~28 재터치·09-30 제출은 그대로.
+- ⏰ **사용자 요청(09-18 밤)으로 세션 크론 예약**: 09-19 **16:41 KST** 1회, #1608 CLOSED 확인 후 `gh pr ready 1796` → CLAUDE.md·메모리 기록. **세션 전용이라 앱을 닫으면 사라진다** — 새 세션이 이 줄을 읽고 #1796이 아직 draft면 직접 `gh pr ready 1796 --repo ScrollPrize/villa`를 돌릴 것(#1608 CLOSED 확인 먼저).
 - ⚠️ 함정: `.venv`의 pytest가 napari 플러그인을 자동 로드하며 **D: 경로를 물고 죽는다**(numba 캐시 locator). `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 -p no:cacheprovider`로 우회. 지문은 **root.name도 해시**하므로 "복사본 동일" 테스트는 다른 디렉터리·같은 이름으로.
 
 ## 최신 재개 안내 (2026-09-15) — 후보 3건 전부 공개됨, 남은 건 시계 관리와 제출
