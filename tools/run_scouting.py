@@ -84,11 +84,13 @@ def render(target: dict) -> Path:
     # bash on Windows: forward slashes everywhere, or the backslashes are eaten as escapes
     cmd = [GIT_BASH, (ROOT / "tools/render_native.sh").as_posix(), volume_scroll, VOLUMES[scroll],
            mesh.as_posix(), out.as_posix(), "--flip-normals"]
-    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                          timeout=4000)
+    # no pipes: a grandchild holding the pipe would make communicate() hang after a timeout
+    wrapper_log = out.with_name(out.name + ".wrapper.log")
+    with wrapper_log.open("w", encoding="utf-8") as fh:
+        proc = subprocess.run(cmd, stdout=fh, stderr=subprocess.STDOUT, timeout=4000)
     dt = time.time() - t0
     if proc.returncode != 0 or not (out / "_render_done").exists():
-        tail = (proc.stdout + proc.stderr)[-600:].replace("\r", "\n")
+        tail = wrapper_log.read_text(encoding="utf-8", errors="replace")[-600:]
         raise RuntimeError(f"render exit={proc.returncode} after {dt:.0f}s: {tail}")
     log(f"  rendered {scroll}/{seg} in {dt/60:.1f} min")
     return out

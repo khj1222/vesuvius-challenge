@@ -17,10 +17,10 @@ while kill -0 $PID 2>/dev/null; do
   if tr '\r' '\n' < "$LOG" | grep -q "(100%)"; then
     AGE=$(( $(date +%s) - $(stat -c %Y "$LOG") ))
     if [ "$AGE" -ge 60 ] && [ -f "$OUT/0/.zarray" ]; then
-      echo "level 0 complete, log quiet ${AGE}s -> killing hung exit" >> "$LOG"; taskkill /PID $PID /F >/dev/null 2>&1; break
+      echo "level 0 complete, log quiet ${AGE}s -> killing hung exit" >> "$LOG"; powershell -NoProfile -Command "Stop-Process -Id $PID -Force" >/dev/null 2>&1; break
     fi
   fi
-  if [ $(( $(date +%s) - START )) -gt 3600 ]; then echo "timeout 1h" >> "$LOG"; taskkill /PID $PID /F >/dev/null 2>&1; exit 2; fi
+  if [ $(( $(date +%s) - START )) -gt 3600 ]; then echo "timeout 1h" >> "$LOG"; powershell -NoProfile -Command "Stop-Process -Id $PID -Force" >/dev/null 2>&1; exit 2; fi
 done
 wait $PID 2>/dev/null
 if [ -f "$OUT/0/.zarray" ] && tr '\r' '\n' < "$LOG" | grep -q "(100%)"; then
