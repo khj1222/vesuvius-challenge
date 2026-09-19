@@ -54,3 +54,4 @@ planning/
 # itself. Untracked on purpose; this line states that intent, so that a stray
 # `git add -A` cannot publish it to a repo the submission links point at.
 AGENTS.md
+logs/
