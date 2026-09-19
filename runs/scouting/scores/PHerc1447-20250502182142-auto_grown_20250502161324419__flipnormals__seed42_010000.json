@@ -1,0 +1,51 @@
+{
+ "name": "PHerc1447-20250502182142-auto_grown_20250502161324419__flipnormals",
+ "render": "E:\\vesuvius-challenge\\data\\first_letters\\scouting_render_native\\PHerc1447_20250502182142-auto_grown_20250502161324419.zarr",
+ "canvas": [
+  3760,
+  2560
+ ],
+ "sheet_share_of_canvas": 0.27616481050531916,
+ "primary": "seed42:010000",
+ "partner": "seed43:010000",
+ "otsu_threshold": 124.0,
+ "window_top_left": [
+  225,
+  727
+ ],
+ "window_above_threshold_px": 82300,
+ "C1_stroke_ratio": 8.47306607465736,
+ "C1_components_used": 7,
+ "C2_top_decile_iou_sheet": 0.2598212185368149,
+ "C2_top_decile_iou_window": 0.2522414823670054,
+ "C3_thirds": {
+  "low": 0.23462448255470136,
+  "mid": 0.7067061362128195,
+  "high": 0.05866938123247909,
+  "min_outer": 0.05866938123247909
+ },
+ "C3_min_outer": 0.05866938123247909,
+ "guards": {
+  "seed42:010000": {
+   "gt128_share": 0.18451711876827329,
+   "max": 232,
+   "median": 96
+  },
+  "seed42:020000": {
+   "gt128_share": 0.21028517988512752,
+   "max": 217,
+   "median": 91
+  },
+  "seed43:010000": {
+   "gt128_share": 0.14497647326137628,
+   "max": 219,
+   "median": 97
+  },
+  "seed43:020000": {
+   "gt128_share": 0.04169770209897331,
+   "max": 206,
+   "median": 84
+  }
+ },
+ "guard_gt128_ratio_max_over_min": 5.043087971274685
+}

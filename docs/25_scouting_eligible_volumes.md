@@ -224,6 +224,51 @@ orientation check: neither orientation of that segment makes the two seeds agree
 the ink is, whereas the control does in exactly one orientation. The 1447 reference values
 used below are therefore the *better* of its two orientations per statistic.
 
+### 8.4 Result — 43 targets, 0 candidates (2026-09-19, run finished 23:19 KST)
+
+All 43 public segments of PHerc0800, PHerc1203 and PHerc1447 were rendered with
+`--flip-normals`, scored in both orientations under the four released checkpoints, and put
+through the v2 gate (section 9). Scorecard: `runs/scouting/scorecard.json`; per-target
+files: `runs/scouting/scores/`; `python tools/summarise_scouting.py` reproduces the table.
+
+| scroll | targets | C2 whole-sheet, best orientation: median / max | C2 window: median / max | orientation-indifferent | > 128 share range |
+|---|---|---|---|---|---|
+| PHerc0800 | 6 | 0.200 / 0.247 | 0.262 / 0.362 | 1 | 0.08 – 0.19 |
+| PHerc1447 | 15 | 0.140 / 0.215 | 0.157 / 0.373 | 12 | 0.11 – 0.53 |
+| PHerc1203 | 22 | 0.200 / 0.239 | 0.163 / 0.355 | 17 | 0.06 – 0.45 |
+| **all** | **43** | **0.176 / 0.247** | — / 0.373 | **30** | — |
+
+- **Gate: 0 of 43 pass.** Four targets clear the whole-sheet bar (≥ 0.229: 0.247, 0.244,
+  0.239, 0.231) and none clears the window bar (≥ 0.405; best 0.373). The unseen control
+  scored 0.285 / 0.431 on the same statistics; the 1447 reference 0.173 / 0.379.
+- **30 of 43 are orientation-indifferent**: the two seeds agree no more in one slice order
+  than in the other. On the control the right orientation moved C2 by +0.08 and turned
+  the trivial classifier into F1 0.65; on these segments the models do not care which way
+  the sheet faces, which is the shape of "no signal", not of a wrong render.
+- The checkpoint-disagreement guard (largest / smallest > 128 share across the four
+  checkpoints) sits at a median of 8.6 (0800), 6.4 (1447) and 3.6 (1203) against 3.0 on
+  the docs/16 reference and 2.1 on the seen control. The models disagree with themselves
+  about how much of every sheet is ink, by more than they did on the one segment already
+  judged negative.
+- The docs/16 segment, re-rendered here with `--flip-normals`, scores 0.153 / 0.130 —
+  consistent with its earlier 0.173 (docs/16 orientation) and 0.100 (reversed).
+- No target reached the eye-judgement stage, so C1 and C3 were not judged. No collapse
+  flag fired: nothing here is the trivial classifier, it is mid-grey hedging everywhere
+  (on-sheet medians 78 – 134).
+
+**The pre-registered prediction (0 candidates) holds, and the decision rule in section 6
+applies: this scorecard is the deliverable, and the First Letters bet stops here.** What
+it says is narrower than "these scrolls have no text": on the 43 surfaces anyone can
+download today, the released 9 µm ink models produce output that two independent seeds do
+not agree on, in either orientation, at a level the same models exceed on an unseen scroll
+that does carry ink. A foothold annotation needs somewhere to start, and none of these
+surfaces offers one to these models. The 20 eligible scrolls without a public mesh were
+not examined.
+
+Cost: 43 renders (106 render-minutes, the Windows build for 15 and the Linux build in
+WSL for 28), 344 inferences, one GPU-day of wall clock including the two stalls described
+in 8.1 and the reboot they forced.
+
 ## 9. Amendment (v2), registered before any target is rendered — 2026-09-19 10:50 KST
 
 1. **Pipeline.** Every target is rendered with `--flip-normals` (the orientation that
