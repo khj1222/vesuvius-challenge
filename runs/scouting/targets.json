@@ -218,5 +218,15 @@
   "scroll": "control_PHerc0139",
   "segment": "w040",
   "s3_prefix": "PHerc0139/segments/20250831000000-w040_2025083102/mesh/20250831000000-on-20250728140407-9.362um.tifxyz/"
+ },
+ {
+  "scroll": "control_PHerc0139",
+  "segment": "w040_zflip",
+  "s3_prefix": "(z-flipped copy of the w040 render)"
+ },
+ {
+  "scroll": "reference_PHerc1447",
+  "segment": "20250703034159_zflip",
+  "s3_prefix": "(z-flipped copy of the docs/16 render)"
  }
 ]

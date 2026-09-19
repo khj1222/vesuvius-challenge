@@ -1,0 +1,47 @@
+{
+ "scored_px": 1629613,
+ "ink_px": 716498,
+ "results": {
+  "w040_zflip/loso42_020000": {
+   "f1": 0.6499,
+   "threshold": 70
+  },
+  "w040_zflip/loso43_020000": {
+   "f1": 0.6512,
+   "threshold": 74
+  },
+  "w040_zflip/seed42_020000": {
+   "f1": 0.8051,
+   "threshold": 118
+  },
+  "w040_zflip/seed43_020000": {
+   "f1": 0.7769,
+   "threshold": 102
+  },
+  "w040_zflip/seed42_010000": {
+   "f1": 0.7314,
+   "threshold": 122
+  },
+  "w040/loso42_020000": {
+   "f1": 0.6108,
+   "threshold": 58
+  },
+  "w040/loso43_020000": {
+   "f1": 0.6108,
+   "threshold": 0
+  },
+  "w040/seed42_020000": {
+   "f1": 0.6108,
+   "threshold": 56
+  },
+  "w040/seed43_020000": {
+   "f1": 0.6114,
+   "threshold": 66
+  },
+  "w040/seed42_010000": {
+   "f1": 0.6108,
+   "threshold": 68
+  }
+ },
+ "corpus_reference": "no0139_matrix.csv loso42 w040 020000 = 0.6835 @ 74; loso43 = 0.7033 @ 79"
+}
