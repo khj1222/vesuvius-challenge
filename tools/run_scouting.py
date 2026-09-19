@@ -82,7 +82,8 @@ def render(target: dict) -> Path:
     volume_scroll = scroll.replace("control_", "")
     t0 = time.time()
     # bash on Windows: forward slashes everywhere, or the backslashes are eaten as escapes
-    cmd = [GIT_BASH, (ROOT / "tools/render_native.sh").as_posix(), volume_scroll, VOLUMES[scroll],
+    # Linux build inside WSL (killable); the Windows build leaves an unkillable 4 GB zombie per render
+    cmd = [GIT_BASH, (ROOT / "tools/render_wsl.sh").as_posix(), volume_scroll, VOLUMES[scroll],
            mesh.as_posix(), out.as_posix(), "--flip-normals"]
     # no pipes: a grandchild holding the pipe would make communicate() hang after a timeout
     wrapper_log = out.with_name(out.name + ".wrapper.log")
