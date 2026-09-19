@@ -34,6 +34,7 @@ SCORE_DIR = ROOT / "runs/scouting/scores"
 LOG = ROOT / "logs/scouting_driver.log"
 S3 = "https://vesuvius-challenge-open-data.s3.amazonaws.com"
 VOLUMES = {
+    "reference_PHerc1447": "20250521151220-8.640um-1.2m-116keV-masked.zarr",
     "PHerc0800": "20250521135224-8.640um-1.2m-116keV-masked.zarr",
     "PHerc1447": "20250521151220-8.640um-1.2m-116keV-masked.zarr",
     "PHerc1203": "20250820131727-9.362um-1.2m-113keV-masked.zarr",
@@ -66,6 +67,9 @@ def scroll_of(target: dict) -> str:
 
 
 def render(target: dict) -> Path:
+    """Render with --flip-normals: on the 0139 w040 control that reproduces the team's
+    published surface volume to 99.7% of bytes, while the default orientation reverses the
+    slice order and turns every checkpoint into the trivial classifier (docs/25 section 8)."""
     scroll, seg = target["scroll"], target["segment"]
     out = RENDER_DIR / f"{scroll}_{seg}.zarr"
     if (out / "_render_done").exists():
@@ -74,20 +78,40 @@ def render(target: dict) -> Path:
     if not (mesh / "x.tif").exists():
         raise RuntimeError(f"mesh missing: {mesh}")
     volume_scroll = scroll.replace("control_", "")
-    url = f"{S3}/{volume_scroll}/volumes/{VOLUMES[scroll]}"
-    cmd = [str(BIN), "-v", str(CACHE_DIR / f"{volume_scroll}.zarr"), "--remote-url", url,
-           "-g", "0", "--scale", "1", "-s", str(mesh), "--num-slices", "28", "--slice-step", "1",
-           "--zarr-output", str(out), "--cache-gb", "8"]
     t0 = time.time()
-    env = dict(os.environ, MSYS_NO_PATHCONV="1")
-    proc = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=3600)
+    cmd = ["bash", str(ROOT / "tools/render_native.sh"), volume_scroll, VOLUMES[scroll], str(mesh), str(out),
+           "--flip-normals"]
+    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=4000)
     dt = time.time() - t0
-    if proc.returncode != 0 or not (out / "0").exists():
+    if proc.returncode != 0 or not (out / "_render_done").exists():
         tail = (proc.stdout + proc.stderr)[-600:].replace("\r", "\n")
         raise RuntimeError(f"render exit={proc.returncode} after {dt:.0f}s: {tail}")
-    (out / "_render_done").write_text(f"{dt:.1f}s\n")
     log(f"  rendered {scroll}/{seg} in {dt/60:.1f} min")
     return out
+
+
+def zflip_copy(src: Path) -> Path:
+    """The other orientation, made from the render rather than re-rendered (byte-identical
+    to a render without --flip-normals on the control)."""
+    dst = src.with_name(src.name.replace(".zarr", "_zflip.zarr"))
+    if (dst / "_render_done").exists():
+        return dst
+    import numpy as np
+    import zarr
+    s = zarr.open(str(src), mode="r")
+    a = s["0"]
+    g = zarr.open_group(str(dst), mode="w")
+    g.attrs.update(dict(s.attrs))
+    d = g.create_dataset("0", shape=a.shape, chunks=a.chunks, dtype=a.dtype, compressor=a.compressor,
+                         fill_value=0, dimension_separator="/")
+    cy = a.chunks[1]
+    for y in range(0, a.shape[1], cy * 8):
+        block = np.asarray(a[:, y:y + cy * 8, :])
+        if block.any():
+            d[:, y:y + cy * 8, :] = block[::-1]
+    (dst / "_render_done").write_text(f"z-flipped copy of {src.name}\n")
+    return dst
 
 
 def infer(target: dict, render_zarr: Path, checkpoints: dict[str, Path]) -> dict[str, Path]:
@@ -104,7 +128,8 @@ def infer(target: dict, render_zarr: Path, checkpoints: dict[str, Path]) -> dict
         t0 = time.time()
         cmd = INFER_CMD + [str(render_zarr), str(ckpt), str(out), "--overlap", "0.5",
                            "--blend-mode", "hann", "--no-compile"]
-        proc = subprocess.run(cmd, cwd=str(INFER_CWD), capture_output=True, text=True, timeout=3600)
+        proc = subprocess.run(cmd, cwd=str(INFER_CWD), capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=3600)
         if proc.returncode != 0 or not out.exists():
             tail = (proc.stdout + proc.stderr)[-800:]
             raise RuntimeError(f"infer {key} exit={proc.returncode}: {tail}")
@@ -119,7 +144,8 @@ def score(name: str, render_zarr: Path, preds: dict[str, Path], primary: str, pa
     cmd = [str(SCORER), str(ROOT / "tools/score_scouting.py"), "--render", str(render_zarr),
            "--name", name, "--out", str(out), "--primary", primary, "--partner", partner, "--pred"]
     cmd += [f"{k}={v}" for k, v in preds.items()]
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
+    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=1800)
     if proc.returncode != 0:
         raise RuntimeError(f"score exit={proc.returncode}: {(proc.stdout + proc.stderr)[-800:]}")
     log(f"  scored {name} ({primary}): {proc.stdout.strip()[:300]}")
@@ -128,15 +154,20 @@ def score(name: str, render_zarr: Path, preds: dict[str, Path], primary: str, pa
 
 def run_target(target: dict) -> None:
     scroll, seg = target["scroll"], target["segment"]
-    name = f"{scroll}-{seg}"
-    log(f"== {name}")
+    log(f"== {scroll}-{seg}")
     render_zarr = render(target)
-    preds = infer(target, render_zarr, RELEASED)
-    score(name, render_zarr, preds, "seed42:020000", "seed43:020000")
-    score(name, render_zarr, preds, "seed42:010000", "seed43:010000")
-    if scroll.startswith("control_"):
-        loso = infer(target, render_zarr, LOSO)
-        score(name + "__unseen", render_zarr, {**preds, **loso}, "loso42:020000", "loso43:020000")
+    variants = {"flipnormals": render_zarr}
+    if not seg.endswith("_zflip"):
+        variants["zflip"] = zflip_copy(render_zarr)
+    for variant, zarr_path in variants.items():
+        name = f"{scroll}-{seg}__{variant}"
+        sub = {"scroll": scroll, "segment": f"{seg}__{variant}"}
+        preds = infer(sub, zarr_path, RELEASED)
+        score(name, zarr_path, preds, "seed42:020000", "seed43:020000")
+        score(name, zarr_path, preds, "seed42:010000", "seed43:010000")
+        if scroll.startswith("control_"):
+            loso = infer(sub, zarr_path, LOSO)
+            score(name + "__unseen", zarr_path, {**preds, **loso}, "loso42:020000", "loso43:020000")
 
 
 def main() -> None:

@@ -158,4 +158,97 @@ method, not on the scrolls.
 
 ## 8. Results
 
-*(empty at pre-registration)*
+### 8.1 The control caught a pipeline bug before any target was rendered (2026-09-19)
+
+The 0139 w040 control was rendered with the native `VC3D-88d4aa8-2026-09-18` build (the
+5479453 asset named in section 3 is no longer on the release tag; 88d4aa8 is the same
+post-rewrite lineage, 11m55s for 50 tile rows, and it hangs at exit after writing a complete
+pyramid — `tools/render_native.sh` kills it once level 0 is done and the log has been quiet
+for 60 s). The `:edge` container segfaulted twice on the same segment and was dropped.
+
+The render has the same canvas and chunking as the team's published surface volume for
+this segment, `(28, 6400, 7980)` in `(28, 128, 128)` chunks, **but the slice order is
+reversed**: the per-slice mean profile is the team's read backwards, and reversing z makes
+the two volumes agree on **99.7% of bytes with a mean absolute difference of 0.0**.
+`vc_render_tifxyz --flip-normals` reproduces the team's volume directly (99.74% of bytes,
+mean |diff| 0.003). Scored against the segment's withheld annotation
+(`runs/scouting/control_w040_honest_f1.json`, 1,629,613 supervised pixels):
+
+| render orientation | leave-0139-out s42 / s43 (unseen) | released s42 / s43 (seen) |
+|---|---|---|
+| as rendered (default normals) | **0.611 / 0.611 — the trivial classifier**, best threshold 58 / 0 | 0.611 / 0.611 |
+| slice order reversed (= team volume) | **0.650 / 0.651** (corpus: 0.684 / 0.703 on a slightly different scored region) | **0.805 / 0.777** |
+
+So the default orientation does not merely weaken the models, it turns every one of them
+into "all ink". Consequence for this project's earlier work: the docs/16 render of PHerc1447
+was made the same way, so its "no letters" verdict had to be re-tested in the other
+orientation (8.3).
+
+### 8.2 The criteria, audited on the control (before any target)
+
+Scores from `tools/score_scouting.py`, seed 42 vs 43 at step 20,000:
+
+| case | C2 sheet | C2 window | C1 | C3 | > 128 share | ckpt ratio | median |
+|---|---|---|---|---|---|---|---|
+| 1447, docs/16 orientation (negative reference) | 0.173 | 0.379 | 4.89 | 0.059 | 0.230 | 3.04 | 100 |
+| 1447, reversed | 0.100 | 0.169 | 5.52 | 0.065 | 0.236 | 3.16 | 101 |
+| control, wrong orientation, unseen | 0.209 | 0.339 | 2.44 | 0.003 | 0.020 | 7.57 | 70 |
+| control, wrong orientation, seen | 0.230 | 0.101 | 3.83 | 0.015 | 0.083 | 3.15 | 83 |
+| **control, right orientation, unseen** | **0.285** | **0.431** | 3.22 | 0.009 | 0.036 | 6.42 | 70 |
+| control, right orientation, seen | 0.407 | 0.398 | 3.54 | 0.056 | 0.163 | 2.06 | 86 |
+
+- **C2 (seeds agree on where) works.** Unseen control 0.285 against the reference's 0.173,
+  and the same control in the wrong orientation drops to 0.209 — below the midpoint 0.229 —
+  which is the right answer for a render on which the model is the trivial classifier.
+- **C1 (skeleton ratio) fails: the control scores *lower* than the reference** (3.22 vs
+  4.89). Hann-blended predictions make large soft components everywhere, and the ratio
+  measures blending, not letters. Its absolute floor of 1.5 was already exceeded by the
+  negative reference.
+- **C3 (outer-thirds share) fails: it measures calibration, not commitment.** The unseen
+  model's best F1 sits at threshold 70–74, so almost none of its ink exceeds 170 and the
+  proxy reads 0.009 on a render where it scores F1 0.65. The wrong-orientation control also
+  shows what collapse looks like — median 70, 83% of the sheet in the low third — and the
+  proxy cannot tell the two apart.
+
+Under section 4's own rule, two of three proxies failed on the control, so **the plan as
+written stops here as a null on the method.** Because no target has been rendered or
+predicted, the criteria can be revised and re-registered before the targets run; that is
+section 9. It is an amendment made with the control and reference in hand and nothing else.
+
+### 8.3 PHerc1447 `20250703034159` in the other orientation
+
+Reversing the docs/16 render and running the four released checkpoints gives C2 0.100
+(step 20,000) and 0.199 (step 10,000) — no higher than the original 0.173 / 0.314 — with the
+same > 128 share (0.236 vs 0.230) and median (101 vs 100). The docs/16 verdict survives the
+orientation check: neither orientation of that segment makes the two seeds agree on where
+the ink is, whereas the control does in exactly one orientation. The 1447 reference values
+used below are therefore the *better* of its two orientations per statistic.
+
+## 9. Amendment (v2), registered before any target is rendered — 2026-09-19 10:50 KST
+
+1. **Pipeline.** Every target is rendered with `--flip-normals` (the orientation that
+   reproduces the team's volumes), and its z-reversed copy is scored too. The orientation
+   whose primary prediction gives the higher C2 is reported as the target's "responsive"
+   orientation; both rows are kept. A target whose two orientations are within 0.03 of each
+   other on C2 is read as "the model does not care", i.e. no signal.
+2. **The numeric gate is C2 alone.** Pass = whole-sheet top-decile IoU (seed 42 vs 43,
+   step 20,000) **≥ 0.229** (midpoint of unseen control 0.285 and reference 0.173) **and**
+   window IoU **≥ 0.405** (midpoint of 0.431 and 0.379). The wrong-orientation control
+   (0.209 / 0.339) fails this gate, the right-orientation control passes it, the reference
+   fails it in both orientations.
+3. **C1 and C3 return to what they were in docs/18: eye judgement on full-resolution crops
+   of the C2 window, both seeds side by side**, reported for every target that passes the
+   gate and able only to demote. Their numeric proxies are still computed and stored but
+   decide nothing.
+4. **Trivial-classifier guard.** A prediction with on-sheet median ≤ 75 *and* low-third
+   share ≥ 0.80 under the released checkpoints is flagged "collapsed" (the wrong-orientation
+   signature). A flag on the responsive orientation demotes the target regardless of C2.
+5. **Decision rule.** A target that passes the C2 gate in its responsive orientation and is
+   not demoted is a *candidate*. Section 6 applies to candidates, with one addition: before
+   any First Letters step, the candidate is re-rendered and re-predicted from scratch and
+   must pass the gate again.
+6. **Predictions, restated.** 0 candidates expected. The only place I would not be
+   surprised by one is among the larger PHerc1203 patches, for the reason given in section 5.
+7. **What this amendment cannot fix.** A single numeric criterion is a weaker screen than
+   three, and the thresholds come from one control segment. A candidate is a reason to look
+   harder, not a finding.
