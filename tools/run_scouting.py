@@ -52,6 +52,8 @@ INFER_CWD = Path("D:/vw2/ink-detection")
 INFER_CMD = ["uv", "run", "--project", str(ROOT / "external/villa/ink-detection"), "--no-sync",
              "python", "-m", "koine_machines.inference.infer"]
 SCORER = ROOT / "external/villa/ink-detection/.venv/Scripts/python.exe"
+# plain "bash" resolves to WSL's bash from a Windows python, which cannot see E:/ paths
+GIT_BASH = "C:/Program Files/Git/bin/bash.exe"
 
 
 def log(msg: str) -> None:
@@ -79,8 +81,9 @@ def render(target: dict) -> Path:
         raise RuntimeError(f"mesh missing: {mesh}")
     volume_scroll = scroll.replace("control_", "")
     t0 = time.time()
-    cmd = ["bash", str(ROOT / "tools/render_native.sh"), volume_scroll, VOLUMES[scroll], str(mesh), str(out),
-           "--flip-normals"]
+    # bash on Windows: forward slashes everywhere, or the backslashes are eaten as escapes
+    cmd = [GIT_BASH, (ROOT / "tools/render_native.sh").as_posix(), volume_scroll, VOLUMES[scroll],
+           mesh.as_posix(), out.as_posix(), "--flip-normals"]
     proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
                           timeout=4000)
     dt = time.time() - t0
