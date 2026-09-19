@@ -10,7 +10,7 @@ LOG="${OUT}.render.log"
 URL="https://vesuvius-challenge-open-data.s3.amazonaws.com/${SCROLL}/volumes/${VOL}"
 START=$(date +%s)
 "$BIN" -v "E:/vesuvius-challenge/data/first_letters/cache_native/${SCROLL}.zarr" --remote-url "$URL" \
-  -g 0 --scale 1 -s "$MESH" --num-slices 28 --slice-step 1 --zarr-output "$OUT" --cache-gb 8 "$@" > "$LOG" 2>&1 &
+  -g 0 --scale 1 -s "$MESH" --num-slices 28 --slice-step 1 --zarr-output "$OUT" --cache-gb 2 "$@" > "$LOG" 2>&1 &
 PID=$!
 while kill -0 $PID 2>/dev/null; do
   sleep 15
@@ -22,8 +22,9 @@ while kill -0 $PID 2>/dev/null; do
   fi
   if [ $(( $(date +%s) - START )) -gt 3600 ]; then echo "timeout 1h" >> "$LOG"; powershell -NoProfile -Command "Stop-Process -Id $PID -Force" >/dev/null 2>&1; exit 2; fi
 done
-wait $PID 2>/dev/null
-if [ -f "$OUT/0/.zarray" ] && tr '\r' '\n' < "$LOG" | grep -q "(100%)"; then
+# Do NOT wait on the renderer: when it hangs at exit it cannot be killed either (kernel wait
+# on the remote fetch), so it is left as a zombie and the output is judged on its own.
+if [ -f "$OUT/0/.zarray" ] && [ -f "$OUT/5/.zarray" ] && tr '\r' '\n' < "$LOG" | grep -q "(100%)"; then
   echo "$(( $(date +%s) - START ))s" > "$OUT/_render_done"; echo "done $OUT in $(( $(date +%s) - START ))s"; exit 0
 fi
 echo "render failed: $OUT"; tail -c 400 "$LOG"; exit 1
