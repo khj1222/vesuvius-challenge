@@ -87,8 +87,9 @@ def render(target: dict) -> Path:
            mesh.as_posix(), out.as_posix(), "--flip-normals"]
     # no pipes: a grandchild holding the pipe would make communicate() hang after a timeout
     wrapper_log = out.with_name(out.name + ".wrapper.log")
+    env = dict(os.environ, MSYS_NO_PATHCONV="1")  # else Git Bash rewrites /mnt/e/... under C:/Program Files/Git/
     with wrapper_log.open("w", encoding="utf-8") as fh:
-        proc = subprocess.run(cmd, stdout=fh, stderr=subprocess.STDOUT, timeout=4000)
+        proc = subprocess.run(cmd, stdout=fh, stderr=subprocess.STDOUT, timeout=4000, env=env)
     dt = time.time() - t0
     if proc.returncode != 0 or not (out / "_render_done").exists():
         tail = wrapper_log.read_text(encoding="utf-8", errors="replace")[-600:]
