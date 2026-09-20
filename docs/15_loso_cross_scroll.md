@@ -205,12 +205,13 @@ result was read as **domain match** — transfer is better into the family you
 trained on — and the guidance issued was "when inferring on an unseen scroll,
 render in the same family you trained on". **A follow-up arm on 2026-08-26
 rejected that reading** (appendix 2). A model that had seen the native family in
-training showed the same gap, so the cause is not family *match* but **the
-aligned representation being better on its own**.
+training showed a similar gap. This weakens family-match as a sufficient explanation;
+it does not uniquely identify sampling density or representation quality as its cause.
+Acquisition, target composition and limited native exposure remain confounded.
 
 The guidance survives in a different shape: not "render in the family you
-trained on" but **"render in the aligned family (high-resolution transfer plus z
-pooling)"** — whatever the training corpus was.
+trained on" but **"render in the aligned family (high-resolution transfer plus XY
+pooling)"** on the four paired segments tested. This is not a guarantee across acquisitions.
 
 ## The three-arm spectrum (summary table for open problem #7)
 
@@ -239,6 +240,12 @@ pooling)"** — whatever the training corpus was.
 
 # Part 4: the nature of the gap, and what it costs to close (2026-08-24)
 
+**September 20 follow-up:** [docs/26](26_fixed_threshold_finetuning.md) fixes thresholds
+on separate calibration segments and still finds positive FT gains on both scrolls.
+It also detects a small repeated-pixel counting effect in the old region-box evaluator.
+The historical figures below retain their original selection/counting rules; docs/26
+reports unique-pixel scores and reproduces the legacy counts separately.
+
 Three arms measured the gap's existence, size and structure. The last question
 is how to close it. Two methods, measured on the same harness: the free one
 (ensembling) and the cheapest paid one (fine-tuning on one target segment).
@@ -256,10 +263,9 @@ Built by reusing the existing prediction TIFFs, so no GPU: a **seed ensemble**
 | into 1667 | 0.546 | 0.555 | +0.009 | +0.007 |
 | into 0139 | 0.678 | 0.685 | +0.007 | +0.001 |
 
-**The cross-scroll gap is bias, not variance.** That averaging two independent
-seeds recovers almost nothing means the two models are wrong about the same
-things in the same way — which is exactly what the near-irrelevance of the seed
-(mean absolute difference around 0.01) already said.
+**The tested seed and step averages recover little of the gap.** This is consistent
+with shared errors in these models, but does not establish immunity to other ensembles
+or a complete bias/variance decomposition.
 
 ## 4b. Label efficiency — one annotated segment on the target scroll closes 82%
 
@@ -293,26 +299,25 @@ cells; `runs/ink9um_scorecard/ft_paris4_matrix.csv` (plus
   0.822, by 2,500 steps (5k gives 0.815, 10k 0.812 — a slight decline). The
   adaptation is over in minutes, and what follows is overfitting to w00. GPU
   cost: **about 7 minutes per seed** for 2,500 steps.
-- If this is what the hardest scroll gives (Paris4, margin +0.06), the others
-  are likely easier.
+- The later 1667 replication gives a smaller benefit; low initial transfer performance
+  does not establish that adaptation on other scrolls will be easier.
 - Seed reproducibility: ft42 and ft43 agree to within 0.01-0.02 per segment.
 
 ## The narrative these four parts support
 
 1. **Measurement**: the cross-scroll pixel signal is +0.06 to +0.17 over the
    trivial baseline, across a three-scroll spectrum.
-2. **Nature**: it is structural bias — seed-independent, immune to ensembling,
-   and partly explained by representation quality (the aligned representation's
-   own advantage, not family *match* — appendix 2).
+2. **Nature**: the tested seed/step ensembles recover little. The aligned family scores
+   better in the paired data; its unique causal advantage is not established (appendix 2).
 3. **Cost to repair**: **one annotated segment on the target scroll plus 7 GPU
    minutes** closes about 82% of the gap (0.50 to 0.82, above the in-scroll
    honest ceiling of 0.74-0.77) — **on Paris4. On 1667 the same recipe closes
    24%** (docs/18, 2026-08-31), so quote this with the scroll attached.
-4. **First Letters implication**: for an unseen scroll (0800/1447) the strategy
-   is render (**in the aligned family** — because of representation quality, not
-   because it matches the training corpus; appendix 2), treat direct inference
+4. **First Letters implication**: for an unseen scroll (0800/1447), the proposed strategy
+   is render (**in the aligned family**, based on the paired results in appendix 2), treat direct inference
    as scouting only, annotate the single most promising segment, fine-tune, then
-   re-infer everything. This document supplies the expected value of each step.
+   re-infer everything. These labeled-scroll results motivate the workflow, but do not
+   validate unread-scroll scouting; the later docs/25 control audit failed its full gate.
 
 *(Caveat: the denominator of "share closed" is the reference's training-pixel
 ceiling, which is a generous bar, and w00 is among the largest annotations in
@@ -369,7 +374,8 @@ and 100% is what the full annotation buys.*
 
 **Half the annotation is cheap, not free.** It costs 0.033 F1 and keeps 89% of what the
 full segment buys — over the noise floor on 6 of 7 segments, so the loss is real, but small
-against halving the annotation work. Below that the curve bends: a fifth of the annotation
+relative to halving labeled area. Human annotation time was not measured. Below that
+the curve bends: a fifth of the annotation
 keeps 71%, an eighth keeps 56%, which throws away nearly half of what fine-tuning on one
 segment was worth.
 

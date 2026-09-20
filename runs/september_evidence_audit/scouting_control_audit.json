@@ -1,0 +1,57 @@
+{
+  "kind": "retrospective control falsification, not a replacement detector",
+  "released": {
+    "selected": "control_PHerc0139-w040_zflip",
+    "primary": "seed42:020000",
+    "sheet": 0.40732648819691153,
+    "window": 0.3979044145971905,
+    "indifferent": false,
+    "collapsed": false,
+    "joint": false,
+    "candidate": false
+  },
+  "loso": {
+    "selected": "control_PHerc0139-w040_zflip__unseen",
+    "primary": "loso42:020000",
+    "sheet": 0.2854419363949036,
+    "window": 0.4305831808417535,
+    "indifferent": false,
+    "collapsed": true,
+    "joint": true,
+    "candidate": false
+  },
+  "offset_diagnostic": {
+    "original": {
+      "sheet": 0.2854419363949036,
+      "window": 0.4305831808417535,
+      "median": 70.0,
+      "low": 0.8154635549724965,
+      "otsu": 100.0,
+      "min": 52,
+      "max": 226,
+      "collapsed": true,
+      "candidate_using_unchanged_orientation": false
+    },
+    "offset20": {
+      "sheet": 0.2854419363949036,
+      "window": 0.4305831808417535,
+      "median": 90.0,
+      "low": 0.18408398352090957,
+      "otsu": 120.0,
+      "min": 72,
+      "max": 246,
+      "collapsed": false,
+      "candidate_using_unchanged_orientation": true
+    }
+  },
+  "offset_preserves_rank_and_binary_masks": true,
+  "decision": "Existing gate fails positive control; no replacement adopted, no target replay.",
+  "sources_sha256": {
+    "runs\\scouting\\scores\\control_PHerc0139-w040__seed42_020000.json": "c4384f4701e451659d10f9586a6e44a02f959d17c58141b175a5a2518bb93902",
+    "runs\\scouting\\scores\\control_PHerc0139-w040_zflip__seed42_020000.json": "0d0cc553f6e9813da4b65be35b8b58fcaebd531955814b9bbf00485759a32529",
+    "runs\\scouting\\scores\\control_PHerc0139-w040__unseen__loso42_020000.json": "e6796208f4127a2d76923d0dc787dda6bef55c07c4d10ca7c5d22c2439398ed6",
+    "runs\\scouting\\scores\\control_PHerc0139-w040_zflip__unseen__loso42_020000.json": "9614636568fb1470b2f8014ca89232d5e11f31fa22c06cb430607f0bbda6237d",
+    "data\\first_letters\\scouting_pred\\control_PHerc0139_w040_zflip\\loso42_020000.tif": "9ee5a0825c22b1341bca1fe2147c9e5c6fcf52253b1ba021baa4c2813ee8c8a5",
+    "data\\first_letters\\scouting_pred\\control_PHerc0139_w040_zflip\\loso43_020000.tif": "5e1f1110ea2625ab7ae51478f6dc323591236448f1f9263addab4fd98f7ab277"
+  }
+}

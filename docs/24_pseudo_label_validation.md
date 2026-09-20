@@ -1,5 +1,10 @@
 # 24 — Does validation on pseudo-labels track the truth?
 
+**2026-09-20 clarification:** the registered result is agreement within a 0.03 F1
+tolerance, not exact checkpoint agreement. Exact matches are 6/10 seed–segment pairs
+and 2/5 segments when both seeds must match. A retrospective conservative bound on
+the approximate threshold-loss estimate is provided after the results.
+
 **Pre-registered 2026-09-05, before any number was computed.** Committed first, as
 [docs/18](18_uda_design.md), [docs/20](20_annotation_targeting.md) and
 [docs/21](21_snr_augmentation.md)–[docs/23](23_blur_exposure.md) were; two of those four were
@@ -135,7 +140,8 @@ improved the model against the truth in 14 of 14.** Whatever makes a pseudo-labe
 training* is not what F1 against the annotation measures. The two uses of the same object come
 apart, and that is the finding:
 
-- as **training signal**, these labels work — measured, twice, on two scrolls (docs/18);
+- as **training signal**, these labels helped on Paris4; the 1667 replication did not
+  reproduce that benefit (docs/18);
 - as a **yardstick**, they agree with the truth at roughly the level of guessing.
 
 A validation score computed against them is therefore agreement with an object of that quality.
@@ -168,7 +174,7 @@ scored **twice from one inference**. Raw numbers: `runs/ink9um_scorecard/pseudo_
 to four decimals and the same threshold — e.g. `D,42,pherc1667-w013,002500` gives 0.5685 @ 67
 either way. The re-inference is the same experiment, so any difference below is the yardstick.
 
-## The registered verdict: agree, 5 of 5 segments
+## The registered verdict: agree within tolerance, 5 of 5 segments
 
 | segment | seed 42 | seed 43 |
 |---|---|---|
@@ -179,6 +185,8 @@ either way. The re-inference is the same experiment, so any difference below is 
 | w031 | same pick, 0.0000 | same pick, 0.0000 |
 
 Every penalty is under 0.03. **I predicted disagreement on 1667 and I was wrong.**
+Exact checkpoint agreement is narrower: 6/10 seed–segment pairs, and both seeds match
+on 2/5 segments (w023 and w031). This does not change the registered verdict.
 
 ## But the failure mode named in advance is exactly what happened
 
@@ -220,8 +228,8 @@ for it — a larger effect than most of the interventions this project has measu
 
 ⚠️ **The cost figure is approximate.** The saved reports carry a 32-point sweep and the
 predictions were deleted after scoring, so truth's F1 is read at the nearest sampled threshold
-(grid spacing 8) rather than exactly at pseudo's. The bound is the curve's change over four grey
-levels; at more than twice the noise floor, the sign and magnitude do not turn on it.
+(grid spacing 8) rather than exactly at pseudo's. Proximity alone does not bound the F1
+change; the later analysis below uses monotonic TP/FP counts instead of assuming smoothness.
 
 ## What Stage 2 leaves standing
 
@@ -231,3 +239,19 @@ levels; at more than twice the noise floor, the sign and magnitude do not turn o
   floor. Not registered, so it is a hypothesis for someone to test properly, not a result.
 - And the Stage 1 constraint still binds everything: this is **our** pseudo-label recipe on
   **this** corpus. Nothing here measures the labels behind the published cross-scroll number.
+
+## Retrospective numerical bound — 2026-09-20
+
+Across the 30 cells, pseudo-selected minus truth-selected thresholds average **45.33**
+uint8 levels (range **18–71**), positive in every cell. TP and FP cannot increase as
+the threshold rises. Bracketing each pseudo threshold with saved sweep points and
+allowing ±0.0000005001 for six-decimal precision/recall rounding gives a conservative
+mean F1-loss interval of **[0.054991, 0.078671]**. All 30 lower bounds are positive;
+20/30 exceed 0.03 even at the lower bound. The earlier 25/30 is a nearest-grid estimate.
+
+This is a numerical interval due to sweep resolution and rounding, **not a statistical
+confidence interval**. The cells share data and checkpoints. It neither validates a new
+calibration method nor evaluates anyone else's pseudo-label recipe.
+
+Bounds and source hashes: [`pseudo_threshold_bounds.json`](../runs/september_evidence_audit/pseudo_threshold_bounds.json).
+The original approximate report is retained unchanged.

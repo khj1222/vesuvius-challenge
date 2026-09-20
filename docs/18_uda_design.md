@@ -1,5 +1,13 @@
 # Unsupervised domain adaptation across scrolls: a pre-registered design (2026-08-29)
 
+**2026-09-20 interpretation note:** the original registered hypotheses and decisions
+below are retained. The measured failures concern the interventions tested, not all
+possible unlabeled methods or ensembles. "No signal" on PHerc1447 describes these
+outputs, not proven ink absence; see the failed complete-gate control audit in
+[docs/25 section 10](25_scouting_eligible_volumes.md). Annotation-area budgets do not
+measure human labor time. The 82% recovery refers to Paris4 and an oracle-threshold,
+train-pixel-reference comparison; 1667 yielded 24%.
+
 [docs/16](16_first_letters_render.md) ends at a wall. The render path to an
 unseen scroll works, the released checkpoints run on it, and nothing readable
 comes out — as [docs/15](15_loso_cross_scroll.md) predicted from a cross-scroll

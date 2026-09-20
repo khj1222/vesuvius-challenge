@@ -1,5 +1,10 @@
 # Running the render path on an unseen scroll: PHerc1447 (2026-08-26)
 
+**2026-09-20 interpretation note:** no convincing letters were identified in these
+outputs. Descriptions below of "no signal" are not evidence that ink is absent or
+that all promising regions were detected; the later complete-gate control audit in
+[docs/25 section 10](25_scouting_eligible_volumes.md) failed to retain known positives.
+
 docs/13 section 6 argued that this path existed and that the only thing blocking
 it was one missing environment (WSL2 and Docker). With that resolved, this is
 the record of running it to the end. **Conclusion: every stage of the path

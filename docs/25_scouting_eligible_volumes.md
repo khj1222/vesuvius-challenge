@@ -1,5 +1,10 @@
 # Scouting the First Letters volumes: which public segment, if any, does a released ink model already react to?
 
+**2026-09-20 control audit:** the recorded 43-target/zero-candidate result is unchanged,
+but the complete gate fails to retain the known positive control consistently. It is not
+a validated test of signal absence or scouting sensitivity. See section 10. The original
+registered plans in sections 1–7 and 9 are retained for traceability.
+
 **Pre-registration. Written and committed on 2026-09-19 before any render or inference on
 the target segments.** The commit hash of this file is the timestamp. Sections 1–7 are the
 plan; results go in section 8 and are not edited back into the plan.
@@ -244,7 +249,8 @@ files: `runs/scouting/scores/`; `python tools/summarise_scouting.py` reproduces 
 - **30 of 43 are orientation-indifferent**: the two seeds agree no more in one slice order
   than in the other. On the control the right orientation moved C2 by +0.08 and turned
   the trivial classifier into F1 0.65; on these segments the models do not care which way
-  the sheet faces, which is the shape of "no signal", not of a wrong render.
+  the sheet faces under this statistic. This does not distinguish absent ink from an
+  insensitive detector; the control audit in section 10 limits that interpretation.
 - The checkpoint-disagreement guard (largest / smallest > 128 share across the four
   checkpoints) sits at a median of 8.6 (0800), 6.4 (1447) and 3.6 (1203) against 3.0 on
   the docs/16 reference and 2.1 on the seen control. The models disagree with themselves
@@ -258,12 +264,12 @@ files: `runs/scouting/scores/`; `python tools/summarise_scouting.py` reproduces 
 
 **The pre-registered prediction (0 candidates) holds, and the decision rule in section 6
 applies: this scorecard is the deliverable, and the First Letters bet stops here.** What
-it says is narrower than "these scrolls have no text": on the 43 surfaces anyone can
-download today, the released 9 µm ink models produce output that two independent seeds do
-not agree on, in either orientation, at a level the same models exceed on an unseen scroll
-that does carry ink. A foothold annotation needs somewhere to start, and none of these
-surfaces offers one to these models. The 20 eligible scrolls without a public mesh were
-not examined.
+it establishes is that neither orientation of these 43 surfaces passed the registered
+20k C2 thresholds. The control uses a different model role (LOSO versus released), and
+the complete rule was not validated as a detector of promising annotation sites. It
+cannot establish that these surfaces offer no foothold or that ink is absent. The 20
+eligible volumes without a public mesh were not examined. The scorecard also contains
+one separate reference row; its 44 rows must not be counted as 44 targets.
 
 Cost: 43 renders (106 render-minutes, the Windows build for 15 and the Linux build in
 WSL for 28), 344 inferences, one GPU-day of wall clock including the two stalls described
@@ -297,3 +303,31 @@ in 8.1 and the reboot they forced.
 7. **What this amendment cannot fix.** A single numeric criterion is a weaker screen than
    three, and the thresholds come from one control segment. A candidate is a reason to look
    harder, not a finding.
+
+## 10. Complete-gate control audit — 2026-09-20 (retrospective)
+
+The earlier comparison calibrated C2 using the unseen-scroll control but described the
+collapse guard as a released-model check. The code uses the current primary's median
+and low-third fraction. Replaying the complete rule, with model roles kept separate:
+
+| Correct-orientation control, paired with its reverse | sheet/window C2 | complete result |
+|---|---|---|
+| released 20k seed pair | 0.407326 / 0.397904 | fails window threshold 0.405 |
+| LOSO 20k seed pair | 0.285442 / 0.430583 | passes C2, fails collapse veto |
+
+The LOSO primary has median 70 and low-third share 0.815464, meeting both collapse
+conditions despite known ink and F1 around 0.65. The historical summarizer did not
+put this control in its target table: this is a replay of its formula.
+
+A fixed **+20** additive offset to both saved LOSO predictions has no clipping and
+preserves ranks, C2, the Otsu binary mask and selected window. Yet median rises 70→90
+and low-third share falls 0.815464→0.184084, changing reject to pass. This diagnoses
+sensitivity to calibration; adding 20 is **not** adopted as a fix.
+
+No replacement threshold or detector has been accepted. No target was re-inferred.
+The original 20k zero is a result of this rule, not proof that promising ink is absent.
+Separately selected positive surfaces and verified negative controls are needed before
+accepting a replacement. A reversed ink-positive surface is not a verified no-ink surface.
+
+Summary and source hashes: [`scouting_control_audit.json`](../runs/september_evidence_audit/scouting_control_audit.json).
+The original scorecard remains unchanged.
