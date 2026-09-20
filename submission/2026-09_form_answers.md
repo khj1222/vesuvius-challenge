@@ -1,8 +1,9 @@
-# 9월 Progress Prize — v29 (통독 완료, 제출 준비 완료, 미제출)
+# 9월 Progress Prize — v30 ✅ **제출 완료 2026-09-20** (이 파일 = 제출본, 동결)
 
 고정 임계값 평가를 완료하고 주석 픽셀 중복 집계 영향을 함께 검증했습니다.
-공개 문서·증거는 09-20 push 완료(c063ae5), 링크 14/14 = 200. v29 = field 5 통독 1회(주장·수치 변경 0, 순서·범위·표기만).
-실제 폼 제출은 하지 않았습니다. 상세: `planning/2026-09-20_fixed_threshold/report.md`.
+공개 근거 17파일은 c063ae5, 공개 답안 v29는 186b2db에 반영돼 있습니다. 09-20 재검토에서 답안 HTTPS 링크 22/22와 공개 근거·문서 19/19 일치를 확인했습니다.
+v30은 스크롤 특성과 학습 데이터 구성의 혼재를 명시하고, 문서 범위·해시·게시 기록을 정리한 로컬 미커밋·미푸시 수정안입니다. 실험 수치는 바꾸지 않았습니다.
+**2026-09-20 KST 폼 제출 완료**(Chrome, bluekgssk@gmail.com 로그인 세션, 확인 화면 "Thanks for submitting your open source contributions!" 수신; 응답 사본 메일 자동 발송 설정). 제출 직전 브라우저 안에서 field 4/5 SHA-256이 이 파일·final_audit.json과 일치함을 확인. Discord 표시 이름은 비움. 상세: `planning/2026-09-20_fixed_threshold/report.md`.
 
 ## 1. Email
 
@@ -30,7 +31,7 @@ Individual submission — no team.
 
 ```
 https://github.com/khj1222/vesuvius-challenge
-Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
+Result writeup (cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
 Raw numbers (1,838 scored cells, 47 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
@@ -89,7 +90,8 @@ out scroll, against the released checkpoints for which those pixels are training
 Every segment is reported against its all-positive F1 floor so ink-fraction artifacts
 cannot masquerade as transfer. Margin over that floor averages +0.06 toward Paris4, +0.13
 toward 1667, +0.17 toward 0139 — and the 0139 arm, trained on HALF the corpus, transfers
-best, so target identity dominates source size. On the four segments existing in both
+best in this comparison. Source size alone does not explain the ordering, while source
+composition and target identity are confounded. On the four segments existing in both
 representation families, the aligned render wins 4 out of 4. I first published that as
 domain match; a reviewer on villa #1580 pointed out the grid contained a control for that
 reading, so I pre-registered the test it could not settle, pushing the design and the
@@ -261,5 +263,5 @@ and quota-preserving experiment configs reproducible.
 폼의 약관을 검토한 뒤 동의하면 **Yes, I agree**를 선택하고 직접 제출하세요.
 제출 확인 화면이나 응답 사본을 보관하세요. 이 문서는 접수 확인서가 아닙니다.
 
-- field 4: 2,889자 · SHA-256 `d711feaee1fece209b0535485ee4d7d640193cb121af75f3465d08e3665728d7`
-- field 5: 15,579자 · SHA-256 `23ee68fa1a4221aa1472d2f5aa26abfb53c329a3547544ef997a53a742a5239c`
+- field 4: 2,879자 · SHA-256 `2d18df8c5e0af6adc9c710fec57872277aa3b323659746b35aee3c69316e9247`
+- field 5: 15,666자 · SHA-256 `5e1f95bb86fdc579273e08b7ebb22dbdd2f55e6fb94a6da0991a69d0980f20b9`

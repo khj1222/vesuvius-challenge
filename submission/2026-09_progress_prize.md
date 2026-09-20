@@ -10,7 +10,7 @@ See `planning/2026-09-20_fixed_threshold/report.md`.
 **Form:** https://docs.google.com/forms/d/e/1FAIpQLScNBMj25FMnphngRG1Ciryv_2_Mkdq2YPJOD9WqPfZExII2iQ/viewform
 Verified through https://scrollprize.org/prizes and the live form on 2026-09-20 KST.
 **Deadline:** 2026-09-30 23:59 Pacific = 2026-10-01 15:59 KST.
-**Current status: v29 — field 5 read straight through on 2026-09-20 after the push (no claim or number changed; one paragraph moved, docs range 20–26, one caveat qualified, wrapping); submission-ready, not submitted.**
+**Current status: SUBMITTED 2026-09-20 (KST) as v30 — form confirmation received; fields 4 and 5 verified in-browser against the recorded hashes before submit. This file is now frozen as the submitted text.** The target/source-size interpretation is now scoped to the confounded comparison. Public evidence remains available at c063ae5, and the published answers are v29 at 186b2db. The v30 answers and record corrections are local, uncommitted and not pushed.
 Copy-ready answers: [2026-09_form_answers.md](2026-09_form_answers.md).
 
 The v25 research narrative remains the basis, following the September 18 freeze decision.
@@ -20,9 +20,10 @@ on September 19 (not merged), removes unsupported present-tense claims about wha
 does not provide, and updates the form prompt/checklist. #1701 remains open, so the conditional
 merged-contribution addition is not included. That earlier finalization did not run a new experiment or publish changes; the v28 follow-up is recorded above.
 
-The latest decisions are in `planning/2026-09-19_handoff.md`, superseding the September 10
-candidate plan: the small-fix PRs already exist, scouting is complete, and October is reserved
-for pursuing existing PR merges. Earlier revision notes are preserved in the v25 snapshot.
+The September small-fix PRs already exist and the recorded scouting run is complete.
+The September 20 request reopened October candidate research alongside existing PR follow-up;
+see `planning/2026-09-20_october_search/report.md`. This does not add an October result to
+this September submission. Earlier revision notes are preserved in the v25 snapshot.
 
 ## Step 1 — upstream contribution submitted; PR now closed
 
@@ -61,7 +62,7 @@ The field-4/field-5 labels below are retained as the document's stable reference
 **4. URL to your open source / publicly available contribution**
 ```
 https://github.com/khj1222/vesuvius-challenge
-Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
+Result writeup (cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
 Groundwork (first scorecard of the released ink_9um models): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/14_ink9um_scorecard.md
 Arm generator: https://github.com/khj1222/vesuvius-challenge/blob/main/tools/make_ink9um_config.py
 Raw numbers (1,838 scored cells, 47 CSV/JSON evidence files): https://github.com/khj1222/vesuvius-challenge/tree/main/runs/ink9um_scorecard
@@ -124,7 +125,8 @@ out scroll, against the released checkpoints for which those pixels are training
 Every segment is reported against its all-positive F1 floor so ink-fraction artifacts
 cannot masquerade as transfer. Margin over that floor averages +0.06 toward Paris4, +0.13
 toward 1667, +0.17 toward 0139 — and the 0139 arm, trained on HALF the corpus, transfers
-best, so target identity dominates source size. On the four segments existing in both
+best in this comparison. Source size alone does not explain the ordering, while source
+composition and target identity are confounded. On the four segments existing in both
 representation families, the aligned render wins 4 out of 4. I first published that as
 domain match; a reviewer on villa #1580 pointed out the grid contained a control for that
 reading, so I pre-registered the test it could not settle, pushing the design and the
@@ -305,7 +307,8 @@ contribution URLs, contribution description, and terms. There is no standalone
 - [x] Confirm September's live form, current questions and official deadline (2026-09-20 KST).
 - [x] Correct the audited v26 claims locally; retain the complete v26 snapshot.
 - [x] Complete fixed-threshold evaluation and document unique/legacy counting.
-- [ ] Publish and verify the corrected research documents and numerical evidence.
+- [x] Publish and verify the corrected research documents and numerical evidence (c063ae5;
+      all 17 files independently matched against remote main 186b2db on 2026-09-20).
 - [x] Verify #1608 CLOSED, not merged; #1471 MERGED, with the final rewrite not re-tested here.
 - [x] Preserve August's submitted file and the 135 existing archived-file deletions.
 - [x] Re-read the final answers and record their hashes below.
@@ -318,11 +321,11 @@ contribution URLs, contribution description, and terms. There is no standalone
 Public research corrections and evidence were pushed on 2026-09-20 (commit c063ae5); all 14 repository links in the form answers return 200 and the 17 published files match the local commit byte for byte.
 The September 27–28 PR follow-up and actual form submission remain separate.
 
-Current field hashes (v28, 2026-09-20), calculated over each fenced block body
+Current field hashes (v30, 2026-09-20), calculated over each fenced block body
 with LF line endings and exactly one trailing newline:
 
-- field 4 — 2,889 chars, `d711feaee1fece209b0535485ee4d7d640193cb121af75f3465d08e3665728d7`
-- field 5 — 15,516 chars, `4efd0544a5451203b1895ff335e46e8a14386404172db974894d776df2eb7c85`
+- field 4 — 2,879 chars, `2d18df8c5e0af6adc9c710fec57872277aa3b323659746b35aee3c69316e9247`
+- field 5 — 15,666 chars, `5e1f95bb86fdc579273e08b7ebb22dbdd2f55e6fb94a6da0991a69d0980f20b9`
 
 If either field is edited before submitting, recompute these against the actual pasted text.
 The full v25 document and historical field hashes are preserved in
