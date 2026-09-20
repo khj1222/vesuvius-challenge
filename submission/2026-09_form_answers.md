@@ -1,64 +1,33 @@
-# September 2026 Progress Prize — submission package (evidence follow-up complete, not submitted)
+# 9월 Progress Prize — v29 (통독 완료, 제출 준비 완료, 미제출)
 
-**v28 evidence follow-up, 2026-09-20:** separate-segment fixed-threshold evaluation
-is complete using saved predictions. The scoring audit removes duplicated pixel counts
-for the new results and preserves the historical comparisons. Public research corrections and evidence were pushed on 2026-09-20 (commit c063ae5); all 14 repository links in the form answers return 200 and the 17 published files match the local commit byte for byte.
-The scouting gate remains invalid as a signal-absence test. PR1703 is still a local
-follow-up and has not been added as an adopted contribution. No form submission occurred.
-See `planning/2026-09-20_fixed_threshold/report.md`.
+고정 임계값 평가를 완료하고 주석 픽셀 중복 집계 영향을 함께 검증했습니다.
+공개 문서·증거는 09-20 push 완료(c063ae5), 링크 14/14 = 200. v29 = field 5 통독 1회(주장·수치 변경 0, 순서·범위·표기만).
+실제 폼 제출은 하지 않았습니다. 상세: `planning/2026-09-20_fixed_threshold/report.md`.
 
-**Form:** https://docs.google.com/forms/d/e/1FAIpQLScNBMj25FMnphngRG1Ciryv_2_Mkdq2YPJOD9WqPfZExII2iQ/viewform
-Verified through https://scrollprize.org/prizes and the live form on 2026-09-20 KST.
-**Deadline:** 2026-09-30 23:59 Pacific = 2026-10-01 15:59 KST.
-**Current status: v29 — field 5 read straight through on 2026-09-20 after the push (no claim or number changed; one paragraph moved, docs range 20–26, one caveat qualified, wrapping); submission-ready, not submitted.**
-Copy-ready answers: [2026-09_form_answers.md](2026-09_form_answers.md).
+## 1. Email
 
-The v25 research narrative remains the basis, following the September 18 freeze decision.
-The earlier v26 finalization added the September 19 scouting result as agreed: one URL in field 4 and one
-sentence after the PHerc1447 paragraph in field 5. It also records #1608's automatic closure
-on September 19 (not merged), removes unsupported present-tense claims about what upstream
-does not provide, and updates the form prompt/checklist. #1701 remains open, so the conditional
-merged-contribution addition is not included. That earlier finalization did not run a new experiment or publish changes; the v28 follow-up is recorded above.
-
-The latest decisions are in `planning/2026-09-19_handoff.md`, superseding the September 10
-candidate plan: the small-fix PRs already exist, scouting is complete, and October is reserved
-for pursuing existing PR merges. Earlier revision notes are preserved in the v25 snapshot.
-
-## Step 1 — upstream contribution submitted; PR now closed
-
-**[#1608](https://github.com/ScrollPrize/villa/pull/1608)** — `ink-detection/scripts/make_holdout_config.py`,
-opened 2026-08-26 against `merge-ink-pipelines`, 1 file; automatically closed
-on 2026-09-19 for 14 days without activity, not merged. The
-`--exclude-scroll` / `--exclude-segment` flags, and the quota renormalisation they force,
-turn the released recipe into the cross-scroll probe this submission is about. Body follows
-`villa/CONTRIBUTING.md` including the human "why this matters to me" paragraph
-(`submission/pr1608_body.md`). One round of outside review already closed: Bullo27
-reproduced the quota arithmetic, found a crash when `batch_size` is below the surviving
-scroll count, and the fix went up as `dc9edb6` two days later
-(`submission/pr1608_reply_bullo27.md`).
-
-## Step 2 — Form answers
-
-**1. Email**
 ```
 bluekgssk@gmail.com
 ```
 
-**2. Your full name**
+## 2. Your full name
+
 ```
 Hyojun Kwon
 ```
 
-**3. Team description**
+## 3. Team description
+
 ```
 Individual submission — no team.
 ```
 
-**Discord display name (optional, between team and URL on September's form)**
-Use the user's actual server display name if they choose to supply it; otherwise leave blank.
-The field-4/field-5 labels below are retained as the document's stable references.
+## Discord display name (선택)
 
-**4. URL to your open source / publicly available contribution**
+서버에서 사용하는 실제 표시 이름을 넣거나 비워 두세요.
+
+## 4. URL of your open source / publicly available contribution
+
 ```
 https://github.com/khj1222/vesuvius-challenge
 Result writeup (four-part cross-scroll study): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/15_loso_cross_scroll.md
@@ -84,11 +53,7 @@ Fixed-threshold follow-up and counting audit: https://github.com/khj1222/vesuviu
 Scouting follow-up (43 public surfaces, 0 candidates; protocol and scorecard): https://github.com/khj1222/vesuvius-challenge/blob/main/docs/25_scouting_eligible_volumes.md
 ```
 
-**5. What is your contribution?**
-
-The live form asks: (1) Which scroll data did you work on? (2) How does this increase the
-probability of reading those scrolls or others? (3) What does it enable? (4) What evidence
-have you provided? The answer below addresses all four; field numbering here is stable.
+## 5. What is your contribution?
 
 ```
 Reading a complete scroll means running an ink model on a scroll nobody has labeled. Open
@@ -291,82 +256,10 @@ Zarr/TIFF formats, with scores in CSV/JSON. The added tools make the held-out co
 and quota-preserving experiment configs reproducible.
 ```
 
-**6. Terms and Conditions** → check "Yes, I agree"
+## Terms and Conditions
 
-**September form checked 2026-09-20:** email, name, team, optional Discord display name,
-contribution URLs, contribution description, and terms. There is no standalone
-"Pull request submitted!" checkbox. Supply the optional Discord name separately if desired.
-(Award acceptance requires permissive open-sourcing; the repo is already MIT.)
+폼의 약관을 검토한 뒤 동의하면 **Yes, I agree**를 선택하고 직접 제출하세요.
+제출 확인 화면이나 응답 사본을 보관하세요. 이 문서는 접수 확인서가 아닙니다.
 
----
-
-## Step 3 — research follow-up complete; actual submission remains separate
-
-- [x] Confirm September's live form, current questions and official deadline (2026-09-20 KST).
-- [x] Correct the audited v26 claims locally; retain the complete v26 snapshot.
-- [x] Complete fixed-threshold evaluation and document unique/legacy counting.
-- [ ] Publish and verify the corrected research documents and numerical evidence.
-- [x] Verify #1608 CLOSED, not merged; #1471 MERGED, with the final rewrite not re-tested here.
-- [x] Preserve August's submitted file and the 135 existing archived-file deletions.
-- [x] Re-read the final answers and record their hashes below.
-- [ ] On the actual submission day, recheck the form and cited PR states. If #1701 has merged,
-      the prior decision permits one supporting URL; otherwise leave it out.
-- [ ] Paste the five fenced answers, optionally supply the actual Discord display name, review
-      and accept Terms, and submit. The user performs the final form submission.
-- [ ] Save the confirmation/response copy and freeze exactly the submitted answers and hashes.
-
-Public research corrections and evidence were pushed on 2026-09-20 (commit c063ae5); all 14 repository links in the form answers return 200 and the 17 published files match the local commit byte for byte.
-The September 27–28 PR follow-up and actual form submission remain separate.
-
-Current field hashes (v28, 2026-09-20), calculated over each fenced block body
-with LF line endings and exactly one trailing newline:
-
-- field 4 — 2,889 chars, `d711feaee1fece209b0535485ee4d7d640193cb121af75f3465d08e3665728d7`
-- field 5 — 15,516 chars, `4efd0544a5451203b1895ff335e46e8a14386404172db974894d776df2eb7c85`
-
-If either field is edited before submitting, recompute these against the actual pasted text.
-The full v25 document and historical field hashes are preserved in
-`planning/2026-09-20_submission_finalization/september_v25.md`.
-
----
-
-## Evidence backing the claims above
-
-| claim | source |
-|---|---|
-| label-efficiency: half the annotation keeps 89% for −0.033 F1; a fifth 71%, an eighth 56% | `runs/ink9um_scorecard/labelbudget_matrix.csv` (84 cells) + `labelbudget_summary.json`, `docs/15` part 5 |
-| annotation targeting (pre-registered, 42 cells): at a fifth of the annotation the subset choice moves the mean 0.0373 F1, ordering identical in both seeds, one subset best on 7 of 7 segments; the disagreement rule loses by 0.017/0.024; benefit retained 70.8% → 82.9% at a smaller budget | `runs/ink9um_scorecard/annotarget_matrix.csv` + `annotarget_summary.json` + `annotation_candidates.json`, `docs/20` |
-| arm A: spectrum matching gains +0.005 F1, median 9.1% of the aligned gap — no effect by the pre-registered rule | `runs/ink9um_scorecard/armA_specmatch_matrix.csv` (48 cells) + summary, `docs/18` |
-| the aligned advantage resists four pre-registered attempts: spectrum matching +0.005; noise stopped by calibration (native smoother in 24 of 24 cells); blur strength stopped (calibrated 0.78 already inside the recipe's 0.5–3.0); blur exposure 2.7% → 50% run and returning −0.012, seeds disagreeing in sign | `runs/ink9um_scorecard/representation_noise.json`, `blur_calibration.json`, `blurexp_matrix.csv` (16 cells) + `blurexp_summary.json`, `docs/21`–`docs/23` |
-| arm B: entropy minimisation costs −0.041 F1, 0 of 14 cells improving, four cells on the trivial floor; AUC 0.66 → 0.48–0.55 on the three rank-checked cells while the objective keeps falling | `runs/ink9um_scorecard/armB_tent_matrix.csv` (34 cells) + `armB_tent_summary.json` + `armB_rank_check_*.json`, `docs/18` |
-| arm C: self-training gains +0.030 F1, 14 of 14 cells, 9.5% of the gap — against +0.320 for a human annotation on the same segment with everything else fixed | `runs/ink9um_scorecard/armC_pseudo_matrix.csv` (18 cells) + `armC_pseudo_summary.json` + `armC_rank_check_w01_s42.json`, `docs/18` |
-| arm D (transductive): +0.046 F1, 14 of 14 cells, 14.3% of the gap, AUC 0.659 → 0.742; pre-registered at +5–30% | `runs/ink9um_scorecard/armD_pseudoT_matrix.csv` (18 cells) + `armD_pseudoT_summary.json` + `armD_rank_check_w01_s42.json`, `docs/18` |
-| arm D on PHerc1447 (unscoreable, judged against criteria fixed first): 0 of 3 met — patches not strokes, top-decile seed overlap 0.173 → 0.177, one-mode collapse | `runs/first_letters/pherc1447_armD_compare.json` + `pherc1447_base_on_sheet.json`, `docs/images/pherc1447_armD_before_after.png`, `docs/18` |
-| 1667 replication (90 cells, 3 arms x 3 steps): one annotated segment buys +0.104 (24%) against Paris4's +0.320 (82%); arm C inside the noise, arm D negative at every step; fine-tune peaks at 2,500 on both scrolls | `runs/ink9um_scorecard/r1667_matrix.csv` + `r1667_stepcurve_summary.json`, `docs/18` |
-| the published pyramids are 2×2 means and never touch z, so one aligned voxel averages 64 acquired voxels | `runs/pyramid/*_pooling.json` (3 scrolls, 18 windows), `docs/15` appendix 3 |
-| held-out masks cut through regions: 2 of 3 / 1 of 1 / 1 of 8 regions mixed; 58.6% / 45.0% / 23.2% within one patch | `runs/ink9um_holdout_audit/*_audit.json`, `docs/17`; villa #1638, closed by the research lead — see the note below |
-| adjacency excess gain +0.1375 (w016) / +0.0733 (w029), 20 of 28 checkpoints | `runs/ink9um_scorecard/leak_strata.csv` (168 rows), `docs/17` |
-| within-scroll honest ceiling 0.74–0.77; memorisation gap 0.22–0.45; seed spread 0.22 @75k | `runs/ink9um_scorecard/scorecard.csv` (+`summary.json`), `docs/14` |
-| LOSO→Paris4 mean 0.487, floor margin +0.060 | `paris4_matrix.csv` (+`paris4_matrix_summary.json`) |
-| LOSO→1667 mean 0.546, floor margin +0.131 | `no1667_matrix.csv` (+`no1667_matrix_summary.json`) |
-| LOSO→0139 mean 0.678, floor margin +0.169; aligned>native 4/4 (+0.03..0.07) | `no0139_matrix.csv` (+`no0139_matrix_summary.json`, `representation_pairs`) |
-| domain match refuted: gap +0.058 with native at 16.4% of batches vs +0.061 at 0%; 2/2 at every checkpoint | `segloso_matrix.csv` (+`segloso_matrix_summary.json`), design pre-registered in commit `fb37974` |
-| ref arms 0.86–0.99 on the same pixels | `ref42`/`ref43` rows of the three matrix CSVs |
-| honest-to-honest drops −0.26 (Paris4) / −0.17 (w029 0.758→0.589) | `docs/14` ceiling vs matrix CSVs |
-| seed agreement \|ΔF1\| 0.011 / 0.015 / 0.032 | `loso_seed_abs_diff_*` in the three summary JSONs |
-| ensembling recovers +0.005..+0.009 (seed) / ±0.007 (step) | `loso_ensembles.csv` (+`loso_ensembles_summary.json`) |
-| one-segment fine-tune: 0.496→0.822 mean, 78–90% closure, saturates @2.5k steps | `ft_paris4_matrix.csv` (+`ft_paris4_summary.json`) |
-| LOSO peak at 10–20k, decline to 75k | `stepwise_mean_loso` in the three summary JSONs |
-| all-positive floor 2p/(1+p) per segment | `floors` in the summary JSONs |
-| recipe fidelity (quota renormalisation, 15/21/23 reps; FT = w00-only + weights-only load) | `configs/ink9um_loso_*.json`, `configs/ink9um_ft_w00_*.json`, generated by `tools/make_ink9um_config.py` |
-| reproduction validity (online val 0.69–0.78 on official masks across arms) | `runs/ink9um_loso_*/validation_metrics.jsonl` |
-| independent recomputation of the 0139 table, margins hold under 4 selection rules | Bullo27 on villa #1580, 2026-08-24 |
-| generator upstreamed, reviewed, crash fixed | villa #1608 (`dc9edb6`), `submission/pr1608_body.md` + `pr1608_reply_bullo27.md` |
-| invited check of villa #1471: 42/42 variants identical at six levels (9,661,092,220 voxels); a one-row strip crashes the new path (`rowsperstrip == 1` or `height % rowsperstrip == 1`) and the fix is verified 18/18; on a real 32249×51380 mask the read-back design costs 3.0x wall for 2.2x peak RSS | `runs/pr1471_striped_check/` (matrix, targeted re-run, real-file timings, and `verify_numbers.py` re-deriving all 38 figures), `submission/pr1471_reply_jaideepsaipadhi.md` |
-| #1471 author incorporated and credited the one-row-strip fix on 2026-09-08; PR merged into villa `main` on 2026-09-10; final source-chunk-major rewrite not re-tested by this project | [author confirmation](https://github.com/ScrollPrize/villa/pull/1471#issuecomment-5586571289), [commit 29d2863](https://github.com/ScrollPrize/villa/commit/29d2863878a751e37d6d1d0a02f2847101c8c5a0), [merge 43f93f4](https://github.com/ScrollPrize/villa/commit/43f93f4b5aa2fd093673ac74e8a6d923d2f7833d) |
-| September 19 scouting: 43 surfaces in 3 scrolls, 0 candidates under the pre-target v2 gate; both orientations scored; 20 mesh-less eligible volumes untested | `docs/25_scouting_eligible_volumes.md`, `runs/scouting/scorecard.json`, `runs/scouting/scores/` |
-
-(Checkpoints and prediction TIFFs stay untracked; the committed CSV/JSON files reproduce
-every quoted figure.)
-
----
+- field 4: 2,889자 · SHA-256 `d711feaee1fece209b0535485ee4d7d640193cb121af75f3465d08e3665728d7`
+- field 5: 15,579자 · SHA-256 `23ee68fa1a4221aa1472d2f5aa26abfb53c329a3547544ef997a53a742a5239c`

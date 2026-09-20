@@ -312,11 +312,12 @@ labels — which is what turns "render aligned" from a preference into an instru
   2026-08-18 asking for `CONTRIBUTING.md` compliance and for the never-measured
   `mean` reduction to be dropped; both were addressed.)
 - **[PR #1608](https://github.com/ScrollPrize/villa/pull/1608)** —
-  `make_holdout_config.py`. The published ink_9um recipe does not run as
-  shipped: its `datasets` field holds a single `/path/to/` placeholder while the
-  29 representations live in a separate contract file. This joins the two and
-  adds `--exclude-scroll` / `--exclude-segment`. Reviewed by another
-  contributor, whose review found a real crash, since fixed.
+  `make_holdout_config.py` expands the label contract into experiment configs,
+  adds `--exclude-scroll` / `--exclude-segment`, and renormalises batch quotas
+  over surviving scrolls. Another contributor reviewed the quota logic and found
+  a crash, since fixed. **Automatically closed on 2026-09-19 for inactivity;
+  not merged.** The placeholder-only dataset layout described in the original
+  writeup applied to `merge-ink-pipelines`, not to `main`.
 
 Three fixes for friction met while running the September study were first opened
 2026-08-31 against `merge-ink-pipelines`. After the pipeline moved on `main`, the
@@ -445,4 +446,17 @@ vesuvius-challenge/
 - [x] **The aligned-over-native gap closed as a research target** (2026-09-01) — four
       pre-registered attempts, two stopped by their own calibrations
       ([docs/21](docs/21_snr_augmentation.md)–[23](docs/23_blur_exposure.md))
-- [ ] September round — submission (deadline 2026-09-30)
+- [x] **Eligible-volume scouting** (2026-09-19) — 43 public surfaces in three
+      scrolls, neither orientation producing a candidate under the control-calibrated
+      gate; 20 eligible volumes without public meshes untested
+      ([docs/25](docs/25_scouting_eligible_volumes.md)).
+- [x] **September draft corrected locally** (v28, 2026-09-20) —
+      [copy-ready form answers](submission/2026-09_form_answers.md), with current
+      PR status and the scouting addendum; **not submitted, public push awaiting approval**.
+      A subsequent audit distinguished exact checkpoint matches from tolerance-based
+      agreement. The complete scouting rule rejects its known positive control, so
+      candidate count is not evidence of signal absence. The late-compilation fix for
+      #1703 passes focused local checks but has not been pushed. Fixed-threshold
+      evaluation is complete: Paris4 0.485→0.790 and1667 0.531→0.629, with separate
+      labeled calibration segments and unique-pixel scoring ([docs/26](docs/26_fixed_threshold_finetuning.md)).
+- [ ] September round — user submission (deadline 2026-09-30 23:59 Pacific)
