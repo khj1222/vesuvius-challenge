@@ -35,11 +35,13 @@ US = "khj1222"
 
 # threads we opened, were asked into, or commented on
 THREADS = [
-    (1701, "our PR: patch cache fingerprint (F4, on main)"),
     (1703, "our PR: eager fallback (F2, on main)"),
-    (1705, "our PR: staged publish (F3, on main, draft)"),
-    (1608, "our PR: holdout config generator"),
-    # superseded or closed, still worth watching for a late maintainer word
+    (1705, "our PR: staged publish (F3, on main)"),
+    (1796, "our PR: Copy TTA direction priors (on main)"),
+    # merged, superseded or closed, still worth watching for a late maintainer word
+    (1701, "our PR: patch cache fingerprint (F4, merged)"),
+    (1803, "our PR: render_ink scale pass-through (closed, superseded by #1886)"),
+    (1608, "our PR: holdout config generator (auto-closed)"),
     (1535, "our PR: flat_depth_targets (auto-closed)"),
     (1661, "our PR: F4 (superseded by 1701)"),
     (1662, "our PR: F2 (superseded by 1703)"),
@@ -49,6 +51,10 @@ THREADS = [
     (1638, "our issue: held-out audit (closed, locked)"),
     (1471, "their PR: striped TIFF streaming (we were asked in)"),
     (1580, "their PR: input scale report (we commented)"),
+    (1819, "their PR: Hecate train/distill (we asked for the split manifest)"),
+    (1893, "their issue: render voxel unit (we reproduced it)"),
+    (1659, "their issue: PHerc.1667 input conventions (we commented)"),
+    (1898, "their issue: native depth blur (we gave our blur-arm data)"),
     (1582, "their issue: representation provenance (we commented)"),
     (192, "their issue: accurate 3d ink labels (we contributed)"),
     (1547, "their issue: duplicate surfaces (our corpus)"),

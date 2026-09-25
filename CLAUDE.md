@@ -2,6 +2,71 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
+## 2026-09-26 — 재개: 스윕 + PR 후속 3건 완료 (최신, 이 절이 아래보다 우선)
+
+정본 인계=`planning/2026-09-26_pr_followup.md`. 사용자 “할일 알려줘” → “1~3번 PR 작업 진행” → “답글 게시” → “기록 갱신”.
+- **스윕(09-19 이후)**: ✅ **#1701 MERGED 09-21**(hendrikschilling, `12d88a4`) = main PR 첫 머지. ❌ **#1803 닫힘 09-25**(pmh47, 코멘트 없음, 이유 미상).
+  ❌ **#1839 후보 소멸** — 남이 PR #1849·#1850을 냈고 이슈는 09-23 닫힘 → 다음 작은 후보 없음. 🔵 **#1582에 AndreasHad04(09-23)**:
+  미학습 PHerc0841에서 pooled 2.4µm > native 9.366µm **42/42**(AUC 중앙값 +0.0819), 우리 0139 4/4와 같은 방향이라고 인용, 상세 #1867.
+  HF 1667 PR 6건 답글 0, scrollprize 메일 0.
+- **#1703**: 리뷰(P2, 첫 배치 성공 후 크기 다른 배치 재컴파일 실패)를 `planning/2026-09-20_followup/pr1703/` 패치로 수정 → 커밋
+  **`3e56ca418` 푸시**(컴파일 호출 전부 가드, `BackendCompilerFailed`/`TritonMissing`만 eager 폴백, 일반 에러·OOM은 전파).
+  17 tests 통과(py3.10/torch2.7, py3.12/torch2.10), 이전 head에선 5개 실패, py3.14/torch2.12 미검증. 답글 게시
+  [issuecomment-5840443558](https://github.com/ScrollPrize/villa/pull/1703#issuecomment-5840443558)(초안 `submission/pr1703_reply_hendrikschilling.md`와 일치).
+- **#1705 ready 승격**(jrudolph·bruniss 자동 요청). **#1796** main `557df7c` 위로 리베이스 → `be112851f`(패치 동일). 열린 non-draft 3/3.
+- **시계**: #1703·#1705 = **28일 규칙으로 10-03 16:00 KST 무조건 종료**(활동 무관). #1796 = 14일 무활동 10-10, 28일 10-14.
+  #1703은 리뷰가 붙었으니 10-03 이후 미머지면 "supersedes" 재개설 대상.
+- **#1582 답글 게시**(사용자 승인) [issuecomment-5840504703](https://github.com/ScrollPrize/villa/issues/1582#issuecomment-5840504703), 게시본=초안(`submission/issue1582_reply_andreashad04.md`), 머리말 유출 0. 요지: 0841 42/42가 docs/15 유보(native가 0139뿐)를 방향 면에서 해소 / 원인은 계열 일치가 아니라 입력 품질(segloso +0.061→+0.058) — 0841만으로는 두 원인 구분 불가 / First Letters용 `--flip-normals` 방향 함정(docs/25 §8.1).
+- **#1803 종료 이유 확인**: 다른 기여자 ItIsCuthNotCup의 **#1886**(09-24 개설, 우리 PR보다 9일 늦음)이 #1728의 빈 strip 경고(실패 처리로 강화)와 **같은 `--scale-segmentation` pass-through**(기본 1.0, 1.0이 아닐 때만 전달)를 묶어 09-25 19:02Z pmh47이 머지했고, 7분 뒤 #1803을 무코멘트로 닫음 = **중복 정리**. #1886 본문·코멘트에 #1803/khj1222 언급 0. 교훈: 상한 때문에 draft로 10일 묵힌 사이 남이 같은 수정을 ready로 올려 머지됨 — draft는 리뷰 대상이 아니다.
+- **#1893 재현·코멘트 게시**(사용자 승인) [issuecomment-5840691184](https://github.com/ScrollPrize/villa/issues/1893#issuecomment-5840691184), 게시본=초안(`submission/issue1893_repro_comment.md`). vc_render_tifxyz가 meta.json µm 값을 `nanometer`로 기록함을 릴리스 f07d33b로 실측 재현, main도 동일 코드. 신고자(Sartoshirelli)에게 PR 의향 질문 — 답에 따라 우리가 C++ 수정(빌드 검증 경로 확보 선행). 스캔 정본 `planning/2026-09-26_issue_scan.md`. 10월 = A(머지 달)+B(작은 수정 1건)+C(Hecate manifest 질의, 게시 완료) 사용자 확정.
+- **C 질의 게시**(사용자 승인) #1819 [issuecomment-5840727207](https://github.com/ScrollPrize/villa/pull/1819#issuecomment-5840727207), 게시본=초안(`submission/pr1819_hecate_manifest_request.md`). Hecate 공개 가중치의 원 manifest+`patches.npz`(또는 스크롤별 held-out 좌표·excluded_segments) 공개 요청. 근거로 6ROI 혼재 결과(2/6 우위, 1667-r2 AP .869→.668) 제시. 답이 오면 두 모델 공통 held-out에서 재측정, 안 오면 Hecate 후속 없음.
+- **#1898 코멘트 게시**(사용자 승인) [issuecomment-5840952348](https://github.com/ScrollPrize/villa/issues/1898#issuecomment-5840952348), 게시본=초안(`submission/issue1898_depth_blur_datapoint.md`). AndreasHad04의 "native가 못 읽히는 주원인=깊이 블러"에 우리 docs/23(3축 블러 증강, 깊이 포함 σ0.39–1.16, 효과 없음)을 약한 데이터로 제공 + 평면 기준 보정·깊이 미측정 한계, 레시피 기본 블러도 3축임을 명시. 대조 메모 `planning/2026-09-26_andreashad04_blur_vs_ours.md`. 스윕 목록에 #1898 추가.
+- **남은 결정(사용자)**: ①~~#1803~~ 이유 확인(#1886 중복), 수용 권고 ②~~#1582 답글~~ 완료 ③10월 방향(작은 후보 공석, Hecate 보류, #1701 머지는
+  9월에 이미 낸 작업이라 10월 신규 성과로 중복 계산 금지 — 채택 근거로만).
+- ⚠️ **함정**: 워크트리에서 `git fetch origin main`이 `origin/main`을 **갱신하지 않았다**(09-15에 멈춤 → 리베이스 no-op).
+  `git fetch origin +refs/heads/main:refs/remotes/origin/main`으로 받을 것. 리베이스 후 SHA가 그대로면 의심할 것.
+- 저장소 기록(CLAUDE/AGENTS/planning)은 로컬만, commit/push 없음. runs135삭제 보존.
+
+## 2026-09-20 — 오늘 종료, 다음 재개 인계
+
+사용자 “오늘 여기까지 하고 문서랑 메모리 업데이트 하고 마무리하자”. **오늘 종료; 사용자 재개 전 새 조사/실험/게시를 시작하지 않는다.** 예약 요청 아님.
+재개 색인=`planning/2026-09-20_october_handoff.md`,계획=`planning/2026-10_working_plan.md`.
+9월v30제출완료·보존,이제10월준비. Hecate검증완료·교체/증류보류,같은실험반복금지.
+다음작은후보#1839최신상태/중복/실제UNC재현은미착수. 기존PR후속/대형후보탐색도재개후진행.
+이대화에서시작한명령모두완료,계속실행/신규예약없음. HEAD4456a85·제출diff0·runs135삭제보존.
+종료정리=AGENTS/CLAUDE/planning갱신,commit/push/외부메시지/폼없음.
+
+## 2026-09-20 — 사용자 9월 제출 완료 확인, 현재 작업은10월 준비 (최신)
+
+사용자 “9월 제출 완료 했어 이제 10월꺼 준비하면되”. 9월v30보존,제출대기로되돌리지않는다.
+정본=`planning/2026-10_working_plan.md`. Hecate교체/증류보류,다음작은후보#1839최신상태·실제UNC재현확인(아직미착수).
+기존PR채택후속·대형신규후보탐색병행가능. 9월기여중복계산금지,10월주력은미선정.
+이번은기록/준비순서갱신,신규실험·외부게시·commit/push·폼·자동예약없음.
+
+## 2026-09-20 — Hecate 별도 구간 보정 검증 완료, 확대 보류 (최신)
+
+사용자 “다음 검증 조건 진행해줘” 실행. 정본=`planning/2026-09-20_hecate_calibration/report.md`.
+dev3곳41,066px에서baseline123/Hecate61 threshold동결→겹치지않는6곳64,379px평가.
+6ROI macro AP **.921653→.904936**, frozenF1 **.831884→.823852**,둘다2/6개선·4/6악화.
+Hecate 자체F1@128 .722066→보정 .823852로회복하나1667-r2 AP .668418/F1 .536657로손실큼.
+pooled micro개선(AP .923677→.937132,F1 .841582→.862857)도보고하지만사전macro관문은실패.
+원래student/teacher split여전히미확보;모든ROI과거C관찰영역→독립일반화아님. 공개18소스재확인.
+증류/전수탐색/범용교체확대보류. 다음은원manifest·teacher제외좌표확보후1667손실원인분리.
+독립hist18/threshold8/eval12검사통과.6forward294tile20.11초,GPU720MiB,종료.
+**9월v30제출본불변**,HEAD4456a85/external/runs135삭제보존. 새학습/CT·weight다운로드/설치/외부게시/commit/push/폼/예약없음.
+
+## 2026-09-20 — 사용자 재개: 10월 Hecate 사전 연구 완료 (최신)
+
+사용자가 “10월꺼 미리 연구좀할까”로 아래 종료 이후 재개했다. 9월 v30 제출본은 보존.
+정본=`planning/2026-09-20_hecate_preflight/report.md`, 상세 인계=AGENTS 최신절.
+공식 소스·입력계약 확인 후 기존C dev3ROI만 Hecate9.6 정/역 예비추론(공식weight1개523MB).
+같은41,066px에서 기존20kensemble→Hecate정방향 AP .910918→.938505, 공통threshold128/255 F1 .861095→.735203.
+원래 학습/teacher split 미확보이므로 독립 일반화·SOTA·모델교체 성공으로 주장하지 않는다.
+기존21장 입력 재사용의 깊이위상차를 확인해 원본109장부터 다시 pooling했다(CPU합성4·실제3 통과).
+다음은 원split 확인 및 별도영역 threshold 보정 검증. 새학습·전수탐색은 아직 근거 없음.
+GPU peak720MiB, 실행46.25초(로드제외), 전부종료. 외부게시/commit/push/폼/예약 없음.
+**이 요청으로 10월 사전 연구는 착수했으며 더 이상 ‘후보 조사만, 사용자 결정 대기’ 상태가 아니다. 대형 주력 확정은 별개다.**
+
 ## 🏁 2026-09-20 — **9월 라운드 제출 완료**, 세션 종료. **다음 재개 = 09-27~28** (최신)
 
 **사용자는 09-20 밤에 종료. 재개 시 첫 확인 = 이 절.** 예약·백그라운드 없음. 저장소 = 원격 동기(`7c2d8b6`), 워킹트리 = `runs/` 아카이브 삭제 135건만(그대로 둘 것).
