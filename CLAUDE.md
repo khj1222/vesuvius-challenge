@@ -2,7 +2,17 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
-## 2026-09-26 — 재개: 스윕 + PR 후속 3건 완료 (최신, 이 절이 아래보다 우선)
+## 2026-09-28 — 스윕·#1893 인계, 빌드는 자원 부족으로 대기 (최신, 이 절이 아래보다 우선)
+
+사용자 “오늘 할일 없징?” → 스윕 → “빌드 환경 확인부터” → “컴퓨터 자원 모자라 대기” → “오늘 여기까지, 기록 갱신”. **오늘 종료, 다운로드·빌드·게시·commit/push 없음, 예약 없음.**
+- ⚠️ 오전 내내 auto mode 분류기가 판정 없이 실패(Bash·PowerShell·브라우저 전부)해 스윕을 사용자가 직접 돌렸다. 풀리면 정상.
+- **스윕(09-25 13:31Z 이후)**: 🔔 **#1893 Sartoshirelli 09-26 “Please take the fix”**(issuecomment-5842273995) → **B 후보가 우리 몫으로 확정**. 제안: ①meta.json 크기 + `--voxel-unit` 미지정 → `micrometer` ②meta.json 없음 → 입력 OME `.zattrs`(`multiscales[0].axes[].unit`·level-0 scale), 그것도 없으면 **`unit` 생략**(nanometer 금지) ③세 경우 `.zattrs` 올리면 #1891(Python)로 검증해 줌, PR에 이슈 번호 걸면 닫힘.
+  **#1819 머지(09-25 22:50Z), manifest 요청 무응답** → 결정대로 Hecate 후속 없음. **#1898 jrudolph가 09-28 닫음**(“무슨 얘긴지 불명확, 이슈는 직접 쓰고 기존 용어를 써라”) — AndreasHad04 이슈지만 우리 PR 본문도 짧고 직접적으로. #1582 AndreasHad04 후속(깊이 블러가 계열 격차 50% 재현) — 답할 것 없음. #1703·#1705·#1796 open·mergeable, 새 리뷰 0. **HF 1667 PR 6건 = 09-15 이후 활동 0**(남의 이벤트 0, 전부 open).
+- **#1893 빌드 경로 조사 결과**(상세 = `planning/2026-09-26_issue_scan.md` 말미 09-28 절): WSL Ubuntu 24.04 툴체인 0(root·sudo 무암호). 릴리스·PR CI 모두 Ubuntu 26.04 이미지에서 빌드. **추천 = PR CI 이미지 `ghcr.io/scrollprize/vc3d-deps/linux:sha-0c371b1d472c5281b703d65517e980d945da693f`**(압축 1.07GB, 익명 pull 가능), CI 플래그로 `vc_render_tifxyz` 타깃만. 수정 위치 main `f4570bfa6` `apps/src/vc_render_tifxyz.cpp` 1179(기본값 "nanometer")·1470–1510. 테스트 선례 `core/test/test_render_tifxyz_logging.py`.
+- **재개 순서**: ①이미지 pull **사용자 승인**(다운로드) ②`D:/vw12` sparse 워크트리(origin/main, `volume-cartographer`) ③컨테이너 빌드 → 수정 전 4케이스 재현 → 수정·테스트 ④PR은 **10-03 이후 자리 나면 ready**. 그 전 **목요일(10-01)쯤 #1703·#1705 확인**(10-03 16:00 KST 28일 종료, #1703 미머지면 “supersedes” 재개설), #1796은 10-10 전 터치.
+- ⚠️ Git Bash에서 `git show origin/main:.github/...`는 MSYS 경로 변환으로 깨진다 → `MSYS_NO_PATHCONV=1`.
+
+## 2026-09-26 — 재개: 스윕 + PR 후속 3건 완료
 
 정본 인계=`planning/2026-09-26_pr_followup.md`. 사용자 “할일 알려줘” → “1~3번 PR 작업 진행” → “답글 게시” → “기록 갱신”.
 - **스윕(09-19 이후)**: ✅ **#1701 MERGED 09-21**(hendrikschilling, `12d88a4`) = main PR 첫 머지. ❌ **#1803 닫힘 09-25**(pmh47, 코멘트 없음, 이유 미상).
