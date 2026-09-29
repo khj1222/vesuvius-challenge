@@ -2,7 +2,20 @@
 
 새 세션은 이 파일 + `README.md` 만 읽으면 컨텍스트 없이 이어갈 수 있게 자기완결로 유지할 것.
 
-## 2026-09-28 — 스윕·#1893 인계, 빌드는 자원 부족으로 대기 (최신, 이 절이 아래보다 우선)
+## 2026-09-29 — #1893 수정 완료·로컬 커밋, PR은 10-03 이후 (최신, 이 절이 아래보다 우선)
+
+사용자 “전부 진행해줘”(이미지 다운로드 승인 포함) → Docker 문제 → “안되겠다, 여기까지, 저녁에 보자”. **다운로드 미완료·빌드 없음·게시/commit/push 없음, 예약 없음.**
+- ✅ **워크트리 `D:/vw12`** = villa `origin/main` `542c6deac`(09-28), detached, sparse `volume-cartographer`(30MB). 첫 checkout이 `git: Resource temporarily unavailable`(당시 자원 부족)로 멈춰 `git reset -q --hard HEAD`로 채움. 수정 대상 `apps/src/vc_render_tifxyz.cpp`·테스트 선례 `core/test/test_render_tifxyz_logging.py` 존재 확인.
+- ❌ **CI 이미지 pull 실패**: `docker pull ghcr.io/scrollprize/vc3d-deps/linux:sha-0c371b1d…` → Docker API 500, 이후 `docker info` = **“Docker Desktop is unable to start”**(프로세스는 떠 있고 `docker-desktop` WSL 배포판 Stopped). Docker Desktop을 `Stop-Process -Name`으로 내리고 재실행함 → **엔진이 올라왔는지는 미확인**(대기 명령을 사용자가 중단).
+- 그 시점 메모리는 여유(RAM 41/61GB free, commit 59/106GB free) → 원인은 자원이 아니라 Docker Desktop 자체로 보임.
+- **저녁 재개 순서**: ①`docker info`로 엔진 확인(안 뜨면 Docker Desktop 창의 오류 메시지를 사용자가 확인, 필요 시 앱에서 Restart/WSL 통합 점검) ②이미지 pull(승인됨) ③`D:/vw12/volume-cartographer`를 마운트해 CI 플래그로 `vc_render_tifxyz`만 빌드(병렬 8 권장) ④수정 전 4케이스 재현 → 수정·테스트 → 초안(PR 본문·신고자용 `.zattrs` 3종). PR은 10-03 이후.
+- ✅ **저녁(같은 날) 1~3단계 완료**: Docker 정상 복구 → CI 이미지 pull(5.26GB) → `vc_render_tifxyz` 빌드 **15.7초**(87단계, exit 0, 이미지에 선빌드 라이브러리) → 수정 전 4케이스 재현, 09-26 릴리스 AppImage 결과와 axes·datasets **4/4 동일**(다른 건 임시경로 `source_zarr`뿐). 정본 `planning/2026-09-29_issue1893_build/README.md`(명령·스크립트·로그), 빌드 트리는 docker 볼륨 `vc1893`(수정 후 같은 명령으로 증분 빌드). **남은 것 = 4단계(수정·테스트·초안)**.
+- ✅ **4단계도 완료(같은 밤)**: 브랜치 `fix/render-voxel-unit-from-metadata` 커밋 **`47f000426`→amend `ca4a5bd68`(로컬만, 미푸시)**, 5파일 +265 −32. 🔑 공개 볼륨 5/5가 `meta.json` 없음·`metadata.json` 스캔기록(µm)·`.zattrs`는 단위 없음+scale 1.0 → 신고자 제안 ②(입력 `.zattrs`)는 무용, 코어 `resolveLocalStoreVoxelSize`/`remoteVolume->voxelSize()`로 해결. 실제 원격 PHerc0139 `-g 5`: nanometer/32.0 → **micrometer/299.584**. 명시 `--voxel-unit`은 환산(nm 299584), 크기 미상은 단위 생략, `--voxel-size` 단독은 nm 유지, **TIFF DPI 4/4 불변**. 신규 테스트 6/6(main에선 5/6 실패), 기존 렌더러 테스트 2파일 통과, ctest·CI 단계 추가. 초안 = `submission/pr1893_voxel_unit_body.md`(Why 줄은 사용자, 10-03 이후 개설) + `submission/issue1893_fix_zattrs_for_reporter.md`(PR 개설 후 게시). **남은 것 = 푸시·PR 개설·코멘트 게시(전부 사용자 승인), Why 한 줄.**
+- ✅ **검증 공백 1·3·4 해소(같은 밤)**: ①`VC_TESTING=ON` 구성에서 새 테스트가 ctest #97로 등록, 렌더러 테스트 3/3 통과 ③CI에 포맷/린트 단계 없음·이미지에 clang-format 없음·파일 자체가 `.clang-format` 미준수 → 주변 관례 따름, 추가 줄 ≤140열(옵션 설명만 줄바꿈) ④실제 `metadata.json` 로컬 ✓·원격 `-g 0` 크롭 9.362µm ✓·`#vc-base-scale=2 -g 3` 37.448µm/L0 299.584(= `-g 5`) ✓·잘못된 meta.json → 경고+단위 생략 ✓. ⚠️ 잘못된 `meta.json`이 있으면 옆 `metadata.json`은 안 읽힘 = 코어·`Volume`과 같은 우선순위라 유지, PR에 명시. 커밋 amend → **`ca4a5bd68`**(로컬, 미푸시). 남은 미검증 = 실제 PR CI·macOS/Windows·사용자 직접 실행(체크박스)·#1891 교차확인.
+- 🏁 **09-29 밤 종료**(사용자 “오늘 여기까지, 기록 갱신”). 실행 중인 컨테이너·백그라운드·예약 없음. docker 볼륨 `vc1893`(수정본 빌드, 359MB)·`vc1893base`(수정 전 main, 190MB) 보존 = 재빌드·재검증용, 10-01 정리 때 삭제 여부 결정. 저장소: `CLAUDE.md` 수정·`submission/pr1893_voxel_unit_body.md`·`submission/issue1893_fix_zattrs_for_reporter.md` 신규 **미커밋**, villa 수정은 `D:/vw12` 브랜치 `fix/render-voxel-unit-from-metadata` `ca4a5bd68` **미푸시**. **다음 재개**: ①10-01(목) #1703·#1705 확인 + 정리 계획 ②10-03 16:00 KST 이후 #1893 PR — 사용자 Why 한 줄 → 푸시 승인 → PR 개설 → 신고자 코멘트 게시(각각 승인) ③#1796은 10-10 전 터치.
+- 10-01 정리 계획·#1703/#1705 확인 일정은 아래 09-28 절 그대로. `D:/vw12`는 정리 대상 아님(#1893용).
+
+## 2026-09-28 — 스윕·#1893 인계, 빌드는 자원 부족으로 대기
 
 사용자 “오늘 할일 없징?” → 스윕 → “빌드 환경 확인부터” → “컴퓨터 자원 모자라 대기” → “오늘 여기까지, 기록 갱신”. **오늘 종료, 다운로드·빌드·게시·commit/push 없음, 예약 없음.**
 - ⚠️ 오전 내내 auto mode 분류기가 판정 없이 실패(Bash·PowerShell·브라우저 전부)해 스윕을 사용자가 직접 돌렸다. 풀리면 정상.
@@ -10,6 +23,7 @@
   **#1819 머지(09-25 22:50Z), manifest 요청 무응답** → 결정대로 Hecate 후속 없음. **#1898 jrudolph가 09-28 닫음**(“무슨 얘긴지 불명확, 이슈는 직접 쓰고 기존 용어를 써라”) — AndreasHad04 이슈지만 우리 PR 본문도 짧고 직접적으로. #1582 AndreasHad04 후속(깊이 블러가 계열 격차 50% 재현) — 답할 것 없음. #1703·#1705·#1796 open·mergeable, 새 리뷰 0. **HF 1667 PR 6건 = 09-15 이후 활동 0**(남의 이벤트 0, 전부 open).
 - **#1893 빌드 경로 조사 결과**(상세 = `planning/2026-09-26_issue_scan.md` 말미 09-28 절): WSL Ubuntu 24.04 툴체인 0(root·sudo 무암호). 릴리스·PR CI 모두 Ubuntu 26.04 이미지에서 빌드. **추천 = PR CI 이미지 `ghcr.io/scrollprize/vc3d-deps/linux:sha-0c371b1d472c5281b703d65517e980d945da693f`**(압축 1.07GB, 익명 pull 가능), CI 플래그로 `vc_render_tifxyz` 타깃만. 수정 위치 main `f4570bfa6` `apps/src/vc_render_tifxyz.cpp` 1179(기본값 "nanometer")·1470–1510. 테스트 선례 `core/test/test_render_tifxyz_logging.py`.
 - **재개 순서**: ①이미지 pull **사용자 승인**(다운로드) ②`D:/vw12` sparse 워크트리(origin/main, `volume-cartographer`) ③컨테이너 빌드 → 수정 전 4케이스 재현 → 수정·테스트 ④PR은 **10-03 이후 자리 나면 ready**. 그 전 **목요일(10-01)쯤 #1703·#1705 확인**(10-03 16:00 KST 28일 종료, #1703 미머지면 “supersedes” 재개설), #1796은 10-10 전 터치.
+- **정리 계획(사용자 확정 09-28) = 10-01 이후** `planning/2026-10-01_cleanup_plan.md`: ①끝난 PR 워크트리 제거(vw2·vw3·vw4~7·vw8·vw11, vw9·vw10 유지) ②CLAUDE.md/AGENTS.md 이력을 로컬 아카이브로 이동 ③external/villa 미추적 76GB는 그날 사용자 결정. runs/ 삭제 135건은 계속 그대로.
 - ⚠️ Git Bash에서 `git show origin/main:.github/...`는 MSYS 경로 변환으로 깨진다 → `MSYS_NO_PATHCONV=1`.
 
 ## 2026-09-26 — 재개: 스윕 + PR 후속 3건 완료
