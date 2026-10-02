@@ -1,7 +1,7 @@
 # Measuring cross-scroll generalisation: leave-Paris4-out (2026-08-23)
 
-Step 2 of the September track, and **the first systematic numbers for open
-problem #7, "cross-scroll ink generalization"**. The public ink_9um recipe was
+Step 2 of the September track: **systematic numbers for open problem #7,
+"cross-scroll ink generalization", scored against withheld annotation**. The public ink_9um recipe was
 retrained unchanged except that the eight PHercParis4 representations were
 removed (seeds 42 and 43, 78,125 steps each), and the resulting models were
 scored on the whole annotation (supervision mask) of all eight Paris4 segments

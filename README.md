@@ -158,18 +158,21 @@ to within 0.001 (0.8235 against w00's 0.8232) while the gap **widened to +0.098
 with a total ordering** — the best measured fold (0.7905) below the worst
 constant fold (0.8133).
 
-### 6. First numbers for the released ink_9um models — [docs/14](docs/14_ink9um_scorecard.md)
+### 6. Scoring the released ink_9um models — [docs/14](docs/14_ink9um_scorecard.md)
 
 The August 2026 `ink_9um` release ships checkpoints with **no performance
 numbers on the model card**. Scoring all 14 of them on the three segments that
 ship a validation mask gives an honest ceiling of **F1 0.74-0.77**, against
 0.98+ on their own training pixels — a memorisation gap of 0.22 to 0.45. No step
 is best everywhere, and two released seeds differ by 0.22 F1 at step 75k on the
-same held-out region.
+same held-out region. (Not the first scoring of these checkpoints: KLAVIS posted
+per-region scores for all 14 on 2026-08-18,
+[ink9um-dense](https://github.com/DomRusso2/ink9um-dense); this page earlier said
+otherwise.)
 
 ### 7. Cross-scroll generalisation, measured — [docs/15](docs/15_loso_cross_scroll.md)
 
-The first systematic numbers for open problem #7. The public recipe was
+Systematic numbers for open problem #7, scored against withheld annotation. The public recipe was
 retrained three times, each with one scroll fully removed, and scored on that
 scroll's entire annotation. Four parts:
 

@@ -111,6 +111,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-02 (저녁)**: Discord #ink-detection 읽기(입력 없음). 라벨 없는 임계값 선택을 다룬 글 없음 = docs/27 중복 아님. 0.5 고정 사용 사례: KLAVIS(08-18, 균형정확도@0.5), freek_cool(09-01, p>0.5 면적), Danilo(#1708, "threshold는 따로 보정 필요"). ⚠️ **KLAVIS가 08-18에 공개 9µm 체크포인트 14개를 영역별로 채점해 올렸다**(github DomRusso2/ink9um-dense) → 우리 docs/14(08-22)·README의 "first quantitative scoring / First numbers" 표현은 틀림 → **10-02 정정 완료**(docs/14 상단에 KLAVIS 크레딧 정정문, README 6·7절, docs/15; #7 수치도 "first" 대신 "가려 둔 주석으로 채점한"으로 범위 축소). 9월 제출본의 "first scorecard"는 이미 제출돼 못 고침. **교훈: 중복 확인은 Discord까지.**
 - **10-02 (오후)**: 10월 연구 착수. 중복 검색(villa threshold/otsu/binarize/calibration) 0건 → docs/27 사전등록(`1b5917e`, 실행 전 푸시) → `tools/score_label_free_threshold.py`로 Z: 저장 LOSO 예측 322칸 CPU 재채점(약 25분) → R1·R3 통과, 128·Otsu 실패 → 결과 `93c5f50` 푸시. 원수치 `runs/ink9um_scorecard/labelfree_{summary.json,cells.csv,hists.npz}`(히스토그램만으로 재감사 가능). 채점 도구의 bbox 중복 계수와 픽셀 1회 계수를 둘 다 계산, 판정 동일(평균 차 ≤0.0015).
 - **10-02**: 스윕 → #1703 머지(09-28) 확인. #1893 PR 준비 중 #1831 중복 발견 — main `f637f3b35`를 CI 이미지로 빌드해 대조(우리 테스트 5/6, 실제 원격 PHerc0139 `-g 5` micrometer 299.584 동일, 차이는 문서화된 `--voxel-unit` 설계뿐, 근거 `planning/2026-09-29_issue1893_build/results/*main_f637f3b*`) → 푸시·PR 없음. 10-01 정리 실행: 워크트리 8개 제거, CLAUDE.md를 이 형태로 축소(원본은 history 폴더), #1893 마무리 코멘트 게시, docker 볼륨은 사용자가 삭제, 76GB는 당분간 유지(사용자 결정, E: 여유 348GB·Z: 131GB), `planning/`(4,308파일)·AGENTS.md를 Z:\아카이브esuvius-local-only에 재동기화(해시 확인).
 - **09-29**: #1893 수정(`ca4a5bd68`) 빌드·검증·로컬 커밋 — 이후 #1831로 불필요해짐.

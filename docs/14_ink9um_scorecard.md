@@ -1,9 +1,19 @@
 # A scorecard for the released ink_9um checkpoints (2026-08-22)
 
-Step 1 of the September track: the **first quantitative scoring** of the public
+Step 1 of the September track: a quantitative scoring of the public
 `scrollprize/ink_9um` models (hybrid_3d2d, seeds 42 and 43 x 7 steps) on the
 three segments that ship an official validation mask. The model card carries no
-performance numbers at all — this table is the first.
+performance numbers.
+
+> **Correction (2026-10-02): this was not the first scoring.** KLAVIS (GitHub
+> DomRusso2) scored all 14 released checkpoints per region on the same three
+> validation-mask segments and posted the results in the project Discord's
+> #ink-detection on 2026-08-18 ([ink9um-dense](https://github.com/DomRusso2/ink9um-dense),
+> first commit 2026-08-17), before this file existed. That work reports balanced
+> accuracy at a 0.5 threshold and AUC; this one reports F1 at the F1-optimal
+> threshold beside each segment's trivial floor, which is the form the later docs
+> build on. Earlier versions of this page and of the README called it the first;
+> that was wrong, and it was not known here until the Discord thread was read.
 
 > Read together with [docs/17](17_holdout_audit.md), which audits those three
 > official masks and finds that a large share of their held-out pixels sit
@@ -112,8 +122,8 @@ ceiling is itself only 0.92.
   {0139: 35, 1667: 27, 0814: 2}), 78,125 iterations. After training, the whole
   supervision of all eight Paris4 segments becomes honest held-out, giving a
   same-pixel comparison between a model that saw the scroll and one that did
-  not — the first systematic numbers for open problem #7, cross-scroll
-  generalization. That study is [docs/15](15_loso_cross_scroll.md).
+  not — systematic numbers, scored against withheld annotation, for open
+  problem #7, cross-scroll generalization. That study is [docs/15](15_loso_cross_scroll.md).
 
 ---
 
