@@ -34,7 +34,7 @@
 5. 스윕: `python tools/upstream_sweep.py --hours 96` 주 2회 + HF 6건 직접. 리뷰가 오면 24시간 내 반영.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
-- `D:/vw9` = F2/F3 브랜치(#1703 머지됨, #1705 종료 후 제거 가능) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
+- `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw9` = F2/F3 브랜치(#1703 머지됨, #1705 종료 후 제거 가능) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
 - 10-02 제거: vw2·vw3·vw4~vw7·vw8·vw11. 브랜치는 로컬·포크에 남아 있고, 미커밋 수정 3건(vw2 `extra_blur`=docs/23 코드, vw6·vw7=#1471 검증 패치)은 `planning/2026-10-02_cleanup/*.patch`(적용 확인).
 - ⚠️ ink_9um config는 `external/villa`(스키마 이전 체크아웃)로는 못 돌린다. 예전엔 `D:/vw2/ink-detection`에서 `uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m ...`로 돌렸다 → 필요하면 `feat/flat-depth-targets`로 워크트리를 다시 만들고 `vw2_uncommitted.patch` 적용.
 - `external/villa` 본 작업트리는 `fix/stream-untiled-label-images` + 미커밋(train/infer/test 구버전, pyproject/uv.lock cu128 핀) — **체크아웃 전환 금지**.
@@ -70,7 +70,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 - GitHub은 새 PR/이슈 본문을 템플릿으로 미리 채운다 → 준비한 본문은 열고 덮어쓰되 이슈는 `- [x] I personally encountered or reproduced this…` 줄 포함. 초안 머리말(HTML 주석)은 붙여넣지 않는다(`---` 아래만).
 - 게시 후엔 항상 **게시본=초안 대조**(API 원문, `gh`). 게시 직전에 스레드를 다시 읽을 것(남이 먼저 답했을 수 있음).
 - 9월 기여는 10월 성과로 중복 계산하지 않는다. 같은 작업을 두 달에 청구 금지.
-- **Discord**: #rules가 AI 생성 글 게시 금지 → 나는 Discord 문안을 쓰지 않는다(번역만). 읽기만 하고 입력창에 키보드 입력 금지(포커스를 뺏음).
+- **Discord**: #rules가 AI 생성 글 게시 금지 — **예외는 #robots**(Paul 공지: LLM이 크게 관여한 실험 보고용, 모델명 명시·모델 출력과 사람 코멘터리 분리·검증 가능한 주장). 따라서 #robots용 글은 초안을 쓸 수 있고("AI disclosure: run and written by Claude …, Posted with X's approval" 형식이 관례), 다른 채널 글은 쓰지 않는다. 게시는 사용자가. 읽기만 하고 입력창에 키보드 입력 금지(포커스를 뺏음).
 
 ## 저장소 규칙
 
@@ -111,6 +111,9 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-02 (오후~저녁) B′ 재현 완료 → docs/27 권고값 철회**: B(판독기 비교)는 Reader v2가 이미 해서 중단, 대신 공개 ink_9um이 안 본 새 공개라벨 스크롤 3개(0841×3·0009B·0500P2)에서 재현. 사전등록 `72c7679`(추론 전) → 70예측 → 결과 `393ab46`. **docs/27 고정값 87(R1a)은 세 스크롤 모두 실패(0.09–0.12)**, 공개 모델의 최적값은 98–141이고 128이 오히려 노이즈 안(0.006–0.027). 같은 모델로 다른 스크롤에서 빌려오기(R1b 0.003–0.009)·분위수(R3)는 통과. → "84–92/128 쓰지 말라"는 LOSO 모델 한정으로 철회, 방법만 유지. README 13절·Status·tools/README·docs/27 상단 정정. **#robots 정정 답글 초안 `submission/discord_robots_docs27_correction.md`(1,420자) 게시는 사용자.** 데이터 `data/ink_9um/{surface-volumes,labels}/openlabels9/`, 예측 `runs/ink9um_openlabels/preds/`(70장). 도구 `tools/prepare_open_label_segments.py`·`run_open_label_replication.py`. `D:/vw2` 워크트리를 sparse로 재생성(ink_9um 추론은 이 브랜치에서만).
+- **10-02 (늦은 밤)**: 사용자가 docs/27 소개 글을 Discord **#robots에 게시**(초안 `submission/discord_robots_docs27.md` v2, 1,457자 + 본인 코멘트). 반응은 다음 스윕 때 확인(스윕 도구 밖, 직접).
+- **10-02 (밤)**: #show-and-tell·#robots·#announcements도 읽음. 임계값 선택 중복 없음. 주목: YoussefNader **v8-in**(09-29, 새 9µm 모델, 1447 zero-shot AUC 0.86), KLAVIS **Reader v2**(09-28, 116keV에서 AUC 0.834, 같은 재현율에서 오탐 10% vs 43~58%), lightsgoblack ink-placebo-check·사전등록 해시 로그, Bullo27(Matteo Bulloni) PHerc0841 시험. #announcements 최신 = 8월 수상 15명(09-07, 최고 $20k Will Stevens); 9월 결과·10월 폼 아직 없음. docs/27은 ink_9um 레시피 한정이라 v8-in·Reader v2엔 미검증.
 - **10-02 (저녁)**: Discord #ink-detection 읽기(입력 없음). 라벨 없는 임계값 선택을 다룬 글 없음 = docs/27 중복 아님. 0.5 고정 사용 사례: KLAVIS(08-18, 균형정확도@0.5), freek_cool(09-01, p>0.5 면적), Danilo(#1708, "threshold는 따로 보정 필요"). ⚠️ **KLAVIS가 08-18에 공개 9µm 체크포인트 14개를 영역별로 채점해 올렸다**(github DomRusso2/ink9um-dense) → 우리 docs/14(08-22)·README의 "first quantitative scoring / First numbers" 표현은 틀림 → **10-02 정정 완료**(docs/14 상단에 KLAVIS 크레딧 정정문, README 6·7절, docs/15; #7 수치도 "first" 대신 "가려 둔 주석으로 채점한"으로 범위 축소). 9월 제출본의 "first scorecard"는 이미 제출돼 못 고침. **교훈: 중복 확인은 Discord까지.**
 - **10-02 (오후)**: 10월 연구 착수. 중복 검색(villa threshold/otsu/binarize/calibration) 0건 → docs/27 사전등록(`1b5917e`, 실행 전 푸시) → `tools/score_label_free_threshold.py`로 Z: 저장 LOSO 예측 322칸 CPU 재채점(약 25분) → R1·R3 통과, 128·Otsu 실패 → 결과 `93c5f50` 푸시. 원수치 `runs/ink9um_scorecard/labelfree_{summary.json,cells.csv,hists.npz}`(히스토그램만으로 재감사 가능). 채점 도구의 bbox 중복 계수와 픽셀 1회 계수를 둘 다 계산, 판정 동일(평균 차 ≤0.0015).
 - **10-02**: 스윕 → #1703 머지(09-28) 확인. #1893 PR 준비 중 #1831 중복 발견 — main `f637f3b35`를 CI 이미지로 빌드해 대조(우리 테스트 5/6, 실제 원격 PHerc0139 `-g 5` micrometer 299.584 동일, 차이는 문서화된 `--voxel-unit` 설계뿐, 근거 `planning/2026-09-29_issue1893_build/results/*main_f637f3b*`) → 푸시·PR 없음. 10-01 정리 실행: 워크트리 8개 제거, CLAUDE.md를 이 형태로 축소(원본은 history 폴더), #1893 마무리 코멘트 게시, docker 볼륨은 사용자가 삭제, 76GB는 당분간 유지(사용자 결정, E: 여유 348GB·Z: 131GB), `planning/`(4,308파일)·AGENTS.md를 Z:\아카이브esuvius-local-only에 재동기화(해시 확인).
