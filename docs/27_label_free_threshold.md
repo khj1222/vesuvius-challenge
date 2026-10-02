@@ -171,3 +171,66 @@ For an ink_9um-recipe model run on a scroll nobody has annotated: **do not binar
 threshold that was F1-optimal on held-out scrolls you do have labels for (here 84–92) and use it
 unchanged. If you fine-tune or self-train on the new scroll, that value no longer applies; re-derive it
 on held-out data of the adapted model.
+
+---
+
+# Replication on three scrolls the public models never saw (pre-registration, 2026-10-02)
+
+**Status: pre-registered, not yet run.** Committed before any prediction below exists. Results are
+appended under it; nothing in this section changes afterwards.
+
+## Why
+
+The result above is for leave-one-scroll-out models on the three scrolls they were left out of. On
+2026-09-22 the team published reviewed ink labels in the open-data bucket for seven scrolls and
+fragments. Three of them are absent from the released `ink_9um` training set (PHerc0139, 1667,
+Paris 4, 0814): **PHerc0841** (3 segments), **PHerc0009B** (1) and **PHerc0500P2** (1). That allows a
+test the first study could not make: the *released* checkpoints, on scrolls new to them, judged by
+labels nobody in this project has looked at.
+
+## Data
+
+- Inputs: each segment's ~2.4 µm surface volume from the open-data bucket, pooled by the recipe's
+  own arithmetic (XY level 2, 84 centred planes, mean of 4 → 21 slices) with
+  [`tools/prepare_open_label_segments.py`](../tools/prepare_open_label_segments.py).
+- Labels: level 2 of the published `inklabels` / `supervision` pyramids (a 4× nearest sample of
+  level 0; on PHerc1667 w029 it lands on the same grid as this repository's earlier labels, IoU 0.986
+  with no shift). Scored inside `supervision`, as above.
+- **Deviation known in advance:** PHerc0500P2's volume is 2.215 µm, so its level 2 is 8.86 µm, not
+  ~9.6 µm. It is kept, and reported on its own line.
+- Predictions: all 14 released checkpoints (seeds 42, 43 × steps 10k–75k), `koine_machines.inference.infer`
+  with `--overlap 0.5 --blend-mode hann --no-compile`, as in docs/14.
+- A cell = (segment, seed, step). Sheet = middle layer of the pooled volume > 0.
+
+## Rules (fixed now)
+
+| rule | threshold |
+|---|---|
+| R0 default | 128 |
+| **R1a docs/27 constant** | **87** = the median oracle threshold of the 92 primary cells above (86.5, rounded half up) |
+| R1b value transfer | median oracle threshold of the *other two* new scrolls' cells, same checkpoint |
+| R2 Otsu | as above, on the cell's sheet |
+| R3 quantile transfer | as above, *q* from the other two new scrolls' cells, same checkpoint |
+
+R1a is the question that matters: does the number this document recommends carry to a different
+model (the released one, trained on four scrolls) and to scrolls nobody here has scored before?
+
+## Measure and decision
+
+Regret as above. **Primary:** steps 10k and 20k (4 checkpoints): 0841 = 12 cells, 0009B = 4, 0500P2 = 4.
+Secondary (descriptive): all 14 checkpoints.
+
+A rule passes if its mean regret is **< 0.03 on each of the three scrolls** and below R0's on each.
+
+| outcome | what we report |
+|---|---|
+| R1a passes | the recommendation above generalises to the released checkpoints and to new scrolls |
+| R1a passes on 1–2 scrolls | the recommendation is scroll-dependent; say which, and how far off the others are |
+| R1a fails everywhere | the 84–92 band belongs to the LOSO models; withdraw it as a general default and keep only the method (borrow from scorable scrolls) |
+
+Same noise floor (0.03). Five segments is a small base: a scroll with one segment is one segment.
+
+## Prediction
+
+R0 fails on every scroll. R1a passes on at least two of the three. No rule passes on all three, and
+the one that fails most is likely PHerc0500P2 (a fragment, at 8.86 µm).
