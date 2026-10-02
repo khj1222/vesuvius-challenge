@@ -1,5 +1,11 @@
 # 27 — Choosing an ink threshold on a scroll with no labels (pre-registration)
 
+> **Correction (2026-10-02, read to the end):** a pre-registered replication on three scrolls the
+> released checkpoints never saw withdraws the specific value below (84–92, and "don't binarize at
+> 128"). It held for the leave-one-scroll-out models; the released models want 98–141, and for them 128
+> is fine. The method — borrow a model's own optimum from other scrolls scored with that model —
+> passed both times. Sections are kept as written; the replication is at the bottom.
+
 **Status: pre-registered, not yet run.** This file is committed before any rule below has
 been scored. The results section is appended after the run; nothing above it changes.
 
@@ -234,3 +240,50 @@ Same noise floor (0.03). Five segments is a small base: a scroll with one segmen
 
 R0 fails on every scroll. R1a passes on at least two of the three. No rule passes on all three, and
 the one that fails most is likely PHerc0500P2 (a fragment, at 8.86 µm).
+
+## Replication results (2026-10-02, run after commit 72c7679)
+
+70 predictions (14 released checkpoints × 5 segments), all completed. Raw:
+[`openlabels_summary.json`](../runs/ink9um_scorecard/openlabels_summary.json),
+[`openlabels_cells.csv`](../runs/ink9um_scorecard/openlabels_cells.csv),
+[`openlabels_hists.npz`](../runs/ink9um_scorecard/openlabels_hists.npz); driver
+[`tools/run_open_label_replication.py`](../tools/run_open_label_replication.py). Mean oracle F1 on the
+primary cells is 0.646 (0841), 0.705 (0009B), 0.661 (0500P2), against trivial floors of 0.41, 0.37,
+0.35 — the models read these scrolls, so the thresholds below are about a real signal.
+
+**F1 lost against the oracle**, primary (steps 10k/20k); in brackets cells under 0.03 and the
+thresholds chosen:
+
+| rule | PHerc0841 (12) | PHerc0009B (4) | PHerc0500P2 (4) | verdict |
+|---|---|---|---|---|
+| R0 default 128 | 0.008 (12/12) | 0.006 (4/4) | 0.027 (3/4) | — |
+| **R1a docs/27 constant 87** | **0.096** (2/12) | **0.118** (0/4) | **0.095** (1/4) | **fails on every scroll** |
+| R1b other new scrolls' optimum | 0.003 (12/12; 101–130) | 0.003 (4/4; 105–127) | 0.009 (4/4; 105–133) | passes |
+| R2 Otsu | 0.007 (12/12) | 0.009 (4/4) | 0.007 (4/4) | under the floor everywhere, but not below R0 on 0009B |
+| R3 quantile transfer | 0.003 (12/12) | 0.006 (4/4) | 0.003 (4/4) | passes |
+
+Oracle thresholds of these cells run **98–141**. All seven steps (secondary) give the same picture:
+R1a 0.044–0.059, R0 0.008–0.027, R1b/R2/R3 all under 0.01.
+
+**The pre-registered outcome is the third row: R1a fails on every scroll.** My prediction (R1a passes
+on at least two) was wrong.
+
+What this changes in the result above:
+
+- **The 84–92 band, and the advice "don't binarize at 128", belong to the leave-one-scroll-out models
+  only.** The released checkpoints, run on scrolls they never saw, want 98–141, and for them 128 is
+  within the noise floor on all three scrolls (0.006–0.027). The first study's practical
+  recommendation is withdrawn as a general default.
+- **The method survives.** Taking the optimum from *other scrolls scored with the same model* (R1b),
+  or their operating quantile (R3), stays far under the floor here too (0.003–0.009). What transfers
+  across scrolls is a model's own threshold, not a number.
+- Otsu, which failed on the LOSO models, is within the floor here. Whether a rule works depends on the
+  model as well as the scroll.
+
+A likely reason, not tested: the leave-one-scroll-out models were trained on fewer scrolls and are
+less confident on the one they never saw (docs/18 found their raw outputs span only 0.17–0.89 on
+Paris 4), which pulls their optimum down; the released models, trained on all four, are not.
+
+**What to do with it now:** for a model you have, find its optimum on held-out data of scrolls you
+*can* score, with that same model, and use it unchanged on the new scroll. Do not carry a number
+from one model to another — including from this document.

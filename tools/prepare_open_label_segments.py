@@ -101,7 +101,14 @@ def volumes(args) -> None:
             print(f"{name}: exists, skipped", flush=True)
         else:
             url = f"{BUCKET}{volume_path}"
-            source = zarr.open(url, mode="r")["2"]
+            for attempt in range(6):          # opening over HTTP fails on the same transient drops
+                try:
+                    source = zarr.open(url, mode="r")["2"]
+                    break
+                except Exception:
+                    if attempt == 5:
+                        raise
+                    time.sleep(2 ** attempt)
             shape = tuple(int(v) for v in source.shape)
             start = math.ceil((shape[0] - OUTPUT_Z * POOL_Z) / 2)
             z0, z1 = start, start + OUTPUT_Z * POOL_Z

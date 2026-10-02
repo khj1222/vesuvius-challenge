@@ -306,11 +306,17 @@ was scored, rescored on the 322 saved leave-one-scroll-out cells:
 | Otsu on the sheet | −0.050 | −0.022 | −0.055 |
 | other scrolls' operating quantile | −0.025 | −0.002 | −0.020 |
 
-(F1 lost against the oracle threshold; the noise floor is 0.03.) I predicted no rule
-would pass everywhere; two did. For these models, **do not binarize at 128** — take the
-optimum from held-out scrolls you can score and use it unchanged. Fine-tuning or
-self-training moves the optimum, so re-derive it after adapting.
-[`score_label_free_threshold.py`](tools/score_label_free_threshold.py), no GPU.
+(F1 lost against the oracle threshold; the noise floor is 0.03; leave-one-scroll-out
+models.) I predicted no rule would pass everywhere; two did.
+
+**Then a pre-registered replication overturned the number.** On three scrolls the released
+checkpoints never saw (PHerc0841, 0009B, 0500P2, labels newly published in the open data),
+the released models want **98–141**: the 87 recommended above loses **0.09–0.12** on every
+scroll, while 128 is within the noise floor. Borrowing the optimum from other scrolls scored
+*with the same model* passes again (0.003–0.009). So the method transfers, the number does
+not: find your model's own optimum on scrolls you can score, and do not carry a threshold from
+one model to another. [`score_label_free_threshold.py`](tools/score_label_free_threshold.py),
+[`run_open_label_replication.py`](tools/run_open_label_replication.py).
 
 ---
 
@@ -483,6 +489,7 @@ vesuvius-challenge/
 - [x] **September round submitted** (2026-09-20) —
       [form answers as submitted](submission/2026-09_form_answers.md).
 - [x] **Two more upstream PRs merged** — #1701 (2026-09-21), #1703 (2026-09-28).
-- [x] **Label-free threshold selection** (2026-10-02) — pre-registered; the 128 default
-      costs 0.06–0.14 F1 on an unseen scroll, transferring other scrolls' optimum stays
-      within the noise floor on all three ([docs/27](docs/27_label_free_threshold.md)).
+- [x] **Label-free threshold selection** (2026-10-02) — pre-registered twice. Borrowing a
+      model's own optimum from other scorable scrolls stays within the noise floor on six
+      scrolls; the specific value (84–92) held for leave-one-scroll-out models and failed for
+      the released ones (which want 98–141) ([docs/27](docs/27_label_free_threshold.md)).

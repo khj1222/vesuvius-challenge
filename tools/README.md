@@ -730,6 +730,8 @@ The rules are a fixed 128, the other scrolls' F1-optimal threshold, Otsu on the 
 other scrolls' operating quantile; regret is F1 lost against the oracle threshold.
 
 On the ink_9um leave-one-scroll-out models all 322 cells reproduce, the fixed 128 loses 0.06–0.14,
-and borrowing the other scrolls' optimum (84–92) loses 0.007–0.016. The histograms are committed
+and borrowing the other scrolls' optimum (84–92) loses 0.007–0.016. The value does not carry to other
+models: `run_open_label_replication.py` (same rules, released checkpoints, three scrolls they never saw)
+finds optima of 98–141, where 87 loses 0.09–0.12 and borrowing within the same model still passes. The histograms are committed
 (`runs/ink9um_scorecard/labelfree_hists.npz`, 1.1 MB), so step 2 runs without the predictions.
 Paths to the predictions and labels are constants at the top of the file. No GPU.
