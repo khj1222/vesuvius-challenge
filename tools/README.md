@@ -46,6 +46,7 @@ run. Everything else below is a variation on those three.
 | [`score_pseudo_labels.py`](score_pseudo_labels.py) | Ask how well those pseudo-labels agree with the truth they stand in for |
 | [`run_pseudo_ranking.py`](run_pseudo_ranking.py) | Score one prediction with both yardsticks, to see if they rank alike |
 | [`summarise_pseudo_ranking.py`](summarise_pseudo_ranking.py) | Apply that study's pre-registered rule, and refuse a verdict on a partial matrix |
+| [`score_label_free_threshold.py`](score_label_free_threshold.py) | Choose a binarization threshold for a scroll with no labels, and price each rule against the oracle |
 
 ### How much annotation, and where
 
@@ -708,3 +709,27 @@ numbers that mean different things. The sidecar states every assumption instead.
 ---
 
 MIT-licensed. Part of the [Vesuvius Challenge walkthrough](../docs/08_windows_reproduction.md).
+
+---
+
+## `score_label_free_threshold.py` — which threshold, without labels?
+
+The [docs/27](../docs/27_label_free_threshold.md) run. Two passes, so the expensive one happens once:
+
+```bash
+# 1. read every saved leave-one-scroll-out prediction once into 256-bin histograms
+uv run --project external/villa/ink-detection --no-sync python tools/score_label_free_threshold.py collect
+# 2. apply the pre-registered rules to those histograms (no TIFF is opened)
+python tools/score_label_free_threshold.py score
+```
+
+Per cell it keeps the annotated ink and non-ink populations inside the supervision mask (each
+pixel once, and also the way `eval_validation.py` counts them, so the committed matrices can be
+checked to reproduce) and the whole rendered sheet — the only thing a label-free rule may read.
+The rules are a fixed 128, the other scrolls' F1-optimal threshold, Otsu on the sheet, and the
+other scrolls' operating quantile; regret is F1 lost against the oracle threshold.
+
+On the ink_9um leave-one-scroll-out models all 322 cells reproduce, the fixed 128 loses 0.06–0.14,
+and borrowing the other scrolls' optimum (84–92) loses 0.007–0.016. The histograms are committed
+(`runs/ink9um_scorecard/labelfree_hists.npz`, 1.1 MB), so step 2 runs without the predictions.
+Paths to the predictions and labels are constants at the top of the file. No GPU.

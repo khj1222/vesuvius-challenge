@@ -290,6 +290,25 @@ calibrations their own pre-registrations had specified in advance. The advantage
 aligned rendering gives you cannot be recovered by anything here that does not use
 labels — which is what turns "render aligned" from a preference into an instruction.
 
+### 13. Which threshold, on a scroll nobody has labelled? — [docs/27](docs/27_label_free_threshold.md)
+
+Every honest F1 above picks its threshold with labels. On a new scroll there are none,
+and the usual fallback is 0.5 (128 of 255). Four rules, fixed and committed before any
+was scored, rescored on the 322 saved leave-one-scroll-out cells:
+
+| rule (steps 10k/20k) | Paris4 | 1667 | 0139 |
+|---|---|---|---|
+| fixed 128 | −0.113 | −0.056 | −0.145 |
+| **other scrolls' optimum (84–92)** | **−0.014** | **−0.007** | **−0.016** |
+| Otsu on the sheet | −0.050 | −0.022 | −0.055 |
+| other scrolls' operating quantile | −0.025 | −0.002 | −0.020 |
+
+(F1 lost against the oracle threshold; the noise floor is 0.03.) I predicted no rule
+would pass everywhere; two did. For these models, **do not binarize at 128** — take the
+optimum from held-out scrolls you can score and use it unchanged. Fine-tuning or
+self-training moves the optimum, so re-derive it after adapting.
+[`score_label_free_threshold.py`](tools/score_label_free_threshold.py), no GPU.
+
 ---
 
 ## Upstream contributions to ScrollPrize/villa
@@ -329,19 +348,23 @@ old PRs were closed and current-main replacements were opened on 2026-09-04:
   was halved under it, against 1,162 in a fresh directory. Fingerprints the
   label assets by name and size, which costs 8 ms per 6,429-file array and keeps
   the warm path at 0.03 s. **Closed and replaced by current-main
-  [#1701](https://github.com/ScrollPrize/villa/pull/1701), open as of 2026-09-10.**
+  [#1701](https://github.com/ScrollPrize/villa/pull/1701), merged 2026-09-21** (after a
+  review asking for file modification times in the fingerprint, which was added).
 - **[PR #1662](https://github.com/ScrollPrize/villa/pull/1662)** — `infer`
   crashes on native Windows because `torch.compile` returns lazily and Triton
   has no Windows build, so `TritonMissing` is raised at the first forward, past
   the `except` meant to catch it. Falls back at the first forward instead.
   **Closed and replaced by current-main
-  [#1703](https://github.com/ScrollPrize/villa/pull/1703), open as of 2026-09-10.**
+  [#1703](https://github.com/ScrollPrize/villa/pull/1703), merged 2026-09-28** (after a
+  review found a recompile on a later, differently sized batch; every compiled call is
+  now guarded).
 - **[PR #1663](https://github.com/ScrollPrize/villa/pull/1663)** —
   `prepare_9um_isotropic_input` dies on the final directory rename when anything
   holds a handle (`WinError 5`), discarding a completed conversion. Retries, and
   if it still cannot publish, says so and keeps the staged output. **Closed and
-  replaced by current-main draft
-  [#1705](https://github.com/ScrollPrize/villa/pull/1705), open as of 2026-09-10.**
+  replaced by current-main
+  [#1705](https://github.com/ScrollPrize/villa/pull/1705)**, unreviewed; the repository's
+  28-day limit closes it on 2026-10-03.
 - **[PR #1471](https://github.com/ScrollPrize/villa/pull/1471)** — not ours. Its
   author asked for this repository's striped masks to be run against their
   branch; that check found the outputs identical to the in-memory path across 42
@@ -351,13 +374,14 @@ old PRs were closed and current-main replacements were opened on 2026-09-04:
   on 2026-09-10**. Its final source-chunk-major rewrite passed upstream CI but
   was not re-tested by this project; the 42/42 result belongs to the earlier
   revision actually tested here.
-- **[PR #1796](https://github.com/ScrollPrize/villa/pull/1796)** (draft, `main`) —
+- **[PR #1796](https://github.com/ScrollPrize/villa/pull/1796)** (`main`, open, unreviewed) —
   Copy-model TTA flips and rotates the input volume but left the two direction-prior
   vectors' components alone, so each variant saw a prior pointing the wrong way.
   Transports the components; a model returning its own priors now gets them back
   (max error 3.6e-7 against 3.04 before). Real-data effect on six manually labelled
   Paris 4 cubes is mixed and is not claimed as a gain. Evidence: `runs/tta_main/`.
-- **[PR #1803](https://github.com/ScrollPrize/villa/pull/1803)** (draft, `main`) —
+- **[PR #1803](https://github.com/ScrollPrize/villa/pull/1803)** (closed 2026-09-25: the
+  same pass-through merged first in another contributor's #1886) —
   `render_ink.py` could not pass `--scale-segmentation` to the renderer, so a mesh in
   a coarser frame rendered an all-black strip and exited 0 (villa #1660). Adds the
   opt-in flag, default 1.0, no auto-detection. Evidence: `runs/render_scale_main/`.
@@ -450,13 +474,12 @@ vesuvius-challenge/
       scrolls, neither orientation producing a candidate under the control-calibrated
       gate; 20 eligible volumes without public meshes untested
       ([docs/25](docs/25_scouting_eligible_volumes.md)).
-- [x] **September draft corrected locally** (v28, 2026-09-20) —
-      [copy-ready form answers](submission/2026-09_form_answers.md), with current
-      PR status and the scouting addendum; **not submitted, public push awaiting approval**.
-      A subsequent audit distinguished exact checkpoint matches from tolerance-based
-      agreement. The complete scouting rule rejects its known positive control, so
-      candidate count is not evidence of signal absence. The late-compilation fix for
-      #1703 passes focused local checks but has not been pushed. Fixed-threshold
-      evaluation is complete: Paris4 0.485→0.790 and1667 0.531→0.629, with separate
-      labeled calibration segments and unique-pixel scoring ([docs/26](docs/26_fixed_threshold_finetuning.md)).
-- [ ] September round — user submission (deadline 2026-09-30 23:59 Pacific)
+- [x] **Fixed-threshold fine-tuning** (2026-09-20) — Paris4 0.485→0.790 and 1667
+      0.531→0.629 with a separately calibrated, frozen threshold
+      ([docs/26](docs/26_fixed_threshold_finetuning.md)).
+- [x] **September round submitted** (2026-09-20) —
+      [form answers as submitted](submission/2026-09_form_answers.md).
+- [x] **Two more upstream PRs merged** — #1701 (2026-09-21), #1703 (2026-09-28).
+- [x] **Label-free threshold selection** (2026-10-02) — pre-registered; the 128 default
+      costs 0.06–0.14 F1 on an unseen scroll, transferring other scrolls' optimum stays
+      within the noise floor on all three ([docs/27](docs/27_label_free_threshold.md)).
