@@ -97,3 +97,77 @@ four. If R3 passes everywhere, that prediction failed in the useful direction.
 - Three scrolls is a small base for "transfer". A pass is a recommendation for these
   representations and this recipe, not a law.
 - Aligned representations only. Native renders (docs/15 appendix 2) are out of scope.
+
+---
+
+# Results (2026-10-02, run after commit 1b5917e)
+
+Tool: [`tools/score_label_free_threshold.py`](../tools/score_label_free_threshold.py) (`collect` reads each
+saved prediction once into 256-bin histograms, `score` applies the rules to those histograms only).
+Raw: [`labelfree_summary.json`](../runs/ink9um_scorecard/labelfree_summary.json),
+[`labelfree_cells.csv`](../runs/ink9um_scorecard/labelfree_cells.csv) (one row per cell),
+[`labelfree_hists.npz`](../runs/ink9um_scorecard/labelfree_hists.npz) (every histogram, so the rules can be
+re-audited without the 18 GB of TIFFs).
+
+**Reproduction check: 322 of 322 cells reproduce the committed matrices** (threshold exact, F1 within
+0.0001). No cell is excluded. As an independent check on the sheet definition, Paris4 w00's sheet is
+85,866,396 px, the same count docs/18 reports for that segment's valid render area.
+
+## Primary (steps 10k and 20k)
+
+Mean regret (oracle F1 − F1 at the rule's threshold); in brackets, cells under 0.03 and the range
+of thresholds the rule chose. Mean oracle F1 is 0.473 (Paris4), 0.536 (1667), 0.654 (0139).
+
+| rule | Paris4 (32 cells) | 1667 (24) | 0139 (36) | verdict |
+|---|---|---|---|---|
+| R0 default 128 | 0.113 (2/32) | 0.056 (5/24) | 0.145 (5/36) | — |
+| **R1 value transfer** | **0.014** (27/32; 86–92) | **0.007** (24/24; 84–86) | **0.016** (30/36; 85–90) | **passes** |
+| R2 Otsu | 0.050 (12/32; 104–116) | 0.022 (19/24; 107–118) | 0.055 (15/36; 98–114) | fails (1 of 3) |
+| **R3 quantile transfer** | **0.025** (20/32; 92–111) | **0.002** (24/24; 78–109) | **0.020** (25/36; 72–85) | **passes** |
+
+**The prediction failed, in the useful direction.** Two rules pass on every scroll, R1 by the wider
+margin. The parts that held: R0 is the worst rule on every scroll, and Otsu is poor.
+
+What the numbers say in plain terms:
+
+- **128 is the wrong default for these models.** On the unseen scroll it costs 0.06–0.14 F1 — two to
+  five times the noise floor — and is within the floor in only 12 of 92 cells. The optimum is below
+  128 in 90 of the 92 cells (the two exceptions are 0139 w017 at step 20k, 131 and 137).
+- **The other scrolls' optimum transfers.** R1 lands at 84–92 in every cell and leaves 0.007–0.016,
+  under half the floor. Because it barely moves, the operational content is close to "these
+  recipe models want about 85–90, not 128" — but that value was taken from other scrolls each time, never
+  from the scroll being scored, which is the whole test.
+- **Quantile transfer also passes but is less safe:** its worst cell on Paris4 loses 0.120.
+- **Otsu does not work** here: its median threshold sits 20–26 grey levels above the optimum on every
+  scroll (worst cell +111). A likely reason, not tested: the sheet histogram has no separate ink mode
+  for Otsu to split off.
+
+## Secondary (descriptive, not tested)
+
+- **All seven steps (10k–75k):** R1 still passes (0.016 / 0.007 / 0.024). R3 does not: Paris4 rises
+  to 0.032. The longer-trained checkpoints are where quantile transfer starts to slip.
+- **Counting each pixel once vs the matrices' per-box counting** changes no verdict and no mean by more
+  than 0.0015.
+- **Adaptation moves the optimum, so the transferred value must not be carried across.** Oracle
+  thresholds from the committed matrices (min / per-seed medians / max): Paris4 fine-tune
+  74 / 90–100 / 131, 1667 fine-tune 98 / 109 / 120, arm C 63–97 (medians 68–73), arm D 65–121,
+  TENT collapses to 0–69.
+  A threshold transferred from unadapted LOSO models describes unadapted LOSO models.
+- For scale: on its own (different, adapted) cells, docs/24's pseudo-label threshold cost 0.066 F1.
+
+## Deviations and limits
+
+- One detail was not fixed in advance: R1's median of an even number of donor thresholds is rounded
+  half-up. Any effect is at most one grey level.
+- Three scrolls, one recipe (the ink_9um LOSO models, aligned 9.6 µm representations). The pass is a
+  recommendation for that setting. Public checkpoints trained on every scroll, Hecate, native renders
+  and adapted models are untested, and the last of these is shown above to move the optimum.
+- Cells within a scroll share a model and neighbouring segments; the counts above are not independent
+  samples.
+
+## What to do with it
+
+For an ink_9um-recipe model run on a scroll nobody has annotated: **do not binarize at 128.** Take the
+threshold that was F1-optimal on held-out scrolls you do have labels for (here 84–92) and use it
+unchanged. If you fine-tune or self-train on the new scroll, that value no longer applies; re-derive it
+on held-out data of the adapted model.
