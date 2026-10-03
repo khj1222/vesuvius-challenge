@@ -25,7 +25,7 @@
 | #1701 | 패치 캐시 지문(F4, main) | 머지 09-21 (hendrikschilling) |
 | #1703 | `torch.compile` 첫 forward eager 폴백(F2, main) | **머지 09-28** (hendrikschilling, `795ca2b`) |
 | #1705 | staged publish Windows 재시도(F3, main) | **10-03 16:21 KST 봇 자동 종료(28일), 재개설 안 함** · vw9 제거 완료 |
-| #1796 | Copy TTA 방향 벡터 | open, 리뷰 0 → 무활동 종료 10-10 16:00 KST, 28일 상한 10-14 16:00 KST |
+| #1796 | Copy TTA 방향 벡터 | open, 리뷰 0. **10-03 리베이스 푸시**(`a104fd70d`, main `5a4388f08`, 로컬 테스트 13/13) → 무활동 종료는 10-17로 밀렸지만 **28일 상한 10-14 16:00 KST가 먼저**. 재개설 여부는 그때 사용자 결정 |
 | #1893 | (남의 이슈) 렌더 voxel 단위 | **BioMarco #1831이 09-30 먼저 머지** → 우리 PR 취소. 마무리 코멘트 게시 10-02 [issuecomment-5941647899](https://github.com/ScrollPrize/villa/issues/1893#issuecomment-5941647899)(게시본=초안). **10-01 23:06Z 작성자 Sartoshirelli가 동의 후 닫음**(#1891 리더로 main 출력 5건 대조, 우리 몫 없음) |
 | #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 + 평가 진입점 질의 | open, erdpx 배정, 무응답 |
 | HF `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1` | 카드 `/255` 수정 6건 | open, 09-15 이후 무활동 (스윕 밖, 직접 확인) |
@@ -35,7 +35,7 @@
 ### 남은 할 일 (주말 재개 시)
 1. ~~#1705 종료 확인 + vw9 제거~~ **10-03 완료**.
 2. ~~스윕~~ **10-03 완료**(아래 최근 기록). 다음 스윕도 Discord #robots 스레드는 직접(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인).
-3. **#1796**: 10-10 16:00 KST 전 리베이스 푸시 한 번(리뷰 0이라 10-14엔 어차피 닫힘).
+3. ~~#1796 리베이스 푸시~~ **10-03 완료**. 10-14 16:00 KST 28일 상한으로 닫힘 예정(리뷰 0).
 4. **C. 섬유 9µm 이식 가능성 1일 점검**(10-01 ScrollFiesta 저자 요청, 팀 주력이 섬유, 언래핑=$20k 영역). 먼저 섬유 주석·모델 공개 여부 확인 → 계속할지 결정. 사용자 승인 후 착수.
 5. 10-15 판정: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27은 10월 신규 성과.
 6. external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정). docker 볼륨 vc1893* 3개는 사용자가 삭제함.
@@ -118,7 +118,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
-- **10-03 (토)**: #1705 봇 종료(16:21 KST) 확인 → `D:/vw9` 제거(깨끗, 브랜치 `fork/fix/eager-fallback-at-first-forward`=`3e56ca418` 확인 후). 스윕 96h: 새 글 3건 — #1893 Sartoshirelli 동의·종료(답할 것 없음), #192 stantheman0128이 pmh47의 08-13 지적에 답하며 "khj1222's per-pixel band is geometrically coherent" 언급(우리 몫 질문 없음 → 답 안 함), #1705 봇. HF 6건 open·무활동. Discord #robots 우리 스레드 = 원글+정정 2개뿐, 남의 답글 0. ⚠️ 스레드 **제목이 아직 "Don't binarize ink_9um at 128…"**(정정으로 철회된 주장) → 제목 수정은 사용자 몫으로 제안. 같은 날 Bullo27 "v8-in on a 12 GB GPU…PHerc0841"(10-02) 글 있음(0841 겹침, 미독).
+- **10-03 (토)**: #1705 봇 종료(16:21 KST) 확인 → `D:/vw9` 제거(깨끗, 브랜치 `fork/fix/eager-fallback-at-first-forward`=`3e56ca418` 확인 후). 스윕 96h: 새 글 3건 — #1893 Sartoshirelli 동의·종료(답할 것 없음), #192 stantheman0128이 pmh47의 08-13 지적에 답하며 "khj1222's per-pixel band is geometrically coherent" 언급(우리 몫 질문 없음 → 답 안 함), #1705 봇. HF 6건 open·무활동. Discord #robots 우리 스레드 = 원글+정정 2개뿐, 남의 답글 0. ⚠️ 스레드 **제목이 아직 "Don't binarize ink_9um at 128…"**(정정으로 철회된 주장) → 제목 수정은 사용자 몫으로 제안. 같은 날 Bullo27 "v8-in on a 12 GB GPU…PHerc0841"(10-02) 글 있음(0841 겹침, 미독). #1796: 같은 파일 건드린 main 커밋·경쟁 PR 없음 확인 → `be112851f`→`a104fd70d` 리베이스(충돌 없음), 로컬 pytest 13/13(import 경로 vw10 확인), `--force-with-lease` 푸시. CI 진행 중, Vercel 실패는 늘 그렇듯 배포 권한 문제.
 
 - **10-02 (오후~저녁) B′ 재현 완료 → docs/27 권고값 철회**: B(판독기 비교)는 Reader v2가 이미 해서 중단, 대신 공개 ink_9um이 안 본 새 공개라벨 스크롤 3개(0841×3·0009B·0500P2)에서 재현. 사전등록 `72c7679`(추론 전) → 70예측 → 결과 `393ab46`. **docs/27 고정값 87(R1a)은 세 스크롤 모두 실패(0.09–0.12)**, 공개 모델의 최적값은 98–141이고 128이 오히려 노이즈 안(0.006–0.027). 같은 모델로 다른 스크롤에서 빌려오기(R1b 0.003–0.009)·분위수(R3)는 통과. → "84–92/128 쓰지 말라"는 LOSO 모델 한정으로 철회, 방법만 유지. README 13절·Status·tools/README·docs/27 상단 정정. **#robots 정정 답글 게시 완료(10-02, 사용자)**, 초안 `submission/discord_robots_docs27_correction.md`. 데이터 `data/ink_9um/{surface-volumes,labels}/openlabels9/`, 예측 `runs/ink9um_openlabels/preds/`(70장). 도구 `tools/prepare_open_label_segments.py`·`run_open_label_replication.py`. `D:/vw2` 워크트리를 sparse로 재생성(ink_9um 추론은 이 브랜치에서만).
 - **10-02 (늦은 밤)**: 사용자가 docs/27 소개 글을 Discord **#robots에 게시**(초안 `submission/discord_robots_docs27.md` v2, 1,457자 + 본인 코멘트). 반응은 다음 스윕 때 확인(스윕 도구 밖, 직접).
