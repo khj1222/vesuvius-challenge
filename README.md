@@ -318,6 +318,25 @@ not: find your model's own optimum on scrolls you can score, and do not carry a 
 one model to another. [`score_label_free_threshold.py`](tools/score_label_free_threshold.py),
 [`run_open_label_replication.py`](tools/run_open_label_replication.py).
 
+### 14. How much of a 2.4 µm fiber reading survives at 9 µm? — [docs/28](docs/28_fiber_9um_agreement.md)
+
+PHerc. 0139 has segment meshes on both its 9.362 µm and its 2.399 µm scan, on one UV grid, so the
+same papyrus can be read at both resolutions without a registration step. Image correlation at the
+mapped points is 0.60–0.84 against ≤ 0.16 one vertex off. Pre-registered before any model ran; 100
+tiles on five segments, on a scroll none of the models trained on; a 2.399 µm fiber model
+(`fiber_ink_4class_selfdistill`) as the reference:
+
+| 9.362 µm model | F1 vs the 2.4 µm reading | no-correspondence null |
+|---|---|---|
+| `fiber_hz_vt` (7.91 µm hand traces) | 0.691 | 0.453 |
+| `afv_fiber_9um` (its 9 µm fine-tune) | 0.685 | 0.439 |
+
+Some fiber information survives at 9 µm. The loss is mostly recall: the 9 µm models mark 30% of the
+surface as fiber against 42%, and four fifths of what they mark sits next to reference fiber. The
+fine-tune and its parent are indistinguishable here (−0.005 [−0.021, +0.009]); I predicted it would
+lead by 0.03. This is agreement with a model-made reference, not accuracy, and a presence map cannot
+test whether touching fibers stay separate. [`fiber9_check.py`](tools/fiber9_check.py).
+
 ---
 
 ## Upstream contributions to ScrollPrize/villa
@@ -493,3 +512,6 @@ vesuvius-challenge/
       model's own optimum from other scorable scrolls stays within the noise floor on six
       scrolls; the specific value (84–92) held for leave-one-scroll-out models and failed for
       the released ones (which want 98–141) ([docs/27](docs/27_label_free_threshold.md)).
+- [x] **9 µm fiber agreement** (2026-10-04) — pre-registered. On PHerc. 0139, 9.362 µm fiber
+      maps agree with a 2.399 µm reading of the same surface at F1 0.69 (null 0.45); the 9 µm
+      fine-tune does not move it ([docs/28](docs/28_fiber_9um_agreement.md)).

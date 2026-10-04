@@ -47,6 +47,7 @@ run. Everything else below is a variation on those three.
 | [`run_pseudo_ranking.py`](run_pseudo_ranking.py) | Score one prediction with both yardsticks, to see if they rank alike |
 | [`summarise_pseudo_ranking.py`](summarise_pseudo_ranking.py) | Apply that study's pre-registered rule, and refuse a verdict on a partial matrix |
 | [`score_label_free_threshold.py`](score_label_free_threshold.py) | Choose a binarization threshold for a scroll with no labels, and price each rule against the oracle |
+| [`fiber9_check.py`](fiber9_check.py) | Read the same papyrus surface at 9.362 µm and 2.399 µm through a segment's two meshes, and score 9 µm fiber maps against a 2.4 µm one |
 
 ### How much annotation, and where
 
@@ -735,3 +736,22 @@ models: `run_open_label_replication.py` (same rules, released checkpoints, three
 finds optima of 98–141, where 87 loses 0.09–0.12 and borrowing within the same model still passes. The histograms are committed
 (`runs/ink9um_scorecard/labelfree_hists.npz`, 1.1 MB), so step 2 runs without the predictions.
 Paths to the predictions and labels are constants at the top of the file. No GPU.
+
+## `fiber9_check.py` — does a 9 µm fiber map agree with a 2.4 µm one?
+
+The [docs/28](../docs/28_fiber_9um_agreement.md) run. PHerc. 0139 segments carry a tifxyz mesh on the
+native 9.362 µm scan and one on the 2.399 µm scan; native grid index (i, j) maps to the 2.399 µm grid by
+the ratio of the grid shapes, so the same papyrus point is known in both scans.
+
+```bash
+PY=E:/envs/fiber9/Scripts/python.exe   # torch cu128 + nnunetv2 + pynrrd; villa main sparse checkout at D:/vw13
+$PY tools/fiber9_check.py uv-check --out runs/fiber9/g1.json   # gate G1: image NCC at mapped vs shifted points
+$PY tools/fiber9_check.py tiles                                # 20 non-overlapping 96x96 tiles per segment
+$PY tools/fiber9_check.py run                                  # arms A/B at 9.362 um, reference R at 2.399 um (resumable)
+$PY tools/fiber9_check.py score                                # gates G2/G3, H1-H3, bootstrap intervals
+```
+
+`uv-check` needs no fiber model and is the quickest way to see whether two meshes of one segment
+share a parametrisation. `score` reads only the saved tiles and also writes `fiber9_maps.npz`
+(1.3 MB, every 2-D map it scores), which is committed. GPU for `run` (about one minute per tile on an
+RTX 5090; the 2.399 µm crops are read from the open-data bucket).

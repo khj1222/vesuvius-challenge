@@ -145,3 +145,118 @@ on this scroll. That would be a result for Qual's card, not a verdict on the mod
   scans in general. In particular, 8.64 µm scans (half of B's training) are not tested.
 - **Not tested**: fiber tracing (the neural tracer and VC3D tools), the effect on spiral fitting, and Qual's
   post-processing into fiber volumes. This compares voxel predictions only.
+
+---
+
+# Results (2026-10-04, run after commit 735404f)
+
+Tool: [`tools/fiber9_check.py`](../tools/fiber9_check.py) (`uv-check`, `tiles`, `run`, `score`). Raw:
+[`fiber9_summary.json`](../runs/fiber9/fiber9_summary.json) (gates, hypotheses, every window × tolerance),
+[`fiber9_tiles.csv`](../runs/fiber9/fiber9_tiles.csv) (one row per tile and window),
+[`g1.json`](../runs/fiber9/g1.json), [`tiles.json`](../runs/fiber9/tiles.json), and
+[`fiber9_maps.npz`](../runs/fiber9/fiber9_maps.npz). That last file holds every 2-D map the scores read, bit-packed,
+so the scoring can be re-audited without the 509 MB of tile stacks. Scoring is deterministic: a second
+`score` run wrote a byte-identical summary.
+
+## How it was run (choices the text above left open, fixed in code before the run)
+
+- **A and B** are built from `plans.json` and loaded with `nnUNetPredictor.manual_initialization`, not
+  `initialize_from_trained_model_folder`. The reason: `fiber_hz_vt`'s checkpoint names a custom trainer class
+  (`nnUNetTrainerMedialSurfaceRecall`) that ships only with its training code, and the trainer does not take
+  part in inference. Both arms are loaded the same way. nnunetv2 2.8.1, torch 2.11.0+cu128.
+- **R** is villa `scripts/fiber_5class` at main `5a4388f08`, EMA weights, bf16 autocast. Softmax is averaged
+  only at the sampled voxels, which gives the same average as computing whole windows and then sampling.
+- **Checkpoint revisions**: `fiber_hz_vt` `0905e68f14`, `afv_fiber_9um` `365e7800ac`,
+  `fiber_ink_4class_selfdistill` `ec9bbc4dbc`.
+- **Crops**: every crop was grown to at least 256 voxels per axis, so that windows hold real data rather than
+  padding.
+  - Native crops came out 256³.
+  - 2.399 µm crops were 256–623 voxels per axis.
+- **Normals**: computed from the vertex grid (`np.gradient`, cross product), interpolated bilinearly. Tiles
+  needed a one-vertex valid margin for this.
+- **Depth sampling**: nearest voxel, one voxel per step on each scan.
+- **Random draws**: one generator (seed 20261003) draws the tiles over the segments in order w035…w044. A
+  second generator with the same seed draws the derangements.
+- **Empty tiles**: a tile where both maps are empty would have been dropped. There were none. A tile where
+  only one map is empty scores F1 0.
+- **G2** is applied to medians over tiles.
+
+## Gates
+
+**G1, all five segments pass:**
+
+| segment | NCC at mapped points | shifted one vertex | 12 vertices away | fine-grid peak |
+|---|---|---|---|---|
+| w035 | 0.84 | 0.02–0.11 | −0.04 | (0, 0) |
+| w039 | 0.60 | −0.02–0.11 | −0.01 | (−0.5, 0) |
+| w040 | 0.67 | −0.05–0.16 | 0.03 | (0, 0) |
+| w041 | 0.61 | 0.01–0.14 | −0.02 | (0, 0) |
+| w044 | 0.61 | 0.03–0.07 | −0.08 | (0, 0) |
+
+**G2 passes.** R's median fiber fraction is 0.44, vertical 0.16, horizontal 0.25.
+
+**G3 passes clearly.** Arm A's per-class F1 is 0.54 with the direct class mapping and 0.21 swapped. The hand-traced
+"vertical" of `fiber_hz_vt` and the principal-axis "vertical" of R mean the same thing.
+
+## Hypotheses (primary: ±47 µm window, 1-pixel tolerance, 100 tiles)
+
+| | F1 vs R | null F1 | F1 − null |
+|---|---|---|---|
+| A `fiber_hz_vt` | 0.691 [0.672, 0.709] | 0.453 | **+0.238** [0.213, 0.263] |
+| B `afv_fiber_9um` | 0.685 [0.664, 0.706] | 0.439 | **+0.246** [0.222, 0.271] |
+
+- **H1 passes for both arms.** A 9.362 µm prediction agrees with the 2.399 µm reading of the same surface far
+  above what the same fiber densities give with no spatial correspondence.
+- **H2: no measurable difference.** B − A = **−0.005** [−0.021, +0.009]. By segment: w035 −0.012, w039 +0.003,
+  w040 −0.012, w041 −0.001, w044 −0.006.
+- **H3 fails.** Spearman ρ between R's fiber fraction and B's recall = **+0.06** [−0.14, +0.25]. Tiles where
+  the 2.4 µm reading finds more fiber are not tiles where the 9 µm model misses more of it.
+
+**Prediction record:**
+- H1: right.
+- H2: wrong. I predicted B ahead by at least 0.03. The point estimate is slightly negative, and the interval
+  excludes +0.03.
+- H3: wrong.
+
+## Secondary (descriptive, no tests)
+
+**B − A across all windows and tolerances** (95% interval):
+
+| window | tol 0 | tol 1 | tol 2 |
+|---|---|---|---|
+| ±19 µm | +0.015 [−0.000, 0.030] | −0.001 [−0.017, 0.015] | −0.011 [−0.028, 0.005] |
+| ±47 µm | +0.009 [−0.006, 0.024] | −0.005 [−0.021, 0.009] | −0.014 [−0.029, 0.000] |
+| ±94 µm | +0.004 [−0.010, 0.018] | −0.009 [−0.022, 0.004] | −0.015 [−0.027, −0.003] |
+
+The sign follows the tolerance. B is marginally ahead when pixels must match exactly, and A is ahead when
+neighbours count. No cell moves by more than 0.015.
+
+**Per class** (G3 passed): vertical A 0.49, B 0.49; horizontal A 0.58, B 0.59.
+
+**Where the disagreement sits** (primary window):
+- Fiber fraction: A 0.31, B 0.30, R 0.42.
+- Precision: A 0.79, B 0.81.
+- Recall: A 0.62, B 0.61.
+- The 9 µm models mark less of the surface as fiber than the 2.4 µm model does. About four fifths of what they
+  mark is within a pixel of reference fiber, but they miss roughly two fifths of the reference's fiber.
+
+**A against B** (no reference): F1 0.79 exact, 0.89 within one pixel. The two 9 µm models agree with each other
+much more than either agrees with the 2.4 µm reading.
+
+## What this says, and what it does not
+
+- **Some fiber information survives at 9 µm, and the loss is mostly recall.** On a scroll none of the three
+  models trained on, a 9.362 µm fiber map recovers a large, measurable part of what a 2.399 µm model sees on the
+  same papyrus. Chance-corrected, (F1 − null) / (1 − null) is about 0.43. What is lost is mostly fiber the 9 µm
+  models do not mark.
+- **On PHerc. 0139 the 9 µm fine-tune does not change agreement with a 2.4 µm reading.** Its parent was trained
+  on 7.91 µm hand traces. Against the reference the two are indistinguishable, and they agree with each other at
+  0.89. This is one scroll, against one model-made reference. It is not a verdict on `afv_fiber_9um`. Its card
+  reports no metric, and its benefit may show on 8.64 µm scans, in what Qual builds on top of it (fiber volumes),
+  or in a measure that sees individual fibers. It is not visible in this measure on this scroll.
+- **The crowding remark is not tested here, despite H3.** A presence map cannot tell two touching fibers from
+  one, so this measure cannot see "squished together" by construction. A 0.9 mm tile's fiber fraction was a
+  weak proxy, and H3 failing says only that denser tiles are not worse covered. Testing separation needs
+  instance-level fibers: traced fibers, or something like Qual's fiber volumes, at both resolutions.
+- **The reference is a Paris 4 self-distilled model.** Every number here is agreement with it, not accuracy.
+  The ~0.31 vs 0.42 fiber-fraction gap could partly be R over-marking.
