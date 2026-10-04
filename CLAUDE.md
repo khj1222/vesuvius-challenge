@@ -36,12 +36,12 @@
 1. ~~#1705 종료 확인 + vw9 제거~~ **10-03 완료**.
 2. ~~스윕~~ **10-03 완료**(아래 최근 기록). 다음 스윕도 Discord #robots 스레드는 직접(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인).
 3. ~~#1796 리베이스 푸시~~ **10-03 완료**. 10-14 16:00 KST 28일 상한으로 닫힘 예정(리뷰 0).
-4. **C. 섬유 9µm → docs/28 사전등록 완료(`735404f`, 10-03, 추론 전 푸시)**. 이식 자체는 Qual(`Qualzz20/afv_fiber_9um`, PR #1930/#1932/#1934)이 이미 함 → 우리는 측정: PHerc0139 5세그(w035 w039 w040 w041 w044), 9.362 메쉬↔2.399 메쉬 UV 대응(격자 모양 비율, NCC 0.84/0.67/0.61, 0 shift 피크)으로 A `fiber_hz_vt`·B `afv_fiber_9um`(9.362) vs R `fiber_ink_4class_selfdistill`(2.399) 존재 F1(허용 1px). 게이트 G1–G3, H1–H3, 예측 "B가 ≥0.03 낫다". 다음 = `tools/fiber9_check.py`에 run/score 구현(바뀐 점은 결과 절에 기록) → 실행. 환경 `E:/envs/fiber9`(py3.12, torch 2.11 cu128, nnunetv2; R은 villa main `vesuvius` NetworkFromConfig 필요, 아직 미설치). 메모 `planning/2026-10-03_fiber_9um_check.md`.
+4. **C. 섬유 9µm → docs/28 완료**(사전등록 `735404f` → 결과 `1b781bf`, 10-04). PHerc0139 100타일: 9.362 µm `fiber_hz_vt` F1 0.691 / `afv_fiber_9um` 0.685 vs 2.399 µm 기준(`fiber_ink_4class_selfdistill`), 영가설 0.45 → H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 0.8). README 14절·tools/README·Status 반영. 공개(#robots 등)·Qual 전달 여부는 사용자 결정. 환경 `E:/envs/fiber9`, villa main sparse `D:/vw13`(읽기 전용, 제거 가능), 타일 509MB `runs/fiber9/tiles`(미커밋).
 5. 10-15 판정: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27은 10월 신규 성과.
 6. external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정). docker 볼륨 vc1893* 3개는 사용자가 삭제함.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
-- `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
+- `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw13` = villa main `5a4388f08` sparse(vesuvius/, scripts/fiber_5class/; docs/28 기준 모델용, detached) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
 - 10-02 제거: vw2·vw3·vw4~vw7·vw8·vw11. 브랜치는 로컬·포크에 남아 있고, 미커밋 수정 3건(vw2 `extra_blur`=docs/23 코드, vw6·vw7=#1471 검증 패치)은 `planning/2026-10-02_cleanup/*.patch`(적용 확인).
 - ⚠️ ink_9um config는 `external/villa`(스키마 이전 체크아웃)로는 못 돌린다. 예전엔 `D:/vw2/ink-detection`에서 `uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m ...`로 돌렸다 → 필요하면 `feat/flat-depth-targets`로 워크트리를 다시 만들고 `vw2_uncommitted.patch` 적용.
 - `external/villa` 본 작업트리는 `fix/stream-untiled-label-images` + 미커밋(train/infer/test 구버전, pyproject/uv.lock cu128 핀) — **체크아웃 전환 금지**.
@@ -113,11 +113,12 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 `README.md`(공개 랜딩) · `docs/08` Windows 재현 · `docs/09` 검증 하네스 · `docs/10–12` 깊이 라벨(8월) · `docs/13` 9월 정찰 ·
 `docs/14` 스코어카드 · `docs/15` LOSO 4부작 · `docs/16` First Letters 렌더 · `docs/17` held-out 감사 · `docs/18` UDA 사다리 ·
-`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도(사전등록) · `tools/README.md`(툴 설명).
+`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `tools/README.md`(툴 설명).
 비공개 계획: `planning/2026-10_merge_month_plan.md`, `planning/2026-10_working_plan.md`.
 
 ## 최근 기록
 
+- **10-04**: docs/28 실행. G1 5/5(NCC 0.60–0.84), 타일 100개(약 1분/타일, 오류 0), G2·G3 통과, 결과 위 4번. 결과 절 통독에서 모델 카드의 "visibly better"가 TTA 얘기인데 미세조정 얘기로 잘못 쓴 문장 발견·수정, 크롭 범위 추정치(267–558)도 로그 실측(256–623)으로 정정. 증거 7개 링크 200.
 - **10-03 (토)**: #1705 봇 종료(16:21 KST) 확인 → `D:/vw9` 제거(깨끗, 브랜치 `fork/fix/eager-fallback-at-first-forward`=`3e56ca418` 확인 후). 스윕 96h: 새 글 3건 — #1893 Sartoshirelli 동의·종료(답할 것 없음), #192 stantheman0128이 pmh47의 08-13 지적에 답하며 "khj1222's per-pixel band is geometrically coherent" 언급(우리 몫 질문 없음 → 답 안 함), #1705 봇. HF 6건 open·무활동. Discord #robots 우리 스레드 = 원글+정정 2개뿐, 남의 답글 0. ⚠️ 스레드 **제목이 아직 "Don't binarize ink_9um at 128…"**(정정으로 철회된 주장) → 제목 수정은 사용자 몫으로 제안. 같은 날 Bullo27 "v8-in on a 12 GB GPU…PHerc0841"(10-02) 글 있음(0841 겹침, 미독). #1796: 같은 파일 건드린 main 커밋·경쟁 PR 없음 확인 → `be112851f`→`a104fd70d` 리베이스(충돌 없음), 로컬 pytest 13/13(import 경로 vw10 확인), `--force-with-lease` 푸시. CI 진행 중, Vercel 실패는 늘 그렇듯 배포 권한 문제. 밤: 섬유 9µm 1단계(공개 여부) → Qual이 이미 9µm 모델·AFV 데이터·PR 3건 → 측정으로 방향 전환, docs/28 사전등록 `735404f`(모델 추론 전). 공개 섬유 모델·예측은 전부 2.4µm(Paris4 학습), `fiber_hz_vt`만 7.91µm 사람 추적 학습.
 
 - **10-02 (오후~저녁) B′ 재현 완료 → docs/27 권고값 철회**: B(판독기 비교)는 Reader v2가 이미 해서 중단, 대신 공개 ink_9um이 안 본 새 공개라벨 스크롤 3개(0841×3·0009B·0500P2)에서 재현. 사전등록 `72c7679`(추론 전) → 70예측 → 결과 `393ab46`. **docs/27 고정값 87(R1a)은 세 스크롤 모두 실패(0.09–0.12)**, 공개 모델의 최적값은 98–141이고 128이 오히려 노이즈 안(0.006–0.027). 같은 모델로 다른 스크롤에서 빌려오기(R1b 0.003–0.009)·분위수(R3)는 통과. → "84–92/128 쓰지 말라"는 LOSO 모델 한정으로 철회, 방법만 유지. README 13절·Status·tools/README·docs/27 상단 정정. **#robots 정정 답글 게시 완료(10-02, 사용자)**, 초안 `submission/discord_robots_docs27_correction.md`. 데이터 `data/ink_9um/{surface-volumes,labels}/openlabels9/`, 예측 `runs/ink9um_openlabels/preds/`(70장). 도구 `tools/prepare_open_label_segments.py`·`run_open_label_replication.py`. `D:/vw2` 워크트리를 sparse로 재생성(ink_9um 추론은 이 브랜치에서만).
