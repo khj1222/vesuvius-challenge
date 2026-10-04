@@ -11,7 +11,7 @@
 - ① LOSO 모델 322칸(사전등록 `1b5917e` → 결과 `93c5f50`): 다른 스크롤 최적값 이식(R1, 84–92)·분위수(R3) 통과, 128 고정 0.06–0.14 손실.
 - ② 공개 체크포인트 × 새 공개라벨 스크롤 3개(0841×3·0009B·0500P2) 70칸(사전등록 `72c7679` → 결과 `393ab46`): **①의 고정값 87은 세 스크롤 모두 실패(0.09–0.12)**, 공개 모델 최적값은 98–141, 128은 노이즈 안. 같은 모델로 빌리기(R1b·R3)는 다시 통과.
 - **결론: 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회.** 예측은 두 번 다 빗나감(문서에 명시).
-- 공개: README 13절, docs/27 상단 정정 배너, Discord **#robots 원글 + 정정 답글 둘 다 사용자가 게시**(초안 `submission/discord_robots_docs27*.md`). **스레드 제목 수정 결정(10-04, 사용자가 적용)**: "Don't binarize ink_9um at 128…"(철회된 주장) → `Label-free ink threshold: borrow the same model's optimum from other scrolls (pre-registered x2)`(96자). 원글 본문은 그대로 두고 정정 답글로 맥락 유지. 다음 스윕 때 바뀌었는지 확인. 업스트림 이슈는 안 냄(버그가 아니라 #1898처럼 닫힐 위험).
+- 공개: README 13절, docs/27 상단 정정 배너, Discord **#robots 원글 + 정정 답글 둘 다 사용자가 게시**(초안 `submission/discord_robots_docs27*.md`). **스레드 제목 수정 결정(10-04, 사용자가 적용)**: "Don't binarize ink_9um at 128…"(철회된 주장) → `Label-free ink threshold: borrow the same model's optimum from other scrolls (pre-registered x2)`(96자). 원글 본문은 그대로 두고 정정 답글로 맥락 유지. **10-04 적용 확인**(새 제목 정확히 일치, 옛 제목 없음, 본문·정정 답글 2개 그대로). 업스트림 이슈는 안 냄(버그가 아니라 #1898처럼 닫힐 위험).
 - 10월 제출: 폼 열리면 docs/27이 주력(정직하게 "방법 통과·숫자 철회" 구성). 기대치 $500~$1k.
 - Discord 전체 조사·후보 = `planning/2026-10-02_discord_survey.md`(B는 Reader v2가 이미 해서 중단, B′=②로 대체 완료; 남은 후보 **C 섬유 9µm 1일 점검**, D 접촉부 잉크는 낮음).
 9월 라운드는 **09-20 v30으로 제출 완료**(`submission/2026-09_form_answers.md`, 동결). 수상 통보 대기.
@@ -118,7 +118,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
-- **10-04 (밤)**: docs/27 #robots 스레드 제목 수정안 3개 중 사용자가 1안 선택(위 '공개' 줄). 적용은 사용자가 Discord에서.
+- **10-04 (밤)**: docs/27 #robots 스레드 제목 수정안 3개 중 사용자가 1안 선택·적용, Chrome에서 게시본=결정안 확인(위 '공개' 줄).
 - **10-04**: docs/28 실행. G1 5/5(NCC 0.60–0.84), 타일 100개(약 1분/타일, 오류 0), G2·G3 통과, 결과 위 4번. 결과 절 통독에서 모델 카드의 "visibly better"가 TTA 얘기인데 미세조정 얘기로 잘못 쓴 문장 발견·수정, 크롭 범위 추정치(267–558)도 로그 실측(256–623)으로 정정. 증거 7개 링크 200.
 - **10-03 (토)**: #1705 봇 종료(16:21 KST) 확인 → `D:/vw9` 제거(깨끗, 브랜치 `fork/fix/eager-fallback-at-first-forward`=`3e56ca418` 확인 후). 스윕 96h: 새 글 3건 — #1893 Sartoshirelli 동의·종료(답할 것 없음), #192 stantheman0128이 pmh47의 08-13 지적에 답하며 "khj1222's per-pixel band is geometrically coherent" 언급(우리 몫 질문 없음 → 답 안 함), #1705 봇. HF 6건 open·무활동. Discord #robots 우리 스레드 = 원글+정정 2개뿐, 남의 답글 0. ⚠️ 스레드 **제목이 아직 "Don't binarize ink_9um at 128…"**(정정으로 철회된 주장) → 제목 수정은 사용자 몫으로 제안. 같은 날 Bullo27 "v8-in on a 12 GB GPU…PHerc0841"(10-02) 글 있음(0841 겹침, 미독). #1796: 같은 파일 건드린 main 커밋·경쟁 PR 없음 확인 → `be112851f`→`a104fd70d` 리베이스(충돌 없음), 로컬 pytest 13/13(import 경로 vw10 확인), `--force-with-lease` 푸시. CI 진행 중, Vercel 실패는 늘 그렇듯 배포 권한 문제. 밤: 섬유 9µm 1단계(공개 여부) → Qual이 이미 9µm 모델·AFV 데이터·PR 3건 → 측정으로 방향 전환, docs/28 사전등록 `735404f`(모델 추론 전). 공개 섬유 모델·예측은 전부 2.4µm(Paris4 학습), `fiber_hz_vt`만 7.91µm 사람 추적 학습.
 
