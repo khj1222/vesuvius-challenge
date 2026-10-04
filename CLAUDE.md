@@ -36,12 +36,12 @@
 1. ~~#1705 종료 확인 + vw9 제거~~ **10-03 완료**.
 2. ~~스윕~~ **10-03 완료**(아래 최근 기록). 다음 스윕도 Discord #robots 스레드는 직접(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인).
 3. ~~#1796 리베이스 푸시~~ **10-03 완료**. 10-14 16:00 KST 28일 상한으로 닫힘 예정(리뷰 0).
-4. **C. 섬유 9µm → docs/28 완료**(사전등록 `735404f` → 결과 `1b781bf`, 10-04). PHerc0139 100타일: 9.362 µm `fiber_hz_vt` F1 0.691 / `afv_fiber_9um` 0.685 vs 2.399 µm 기준(`fiber_ink_4class_selfdistill`), 영가설 0.45 → H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 0.8). README 14절·tools/README·Status 반영. 공개(#robots 등)·Qual 전달 여부는 사용자 결정. 환경 `E:/envs/fiber9`, villa main sparse `D:/vw13`(읽기 전용, 제거 가능), 타일 509MB `runs/fiber9/tiles`(미커밋).
+4. **C. 섬유 9µm → docs/28 완료**(사전등록 `735404f` → 결과 `1b781bf`, 10-04). PHerc0139 100타일: 9.362 µm `fiber_hz_vt` F1 0.691 / `afv_fiber_9um` 0.685 vs 2.399 µm 기준(`fiber_ink_4class_selfdistill`), 영가설 0.45 → H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 0.8). README 14절·tools/README·Status 반영. 공개(#robots 등)·Qual 전달 여부는 사용자 결정. 환경 `E:/envs/fiber9`. 10-04 정리: `D:/vw13` 제거, 타일 508MB는 `Z:\아카이브esuvius-runsiber9	iles`로 이동(SHA256 100/100 일치). 재실행하려면 `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`, 안 하면 패턴이 `C:/Program Files/Git/...`로 바뀜). 재채점만이면 커밋된 `fiber9_maps.npz`로 충분.
 5. 10-15 판정: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27은 10월 신규 성과.
 6. external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정). docker 볼륨 vc1893* 3개는 사용자가 삭제함.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
-- `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw13` = villa main `5a4388f08` sparse(vesuvius/, scripts/fiber_5class/; docs/28 기준 모델용, detached) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
+- `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
 - 10-02 제거: vw2·vw3·vw4~vw7·vw8·vw11. 브랜치는 로컬·포크에 남아 있고, 미커밋 수정 3건(vw2 `extra_blur`=docs/23 코드, vw6·vw7=#1471 검증 패치)은 `planning/2026-10-02_cleanup/*.patch`(적용 확인).
 - ⚠️ ink_9um config는 `external/villa`(스키마 이전 체크아웃)로는 못 돌린다. 예전엔 `D:/vw2/ink-detection`에서 `uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m ...`로 돌렸다 → 필요하면 `feat/flat-depth-targets`로 워크트리를 다시 만들고 `vw2_uncommitted.patch` 적용.
 - `external/villa` 본 작업트리는 `fix/stream-untiled-label-images` + 미커밋(train/infer/test 구버전, pyproject/uv.lock cu128 핀) — **체크아웃 전환 금지**.
