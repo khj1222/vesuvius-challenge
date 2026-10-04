@@ -5,15 +5,17 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-10-02 밤 기준, 이 절이 최우선) — 사용자는 10-02 밤 종료, **주말에 재개**
+## 현재 상태 (2026-10-04 밤 기준, 이 절이 최우선) — 사용자는 10-04 밤 종료
 
-**10월 = 열린 PR 머지 + 소형 연구**(10-02 사용자: "10월에 할만한 연구도 해야"). 연구 = **docs/27 라벨 없는 임계값 선택**, 두 번 사전등록:
-- ① LOSO 모델 322칸(사전등록 `1b5917e` → 결과 `93c5f50`): 다른 스크롤 최적값 이식(R1, 84–92)·분위수(R3) 통과, 128 고정 0.06–0.14 손실.
-- ② 공개 체크포인트 × 새 공개라벨 스크롤 3개(0841×3·0009B·0500P2) 70칸(사전등록 `72c7679` → 결과 `393ab46`): **①의 고정값 87은 세 스크롤 모두 실패(0.09–0.12)**, 공개 모델 최적값은 98–141, 128은 노이즈 안. 같은 모델로 빌리기(R1b·R3)는 다시 통과.
-- **결론: 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회.** 예측은 두 번 다 빗나감(문서에 명시).
-- 공개: README 13절, docs/27 상단 정정 배너, Discord **#robots 원글 + 정정 답글 둘 다 사용자가 게시**(초안 `submission/discord_robots_docs27*.md`). **스레드 제목 수정 결정(10-04, 사용자가 적용)**: "Don't binarize ink_9um at 128…"(철회된 주장) → `Label-free ink threshold: borrow the same model's optimum from other scrolls (pre-registered x2)`(96자). 원글 본문은 그대로 두고 정정 답글로 맥락 유지. **10-04 적용 확인**(새 제목 정확히 일치, 옛 제목 없음, 본문·정정 답글 2개 그대로). 업스트림 이슈는 안 냄(버그가 아니라 #1898처럼 닫힐 위험).
-- 10월 제출: 폼 열리면 docs/27이 주력(정직하게 "방법 통과·숫자 철회" 구성). 기대치 $500~$1k.
-- Discord 전체 조사·후보 = `planning/2026-10-02_discord_survey.md`(B는 Reader v2가 이미 해서 중단, B′=②로 대체 완료; 남은 후보 **C 섬유 9µm 1일 점검**, D 접촉부 잉크는 낮음).
+**10월 = 열린 PR 머지 + 소형 연구.** 10월 연구 두 건 모두 사전등록·실행·공개 완료:
+- **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). **방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회**(공개 모델 최적값 98–141). 예측 두 번 다 빗나감(문서에 명시).
+- **docs/28 9µm 섬유 일치도**(사전등록 `735404f` → 결과 `1b781bf`): PHerc0139 5세그·100타일, 9.362 µm `fiber_hz_vt` F1 0.691 / Qual `afv_fiber_9um` 0.685 vs 2.399 µm 기준 `fiber_ink_4class_selfdistill`(영가설 0.45). H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 ~0.8). 일치도이지 정확도 아님.
+- **공개**: README 13·14절 + Status, tools/README, docs/27 상단 정정 배너. Discord #robots(전부 사용자 게시, 게시본=초안 확인):
+  - docs/27 스레드: 원글 + 정정 답글. **제목을 10-04에 수정** → `Label-free ink threshold: borrow the same model's optimum from other scrolls (pre-registered x2)`(옛 제목 "Don't binarize ink_9um at 128…"은 철회된 주장). 본문은 그대로. 태그 `analysis`·`ink-detection`.
+  - docs/28 포스트(10-04): "Fiber maps at 9 µm vs a 2.4 µm reading of the same surface (PHerc0139, pre-registered)", 본문 = `submission/discord_robots_docs28.md`(정규화 후 1,709자 일치), Human 줄 생략, @Qual 언급 없음, 태그 `unrolling`·`analysis`.
+  - 업스트림 이슈는 안 냄(버그가 아니라 #1898처럼 닫힐 위험).
+- **10월 제출**: 폼 열리면 docs/27 + docs/28이 주력(둘 다 "정직한 부분 실패" 구성). 기대치 $500~$1k.
+- Discord 조사·후보 = `planning/2026-10-02_discord_survey.md`(남은 후보 D 접촉부 잉크는 낮음). 섬유 조사 메모 `planning/2026-10-03_fiber_9um_check.md`.
 9월 라운드는 **09-20 v30으로 제출 완료**(`submission/2026-09_form_answers.md`, 동결). 수상 통보 대기.
 
 ### 업스트림 PR/이슈 (ScrollPrize/villa)
@@ -32,13 +34,13 @@
 
 닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
 
-### 남은 할 일 (주말 재개 시)
-1. ~~#1705 종료 확인 + vw9 제거~~ **10-03 완료**.
-2. ~~스윕~~ **10-03 완료**(아래 최근 기록). 다음 스윕도 Discord #robots 스레드는 직접(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인).
-3. ~~#1796 리베이스 푸시~~ **10-03 완료**. 10-14 16:00 KST 28일 상한으로 닫힘 예정(리뷰 0).
-4. **C. 섬유 9µm → docs/28 완료**(사전등록 `735404f` → 결과 `1b781bf`, 10-04). PHerc0139 100타일: 9.362 µm `fiber_hz_vt` F1 0.691 / `afv_fiber_9um` 0.685 vs 2.399 µm 기준(`fiber_ink_4class_selfdistill`), 영가설 0.45 → H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 0.8). README 14절·tools/README·Status 반영. **#robots 게시 완료(10-04, 사용자)**: 제목 "Fiber maps at 9 µm vs a 2.4 µm reading of the same surface (PHerc0139, pre-registered)", 본문 = 초안 `submission/discord_robots_docs28.md` 정확히 일치(정규화 후 1,709자), Human 줄 생략, @Qual 언급 없음, 태그 `unrolling`·`analysis` 추가 확인(10-04). docs/27 스레드도 태그 `analysis`·`ink-detection` 추가 확인(10-04). 반응은 다음 스윕 때 직접 확인. 10-04 정리: 환경 `E:/envs/fiber9`(4.6GB)·체크포인트 `runs/fiber9/models`(3.7GB) 삭제 — 재실행 시 `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd`, 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드. `D:/vw13` 제거, 타일 508MB는 `Z:\아카이브esuvius-runsiber9	iles`로 이동(SHA256 100/100 일치). 재실행하려면 `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`, 안 하면 패턴이 `C:/Program Files/Git/...`로 바뀜). 재채점만이면 커밋된 `fiber9_maps.npz`로 충분.
-5. 10-15 판정: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27은 10월 신규 성과.
-6. external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정). docker 볼륨 vc1893* 3개는 사용자가 삭제함.
+### 남은 할 일 (다음 세션)
+1. **스윕**: `python tools/upstream_sweep.py --hours <마지막 이후>` + HF 6건(스윕 밖) + **Discord #robots 두 스레드 반응 직접**(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인. 읽기만, 입력 금지). docs/28 글에 Qual·waldkauz 반응 있으면 사용자에게 보고(답글은 #robots 규칙대로 초안만, 게시는 사용자).
+2. **#1796**: 10-14 16:00 KST 28일 상한으로 닫힘(리뷰 0). 닫힌 뒤 같은 브랜치로 새 PR 열지 사용자 결정. 워크트리 `D:/vw10`.
+3. **10-15 판정**: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27·28은 10월 신규 성과.
+4. **10월 제출**: scrollprize.org/prizes에서 새 폼 확인(9월 수상 발표 후에 뜸). 열리면 docs/27·28 중심으로 field 문안 작성 → 같은 날 통독.
+5. 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정).
+6. docs/28 재실행 필요 시: 환경·체크포인트·`D:/vw13`은 10-04 삭제. 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`(SHA256 100/100 일치).
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
 - `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
@@ -128,6 +130,6 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 - **10-02 (밤)**: #show-and-tell·#robots·#announcements도 읽음. 임계값 선택 중복 없음. 주목: YoussefNader **v8-in**(09-29, 새 9µm 모델, 1447 zero-shot AUC 0.86), KLAVIS **Reader v2**(09-28, 116keV에서 AUC 0.834, 같은 재현율에서 오탐 10% vs 43~58%), lightsgoblack ink-placebo-check·사전등록 해시 로그, Bullo27(Matteo Bulloni) PHerc0841 시험. #announcements 최신 = 8월 수상 15명(09-07, 최고 $20k Will Stevens); 9월 결과·10월 폼 아직 없음. docs/27은 ink_9um 레시피 한정이라 v8-in·Reader v2엔 미검증.
 - **10-02 (저녁)**: Discord #ink-detection 읽기(입력 없음). 라벨 없는 임계값 선택을 다룬 글 없음 = docs/27 중복 아님. 0.5 고정 사용 사례: KLAVIS(08-18, 균형정확도@0.5), freek_cool(09-01, p>0.5 면적), Danilo(#1708, "threshold는 따로 보정 필요"). ⚠️ **KLAVIS가 08-18에 공개 9µm 체크포인트 14개를 영역별로 채점해 올렸다**(github DomRusso2/ink9um-dense) → 우리 docs/14(08-22)·README의 "first quantitative scoring / First numbers" 표현은 틀림 → **10-02 정정 완료**(docs/14 상단에 KLAVIS 크레딧 정정문, README 6·7절, docs/15; #7 수치도 "first" 대신 "가려 둔 주석으로 채점한"으로 범위 축소). 9월 제출본의 "first scorecard"는 이미 제출돼 못 고침. **교훈: 중복 확인은 Discord까지.**
 - **10-02 (오후)**: 10월 연구 착수. 중복 검색(villa threshold/otsu/binarize/calibration) 0건 → docs/27 사전등록(`1b5917e`, 실행 전 푸시) → `tools/score_label_free_threshold.py`로 Z: 저장 LOSO 예측 322칸 CPU 재채점(약 25분) → R1·R3 통과, 128·Otsu 실패 → 결과 `93c5f50` 푸시. 원수치 `runs/ink9um_scorecard/labelfree_{summary.json,cells.csv,hists.npz}`(히스토그램만으로 재감사 가능). 채점 도구의 bbox 중복 계수와 픽셀 1회 계수를 둘 다 계산, 판정 동일(평균 차 ≤0.0015).
-- **10-02**: 스윕 → #1703 머지(09-28) 확인. #1893 PR 준비 중 #1831 중복 발견 — main `f637f3b35`를 CI 이미지로 빌드해 대조(우리 테스트 5/6, 실제 원격 PHerc0139 `-g 5` micrometer 299.584 동일, 차이는 문서화된 `--voxel-unit` 설계뿐, 근거 `planning/2026-09-29_issue1893_build/results/*main_f637f3b*`) → 푸시·PR 없음. 10-01 정리 실행: 워크트리 8개 제거, CLAUDE.md를 이 형태로 축소(원본은 history 폴더), #1893 마무리 코멘트 게시, docker 볼륨은 사용자가 삭제, 76GB는 당분간 유지(사용자 결정, E: 여유 348GB·Z: 131GB), `planning/`(4,308파일)·AGENTS.md를 Z:\아카이브esuvius-local-only에 재동기화(해시 확인).
+- **10-02**: 스윕 → #1703 머지(09-28) 확인. #1893 PR 준비 중 #1831 중복 발견 — main `f637f3b35`를 CI 이미지로 빌드해 대조(우리 테스트 5/6, 실제 원격 PHerc0139 `-g 5` micrometer 299.584 동일, 차이는 문서화된 `--voxel-unit` 설계뿐, 근거 `planning/2026-09-29_issue1893_build/results/*main_f637f3b*`) → 푸시·PR 없음. 10-01 정리 실행: 워크트리 8개 제거, CLAUDE.md를 이 형태로 축소(원본은 history 폴더), #1893 마무리 코멘트 게시, docker 볼륨은 사용자가 삭제, 76GB는 당분간 유지(사용자 결정, E: 여유 348GB·Z: 131GB), `planning/`(4,308파일)·AGENTS.md를 Z:/아카이브/vesuvius-local-only에 재동기화(해시 확인).
 - **09-29**: #1893 수정(`ca4a5bd68`) 빌드·검증·로컬 커밋 — 이후 #1831로 불필요해짐.
 - **09-26~28**: #1703 리뷰 반영 푸시(`3e56ca418`), #1705 ready, #1796 리베이스, #1582·#1893·#1819·#1898 코멘트 게시. #1803은 #1886 중복으로 종료. #1819 manifest 요청 무응답 → Hecate 후속 없음.
