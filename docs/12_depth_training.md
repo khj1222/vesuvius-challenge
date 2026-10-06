@@ -396,13 +396,39 @@ as random pairs, which neither shows a smooth sheet nor a random field); and
 moved off z = 32. `pmh47`'s objection on #192 — that a gradient peak in a 1 um
 scan is not by itself ink localisation — stands unchanged.
 
-Within those limits it lands on the second branch. On the one region that can
-be seen, the per-pixel band is not obviously misplaced: its centre sits a
-median 2 voxels from an independently observed surface, and three quarters of
-the anchors are within 3. It still loses to a band held flat at the segment
-median. Per-anchor records, the pre-registration and file hashes are in their
-repository; the scoring comment is on
+Within those limits, on the one region that can be seen, the band is near an
+interface: its centre sits a median 2 voxels from an independently observed
+surface, and three quarters of the anchors are within 3. It still loses to a
+band held flat at the segment median. Per-anchor records, the pre-registration
+and file hashes are in their repository; the scoring comment is on
 [villa #192](https://github.com/ScrollPrize/villa/issues/192).
+
+**Correction (2026-10-06).** This section first read that result as landing on
+the second branch — geometry sound, still loses — and our 2026-08-31 reply on
+#192 said it removed the possibility that the band was simply misplaced. That
+was more than the measurement says. A median D of 2 shows the band is near an
+interface *on average*; it does not show that the band's per-cell movement
+follows that interface, and the adjacent-cell |ΔD| result above already
+declined to show a smooth sheet.
+
+The movement itself was tested later, by someone else, on data where the
+surface is known without a model. [kartoun](https://github.com/kartoun/vesuvius-fragment-ink-depth)
+ported `tools/make_3d_labels.py` (same defaults, their own occlusion model) to
+the IR-labelled fragment Frag1 and compared the band with the CT-detected
+exposed surface ([#192, 2026-10-06](https://github.com/ScrollPrize/villa/issues/192#issuecomment-6016079974)).
+Over the whole fragment the measured band's centre correlates with the surface
+at 0.16, and it is no closer to it than the constant band (median offset +3.6
+layers and MAD 2.0 for both; 42% vs 46% of ink pixels within ±3). Their own
+output also has a held-out strip where the correlation is 0.40 and the measured
+band's MAD is 1.71 against 2.00, so "it does not track at all" would overstate
+it too. One fragment, a model that is not ours, and an exposed fragment surface
+rather than a buried scroll sheet.
+
+The better reading of `v4` losing is therefore closer to the **first** branch
+than this section originally said: the band moves per cell in ways the sheet
+does not, at least mostly. The training comparison itself is unchanged; what
+changes is what it indicts — this estimator's per-cell movement, not per-pixel
+bands as such.
 
 ---
 

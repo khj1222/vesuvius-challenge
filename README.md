@@ -427,7 +427,11 @@ old PRs were closed and current-main replacements were opened on 2026-09-04:
   measured band as scroll-coordinate anchors (7,005 cells with normals, with the
   unverified assumptions spelled out in a sidecar), and a third party scored
   them against an independent 1.129 um scan: the band's centre sits a median 2.0
-  voxels from the independently observed surface.
+  voxels from the independently observed surface. That shows the band is near an
+  interface, not that its per-cell movement follows one: a later port of the
+  recipe to an IR-labelled fragment found the movement tracks the surface no
+  better than a constant band
+  ([correction in docs/12](docs/12_depth_training.md#independent-check-is-the-band-where-it-says-it-is)).
 - **[Issue #1611](https://github.com/ScrollPrize/villa/issues/1611)** — the
   renderer waits forever when remote streaming stalls, with a workaround and the
   evidence that it finishes the job. Retested on 2026-08-31 against the current
