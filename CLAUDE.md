@@ -5,7 +5,7 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-10-04 밤 기준, 이 절이 최우선) — 사용자는 10-04 밤 종료
+## 현재 상태 (2026-10-06 기준, 이 절이 최우선)
 
 **10월 = 열린 PR 머지 + 소형 연구.** 10월 연구 두 건 모두 사전등록·실행·공개 완료:
 - **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). **방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회**(공개 모델 최적값 98–141). 예측 두 번 다 빗나감(문서에 명시).
@@ -35,10 +35,10 @@
 닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
 
 ### 남은 할 일 (다음 세션)
-1. **스윕**: `python tools/upstream_sweep.py --hours <마지막 이후>` + HF 6건(스윕 밖) + **Discord #robots 두 스레드 반응 직접**(Chrome 확장, 로그인됨; 내장 브라우저는 미로그인. 읽기만, 입력 금지). docs/28 글에 Qual·waldkauz 반응 있으면 사용자에게 보고(답글은 #robots 규칙대로 초안만, 게시는 사용자). **10-04 합의: 다음 세션은 스윕부터.** 스윕 결과(반응)와 9월 수상 결과를 보고 채택 신호 작업을 고른다 — (a) Qual HF 카드에 docs/28 수치 제안(저비용) 또는 (b) docs/27 방법을 villa 옵션/도구 PR로(고위험·고효과). 10월 상금 판단(10-04): 소액 가능성 반반 이하, $2.5k+ 희박 — 8월 측정 결과 무수상 전례, 채택 증거 0, 10월 머지 0.
+1. **스윕**: `python tools/upstream_sweep.py --since <마지막 이후>` + HF 6건(스윕 밖) + Discord #robots 두 스레드·#announcements 직접(Chrome 확장, 로그인됨; 읽기만, 입력 금지). 마지막 스윕 10-06 ~13:50Z. **#192 kartoun 답글 여부 확인**(10-06 우리 답글에서 홀드아웃 행 상관 0.40 이유를 물음). 채택 신호 후보 (a) Qual HF 카드에 docs/28 수치 제안 (b) docs/27 방법 villa PR — 아직 미착수.
 2. **#1796**: 10-14 16:00 KST 28일 상한으로 닫힘(리뷰 0). 닫힌 뒤 같은 브랜치로 새 PR 열지 사용자 결정. 워크트리 `D:/vw10`.
 3. **10-15 판정**: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27·28은 10월 신규 성과.
-4. **10월 제출**: scrollprize.org/prizes에서 새 폼 확인(9월 수상 발표 후에 뜸). 열리면 docs/27·28 중심으로 field 문안 작성 → 같은 날 통독.
+4. **10월 제출**: **폼 열림**(10-06 확인, 제목 "October 2026 Progress Prizes", `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`). 9월 수상 발표 전인데 떴음(Discord 최신 공지 09-25, Substack 없음). field 5 질문이 4개로 명시됨: (1) 어떤 스크롤 데이터 (2) 판독 확률을 어떻게 높이나 (3) 전에 못 하던 무엇을 가능케 하나 (4) 증거 — 이 순서로 docs/27·28 중심 문안 작성 → 같은 날 통독. kartoun의 8월 레시피 재사용은 8월 작업이라 청구 금지, 넣어도 맥락 한 줄만(사용자 결정 필요).
 5. 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정).
 6. docs/28 재실행 필요 시: 환경·체크포인트·`D:/vw13`은 10-04 삭제. 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`(SHA256 100/100 일치).
 
@@ -120,6 +120,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-06**: 스윕(10-03 12:00Z~). **#192에 kartoun(Claude Code 사용, AI 공개)이 우리 `make_3d_labels.py`를 IR 라벨 조각 Frag1로 포팅**(저장소 kartoun/vesuvius-fragment-ink-depth, MIT, 기본값 일치 확인): v4 측정 밴드 중심이 CT 표면을 상수 밴드보다 더 잘 따라가지 않음(상관 0.16, 홀드아웃 행 0.40). → 우리 08-31 "기하는 맞는데 진다" 해석이 과했음 → **docs/12에 Correction 문단 + README 한 줄(`eff21cf`)**, 답글 `submission/issue192_reply_kartoun.md` 사용자 게시(13:46Z, issuecomment-6017644321, 게시본=초안 2,187자 일치, AI 공개 줄 없음=사용자 결정). 10월 폼 열림(위 4번). HF 6건·#1796·#robots 두 스레드 변화 없음.
 - **10-04 (밤)**: docs/28 #robots 게시(사용자) → Chrome에서 게시본=초안 대조 일치, 태그 unrolling·analysis 확인.
 - **10-04 (밤)**: docs/27 #robots 스레드 제목 수정안 3개 중 사용자가 1안 선택·적용, Chrome에서 게시본=결정안 확인(위 '공개' 줄).
 - **10-04**: docs/28 실행. G1 5/5(NCC 0.60–0.84), 타일 100개(약 1분/타일, 오류 0), G2·G3 통과, 결과 위 4번. 결과 절 통독에서 모델 카드의 "visibly better"가 TTA 얘기인데 미세조정 얘기로 잘못 쓴 문장 발견·수정, 크롭 범위 추정치(267–558)도 로그 실측(256–623)으로 정정. 증거 7개 링크 200.
