@@ -316,7 +316,10 @@ scroll, while 128 is within the noise floor. Borrowing the optimum from other sc
 *with the same model* passes again (0.003–0.009). So the method transfers, the number does
 not: find your model's own optimum on scrolls you can score, and do not carry a threshold from
 one model to another. [`score_label_free_threshold.py`](tools/score_label_free_threshold.py),
-[`run_open_label_replication.py`](tools/run_open_label_replication.py).
+[`run_open_label_replication.py`](tools/run_open_label_replication.py). To use the method on your
+own model: [`borrow_threshold.py`](tools/borrow_threshold.py) (`calibrate` on labelled segments,
+`apply` to the unlabelled scroll; on the replication's data it reproduces every cell's optimum and
+each scroll's borrowed threshold and losses, for all 14 checkpoints).
 
 ### 14. How much of a 2.4 µm fiber reading survives at 9 µm? — [docs/28](docs/28_fiber_9um_agreement.md)
 

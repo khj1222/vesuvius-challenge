@@ -47,6 +47,7 @@ run. Everything else below is a variation on those three.
 | [`run_pseudo_ranking.py`](run_pseudo_ranking.py) | Score one prediction with both yardsticks, to see if they rank alike |
 | [`summarise_pseudo_ranking.py`](summarise_pseudo_ranking.py) | Apply that study's pre-registered rule, and refuse a verdict on a partial matrix |
 | [`score_label_free_threshold.py`](score_label_free_threshold.py) | Choose a binarization threshold for a scroll with no labels, and price each rule against the oracle |
+| [`borrow_threshold.py`](borrow_threshold.py) | Use it: calibrate a model's threshold on scrolls you can score (with a check of what borrowing costs), then binarize a prediction of an unlabelled scroll |
 | [`fiber9_check.py`](fiber9_check.py) | Read the same papyrus surface at 9.362 µm and 2.399 µm through a segment's two meshes, and score 9 µm fiber maps against a 2.4 µm one |
 
 ### How much annotation, and where

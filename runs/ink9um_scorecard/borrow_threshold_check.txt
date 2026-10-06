@@ -1,0 +1,146 @@
+# tools/borrow_threshold.py checked against docs/27's replication (2026-10-06)
+# For each released ink_9um checkpoint (seed x step), `calibrate` was run on all five open-label segments
+# (PHerc0841 x3, PHerc0009B, PHerc0500P2; sheet = surface-volume middle layer) and compared with
+# runs/ink9um_scorecard/openlabels_cells.csv: per-cell oracle threshold and F1, then per scroll the
+# borrowed threshold (vs R1b) and mean regret of value/quantile/128 (vs R1b/R3/R0). Tolerance 1e-6 / 1e-5.
+
+== seed 42 step 010000
+pherc0841-w00      oracle 141 vs 141  F1 0.674327 vs 0.674327  OK
+pherc0841-ag144    oracle 129 vs 129  F1 0.670115 vs 0.670115  OK
+pherc0841-ag174    oracle 124 vs 124  F1 0.602950 vs 0.602950  OK
+pherc0009b-ag055   oracle 137 vs 137  F1 0.709816 vs 0.709816  OK
+pherc0500p2-s1     oracle 123 vs 123  F1 0.679930 vs 0.679930  OK
+PHerc0009B   borrowed 127 vs R1b ['127']  value 0.006140 vs R1b 0.006140  quantile 0.012802 vs R3 0.012802  128 0.005009 vs R0 0.005009
+PHerc0500P2  borrowed 133 vs R1b ['133']  value 0.013261 vs R1b 0.013261  quantile 0.001339 vs R3 0.001339  128 0.003794 vs R0 0.003794
+PHerc0841    borrowed 130 vs R1b ['130']  value 0.004605 vs R1b 0.004605  quantile 0.006529 vs R3 0.006529  128 0.005142 vs R0 0.005142
+ALL MATCH
+== seed 42 step 020000
+pherc0841-w00      oracle 120 vs 120  F1 0.662469 vs 0.662469  OK
+pherc0841-ag144    oracle 120 vs 120  F1 0.661632 vs 0.661632  OK
+pherc0841-ag174    oracle 126 vs 126  F1 0.590688 vs 0.590688  OK
+pherc0009b-ag055   oracle 126 vs 126  F1 0.735803 vs 0.735803  OK
+pherc0500p2-s1     oracle 110 vs 110  F1 0.659592 vs 0.659592  OK
+PHerc0009B   borrowed 120 vs R1b ['120']  value 0.001598 vs R1b 0.001598  quantile 0.007924 vs R3 0.007924  128 0.000231 vs R0 0.000231
+PHerc0500P2  borrowed 123 vs R1b ['123']  value 0.013018 vs R1b 0.013018  quantile 0.005627 vs R3 0.005627  128 0.022885 vs R0 0.022885
+PHerc0841    borrowed 118 vs R1b ['118']  value 0.000744 vs R1b 0.000744  quantile 0.001741 vs R3 0.001741  128 0.002571 vs R0 0.002571
+ALL MATCH
+== seed 42 step 030000
+pherc0841-w00      oracle 123 vs 123  F1 0.661672 vs 0.661672  OK
+pherc0841-ag144    oracle 126 vs 126  F1 0.648598 vs 0.648598  OK
+pherc0841-ag174    oracle 118 vs 118  F1 0.611294 vs 0.611294  OK
+pherc0009b-ag055   oracle 118 vs 118  F1 0.715016 vs 0.715016  OK
+pherc0500p2-s1     oracle 107 vs 107  F1 0.676183 vs 0.676183  OK
+PHerc0009B   borrowed 121 vs R1b ['121']  value 0.000474 vs R1b 0.000474  quantile 0.002054 vs R3 0.002054  128 0.004398 vs R0 0.004398
+PHerc0500P2  borrowed 121 vs R1b ['121']  value 0.012381 vs R1b 0.012381  quantile 0.001712 vs R3 0.001712  128 0.025970 vs R0 0.025970
+PHerc0841    borrowed 113 vs R1b ['113']  value 0.004902 vs R1b 0.004902  quantile 0.000796 vs R3 0.000796  128 0.003025 vs R0 0.003025
+ALL MATCH
+== seed 42 step 040000
+pherc0841-w00      oracle 124 vs 124  F1 0.663982 vs 0.663982  OK
+pherc0841-ag144    oracle 130 vs 130  F1 0.644514 vs 0.644514  OK
+pherc0841-ag174    oracle 112 vs 112  F1 0.587426 vs 0.587426  OK
+pherc0009b-ag055   oracle 123 vs 123  F1 0.705530 vs 0.705530  OK
+pherc0500p2-s1     oracle 111 vs 111  F1 0.626045 vs 0.626045  OK
+PHerc0009B   borrowed 118 vs R1b ['118']  value 0.000656 vs R1b 0.000656  quantile 0.002388 vs R3 0.002388  128 0.001693 vs R0 0.001693
+PHerc0500P2  borrowed 124 vs R1b ['124']  value 0.007956 vs R1b 0.007956  quantile 0.000297 vs R3 0.000297  128 0.013826 vs R0 0.013826
+PHerc0841    borrowed 117 vs R1b ['117']  value 0.001571 vs R1b 0.001571  quantile 0.001361 vs R3 0.001361  128 0.000981 vs R0 0.000980
+ALL MATCH
+== seed 42 step 050000
+pherc0841-w00      oracle 115 vs 115  F1 0.622233 vs 0.622233  OK
+pherc0841-ag144    oracle  98 vs  98  F1 0.648425 vs 0.648425  OK
+pherc0841-ag174    oracle 119 vs 119  F1 0.596492 vs 0.596492  OK
+pherc0009b-ag055   oracle 106 vs 106  F1 0.673297 vs 0.673297  OK
+pherc0500p2-s1     oracle 101 vs 101  F1 0.602009 vs 0.602009  OK
+PHerc0009B   borrowed 108 vs R1b ['108']  value 0.000150 vs R1b 0.000150  quantile 0.004547 vs R3 0.004547  128 0.011855 vs R0 0.011855
+PHerc0500P2  borrowed 111 vs R1b ['111']  value 0.007708 vs R1b 0.007708  quantile 0.001382 vs R3 0.001382  128 0.040878 vs R0 0.040878
+PHerc0841    borrowed 104 vs R1b ['104']  value 0.003243 vs R1b 0.003243  quantile 0.008717 vs R3 0.008717  128 0.011590 vs R0 0.011590
+ALL MATCH
+== seed 42 step 060000
+pherc0841-w00      oracle 109 vs 109  F1 0.643678 vs 0.643678  OK
+pherc0841-ag144    oracle 110 vs 110  F1 0.639196 vs 0.639196  OK
+pherc0841-ag174    oracle 116 vs 116  F1 0.611904 vs 0.611904  OK
+pherc0009b-ag055   oracle 117 vs 117  F1 0.701777 vs 0.701777  OK
+pherc0500p2-s1     oracle 108 vs 108  F1 0.628425 vs 0.628425  OK
+PHerc0009B   borrowed 110 vs R1b ['110']  value 0.002572 vs R1b 0.002572  quantile 0.010226 vs R3 0.010226  128 0.004896 vs R0 0.004896
+PHerc0500P2  borrowed 113 vs R1b ['113']  value 0.001679 vs R1b 0.001679  quantile 0.000316 vs R3 0.000316  128 0.017091 vs R0 0.017091
+PHerc0841    borrowed 113 vs R1b ['113']  value 0.000596 vs R1b 0.000596  quantile 0.007665 vs R3 0.007665  128 0.011073 vs R0 0.011073
+ALL MATCH
+== seed 42 step 075000
+pherc0841-w00      oracle 100 vs 100  F1 0.642980 vs 0.642980  OK
+pherc0841-ag144    oracle 105 vs 105  F1 0.652246 vs 0.652246  OK
+pherc0841-ag174    oracle 102 vs 102  F1 0.597570 vs 0.597570  OK
+pherc0009b-ag055   oracle 105 vs 105  F1 0.678229 vs 0.678229  OK
+pherc0500p2-s1     oracle  99 vs  99  F1 0.617210 vs 0.617210  OK
+PHerc0009B   borrowed 101 vs R1b ['101']  value 0.000931 vs R1b 0.000931  quantile 0.008606 vs R3 0.008606  128 0.021405 vs R0 0.021405
+PHerc0500P2  borrowed 104 vs R1b ['104']  value 0.002196 vs R1b 0.002196  quantile 0.000941 vs R3 0.000941  128 0.033806 vs R0 0.033806
+PHerc0841    borrowed 102 vs R1b ['102']  value 0.000254 vs R1b 0.000254  quantile 0.007646 vs R3 0.007646  128 0.018728 vs R0 0.018728
+ALL MATCH
+== seed 43 step 010000
+pherc0841-w00      oracle 131 vs 131  F1 0.640300 vs 0.640300  OK
+pherc0841-ag144    oracle 118 vs 118  F1 0.646374 vs 0.646374  OK
+pherc0841-ag174    oracle 121 vs 121  F1 0.603444 vs 0.603444  OK
+pherc0009b-ag055   oracle 124 vs 124  F1 0.689735 vs 0.689735  OK
+pherc0500p2-s1     oracle 118 vs 118  F1 0.639298 vs 0.639298  OK
+PHerc0009B   borrowed 120 vs R1b ['120']  value 0.001630 vs R1b 0.001630  quantile 0.001630 vs R3 0.001630  128 0.002145 vs R0 0.002145
+PHerc0500P2  borrowed 123 vs R1b ['123']  value 0.004175 vs R1b 0.004175  quantile 0.001822 vs R3 0.001822  128 0.014143 vs R0 0.014143
+PHerc0841    borrowed 121 vs R1b ['121']  value 0.003567 vs R1b 0.003567  quantile 0.004234 vs R3 0.004234  128 0.005696 vs R0 0.005696
+ALL MATCH
+== seed 43 step 020000
+pherc0841-w00      oracle 111 vs 111  F1 0.686734 vs 0.686734  OK
+pherc0841-ag144    oracle 104 vs 104  F1 0.691015 vs 0.691015  OK
+pherc0841-ag174    oracle 105 vs 105  F1 0.623396 vs 0.623396  OK
+pherc0009b-ag055   oracle 103 vs 103  F1 0.683959 vs 0.683959  OK
+pherc0500p2-s1     oracle  98 vs  98  F1 0.663262 vs 0.663262  OK
+PHerc0009B   borrowed 105 vs R1b ['105']  value 0.000887 vs R1b 0.000887  quantile 0.001902 vs R3 0.001902  128 0.017050 vs R0 0.017050
+PHerc0500P2  borrowed 105 vs R1b ['105']  value 0.005433 vs R1b 0.005433  quantile 0.002922 vs R3 0.002922  128 0.066798 vs R0 0.066798
+PHerc0841    borrowed 101 vs R1b ['101']  value 0.004683 vs R1b 0.004683  quantile 0.000943 vs R3 0.000944  128 0.020193 vs R0 0.020193
+ALL MATCH
+== seed 43 step 030000
+pherc0841-w00      oracle 113 vs 113  F1 0.663647 vs 0.663647  OK
+pherc0841-ag144    oracle 101 vs 101  F1 0.640769 vs 0.640769  OK
+pherc0841-ag174    oracle 115 vs 115  F1 0.575097 vs 0.575097  OK
+pherc0009b-ag055   oracle  96 vs  96  F1 0.665313 vs 0.665313  OK
+pherc0500p2-s1     oracle  93 vs  93  F1 0.649412 vs 0.649412  OK
+PHerc0009B   borrowed 107 vs R1b ['107']  value 0.001728 vs R1b 0.001728  quantile 0.000229 vs R3 0.000229  128 0.024620 vs R0 0.024620
+PHerc0500P2  borrowed 107 vs R1b ['107']  value 0.004629 vs R1b 0.004629  quantile 0.000120 vs R3 0.000120  128 0.051337 vs R0 0.051337
+PHerc0841    borrowed 95 vs R1b ['95']  value 0.018868 vs R1b 0.018869  quantile 0.007805 vs R3 0.007805  128 0.019616 vs R0 0.019616
+ALL MATCH
+== seed 43 step 040000
+pherc0841-w00      oracle 123 vs 123  F1 0.666268 vs 0.666268  OK
+pherc0841-ag144    oracle 121 vs 121  F1 0.645441 vs 0.645441  OK
+pherc0841-ag174    oracle 114 vs 114  F1 0.582765 vs 0.582765  OK
+pherc0009b-ag055   oracle 120 vs 120  F1 0.670463 vs 0.670463  OK
+pherc0500p2-s1     oracle  95 vs  95  F1 0.670422 vs 0.670422  OK
+PHerc0009B   borrowed 118 vs R1b ['118']  value 0.000300 vs R1b 0.000300  quantile 0.008088 vs R3 0.008088  128 0.002111 vs R0 0.002111
+PHerc0500P2  borrowed 121 vs R1b ['121']  value 0.028508 vs R1b 0.028508  quantile 0.006669 vs R3 0.006669  128 0.041626 vs R0 0.041626
+PHerc0841    borrowed 108 vs R1b ['108']  value 0.006298 vs R1b 0.006298  quantile 0.001753 vs R3 0.001753  128 0.003162 vs R0 0.003162
+ALL MATCH
+== seed 43 step 050000
+pherc0841-w00      oracle 130 vs 130  F1 0.696452 vs 0.696452  OK
+pherc0841-ag144    oracle 125 vs 125  F1 0.656964 vs 0.656964  OK
+pherc0841-ag174    oracle 109 vs 109  F1 0.601340 vs 0.601340  OK
+pherc0009b-ag055   oracle 121 vs 121  F1 0.683381 vs 0.683381  OK
+pherc0500p2-s1     oracle 113 vs 113  F1 0.646488 vs 0.646488  OK
+PHerc0009B   borrowed 119 vs R1b ['119']  value 0.000089 vs R1b 0.000089  quantile 0.006532 vs R3 0.006532  128 0.001678 vs R0 0.001678
+PHerc0500P2  borrowed 123 vs R1b ['123']  value 0.005466 vs R1b 0.005466  quantile 0.001720 vs R3 0.001720  128 0.011767 vs R0 0.011767
+PHerc0841    borrowed 117 vs R1b ['117']  value 0.003200 vs R1b 0.003200  quantile 0.009849 vs R3 0.009849  128 0.002725 vs R0 0.002725
+ALL MATCH
+== seed 43 step 060000
+pherc0841-w00      oracle 129 vs 129  F1 0.665697 vs 0.665697  OK
+pherc0841-ag144    oracle 102 vs 102  F1 0.637678 vs 0.637678  OK
+pherc0841-ag174    oracle 113 vs 113  F1 0.582788 vs 0.582788  OK
+pherc0009b-ag055   oracle 111 vs 111  F1 0.662614 vs 0.662614  OK
+pherc0500p2-s1     oracle 119 vs 119  F1 0.632869 vs 0.632869  OK
+PHerc0009B   borrowed 116 vs R1b ['116']  value 0.000700 vs R1b 0.000700  quantile 0.001504 vs R3 0.001504  128 0.008870 vs R0 0.008870
+PHerc0500P2  borrowed 112 vs R1b ['112']  value 0.001866 vs R1b 0.001866  quantile 0.004644 vs R3 0.004644  128 0.003650 vs R0 0.003650
+PHerc0841    borrowed 115 vs R1b ['115']  value 0.004680 vs R1b 0.004680  quantile 0.011413 vs R3 0.011413  128 0.005622 vs R0 0.005622
+ALL MATCH
+== seed 43 step 075000
+pherc0841-w00      oracle 118 vs 118  F1 0.692978 vs 0.692978  OK
+pherc0841-ag144    oracle  94 vs  94  F1 0.649892 vs 0.649892  OK
+pherc0841-ag174    oracle 111 vs 111  F1 0.606827 vs 0.606827  OK
+pherc0009b-ag055   oracle 109 vs 109  F1 0.648883 vs 0.648883  OK
+pherc0500p2-s1     oracle 102 vs 102  F1 0.640398 vs 0.640398  OK
+PHerc0009B   borrowed 107 vs R1b ['107']  value 0.000224 vs R1b 0.000224  quantile 0.001959 vs R3 0.001959  128 0.005944 vs R0 0.005944
+PHerc0500P2  borrowed 110 vs R1b ['110']  value 0.003087 vs R1b 0.003087  quantile 0.000089 vs R3 0.000089  128 0.023156 vs R0 0.023156
+PHerc0841    borrowed 106 vs R1b ['106']  value 0.006164 vs R1b 0.006163  quantile 0.010753 vs R3 0.010753  128 0.013846 vs R0 0.013846
+ALL MATCH

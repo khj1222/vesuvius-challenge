@@ -287,3 +287,36 @@ Paris 4), which pulls their optimum down; the released models, trained on all fo
 **What to do with it now:** for a model you have, find its optimum on held-out data of scrolls you
 *can* score, with that same model, and use it unchanged on the new scroll. Do not carry a number
 from one model to another — including from this document.
+
+---
+
+# Tool (2026-10-06)
+
+The pre-registration promised "a small tool that prints the threshold for a prediction TIFF" if a rule
+passed. It is [`tools/borrow_threshold.py`](../tools/borrow_threshold.py), written after both studies above:
+
+```
+python tools/borrow_threshold.py calibrate --out calib.json \
+    --cell PHerc0841 preds/0841-w00.tif labels/0841-w00_inklabels.zarr labels/0841-w00_supervision_mask.zarr \
+    --cell PHerc0009B preds/0009b.tif labels/0009b_inklabels.zarr labels/0009b_supervision_mask.zarr
+python tools/borrow_threshold.py apply preds/unlabelled.tif --calibration calib.json --out ink_mask.tif
+```
+
+- `calibrate` takes predictions of segments you have labels for, made with the model you will run. It
+  writes the median optimum (R1) and the operating quantile (R3). With two or more scrolls it also
+  scores each scroll with a threshold borrowed from the others, as above, and warns if that costs 0.03
+  or more. That check is the only evidence a user gets that the method holds for their model.
+- `apply` binarizes a prediction of the unlabelled scroll at the calibrated threshold (`--rule value`,
+  the default, or `--rule quantile` with `--sheet`).
+
+**Check.** Run on the replication's data for each of the 14 released checkpoints, `calibrate`
+reproduces every cell's oracle threshold and F1, and its leave-one-scroll-out check reproduces R1b's
+borrowed thresholds and the mean losses of R1b, R3 and R0 for every scroll (70 cells, 14 of 14
+checkpoints:
+[`borrow_threshold_check.txt`](../runs/ink9um_scorecard/borrow_threshold_check.txt)). `apply` on
+PHerc0500P2 (seed 43, step 20k), calibrated on the other two scrolls, gives 105 and 103, the R1b and
+R3 thresholds in `openlabels_cells.csv`.
+
+It inherits every limit above. It has been checked on one recipe's checkpoints, and a threshold
+calibrated before fine-tuning does not apply after it.
+
