@@ -120,6 +120,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-06 (밤)**: Qual HF 카드 제안 초안 `submission/hf_afv_fiber_9um_discussion.md`(토론 글, 카드 PR은 제안만; 수치는 fiber9 원자료로 재확인). 게시는 사용자. 진행 현황 문서 = claude.ai Docs "10월 Progress Prize 준비 현황"(https://claude.ai/code/artifact/45c8a04a-7b87-40e1-8ce8-3c3551e158cb).
 - **10-06 (밤)**: `tools/borrow_threshold.py` 작성·검증·푸시(`b6da7af`), docs/27 끝에 Tool 절, README 13절·tools/README 한 줄. 10월 초안 v1 작성(planning) 후 도구 반영.
 - **10-06**: 스윕(10-03 12:00Z~). **#192에 kartoun(Claude Code 사용, AI 공개)이 우리 `make_3d_labels.py`를 IR 라벨 조각 Frag1로 포팅**(저장소 kartoun/vesuvius-fragment-ink-depth, MIT, 기본값 일치 확인): v4 측정 밴드 중심이 CT 표면을 상수 밴드보다 더 잘 따라가지 않음(상관 0.16, 홀드아웃 행 0.40). → 우리 08-31 "기하는 맞는데 진다" 해석이 과했음 → **docs/12에 Correction 문단 + README 한 줄(`eff21cf`)**, 답글 `submission/issue192_reply_kartoun.md` 사용자 게시(13:46Z, issuecomment-6017644321, 게시본=초안 2,187자 일치, AI 공개 줄 없음=사용자 결정). 10월 폼 열림(위 4번). HF 6건·#1796·#robots 두 스레드 변화 없음.
 - **10-04 (밤)**: docs/28 #robots 게시(사용자) → Chrome에서 게시본=초안 대조 일치, 태그 unrolling·analysis 확인.
