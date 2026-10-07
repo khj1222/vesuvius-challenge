@@ -121,6 +121,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-07**: 스윕(10-06 13:30Z~, 10:55Z 실행). 새 글 1건 = **#192 kartoun 답글**(10-06 14:08Z, issuecomment-6018077755): 홀드아웃 행(3298–4432)은 기복이 오히려 작음(sd 2.55 vs 3.38) → 0.40은 추적이 아니라 국소 효과로 해석. Frag1을 안 본 occluder(Frag2–6 학습, AUC 0.65)로 같은 레시피를 돌리니 밴드 중심이 z 32.6 → 17.5로 15층 이동, 상관 −0.07. 결론 "occlusion 깊이 = 그 모델이 증거를 얻는 곳, 잉크 위치 아님". 더 강한 2D 체크포인트가 있으면 세 번째 occluder로 돌려 주겠다고 제안. 답할지·docs/12 보강할지는 주말 결정. HF 6건 open·09-15 이후 무활동, #1796 변화 없음(28일 상한 10-14 16:00 KST), #robots 두 스레드 남의 답글 0. #announcements는 이번엔 안 봄.
 - **10-06 (밤)**: Qual HF 카드 제안 초안 `submission/hf_afv_fiber_9um_discussion.md`(토론 글, 카드 PR은 제안만; 수치는 fiber9 원자료로 재확인). 게시는 사용자. 진행 현황 문서 = claude.ai Docs "10월 Progress Prize 준비 현황"(https://claude.ai/code/artifact/45c8a04a-7b87-40e1-8ce8-3c3551e158cb).
 - **10-06 (밤)**: `tools/borrow_threshold.py` 작성·검증·푸시(`b6da7af`), docs/27 끝에 Tool 절, README 13절·tools/README 한 줄. 10월 초안 v1 작성(planning) 후 도구 반영.
 - **10-06**: 스윕(10-03 12:00Z~). **#192에 kartoun(Claude Code 사용, AI 공개)이 우리 `make_3d_labels.py`를 IR 라벨 조각 Frag1로 포팅**(저장소 kartoun/vesuvius-fragment-ink-depth, MIT, 기본값 일치 확인): v4 측정 밴드 중심이 CT 표면을 상수 밴드보다 더 잘 따라가지 않음(상관 0.16, 홀드아웃 행 0.40). → 우리 08-31 "기하는 맞는데 진다" 해석이 과했음 → **docs/12에 Correction 문단 + README 한 줄(`eff21cf`)**, 답글 `submission/issue192_reply_kartoun.md` 사용자 게시(13:46Z, issuecomment-6017644321, 게시본=초안 2,187자 일치, AI 공개 줄 없음=사용자 결정). 10월 폼 열림(위 4번). HF 6건·#1796·#robots 두 스레드 변화 없음.
