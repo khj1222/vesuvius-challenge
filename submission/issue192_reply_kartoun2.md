@@ -9,6 +9,8 @@ Check (planning/2026-10-07_w00_occluder_frag1/PREREG.md, rule fixed before infer
   - kartoun's score_3d.py (a) functions, whole Frag1: A native 0.521, B resampled to 7.91 um 0.565;
     post-hoc layer-order flips 0.578 / 0.553. All below his LOFO occluder's 0.654 -> not stronger.
   - Prediction maps show no letters (compare.png).
+  - Controls: scorer eval set = kartoun's Frag1_lofo_flat.json (28,637,133 px / 5,087,226 ink); IR darkness AUC 0.974;
+    same predict loop on w00 held-out regions AUC 0.952 (positive_control.json).
   - v1 of this draft (handing over the checkpoint) is superseded; no release was created.
   - No AI-disclosure line (same as the 10-06 reply, user decision).
 
@@ -21,4 +23,4 @@ POST ONLY WHAT IS BELOW THE --- LINE.
 
 Your third point is the stronger result. docs/11 only hedged the band's width ("what this model's evidence spans", not the ink's physical thickness). A 15-layer shift between two occluders on the same fragment and annotation shows the same is true of where the band sits, and shows it directly.
 
-On the third occluder: before offering mine I ran it over Frag1 and scored it with your `score_3d.py` ink-map score (your functions, whole fragment). It is the checkpoint that produced the `w00` band, trained on a single PHerc Paris 4 segment at 7.91 µm. AUC was 0.52 at Frag1's native 3.24 µm and 0.57 resampled to 7.91 µm (0.55–0.58 with the layer order reversed), against 0.654 for your leave-one-fragment-out model, and the map shows no letters. So it isn't the stronger occluder you asked for, and I don't have one. A model trained on scroll segments doesn't transfer to this fragment without adaptation, and that is all this check says.
+On the third occluder: before offering mine I ran it over Frag1 and scored it with your `score_3d.py` ink-map score (your functions, whole fragment). It is the checkpoint that produced the `w00` band, trained on a single PHerc Paris 4 segment at 7.91 µm. AUC was 0.52 at Frag1's native 3.24 µm and 0.57 resampled to 7.91 µm (0.55–0.58 with the layer order reversed), against 0.654 for your leave-one-fragment-out model, and the map shows no letters. The same inference code gives AUC 0.95 on the held-out regions of the segment it was trained on, so the low Frag1 score comes from the model, not the pipeline. It isn't the stronger occluder you asked for, and I don't have one. A model trained on scroll segments doesn't transfer to this fragment without adaptation, and that is all this check says.
