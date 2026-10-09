@@ -26,14 +26,14 @@
 | (새 PR 예정) | `vesuvius.ink_detection.inference.threshold` (docs/27 도구의 villa판) | **미개설.** `D:/vw15` 로컬 `096760d7c`(미푸시). 증거 `runs/villa_threshold_pr/`, 본문 `submission/pr_ink_threshold.md`. Why 문단 = 사용자 |
 | #1705 | staged publish Windows 재시도(F3) | 10-03 봇 자동 종료, 재개설 안 함 |
 | #1893 | (남의 이슈) 렌더 voxel 단위 | #1831 먼저 머지, 작성자가 10-01 닫음. 끝 |
-| #192 | (남의 이슈) 3D 잉크 라벨 | kartoun이 우리 Frag1 결과를 자기 결과표에 올려도 되는지 물음(10-07) → **사용자 허락, 답글 `submission/issue192_reply_kartoun3.md` 미게시** |
+| #192 | (남의 이슈) 3D 잉크 라벨 | kartoun이 우리 Frag1 결과를 자기 결과표에 올려도 되는지 물음(10-07) → **사용자 허락, 답글 게시 10-09 05:56Z(issuecomment-6075223909), 게시본=초안 462자 일치** |
 | #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 | open, erdpx 배정, 무응답 |
 | HF `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1` | 카드 `/255` 수정 6건 | open, 09-15 이후 무활동 (스윕 밖, 직접 확인) |
 
 닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
 
 ### 남은 할 일 (다음 세션)
-0. **사용자 몫 3건**: ① kartoun 답글 게시(`submission/issue192_reply_kartoun3.md`) ② Qual HF 토론 검토 후 게시(`submission/hf_afv_fiber_9um_discussion.md`, 10-07 카드 개정 반영 완료, 가중치 동일) ③ villa threshold PR Why 문단 작성(+직접 테스트 돌리면 체크박스). 게시 뒤엔 게시본=초안 대조.
+0. **사용자 몫**: ① ~~kartoun 답글~~ 10-09 게시·대조 완료 ② Qual HF 토론 검토 후 게시(`submission/hf_afv_fiber_9um_discussion.md`, 10-07 카드 개정 반영 완료, 가중치 동일) ③ villa threshold PR Why 문단 작성(+직접 테스트 돌리면 체크박스). 게시 뒤엔 게시본=초안 대조.
 1. **threshold PR 개설 절차**(Why 받은 뒤): main 재확인(같은 파일 건드린 새 PR·커밋 없나, #1872 진행) → 필요하면 리베이스·테스트 재실행 → `D:/vw15` 브랜치 포크에 푸시 → 사용자가 PR 개설(그림 업로드) → 게시본=초안 대조. 열린 non-draft 상한 3건 중 현재 0건. 28일 상한 주의.
 2. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T03:30:00Z` + HF 6건 + Qual 토론(게시했다면) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만). 마지막 스윕 10-09 ~03:30Z(GitHub·HF), Discord 10-09 ~05:30Z.
 3. **10월 제출**: 마감 10-31 23:59 PT. 사용자 일정에 맞춰 최종 통독·링크 200 확인·해시 → 사용자 제출.
