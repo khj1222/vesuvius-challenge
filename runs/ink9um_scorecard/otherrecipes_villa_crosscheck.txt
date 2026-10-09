@@ -1,0 +1,16 @@
+K_ex016_75k    PHerc0009B   borrowed 120 loss 0.0001 (docs/29 0.0001)  128 0.0013  OK
+K_ex016_75k    PHerc0500P2  borrowed 123 loss 0.0687 (docs/29 0.0687)  128 0.0869  OK
+K_ex016_75k    PHerc0841    borrowed 108 loss 0.0161 (docs/29 0.0161)  128 0.0037  OK
+K_ex016_60k    PHerc0009B   borrowed 126 loss 0.0000 (docs/29 0.0000)  128 0.0001  OK
+K_ex016_60k    PHerc0500P2  borrowed 128 loss 0.0605 (docs/29 0.0605)  128 0.0605  OK
+K_ex016_60k    PHerc0841    borrowed 114 loss 0.0100 (docs/29 0.0100)  128 0.0008  OK
+K_all7_75k     PHerc0009B   borrowed 124 loss 0.0019 (docs/29 0.0019)  128 0.0004  OK
+K_all7_75k     PHerc0500P2  borrowed 133 loss 0.0714 (docs/29 0.0714)  128 0.0519  OK
+K_all7_75k     PHerc0841    borrowed 117 loss 0.0130 (docs/29 0.0130)  128 0.0034  OK
+N_native_16k   PHerc0009B   borrowed 123 loss 0.0047 (docs/29 0.0047)  128 0.0020  OK
+N_native_16k   PHerc0500P2  borrowed 128 loss 0.0468 (docs/29 0.0468)  128 0.0468  OK
+N_native_16k   PHerc0841    borrowed 121 loss 0.0032 (docs/29 0.0032)  128 0.0020  OK
+K_control_75k  PHerc0009B   borrowed 110 loss 0.0019 (docs/29 0.0019)  128 0.0024  OK
+K_control_75k  PHerc0500P2  borrowed 117 loss 0.0121 (docs/29 0.0121)  128 0.0322  OK
+K_control_75k  PHerc0841    borrowed 112 loss 0.0028 (docs/29 0.0028)  128 0.0140  OK
+villa calibrate vs docs/29: all 15 match

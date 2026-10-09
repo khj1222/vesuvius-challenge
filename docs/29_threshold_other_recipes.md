@@ -178,3 +178,36 @@ scroll or the dense labels make the gap larger is not separated here.
 - docs/27, `tools/borrow_threshold.py` and the README point here instead of saying "one recipe".
   `tools/borrow_threshold.py apply --rule quantile` already implements R3; villa #2012 implements only
   R1b, and this result belongs in its thread.
+
+## Checks (added after the results, 2026-10-09)
+
+Run because the result was a first failure for a rule that had passed twice. Script:
+[`check_otherrecipes.py`](../tools/check_otherrecipes.py); outputs:
+[`otherrecipes_checks.json`](../runs/ink9um_scorecard/otherrecipes_checks.json),
+[`otherrecipes_villa_crosscheck.txt`](../runs/ink9um_scorecard/otherrecipes_villa_crosscheck.txt).
+
+- **Scoring.** All 25 cells recounted pixel by pixel from the prediction TIFFs (F1 at the oracle, at 128
+  and at the R1b threshold): largest difference from `otherrecipes_cells.csv` 4.9e-7. Villa #2012's
+  `threshold calibrate`, an independent implementation, run per checkpoint: borrowed thresholds and both
+  losses equal docs/29's for all 15 checkpoint × scroll pairs.
+- **The checkpoints are the published ones.** The five converted files are tensor-for-tensor identical to
+  their sources.
+- **Positive control (the models run as their author ran them).** KLAVIS's card publishes balanced accuracy
+  at 0.5 and AUC on the three `ink_9um` validation masks for `K_ex016_75k` and the control. The same
+  converted checkpoints and inference path reproduce all six AUCs within 0.0007 (w016 exactly) and the
+  balanced accuracies within 0.003; the small differences are on the two segments where his inputs were
+  rebuilt by his own script. No published number on these inputs exists for Nieuwlaar's checkpoint; its
+  check is weaker: sha256 equal to its `VERIFY.md`, and on these segments it reads at the level of KLAVIS's
+  (oracle F1 0.72–0.74 on PHerc0009B and 0500P2).
+
+| checkpoint | segment | AUC here / published | balanced accuracy at 0.5 here / published |
+|---|---|---|---|
+| `K_ex016_75k` | pherc0814-46527 | 0.9300 / 0.9298 | 0.8356 / 0.8329 |
+| `K_ex016_75k` | pherc0139-w016 | 0.9070 / 0.9070 | 0.7495 / 0.7496 |
+| `K_ex016_75k` | pherc1667-w029 | 0.8852 / 0.8853 | 0.7873 / 0.7882 |
+| `K_control_75k` | pherc0139-w016 | 0.8707 / 0.8707 | 0.7016 / 0.7016 |
+| `K_control_75k` | pherc0814-46527 | 0.8316 / 0.8323 | 0.7546 / 0.7539 |
+| `K_control_75k` | pherc1667-w029 | 0.8946 / 0.8945 | 0.7800 / 0.7814 |
+
+The PHerc0500P2 failure is therefore not a scoring or loading error. Its inputs and labels are the ones on
+which the released checkpoints and the control lost about 0.01, so it is not a broken segment either.
