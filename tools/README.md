@@ -552,6 +552,10 @@ comment revised in place, which is exactly what happened on villa #1547: the thr
 `updated_at` moved, the sweep found nothing, and the author had edited an older comment rather
 than adding one. Those now appear as `comment EDITED (posted <date>)` at the time of the edit.
 
+**Hugging Face threads too.** The discussions and model-card PRs this repository opened on
+Hugging Face (`HF_THREADS`) are read through the public Hub API, no token needed, and other
+people's events after the cutoff are listed with the GitHub ones.
+
 `--since 2026-08-31T12:00:00Z` · `--hours` · `--no-gh`
 
 ## `score_pseudo_labels.py` — how good is the yardstick?
