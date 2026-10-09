@@ -31,7 +31,7 @@ POST ONLY WHAT IS BELOW THE --- LINE.
 
 ---
 
-Hi @Qualzz20, the card says no independent test accuracy is claimed, so here is one measurement on a scroll this model never saw, in case it is useful for the card.
+Hi @Qualzz20, thanks for releasing the model and the training write-up. The card notes that no independent test accuracy is claimed, so here is one measurement on a scroll this model never saw, in case it is useful for the card.
 
 **Setup.** PHerc0139 (not in your training or validation scans). Five segments (w035, w039, w040, w041, w044) have a tifxyz mesh on both the 9.362 µm scan (`20250728140407`) and the 2.399 µm scan (`20260102150214`), so the same papyrus surface can be read in both. 100 tiles of about 0.9 mm. Reference: `scrollprize/fiber_ink_4class_selfdistill` on the 2.399 µm scan. Compared on the 9.362 µm scan: this model (revision `365e7800ac`; the checkpoint is unchanged in the current `e189af7507`) and its base `scrollprize/fiber_hz_vt` (`0905e68f14`), both with test-time mirroring on. Measure: fiber-presence F1 per tile with a 1-pixel tolerance over a ±47 µm depth window. The null scores each map against the reference of a different tile, which keeps fiber densities but removes the spatial match.
 
