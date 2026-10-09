@@ -405,12 +405,13 @@ old PRs were closed and current-main replacements were opened on 2026-09-04:
   on 2026-09-10**. Its final source-chunk-major rewrite passed upstream CI but
   was not re-tested by this project; the 42/42 result belongs to the earlier
   revision actually tested here.
-- **[PR #1796](https://github.com/ScrollPrize/villa/pull/1796)** (`main`, open, unreviewed) —
+- **[PR #1796](https://github.com/ScrollPrize/villa/pull/1796)** (`main`, **merged 2026-10-08**) —
   Copy-model TTA flips and rotates the input volume but left the two direction-prior
   vectors' components alone, so each variant saw a prior pointing the wrong way.
   Transports the components; a model returning its own priors now gets them back
-  (max error 3.6e-7 against 3.04 before). Real-data effect on six manually labelled
-  Paris 4 cubes is mixed and is not claimed as a gain. Evidence: `runs/tta_main/`.
+  (mirror TTA max error 6.08 before, 3.6e-7 after; `runs/tta_main/tta_console.txt`).
+  Real-data effect on six manually labelled Paris 4 cubes is mixed and is not claimed
+  as a gain. Evidence: `runs/tta_main/`.
 - **[PR #1803](https://github.com/ScrollPrize/villa/pull/1803)** (closed 2026-09-25: the
   same pass-through merged first in another contributor's #1886) —
   `render_ink.py` could not pass `--scale-segmentation` to the renderer, so a mesh in
@@ -522,3 +523,4 @@ vesuvius-challenge/
 - [x] **9 µm fiber agreement** (2026-10-04) — pre-registered. On PHerc. 0139, 9.362 µm fiber
       maps agree with a 2.399 µm reading of the same surface at F1 0.69 (null 0.45); the 9 µm
       fine-tune does not move it ([docs/28](docs/28_fiber_9um_agreement.md)).
+- [x] **Copy TTA direction priors merged** — #1796 (2026-10-08).
