@@ -5,40 +5,39 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-10-09 기준, 이 절이 최우선) — 주말 일정은 10-09에 당겨 처리함
+## 현재 상태 (2026-10-09 밤 기준, 이 절이 최우선)
 
-**10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 두 건 모두 사전등록·실행·공개 완료:
-- **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). **방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회**(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
+**10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 세 건 모두 사전등록·실행·공개 완료:
+- **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
+- **docs/29 다른 라벨 레시피에서 3차 시험**(사전등록 `a2a187c` → 결과 `cff3061`, 점검 `0da72b2`): KLAVIS ink9um-dense ×3 + Nieuwlaar dense-native(+KLAVIS 수동라벨 대조군). **빌린 값(R1b)은 0500P2에서 0.062로 실패, 128도 0.062, 분위수(R3)는 0.010/0.004/0.003 통과** — 세 시험 모두 통과한 건 분위수뿐. 예측 4개 중 3개 실패. 점검: TIFF 재계산·villa 도구 교차·텐서 동일·**KLAVIS 공개 검증 AUC 6개 재현(차 ≤0.0007)**. v8-in·Reader v2는 우리 라벨로 시험 불가(이유 문서에 명시).
 - **docs/28 9µm 섬유 일치도**(사전등록 `735404f` → 결과 `1b781bf`): PHerc0139, `fiber_hz_vt` F1 0.691 / Qual `afv_fiber_9um` 0.685 vs 2.399 µm 기준(영가설 0.45), 미세조정 차이 없음(−0.005), 손실은 재현율. 일치도이지 정확도 아님.
-- **공개**: README 13·14절 + Status, docs/27 정정 배너, Discord #robots 두 글(사용자 게시; docs/27 스레드 제목 10-04 수정). **10-09 확인: 두 스레드 모두 남의 답글 0.**
-- **10월 제출 초안 v2** = `planning/2026-10_submission_draft.md`(10-09, field 5 통독 1회). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 확정: docs/27(+도구) + docs/28 + **#1796(10-08 머지)** + **#1703**("09-20 9월 제출 뒤 09-28 머지라 9월엔 없었다" 명시), kartoun 맥락 줄 없음, Discord 이름 `jamiolrangmalrang4936`. villa threshold PR이 열리면 field 4·5에 한 줄 추가 검토. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
-- 9월 라운드는 09-20 v30 제출(`submission/2026-09_form_answers.md`, 동결). **10-09 기준 9월 수상 발표 아직 없음**(#announcements 최신 = 10-09 First Letters $50K PHerc.343 Erwin Nieuwlaar 수상, 남은 대상 21개 스크롤; 09-26 YoussefNader 9µm 레시피로 PHerc1447이 First Letters 대상에서 빠짐).
+- **공개·게시(전부 사용자 게시, 게시본=초안 확인)**: README 13·14절 + Status, docs/27 상단 배너(정정 + docs/29 업데이트). Discord #robots: docs/27 스레드(원글·정정·docs/29 업데이트 10-09 18:45 KST), docs/28 포스트. HF `Qualzz20/afv_fiber_9um/discussions/1`(10-09). #192 kartoun 답글 2건.
+- **외부 인용**: kartoun이 우리 Frag1 결과를 자기 저장소 README "Findings so far" 9번 외부 항목으로 등재(10-09 11:45Z, 커밋 `61d657961`, 크레딧+우리 댓글 링크).
+- **10월 제출 초안 v3** = `planning/2026-10_submission_draft.md`(10-09, field 4 3,848자·field 5 8,573자, 통독 1회). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 구성: docs/27(+도구) + docs/28 + docs/29 + #1796(10-08 머지) + #1703("09-20 9월 제출 뒤 09-28 머지" 명시) + #2012(open PR, field 4 한 줄). kartoun 맥락 줄 없음(사용자 결정 — 단 10-09 README 등재는 새 사실이라 넣을지 다시 물을 수 있음), Discord 이름 `jamiolrangmalrang4936`. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. #2012가 그 전에 머지되면 문구를 "merged"로. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
+- 9월 라운드는 09-20 v30 제출(`submission/2026-09_form_answers.md`, 동결). **10-09 기준 9월 수상 발표 아직 없음**(#announcements 최신 = 10-09 First Letters $50K PHerc.343 Erwin Nieuwlaar, 남은 대상 21개; 09-26 PHerc1447 First Letters 제외).
 
 ### 업스트림 PR/이슈 (ScrollPrize/villa)
 
 | 번호 | 내용 | 상태 |
 |---|---|---|
-| #1249 | 커뮤니티 툴 목록에 하네스 등재 | 머지 07-31 |
-| #1234 | `create_label_zarrs` striped TIFF 스트리밍 | 머지 08-14 (`merge-ink-pipelines`) |
-| #1701 | 패치 캐시 지문(F4, main) | 머지 09-21 (hendrikschilling) |
-| #1703 | `torch.compile` 첫 forward eager 폴백(F2, main) | 머지 09-28 (hendrikschilling, `795ca2b`) |
-| #1796 | Copy TTA 방향 벡터 | **머지 10-08 15:43Z** (bruniss, 리뷰 0, `12f21236a`). 워크트리 `D:/vw10`은 이제 정리 가능 |
-| **#2012** | `vesuvius.ink_detection.inference.threshold` (docs/27 도구의 villa판) | **open 10-09 06:35Z**(사용자 개설, ready, 리뷰어 자동 jrudolph·bruniss). 헤드 `096760d7c` = 포크 `feat/ink-borrow-threshold`(`D:/vw15`). 게시본=초안(그림 자리만 업로드 이미지로 바뀜). Why = 사용자 말 번역("내 생각 맞다" 확인), 체크박스 끔(테스트는 내가 돌림). 14일 무활동 10-23, 28일 상한 11-06 저녁 KST. 앱 PR 모니터에 bind |
-| #1705 | staged publish Windows 재시도(F3) | 10-03 봇 자동 종료, 재개설 안 함 |
-| #1893 | (남의 이슈) 렌더 voxel 단위 | #1831 먼저 머지, 작성자가 10-01 닫음. 끝 |
-| #192 | (남의 이슈) 3D 잉크 라벨 | kartoun이 우리 Frag1 결과를 자기 결과표에 올려도 되는지 물음(10-07) → **사용자 허락, 답글 게시 10-09 05:56Z(issuecomment-6075223909), 게시본=초안 462자 일치** |
-| #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 | open, erdpx 배정, 무응답 |
-| HF `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1` | 카드 `/255` 수정 6건 | open, 09-15 이후 무활동 (스윕 밖, 직접 확인) |
+| **#2012** | `vesuvius.ink_detection.inference.threshold` calibrate/apply (docs/27 도구의 villa판) | **open**(10-09 06:35Z 사용자 개설, 리뷰어 자동 jrudolph·bruniss, 리뷰 0). 커밋 2개: `096760d7c`(빌린 값) + `720a487d4`(분위수 `--rule quantile`, 기본은 value). CI 통과(zarr 2·3), Vercel 실패는 권한 문제. 댓글 2건(docs/29 결과 09:45Z, 분위수 추가 12:06Z) 게시본=초안. Why = 사용자 말 번역, 체크박스 끔. **14일 무활동 10-23, 28일 상한 11-06 저녁 KST.** 앱 Auto-fix 켬(실패·리뷰 시 세션 깨움) |
+| #1796 | Copy TTA 방향 벡터 | 머지 10-08 (bruniss, `12f21236a`) |
+| #1703 | `torch.compile` 첫 forward eager 폴백 | 머지 09-28 (hendrikschilling, `795ca2b`) |
+| #1701 | 패치 캐시 지문 | 머지 09-21 |
+| #1249 / #1234 | 커뮤니티 툴 목록 / striped TIFF | 머지 07-31 / 08-14 |
+| #192 | (남의 이슈) 3D 잉크 라벨 | kartoun 결과표 등재 완료(위). 우리 답 의무 없음 |
+| #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 | open, 무응답 |
+| HF 1667 카드 6건 + Qual 토론 | `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1`, `Qualzz20/afv_fiber_9um/discussions/1` | open. **10-09부터 `tools/upstream_sweep.py`가 같이 본다** |
 
-닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
+닫힌 것: #1705·#1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(닫고 잠금), #1611(완료), #1893(#1831로 해결).
 
 ### 남은 할 일 (다음 세션)
-0. **사용자 몫**: ① ~~kartoun 답글~~ 10-09 게시·대조 완료 ② ~~Qual HF 토론~~ 10-09 06:02Z 게시(`Qualzz20/afv_fiber_9um/discussions/1`), 제목·본문 2,909자 초안과 일치 — 다음 스윕에서 답 확인(스윕 밖, HF API) ③ ~~villa threshold PR~~ #2012로 개설 완료. 게시 뒤엔 게시본=초안 대조.
-1. **#2012 관리**: 스윕에 #2012 추가(tools/upstream_sweep.py 목록), CI(python 테스트 zarr 2.18.7/3.2.1) 결과 확인, 리뷰 오면 답. 10월 제출 초안 field 4·5에 "open PR #2012" 한 줄 넣을지 사용자 결정(열린 PR은 머지 전이라 청구는 약하게).
-2. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T03:30:00Z` + HF 6건 + Qual 토론(게시했다면) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만). 마지막 스윕 10-09 ~03:30Z(GitHub·HF), Discord 10-09 ~05:30Z.
-3. **10월 제출**: 마감 10-31 23:59 PT. 사용자 일정에 맞춰 최종 통독·링크 200 확인·해시 → 사용자 제출.
-4. 선택: `D:/vw10`(#1796 머지됨)·`D:/vw14`(Frag1 점검 끝) 워크트리 정리, 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 당분간 유지(10-02 사용자 결정).
+1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T12:16:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대). 9월 수상 발표 확인.
+2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한.
+3. **10월 제출**: 마감 10-31 23:59 PT. **10-24 무렵** 최종 통독·링크 200·해시 → 사용자 제출. kartoun README 등재를 field 4/5에 넣을지 그때 사용자에게 물을 것.
+4. 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB 당분간 유지(10-02 사용자 결정).
 5. docs/28 재실행 필요 시: 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`.
+6. docs/29 재실행 필요 시: 서드파티 체크포인트는 `data/ink_9um/models_ext/clean/`(gitignore, 재생성은 `tools/convert_thirdparty_ckpts.py`), 예측 `runs/ink9um_openlabels/preds_otherrecipes*`.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
 - `D:/vw15` = villa #2012(`feat/ink-borrow-threshold`, 원격 `096760d7c`, +`720a487d4` 분위수 규칙 푸시됨) · `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · vw10·vw14는 10-09 제거 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
@@ -113,11 +112,12 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 `README.md`(공개 랜딩) · `docs/08` Windows 재현 · `docs/09` 검증 하네스 · `docs/10–12` 깊이 라벨(8월) · `docs/13` 9월 정찰 ·
 `docs/14` 스코어카드 · `docs/15` LOSO 4부작 · `docs/16` First Letters 렌더 · `docs/17` held-out 감사 · `docs/18` UDA 사다리 ·
-`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `tools/README.md`(툴 설명).
+`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `docs/29` 임계값 규칙 3차(dense 라벨) · `tools/README.md`(툴 설명).
 비공개 계획: `planning/2026-10_merge_month_plan.md`, `planning/2026-10_working_plan.md`.
 
 ## 최근 기록
 
+- **10-09 (밤, 마감 점검)**: 사용자 "진짜 다 됐나" → 현재 상태 절·메모리·현황 문서가 분위수 푸시 이전 상태였음을 발견해 갱신. **`tools/upstream_sweep.py`에 HF 토론 7건(1667 카드 6 + Qual) 추가**(공개 API, 우리 이벤트 제외). 그 스윕에서 **kartoun이 우리 Frag1 결과를 README Findings 9번 외부 항목으로 등재**(11:45Z, `61d657961`) 확인.
 - **10-09 (밤) 4·5번**: `D:/vw10`·`D:/vw14` 제거(깨끗, vw10 브랜치는 포크에 있음). **#2012용 분위수 규칙 — `D:/vw15` 커밋 `720a487d4`, 사용자 "추천대로" 후 포크에 푸시(PR head=720a487d4, 커밋 2개).** sheet=`prediction>0`로 대체해도 되는지 먼저 확인(`tools/check_quantile_sheet.py`, 차이 ±0.002 이내) → calibrate가 value·quantile·128을 나란히 보고, `apply --rule quantile`(기본은 value 유지), 테스트 8/8. 세 연구 데이터로 villa CLI 재계산(`runs/villa_threshold_pr/quantile_evidence.*`): quantile 최대 0.025, value는 dense 0500P2 0.062. 후속 댓글 초안 `submission/pr2012_quantile_update.md`(푸시 후 게시, 게시 전 스레드 재확인). CI 통과(zarr 2·3) 확인 후 사용자가 후속 댓글 게시 12:06Z(issuecomment-6080542847, 1,222자 초안과 일치).
 - **10-09 (마무리)**: 진행 현황 문서 갱신(10-09 표에 docs/29·게시 4건, 더 할 만한 분야 1·3번 완료 표시, 초안 v3 글자 수), 메모리 갱신(10월·Copy TTA 항목 + 피드백 2건: 의외 결과는 양성 대조까지 점검 / 한국어로 소통), planning/·AGENTS.md를 Z:/아카이브/vesuvius-local-only에 동기화(4,414파일 중 22개 복사, 해시 불일치 0, 백업에만 있는 파일 0).
 - **10-09 (저녁) docs/29 완료**: 사용자 "더 할 만한 분야 3번 하자" → v8-in·Reader v2는 우리 라벨 데이터로 시험 불가(Reader v2는 0009B·0500P2 학습, v8-in은 0500P2 학습+24층 원본 렌더 입력) → 사용자 승인 하에 **KLAVIS ink9um-dense 4개(대조군 포함) + Nieuwlaar dense-native**로 대체. 서드파티 pickle은 `weights_only=True`/safetensors로만 읽어 `data/ink_9um/models_ext/clean/`에 재저장(`tools/convert_thirdparty_ckpts.py`, sha256 기록). 사전등록 `a2a187c` → 25예측(각 0.5분) → 결과 `cff3061`·`361a586`. **dense 4개 합산: R1b(빌린 값) 0841 0.011 / 0009B 0.002 / 0500P2 0.062 → 실패, 128도 0500P2 0.062, R3(분위수) 0.010/0.004/0.003 통과, Otsu도 통과. 대조군(수동라벨 재학습)은 R1b 통과, 128은 0500P2 0.032.** 예측 4개 중 3개 실패(문서 명시). 0500P2 최적 94–106 vs 다른 두 스크롤 ~126(사후 관찰: 공개 ckpt도 0500P2가 가장 낮았으나 차이 10). docs/27 상단 Update 배너·Tool 절 한계, README 13절 단락·Status 2줄, borrow_threshold.py docstring, tools/README 2행 갱신. **점검(`0da72b2`, 사용자 "제대로 확인해봐")**: 25칸 TIFF 직접 재계산 차이 ≤4.9e-7, villa #2012 calibrate로 15조합 전부 일치, 변환본=원본 텐서 동일, **KLAVIS 공개 검증 수치 6개 재현(AUC 차 ≤0.0007, w016 완전 일치)** → 0500P2 실패는 채점·로딩 오류 아님. Nieuwlaar는 공개 수치가 다른 입력이라 약한 점검만(sha·판독 수준). **#2012는 R1b만 구현.** 사용자 "추천대로"(10-09): ① #2012 댓글 초안 `submission/pr2012_comment_docs29.md`(결과 알림 + quantile 추가 제안, 미게시) ② 10월 초안 v3에 docs/29 포함(field 4 3링크, field 5 (1)·(2)·(4)·Limits, 8,573자, 통독 1회 — "점검을 먼저 했다"는 틀린 문장 발견·수정) ③ #robots docs/27 스레드 답글 초안 `submission/discord_robots_docs29_update.md`. **둘 다 사용자 게시·대조 완료**: #2012 댓글 09:45Z(issuecomment-6078455629, 1,448자 초안과 일치), #robots 답글 10-09 18:45 KST(Chrome 화면 대조 일치, JS 추출은 확장이 막음 → 스크린샷 확대로 확인).

@@ -62,6 +62,14 @@ THREADS = [
 ]
 
 
+# Hugging Face discussions we opened (not on GitHub, so the GitHub API above never sees them)
+HF_THREADS = [
+    *[(f"scrollprize/PHerc.1667-iteration-{i}", 1, "our HF PR: card /255 input convention")
+      for i in range(6)],
+    ("Qualzz20/afv_fiber_9um", 1, "our HF discussion: docs/28 numbers for the card"),
+]
+HF_US = "khj1222"
+
 _GH: str | None = None       # resolved gh binary, or None for the curl fallback
 
 
@@ -120,6 +128,19 @@ def rate_limit() -> str:
     if not core:
         return "rate limit unknown"
     return f"{core.get('remaining')}/{core.get('limit')} calls left this hour"
+
+
+def hf_discussion(repo: str, num: int):
+    """One Hugging Face discussion with its events, or None. Public API, no token needed."""
+    import urllib.request
+
+    try:
+        with urllib.request.urlopen(f"https://huggingface.co/api/models/{repo}/discussions/{num}",
+                                    timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except Exception as exc:   # one unreachable discussion must not stop the sweep
+        print(f"  HF {repo}#{num}: could not read ({exc.__class__.__name__})")
+        return None
 
 
 def main(argv=None) -> int:
@@ -182,13 +203,33 @@ def main(argv=None) -> int:
                                  " ".join((review.get("body") or "").split())[:400],
                                  review["html_url"]))
 
+    for repo, num, label in HF_THREADS:
+        discussion = hf_discussion(repo, num)
+        if not discussion:
+            continue
+        events = discussion.get("events") or []
+        last = max((e.get("createdAt") or "" for e in events), default="")
+        print(f"  HF {repo}#{num} {discussion.get('status', ''):<6} last {last[:16]} "
+              f"events {len(events):<3} {label}")
+        for event in events:
+            author = (event.get("author") or {}).get("name", "")
+            when = (event.get("createdAt") or "").replace(".000Z", "Z")
+            if author == HF_US or when <= cutoff:
+                continue
+            data = event.get("data") or {}
+            body = (data.get("latest") or {}).get("raw") or data.get("status") or event.get("type", "")
+            news.append((when, f"HF {repo}#{num}", author, event.get("type", "event"),
+                         " ".join(str(body).split())[:400],
+                         f"https://huggingface.co/{repo}/discussions/{num}"))
+
     print()
     if not news:
         print(f"nothing new from anyone else since {cutoff}")
         return 0
     print(f"=== {len(news)} new item(s) from others ===")
-    for when, number, who, kind, body, url in sorted(news):
-        print(f"\n  [{when}] #{number} {who} ({kind})")
+    for when, number, who, kind, body, url in sorted(news, key=lambda item: item[0]):
+        ref = number if isinstance(number, str) else f"#{number}"
+        print(f"\n  [{when}] {ref} {who} ({kind})")
         print(f"  {url}")
         print(f"  {body}")
     return 0
