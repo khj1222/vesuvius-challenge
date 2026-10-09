@@ -5,18 +5,14 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-10-06 밤 기준, 이 절이 최우선) — 다음 대화는 주말
+## 현재 상태 (2026-10-09 기준, 이 절이 최우선) — 주말 일정은 10-09에 당겨 처리함
 
-**10월 = 열린 PR 머지 + 소형 연구.** 10월 연구 두 건 모두 사전등록·실행·공개 완료:
-- **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). **방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회**(공개 모델 최적값 98–141). 예측 두 번 다 빗나감(문서에 명시).
-- **docs/28 9µm 섬유 일치도**(사전등록 `735404f` → 결과 `1b781bf`): PHerc0139 5세그·100타일, 9.362 µm `fiber_hz_vt` F1 0.691 / Qual `afv_fiber_9um` 0.685 vs 2.399 µm 기준 `fiber_ink_4class_selfdistill`(영가설 0.45). H1 통과, **H2 B−A −0.005 [−0.021,+0.009] 차이 없음(예측 +0.03 실패)**, H3 실패(존재 지도로는 섬유 분리 못 봄 — 문서에 명시). 손실은 주로 재현율(섬유 비율 0.30 vs 0.42, 정밀도 ~0.8). 일치도이지 정확도 아님.
-- **공개**: README 13·14절 + Status, tools/README, docs/27 상단 정정 배너. Discord #robots(전부 사용자 게시, 게시본=초안 확인):
-  - docs/27 스레드: 원글 + 정정 답글. **제목을 10-04에 수정** → `Label-free ink threshold: borrow the same model's optimum from other scrolls (pre-registered x2)`(옛 제목 "Don't binarize ink_9um at 128…"은 철회된 주장). 본문은 그대로. 태그 `analysis`·`ink-detection`.
-  - docs/28 포스트(10-04): "Fiber maps at 9 µm vs a 2.4 µm reading of the same surface (PHerc0139, pre-registered)", 본문 = `submission/discord_robots_docs28.md`(정규화 후 1,709자 일치), Human 줄 생략, @Qual 언급 없음, 태그 `unrolling`·`analysis`.
-  - 업스트림 이슈는 안 냄(버그가 아니라 #1898처럼 닫힐 위험).
-- **10월 제출**: 폼 열리면 docs/27 + docs/28이 주력(둘 다 "정직한 부분 실패" 구성). 기대치 $500~$1k.
-- Discord 조사·후보 = `planning/2026-10-02_discord_survey.md`(남은 후보 D 접촉부 잉크는 낮음). 섬유 조사 메모 `planning/2026-10-03_fiber_9um_check.md`.
-9월 라운드는 **09-20 v30으로 제출 완료**(`submission/2026-09_form_answers.md`, 동결). 수상 통보 대기.
+**10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 두 건 모두 사전등록·실행·공개 완료:
+- **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). **방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회**(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
+- **docs/28 9µm 섬유 일치도**(사전등록 `735404f` → 결과 `1b781bf`): PHerc0139, `fiber_hz_vt` F1 0.691 / Qual `afv_fiber_9um` 0.685 vs 2.399 µm 기준(영가설 0.45), 미세조정 차이 없음(−0.005), 손실은 재현율. 일치도이지 정확도 아님.
+- **공개**: README 13·14절 + Status, docs/27 정정 배너, Discord #robots 두 글(사용자 게시; docs/27 스레드 제목 10-04 수정). **10-09 확인: 두 스레드 모두 남의 답글 0.**
+- **10월 제출 초안 v2** = `planning/2026-10_submission_draft.md`(10-09, field 5 통독 1회). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 확정: docs/27(+도구) + docs/28 + **#1796(10-08 머지)** + **#1703**("09-20 9월 제출 뒤 09-28 머지라 9월엔 없었다" 명시), kartoun 맥락 줄 없음, Discord 이름 `jamiolrangmalrang4936`. villa threshold PR이 열리면 field 4·5에 한 줄 추가 검토. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
+- 9월 라운드는 09-20 v30 제출(`submission/2026-09_form_answers.md`, 동결). **10-09 기준 9월 수상 발표 아직 없음**(#announcements 최신 = 10-09 First Letters $50K PHerc.343 Erwin Nieuwlaar 수상, 남은 대상 21개 스크롤; 09-26 YoussefNader 9µm 레시피로 PHerc1447이 First Letters 대상에서 빠짐).
 
 ### 업스트림 PR/이슈 (ScrollPrize/villa)
 
@@ -25,26 +21,27 @@
 | #1249 | 커뮤니티 툴 목록에 하네스 등재 | 머지 07-31 |
 | #1234 | `create_label_zarrs` striped TIFF 스트리밍 | 머지 08-14 (`merge-ink-pipelines`) |
 | #1701 | 패치 캐시 지문(F4, main) | 머지 09-21 (hendrikschilling) |
-| #1703 | `torch.compile` 첫 forward eager 폴백(F2, main) | **머지 09-28** (hendrikschilling, `795ca2b`) |
-| #1705 | staged publish Windows 재시도(F3, main) | **10-03 16:21 KST 봇 자동 종료(28일), 재개설 안 함** · vw9 제거 완료 |
-| #1796 | Copy TTA 방향 벡터 | open, 리뷰 0. **10-03 리베이스 푸시**(`a104fd70d`, main `5a4388f08`, 로컬 테스트 13/13) → 무활동 종료는 10-17로 밀렸지만 **28일 상한 10-14 16:00 KST가 먼저**. 재개설 여부는 그때 사용자 결정 |
-| #1893 | (남의 이슈) 렌더 voxel 단위 | **BioMarco #1831이 09-30 먼저 머지** → 우리 PR 취소. 마무리 코멘트 게시 10-02 [issuecomment-5941647899](https://github.com/ScrollPrize/villa/issues/1893#issuecomment-5941647899)(게시본=초안). **10-01 23:06Z 작성자 Sartoshirelli가 동의 후 닫음**(#1891 리더로 main 출력 5건 대조, 우리 몫 없음) |
-| #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 + 평가 진입점 질의 | open, erdpx 배정, 무응답 |
+| #1703 | `torch.compile` 첫 forward eager 폴백(F2, main) | 머지 09-28 (hendrikschilling, `795ca2b`) |
+| #1796 | Copy TTA 방향 벡터 | **머지 10-08 15:43Z** (bruniss, 리뷰 0, `12f21236a`). 워크트리 `D:/vw10`은 이제 정리 가능 |
+| (새 PR 예정) | `vesuvius.ink_detection.inference.threshold` (docs/27 도구의 villa판) | **미개설.** `D:/vw15` 로컬 `096760d7c`(미푸시). 증거 `runs/villa_threshold_pr/`, 본문 `submission/pr_ink_threshold.md`. Why 문단 = 사용자 |
+| #1705 | staged publish Windows 재시도(F3) | 10-03 봇 자동 종료, 재개설 안 함 |
+| #1893 | (남의 이슈) 렌더 voxel 단위 | #1831 먼저 머지, 작성자가 10-01 닫음. 끝 |
+| #192 | (남의 이슈) 3D 잉크 라벨 | kartoun이 우리 Frag1 결과를 자기 결과표에 올려도 되는지 물음(10-07) → **사용자 허락, 답글 `submission/issue192_reply_kartoun3.md` 미게시** |
+| #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 | open, erdpx 배정, 무응답 |
 | HF `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1` | 카드 `/255` 수정 6건 | open, 09-15 이후 무활동 (스윕 밖, 직접 확인) |
 
 닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
 
 ### 남은 할 일 (다음 세션)
-0. **10-06 합의: 다음 이야기는 주말(10-10~11).** Qual HF 토론 초안(`submission/hf_afv_fiber_9um_discussion.md`)은 **사용자가 직접 꼼꼼히 검토한 뒤 게시** — 미게시 상태. 주말에 검토 결과·게시 여부, 남은 제출 결정 3건(#1703·kartoun 한 줄·Discord 이름), villa PR(borrow_threshold) 착수 여부를 논의. 진행 현황 문서 https://claude.ai/code/artifact/45c8a04a-7b87-40e1-8ce8-3c3551e158cb
-1. **스윕**: `python tools/upstream_sweep.py --since <마지막 이후>` + HF 6건(스윕 밖) + Discord #robots 두 스레드·#announcements 직접(Chrome 확장, 로그인됨; 읽기만, 입력 금지). 마지막 스윕 10-06 ~13:50Z. **#192 kartoun 답글 여부 확인**(10-06 우리 답글에서 홀드아웃 행 상관 0.40 이유를 물음). 채택 신호 후보 (a) Qual HF 카드에 docs/28 수치 제안 (b) docs/27 방법 villa PR — 아직 미착수.
-2. **#1796**: 10-14 16:00 KST 28일 상한으로 닫힘(리뷰 0). 닫힌 뒤 같은 브랜치로 새 PR 열지 사용자 결정. 워크트리 `D:/vw10`.
-3. **10-15 판정**: #1703 머지(09-28)를 10월 근거로 쓸지 사용자 결정. docs/27·28은 10월 신규 성과.
-4. **10월 제출**: **폼 열림**(10-06 확인, 제목 "October 2026 Progress Prizes", `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`). 9월 수상 발표 전인데 떴음(Discord 최신 공지 09-25, Substack 없음). field 5 질문이 4개로 명시됨: (1) 어떤 스크롤 데이터 (2) 판독 확률을 어떻게 높이나 (3) 전에 못 하던 무엇을 가능케 하나 (4) 증거 — → **초안 v1 = `planning/2026-10_submission_draft.md`(10-06, field 4 2,217자·field 5 5,717자, 통독 1회)**. 남은 사용자 결정 3건(⚑: #1703 포함, kartoun 맥락 줄, Discord 이름)이 파일 머리에 있음. docs/27이 약속한 도구 **`tools/borrow_threshold.py` 10-06 완료(`b6da7af`)**: calibrate(같은 모델로 채점 가능한 세그먼트 → 중앙값 최적값 + 스크롤 빼기 점검)·apply. 공개라벨 재현 데이터 14체크포인트 전부 기존 R1b/R3/R0 수치와 일치(`runs/ink9um_scorecard/borrow_threshold_check.txt`). 실행은 ink-detection uv 환경(zarr 필요). kartoun의 8월 레시피 재사용은 8월 작업이라 청구 금지, 넣어도 맥락 한 줄만(사용자 결정 필요).
-5. 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 **당분간 유지**(10-02 사용자 결정).
-6. docs/28 재실행 필요 시: 환경·체크포인트·`D:/vw13`은 10-04 삭제. 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`(SHA256 100/100 일치).
+0. **사용자 몫 3건**: ① kartoun 답글 게시(`submission/issue192_reply_kartoun3.md`) ② Qual HF 토론 검토 후 게시(`submission/hf_afv_fiber_9um_discussion.md`, 10-07 카드 개정 반영 완료, 가중치 동일) ③ villa threshold PR Why 문단 작성(+직접 테스트 돌리면 체크박스). 게시 뒤엔 게시본=초안 대조.
+1. **threshold PR 개설 절차**(Why 받은 뒤): main 재확인(같은 파일 건드린 새 PR·커밋 없나, #1872 진행) → 필요하면 리베이스·테스트 재실행 → `D:/vw15` 브랜치 포크에 푸시 → 사용자가 PR 개설(그림 업로드) → 게시본=초안 대조. 열린 non-draft 상한 3건 중 현재 0건. 28일 상한 주의.
+2. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T03:30:00Z` + HF 6건 + Qual 토론(게시했다면) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만). 마지막 스윕 10-09 ~03:30Z(GitHub·HF), Discord 10-09 ~05:30Z.
+3. **10월 제출**: 마감 10-31 23:59 PT. 사용자 일정에 맞춰 최종 통독·링크 200 확인·해시 → 사용자 제출.
+4. 선택: `D:/vw10`(#1796 머지됨)·`D:/vw14`(Frag1 점검 끝) 워크트리 정리, 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 당분간 유지(10-02 사용자 결정).
+5. docs/28 재실행 필요 시: 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
-- `D:/vw15` = villa threshold PR(`feat/ink-borrow-threshold`, 10-09) · `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw10` = #1796 · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
+- `D:/vw15` = villa threshold PR(`feat/ink-borrow-threshold`, 10-09) · `D:/vw2` = ink_9um 추론용(10-02 sparse 재생성, `feat/flat-depth-targets`) · `D:/vw10` = #1796(머지됨, 정리 가능) · `D:/vw14` = Frag1 점검용 main `e0bbb8b40`(끝, 정리 가능) · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(로컬 미푸시, 보존용).
 - 10-02 제거: vw2·vw3·vw4~vw7·vw8·vw11. 브랜치는 로컬·포크에 남아 있고, 미커밋 수정 3건(vw2 `extra_blur`=docs/23 코드, vw6·vw7=#1471 검증 패치)은 `planning/2026-10-02_cleanup/*.patch`(적용 확인).
 - ⚠️ ink_9um config는 `external/villa`(스키마 이전 체크아웃)로는 못 돌린다. 예전엔 `D:/vw2/ink-detection`에서 `uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m ...`로 돌렸다 → 필요하면 `feat/flat-depth-targets`로 워크트리를 다시 만들고 `vw2_uncommitted.patch` 적용.
 - `external/villa` 본 작업트리는 `fix/stream-untiled-label-images` + 미커밋(train/infer/test 구버전, pyproject/uv.lock cu128 핀) — **체크아웃 전환 금지**.
@@ -121,6 +118,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-09 (오후)**: Discord 확인(Chrome, 읽기만): #robots 두 스레드 남의 답글 0. #announcements 새 글 = 10-09 First Letters $50K PHerc.343(Erwin Nieuwlaar), 남은 대상 21개; 09-26 PHerc1447 First Letters 제외(YoussefNader 9µm 레시피). 9월 Progress Prize 결과는 아직. CLAUDE.md '현재 상태' 절 전면 갱신.
 - **10-09 (주말 일정 당겨 처리)**: 스윕(10-07 12:00Z~). ① **#1796 머지(10-08 15:43Z, bruniss, 리뷰 0, `12f21236a`)** → README 머지 표기·Status 추가, README의 "3.6e-7 vs 3.04"는 서로 다른 실행 수치가 섞인 것이라 커밋된 콘솔 로그(6.08→3.6e-7)로 정정(`9b84be7`). ② kartoun #192 답글(10-07 12:37Z, issuecomment-6038055753): 우리 Frag1 결과를 자기 저장소 결과표에 외부 항목으로 올리겠다며 허락 요청 → **사용자 허락**, 답글 초안 `submission/issue192_reply_kartoun3.md`(게시는 사용자). ③ **Qual이 10-07 카드 재작성**(`e189af7507`, 학습 저장소 Qualzz/afv-fiber-9um-training 공개, 가중치 LFS oid 동일 6837f3fe8f, "No independent test accuracy is claimed", 0139 미사용 확인) → HF 토론 초안 문구 갱신(첫 문장·리비전·미러링). HF 6건 변화 없음. **사용자 결정**: 10월 제출에 #1796 + #1703 포함(#1703은 "09-20 9월 제출 뒤 09-28 머지라 9월엔 없었다" 명시), kartoun 맥락 줄 미포함, Discord 이름 `jamiolrangmalrang4936` → 초안 v2(`planning/2026-10_submission_draft.md`, field 5 통독 1회, Qual 카드 문장 갱신). villa PR(borrow_threshold) 착수 결정 → main에서 ink 파이프라인은 `vesuvius/src/vesuvius/ink_detection/`(koine_machines 아님). 경쟁 PR 없음, 인접 #1872(Danishk2445 checkpoint·depth·direction sweep, AUC, open). `merge_predictions.py`의 128은 투표 기준이라 손댈 근거 없음. ⚠️ 공개 체크포인트에선 빌린 값이 128보다 낫지 않음(이득은 자체 학습 LOSO 모델뿐) + LOSO 예측은 Z:에만 있고 Z: 미연결 → **사용자 결정: Z: 연결 후 LOSO로 증거**. 그 사이 `D:/vw15`(브랜치 `feat/ink-borrow-threshold`, main `a329895ea`, sparse vesuvius/) 로컬 커밋 `096760d7c`(미푸시): `vesuvius.ink_detection.inference.threshold` calibrate/apply(value 규칙만), 테스트 6/6, docs/ink_detection.md 새 절(Labeling loop 앞, #1872와 다른 hunk)·README 한 블록. 우리 도구와 14/14 체크포인트 완전 일치(임계값·F1·빌린 값·손실). 실행 = ink-detection .venv + `PYTHONPATH=D:/vw15/vesuvius/src`. docstring은 검증한 경우(안 본 스크롤의 세그먼트)로 한정, validation mask 보정은 미검증이라 뺌. **Z: 연결 후 증거 완료(`7467660`)**: LOSO step 10k·20k 각 46칸을 CLI로 돌려 docs/27 `labelfree_cells.csv`와 전부 일치(빌린 값 손실 0.004–0.019, 128 손실 0.052–0.176), 그림 pherc0139-w028(128 F1 0.522 → 90 F1 0.607, 맞음/오탐/놓침 색), 공개 ckpt s42 20k에선 128로 충분(0.000–0.023)도 본문에 명시. 증거 `runs/villa_threshold_pr/`, 본문 초안 `submission/pr_ink_threshold.md`. **남은 것(사용자)**: Why 문단 작성, 체크박스는 직접 실행 시에만, 그 뒤 vw15 브랜치 포크에 푸시 → PR 개설. 첫 그림(w041, 크롭이 라벨 없는 영역)은 설득력 없어 폐기.
 
 - **10-07**: 스윕(10-06 13:30Z~, 10:55Z 실행). 새 글 1건 = **#192 kartoun 답글**(10-06 14:08Z, issuecomment-6018077755): 홀드아웃 행(3298–4432)은 기복이 오히려 작음(sd 2.55 vs 3.38) → 0.40은 추적이 아니라 국소 효과로 해석. Frag1을 안 본 occluder(Frag2–6 학습, AUC 0.65)로 같은 레시피를 돌리니 밴드 중심이 z 32.6 → 17.5로 15층 이동, 상관 −0.07. 결론 "occlusion 깊이 = 그 모델이 증거를 얻는 곳, 잉크 위치 아님". 더 강한 2D 체크포인트가 있으면 세 번째 occluder로 돌려 주겠다고 제안. 답할지·docs/12 보강할지는 주말 결정. HF 6건 open·09-15 이후 무활동, #1796 변화 없음(28일 상한 10-14 16:00 KST), #robots 두 스레드 남의 답글 0. #announcements는 이번엔 안 봄.
