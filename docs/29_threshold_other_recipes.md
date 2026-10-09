@@ -117,7 +117,7 @@ segments, the other two one each). Noise floor 0.03 (docs/09).
 [`otherrecipes_hists.npz`](../runs/ink9um_scorecard/otherrecipes_hists.npz) (every histogram),
 [`otherrecipes_infer.log`](../runs/ink9um_scorecard/otherrecipes_infer.log).
 
-**Reading gate: all 15 checkpoint × scroll pairs read** (oracle F1 above the all-ink F1 by 0.27–0.38
+**Reading gate: all 15 checkpoint × scroll pairs read** (oracle F1 above the all-ink F1 by 0.26–0.38
 for the dense checkpoints, 0.22–0.31 for the control). Nothing was dropped.
 
 ## Primary: the four dense checkpoints (mean F1 lost against each cell's own optimum)
@@ -131,7 +131,7 @@ for the dense checkpoints, 0.22–0.31 for the control). Nothing was dropped.
 
 Optima: PHerc0841 115–137, PHerc0009B 121–136, **PHerc0500P2 94–106**. R1b gave PHerc0500P2 123–133,
 taken from the other two scrolls, and lost 0.047–0.071 on each of the four checkpoints. The worst R1b cell
-elsewhere was 0.030 (PHerc0841 w00, `K_ex016_75k`).
+elsewhere was 0.0296, just under the floor (PHerc0841 w00, `K_ex016_75k`).
 
 ## Control: KLAVIS's manual-label run (the released recipe, retrained)
 
