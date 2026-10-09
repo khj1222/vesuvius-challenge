@@ -1,0 +1,351 @@
+{
+  "checkpoint": "docs/15 leave-one-scroll-out models, seeds 42+43, step 020000; each scroll predicted by the model that left it out",
+  "threshold": 85,
+  "cells": [
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w00_loso42_020000.tif",
+      "best_threshold": 81,
+      "f1_best": 0.41002061595945305,
+      "f1_at_128": 0.33181231425054786
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w00_loso43_020000.tif",
+      "best_threshold": 86,
+      "f1_best": 0.42636074678607355,
+      "f1_at_128": 0.37880659570715874
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w02_loso42_020000.tif",
+      "best_threshold": 79,
+      "f1_best": 0.40967393850651185,
+      "f1_at_128": 0.34081566284318965
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w02_loso43_020000.tif",
+      "best_threshold": 78,
+      "f1_best": 0.4174232375114309,
+      "f1_at_128": 0.34910115500543876
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w01_loso42_020000.tif",
+      "best_threshold": 85,
+      "f1_best": 0.46068506657233393,
+      "f1_at_128": 0.3823082261201457
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w01_loso43_020000.tif",
+      "best_threshold": 83,
+      "f1_best": 0.4621439007971115,
+      "f1_at_128": 0.38528011253416916
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w03_loso42_020000.tif",
+      "best_threshold": 72,
+      "f1_best": 0.5232553652669629,
+      "f1_at_128": 0.34790382713231377
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w03_loso43_020000.tif",
+      "best_threshold": 75,
+      "f1_best": 0.5331453791123997,
+      "f1_at_128": 0.3747760876825455
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w05_loso42_020000.tif",
+      "best_threshold": 81,
+      "f1_best": 0.3861134507052588,
+      "f1_at_128": 0.29577880708752713
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w05_loso43_020000.tif",
+      "best_threshold": 85,
+      "f1_best": 0.3970577300476644,
+      "f1_at_128": 0.3246636377960175
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w06_loso42_020000.tif",
+      "best_threshold": 77,
+      "f1_best": 0.5013008772260512,
+      "f1_at_128": 0.3607108619975182
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w06_loso43_020000.tif",
+      "best_threshold": 77,
+      "f1_best": 0.4984798136290994,
+      "f1_at_128": 0.3828521914737249
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w07_loso42_020000.tif",
+      "best_threshold": 89,
+      "f1_best": 0.5522285342613514,
+      "f1_at_128": 0.4854410765895369
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w07_loso43_020000.tif",
+      "best_threshold": 96,
+      "f1_best": 0.5550546505757801,
+      "f1_at_128": 0.5232255276517738
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w09_loso42_020000.tif",
+      "best_threshold": 108,
+      "f1_best": 0.5874986434566276,
+      "f1_at_128": 0.5599011499511201
+    },
+    {
+      "scroll": "PHercParis4",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\phercparis4-w09_loso43_020000.tif",
+      "best_threshold": 112,
+      "f1_best": 0.5981233916543652,
+      "f1_at_128": 0.5894562694002741
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w029_loso42_020000.tif",
+      "best_threshold": 92,
+      "f1_best": 0.5889132191482256,
+      "f1_at_128": 0.5286779942658731
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w029_loso43_020000.tif",
+      "best_threshold": 88,
+      "f1_best": 0.5851030193202518,
+      "f1_at_128": 0.5543772517250504
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w028_loso42_020000.tif",
+      "best_threshold": 116,
+      "f1_best": 0.5118713104598717,
+      "f1_at_128": 0.5061724284138158
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w028_loso43_020000.tif",
+      "best_threshold": 108,
+      "f1_best": 0.5398343850602286,
+      "f1_at_128": 0.5191026460600062
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w031_loso42_020000.tif",
+      "best_threshold": 79,
+      "f1_best": 0.5534627484543791,
+      "f1_at_128": 0.46293604499602714
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w031_loso43_020000.tif",
+      "best_threshold": 90,
+      "f1_best": 0.5686233156475836,
+      "f1_at_128": 0.5097690574151797
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w023_loso42_020000.tif",
+      "best_threshold": 77,
+      "f1_best": 0.467226812708377,
+      "f1_at_128": 0.403558700456778
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w023_loso43_020000.tif",
+      "best_threshold": 86,
+      "f1_best": 0.47885623843557185,
+      "f1_at_128": 0.43059134916765346
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w018_loso42_020000.tif",
+      "best_threshold": 74,
+      "f1_best": 0.4597062064903939,
+      "f1_at_128": 0.3513304598200733
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w018_loso43_020000.tif",
+      "best_threshold": 86,
+      "f1_best": 0.4766325392994289,
+      "f1_at_128": 0.4029021271494405
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w013_loso42_020000.tif",
+      "best_threshold": 81,
+      "f1_best": 0.5996801867586081,
+      "f1_at_128": 0.5080395757727858
+    },
+    {
+      "scroll": "PHerc1667",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc1667-w013_loso43_020000.tif",
+      "best_threshold": 88,
+      "f1_best": 0.6009260628696367,
+      "f1_at_128": 0.5291348578077893
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w016_loso0139_42_020000.tif",
+      "best_threshold": 84,
+      "f1_best": 0.501917021159052,
+      "f1_at_128": 0.31073370417148133
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w016_loso0139_43_020000.tif",
+      "best_threshold": 90,
+      "f1_best": 0.5726501896284615,
+      "f1_at_128": 0.46897372006714894
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w017_loso0139_42_020000.tif",
+      "best_threshold": 131,
+      "f1_best": 0.5950101337657073,
+      "f1_at_128": 0.5947535868881351
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w017_loso0139_43_020000.tif",
+      "best_threshold": 137,
+      "f1_best": 0.6384313631640771,
+      "f1_at_128": 0.6377019558826583
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w028_loso0139_42_020000.tif",
+      "best_threshold": 99,
+      "f1_best": 0.6238371555540267,
+      "f1_at_128": 0.5894430864403715
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w028_loso0139_43_020000.tif",
+      "best_threshold": 103,
+      "f1_best": 0.6819563563621425,
+      "f1_at_128": 0.6511599805179992
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w029_loso0139_42_020000.tif",
+      "best_threshold": 78,
+      "f1_best": 0.7049639519102118,
+      "f1_at_128": 0.5078594561213278
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w029_loso0139_43_020000.tif",
+      "best_threshold": 90,
+      "f1_best": 0.6959375185603137,
+      "f1_at_128": 0.5791010924818525
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w035_loso0139_42_020000.tif",
+      "best_threshold": 79,
+      "f1_best": 0.72191410261974,
+      "f1_at_128": 0.5663918714908486
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w035_loso0139_43_020000.tif",
+      "best_threshold": 84,
+      "f1_best": 0.7080975869581847,
+      "f1_at_128": 0.6384280631826427
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w039_loso0139_42_020000.tif",
+      "best_threshold": 75,
+      "f1_best": 0.6156943950719788,
+      "f1_at_128": 0.3410019885108263
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w039_loso0139_43_020000.tif",
+      "best_threshold": 79,
+      "f1_best": 0.6543937896284868,
+      "f1_at_128": 0.5426714854159822
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w040_loso0139_42_020000.tif",
+      "best_threshold": 74,
+      "f1_best": 0.6835071800827154,
+      "f1_at_128": 0.4597113310796443
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w040_loso0139_43_020000.tif",
+      "best_threshold": 79,
+      "f1_best": 0.7032581154150113,
+      "f1_at_128": 0.5643017681774148
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w041_loso0139_42_020000.tif",
+      "best_threshold": 72,
+      "f1_best": 0.6650888957064177,
+      "f1_at_128": 0.46920610163566323
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w041_loso0139_43_020000.tif",
+      "best_threshold": 80,
+      "f1_best": 0.7340470142946227,
+      "f1_at_128": 0.616203335036904
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w043_loso0139_42_020000.tif",
+      "best_threshold": 91,
+      "f1_best": 0.751773083100814,
+      "f1_at_128": 0.6854903590672268
+    },
+    {
+      "scroll": "PHerc0139",
+      "prediction": "Z:\\\uc544\uce74\uc774\ube0c\\vesuvius-runs\\ink9um_scorecard\\preds\\pherc0139-w043_loso0139_43_020000.tif",
+      "best_threshold": 110,
+      "f1_best": 0.7616688194265047,
+      "f1_at_128": 0.7485596869103674
+    }
+  ],
+  "check_against_other_scrolls": {
+    "PHerc0139": {
+      "cells": 18,
+      "threshold_from_other_scrolls": 85,
+      "mean_f1_best": 0.6674525929115815,
+      "mean_f1_loss_borrowed": 0.014095761328942587,
+      "mean_f1_loss_128": 0.11346967218499852
+    },
+    "PHerc1667": {
+      "cells": 12,
+      "threshold_from_other_scrolls": 84,
+      "mean_f1_best": 0.5359030037210464,
+      "mean_f1_loss_borrowed": 0.004261621346989435,
+      "mean_f1_loss_128": 0.06035362930017366
+    },
+    "PHercParis4": {
+      "cells": 16,
+      "threshold_from_other_scrolls": 86,
+      "mean_f1_best": 0.48241033387927973,
+      "mean_f1_loss_borrowed": 0.008726621181874832,
+      "mean_f1_loss_128": 0.08160823992784212
+    }
+  }
+}

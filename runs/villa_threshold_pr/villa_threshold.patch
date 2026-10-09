@@ -1,0 +1,439 @@
+From 096760d7cfe880c1cbcac3e10c3bc7c939bdba70 Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Fri, 9 Oct 2026 13:20:48 +0900
+Subject: [PATCH] ink_detection: threshold, pick the binarization threshold
+ from labelled predictions
+
+`calibrate` finds the F1-optimal threshold of each labelled prediction made by
+one checkpoint and stores their median; with two or more scrolls it scores each
+scroll at the other scrolls' median and at 128, so the cost of each choice is
+visible before reading an unlabelled scroll. `apply` binarizes at that value.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ vesuvius/docs/ink_detection.md                |  20 ++
+ vesuvius/src/vesuvius/ink_detection/README.md |   8 +
+ .../ink_detection/inference/threshold.py      | 224 ++++++++++++++++++
+ .../ink_detection/test_inference_threshold.py | 129 ++++++++++
+ 4 files changed, 381 insertions(+)
+ create mode 100644 vesuvius/src/vesuvius/ink_detection/inference/threshold.py
+ create mode 100644 vesuvius/tests/ink_detection/test_inference_threshold.py
+
+diff --git a/vesuvius/docs/ink_detection.md b/vesuvius/docs/ink_detection.md
+index db25b294c..7a3682b8b 100644
+--- a/vesuvius/docs/ink_detection.md
++++ b/vesuvius/docs/ink_detection.md
+@@ -520,6 +520,26 @@ volume because those determine the plan. Level 0 is a sparse uint8 Zarr-v2
+ array in scroll Z/Y/X coordinates. Five rounded-mean levels are derived from
+ it, producing a six-level OME-Zarr pyramid with ceil-halved shapes.
+ 
++## Binarize a flat prediction
++
++Flat inference writes probabilities; reading a scroll ends with a threshold.
++The best threshold depends on the checkpoint, so `threshold` measures it on
++segments you have labels for and applies it to a scroll you do not:
++
++```bash
++uv run --extra models python -m vesuvius.ink_detection.inference.threshold calibrate   --cell PHerc0841 preds/pherc0841-w00.tif          labels/pherc0841-w00/pherc0841-w00_inklabels.zarr          labels/pherc0841-w00/pherc0841-w00_supervision_mask.zarr   --cell PHerc0009B preds/pherc0009b-ag055.tif          labels/pherc0009b-ag055/pherc0009b-ag055_inklabels.zarr          labels/pherc0009b-ag055/pherc0009b-ag055_supervision_mask.zarr   --out calibration.json
++uv run --extra models python -m vesuvius.ink_detection.inference.threshold apply   preds/unlabelled.tif --calibration calibration.json --out unlabelled_ink.tif
++```
++
++Every prediction must come from the checkpoint you will run on the new scroll,
++and from scrolls that checkpoint did not train on. `calibrate` finds each
++prediction's F1-optimal threshold and stores their median. With predictions
++from two or more scrolls it also scores each scroll at the median of the other
++scrolls, next to the score at 128, so the output shows what each choice costs
++for this checkpoint on a scroll it was not taken from. Label Zarrs are read at
++level 0, middle Z plane; label TIFF/PNG images also work, and any non-zero
++pixel counts. Re-calibrate after further training.
++
+ ## Labeling loop
+ 
+ 1. Train from Zarr labels and a surface volume.
+diff --git a/vesuvius/src/vesuvius/ink_detection/README.md b/vesuvius/src/vesuvius/ink_detection/README.md
+index 058f1a405..9f3a30368 100644
+--- a/vesuvius/src/vesuvius/ink_detection/README.md
++++ b/vesuvius/src/vesuvius/ink_detection/README.md
+@@ -146,6 +146,14 @@ The native tifxyz directory must contain `x.tif`, `y.tif`, `z.tif`, and
+ `volume_source.txt`. Use `--plan-only` to inspect occupied-chunk and patch
+ counts without creating output.
+ 
++Pick the binarization threshold for an unlabelled scroll from labelled
++predictions made by the same checkpoint (see `docs/ink_detection.md`):
++
++```bash
++uv run --extra models python -m vesuvius.ink_detection.inference.threshold calibrate   --cell SCROLL PREDICTION.tif INKLABELS.zarr SUPERVISION_MASK.zarr --out calibration.json
++uv run --extra models python -m vesuvius.ink_detection.inference.threshold apply   UNLABELLED.tif --calibration calibration.json --out ink.tif
++```
++
+ ## Checkpoints and metrics
+ 
+ Training embeds the resolved JSON config in each checkpoint. Inference
+diff --git a/vesuvius/src/vesuvius/ink_detection/inference/threshold.py b/vesuvius/src/vesuvius/ink_detection/inference/threshold.py
+new file mode 100644
+index 000000000..ecb2615ac
+--- /dev/null
++++ b/vesuvius/src/vesuvius/ink_detection/inference/threshold.py
+@@ -0,0 +1,224 @@
++"""Choose the threshold for binarizing a flat ink prediction of an unlabelled scroll.
++
++``calibrate`` takes predictions that the same checkpoint made on labelled segments, finds the
++F1-optimal threshold of each, and stores their median. With segments from two or more scrolls
++it also scores each scroll with the threshold taken from the other scrolls only, next to the
++score at 128, so you can see what each choice costs for this checkpoint before reading a scroll
++that has no labels. ``apply`` binarizes a prediction at the stored threshold.
++
++Calibrate on segments of scrolls the checkpoint never saw: that is the case this was measured
++on, and a threshold taken from pixels the checkpoint trained on is not expected to carry over.
++Re-calibrate after any further training.
++"""
++
++from __future__ import annotations
++
++import json
++from dataclasses import dataclass
++from pathlib import Path
++from typing import Sequence
++
++import numpy as np
++import tifffile
++
++from vesuvius.utils.cli import HyphenUnderscoreParser
++
++
++DEFAULT_THRESHOLD_U8 = 128
++SUPPORTED_IMAGE_SUFFIXES = {".tif", ".tiff", ".png"}
++
++
++@dataclass(frozen=True)
++class CalibrationCell:
++    scroll: str
++    prediction: str
++    f1_curve: np.ndarray
++
++    @property
++    def best_threshold(self) -> int:
++        return int(np.argmax(self.f1_curve))
++
++
++def read_prediction(path: Path) -> np.ndarray:
++    """A 2-D uint8 prediction as written by ``inference.infer``."""
++    with tifffile.TiffFile(path) as tif:
++        prediction = np.squeeze(tif.pages[0].asarray())
++    if prediction.ndim != 2:
++        raise ValueError(f"Expected a 2D prediction in {path}, got shape={prediction.shape}")
++    if prediction.dtype != np.uint8:
++        raise ValueError(f"Expected a uint8 prediction in {path}, got dtype={prediction.dtype}")
++    return prediction
++
++
++def read_mask(path: Path) -> np.ndarray:
++    """A boolean plane from a label OME-Zarr (array ``0``, middle Z plane) or a label image."""
++    if path.suffix.lower() == ".zarr":
++        import zarr
++
++        node = zarr.open(str(path), mode="r")
++        array = node["0"] if hasattr(node, "array_keys") else node
++        plane = np.asarray(array[array.shape[0] // 2] if array.ndim == 3 else array[...])
++    elif path.suffix.lower() in SUPPORTED_IMAGE_SUFFIXES:
++        if path.suffix.lower() == ".png":
++            from PIL import Image
++
++            Image.MAX_IMAGE_PIXELS = None
++            with Image.open(path) as image:
++                plane = np.asarray(image)
++        else:
++            plane = tifffile.imread(path)
++        if plane.ndim == 3:
++            plane = plane[..., :3].max(axis=-1)
++    else:
++        raise ValueError(f"Unsupported label format: {path}")
++    if plane.ndim != 2:
++        raise ValueError(f"Expected a 2D label plane in {path}, got shape={plane.shape}")
++    return plane != 0
++
++
++def f1_curve(prediction: np.ndarray, ink: np.ndarray, scored: np.ndarray) -> np.ndarray:
++    """F1 of ``prediction >= t`` against ``ink`` inside ``scored``, for every t in 0..255."""
++    positives = np.bincount(prediction[ink & scored], minlength=256)
++    negatives = np.bincount(prediction[~ink & scored], minlength=256)
++    true_pos = positives[::-1].cumsum()[::-1].astype(np.float64)
++    false_pos = negatives[::-1].cumsum()[::-1].astype(np.float64)
++    total_ink = float(positives.sum())
++    with np.errstate(divide="ignore", invalid="ignore"):
++        precision = np.where(true_pos + false_pos > 0, true_pos / (true_pos + false_pos), 0.0)
++        recall = true_pos / max(total_ink, 1.0)
++        return np.where(precision + recall > 0, 2 * precision * recall / (precision + recall), 0.0)
++
++
++def median_threshold(cells: Sequence[CalibrationCell]) -> int:
++    """Median of the per-cell optima, rounded half up."""
++    return int(np.floor(np.median([cell.best_threshold for cell in cells]) + 0.5))
++
++
++def score_cell(scroll: str, prediction_path: Path, ink_path: Path, mask_path: Path | None) -> CalibrationCell:
++    prediction = read_prediction(prediction_path)
++    ink = read_mask(ink_path)
++    scored = read_mask(mask_path) if mask_path is not None else np.ones(prediction.shape, bool)
++    for name, plane in ((ink_path, ink), (mask_path, scored)):
++        if plane.shape != prediction.shape:
++            raise ValueError(f"{name} has shape {plane.shape}, the prediction has {prediction.shape}")
++    if not (ink & scored).any():
++        raise ValueError(f"{prediction_path}: no ink pixels inside the scored mask")
++    return CalibrationCell(scroll=scroll, prediction=str(prediction_path), f1_curve=f1_curve(prediction, ink, scored))
++
++
++def borrowing_check(cells: Sequence[CalibrationCell]) -> dict[str, dict[str, float | int]]:
++    """Score each scroll at the median threshold of the other scrolls, and at 128."""
++    report: dict[str, dict[str, float | int]] = {}
++    for scroll in sorted({cell.scroll for cell in cells}):
++        own = [cell for cell in cells if cell.scroll == scroll]
++        borrowed = median_threshold([cell for cell in cells if cell.scroll != scroll])
++        report[scroll] = {
++            "cells": len(own),
++            "threshold_from_other_scrolls": borrowed,
++            "mean_f1_best": float(np.mean([cell.f1_curve.max() for cell in own])),
++            "mean_f1_loss_borrowed": float(np.mean([cell.f1_curve.max() - cell.f1_curve[borrowed] for cell in own])),
++            "mean_f1_loss_128": float(
++                np.mean([cell.f1_curve.max() - cell.f1_curve[DEFAULT_THRESHOLD_U8] for cell in own])
++            ),
++        }
++    return report
++
++
++def calibrate(cell_specs: Sequence[Sequence[str]], output_path: Path, *, checkpoint: str = "") -> dict:
++    cells: list[CalibrationCell] = []
++    for spec in cell_specs:
++        if len(spec) not in (3, 4):
++            raise ValueError("--cell takes SCROLL PREDICTION INKLABELS [MASK]")
++        cell = score_cell(spec[0], Path(spec[1]), Path(spec[2]), Path(spec[3]) if len(spec) == 4 else None)
++        cells.append(cell)
++        print(
++            f"{cell.scroll}  {Path(cell.prediction).name}: best threshold {cell.best_threshold} "
++            f"(F1 {cell.f1_curve.max():.3f}; at {DEFAULT_THRESHOLD_U8}: {cell.f1_curve[DEFAULT_THRESHOLD_U8]:.3f})",
++            flush=True,
++        )
++    if not cells:
++        raise ValueError("Give at least one --cell")
++
++    result: dict = {
++        "checkpoint": checkpoint,
++        "threshold": median_threshold(cells),
++        "cells": [
++            {
++                "scroll": cell.scroll,
++                "prediction": cell.prediction,
++                "best_threshold": cell.best_threshold,
++                "f1_best": float(cell.f1_curve.max()),
++                f"f1_at_{DEFAULT_THRESHOLD_U8}": float(cell.f1_curve[DEFAULT_THRESHOLD_U8]),
++            }
++            for cell in cells
++        ],
++        "check_against_other_scrolls": None,
++    }
++    if len({cell.scroll for cell in cells}) >= 2:
++        check = borrowing_check(cells)
++        result["check_against_other_scrolls"] = check
++        print("\neach scroll scored at the threshold of the other scrolls, and at 128 (mean F1 lost):")
++        for scroll, row in check.items():
++            print(
++                f"  {scroll}: threshold {row['threshold_from_other_scrolls']} loses "
++                f"{row['mean_f1_loss_borrowed']:.3f}, 128 loses {row['mean_f1_loss_128']:.3f} "
++                f"({row['cells']} cell{'' if row['cells'] == 1 else 's'}, best F1 {row['mean_f1_best']:.3f})"
++            )
++    else:
++        print("\nnote: all cells come from one scroll; add a second scroll to see what the threshold costs on a scroll it was not taken from.")
++
++    output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
++    print(f"\nthreshold {result['threshold']} -> {output_path}")
++    return result
++
++
++def apply(prediction_path: Path, calibration_path: Path, output_path: Path) -> dict:
++    threshold = int(json.loads(calibration_path.read_text(encoding="utf-8"))["threshold"])
++    prediction = read_prediction(prediction_path)
++    mask = np.where(prediction >= threshold, 255, 0).astype(np.uint8)
++    tifffile.imwrite(output_path, mask, compression="lzw")
++    report = {
++        "prediction": str(prediction_path),
++        "threshold": threshold,
++        "fraction_of_nonzero_marked": float((prediction >= threshold).sum() / max(int((prediction > 0).sum()), 1)),
++        "output": str(output_path),
++    }
++    print(json.dumps(report, indent=1))
++    return report
++
++
++def parse_args(argv: Sequence[str] | None = None):
++    parser = HyphenUnderscoreParser(description=__doc__.split("\n\n")[0])
++    commands = parser.add_subparsers(dest="command", required=True)
++    calibrate_parser = commands.add_parser("calibrate", help="best threshold per labelled prediction, and their median")
++    calibrate_parser.add_argument(
++        "--cell",
++        nargs="+",
++        action="append",
++        required=True,
++        metavar="ARG",
++        help=(
++            "SCROLL PREDICTION INKLABELS [MASK]: one labelled prediction. MASK limits scoring "
++            "(e.g. the supervision mask); without it the whole image is scored. Repeat per prediction."
++        ),
++    )
++    calibrate_parser.add_argument("--checkpoint", default="", help="Note of the checkpoint, stored in the output.")
++    calibrate_parser.add_argument("--out", type=Path, required=True, help="Calibration JSON to write.")
++    apply_parser = commands.add_parser("apply", help="binarize a prediction at the calibrated threshold")
++    apply_parser.add_argument("prediction", type=Path)
++    apply_parser.add_argument("--calibration", type=Path, required=True)
++    apply_parser.add_argument("--out", type=Path, required=True, help="0/255 uint8 TIFF to write.")
++    return parser.parse_args(argv)
++
++
++def main(argv: Sequence[str] | None = None) -> int:
++    args = parse_args(argv)
++    if args.command == "calibrate":
++        calibrate(args.cell, args.out, checkpoint=args.checkpoint)
++    else:
++        apply(args.prediction, args.calibration, args.out)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/vesuvius/tests/ink_detection/test_inference_threshold.py b/vesuvius/tests/ink_detection/test_inference_threshold.py
+new file mode 100644
+index 000000000..90a20e8e2
+--- /dev/null
++++ b/vesuvius/tests/ink_detection/test_inference_threshold.py
+@@ -0,0 +1,129 @@
++from __future__ import annotations
++
++import json
++from pathlib import Path
++
++import numpy as np
++import pytest
++import tifffile
++import zarr
++
++from vesuvius.ink_detection.inference import threshold
++
++
++_ZARR_V3 = int(zarr.__version__.split(".", 1)[0]) >= 3
++
++
++def _write_label_zarr(path: Path, plane: np.ndarray, depth: int = 65) -> None:
++    volume = np.zeros((depth, *plane.shape), dtype=np.uint8)
++    volume[depth // 2] = plane
++    root = zarr.open_group(path, mode="w")
++    if _ZARR_V3:
++        root.create_array("0", data=volume, chunks=(depth, *plane.shape))
++    else:
++        root.create_dataset("0", data=volume, chunks=(depth, *plane.shape))
++
++
++def _segment(tmp_path: Path, name: str, best: int, seed: int) -> tuple[str, str]:
++    """A prediction whose ink scores sit just above ``best`` and background just below."""
++    rng = np.random.default_rng(seed)
++    ink = np.zeros((40, 50), dtype=bool)
++    ink[10:30, 5:45] = True
++    prediction = np.where(ink, rng.integers(best, best + 40, ink.shape), rng.integers(0, best, ink.shape))
++    pred_path = tmp_path / f"{name}.tif"
++    tifffile.imwrite(pred_path, prediction.astype(np.uint8))
++    label_path = tmp_path / f"{name}_inklabels.zarr"
++    _write_label_zarr(label_path, ink.astype(np.uint8) * 255)
++    return str(pred_path), str(label_path)
++
++
++def test_f1_curve_matches_direct_count():
++    rng = np.random.default_rng(0)
++    prediction = rng.integers(0, 256, (30, 30)).astype(np.uint8)
++    ink = rng.random((30, 30)) < 0.3
++    scored = rng.random((30, 30)) < 0.8
++    curve = threshold.f1_curve(prediction, ink, scored)
++    for t in (0, 1, 64, 128, 200, 255):
++        marked = prediction >= t
++        tp = np.sum(marked & ink & scored)
++        fp = np.sum(marked & ~ink & scored)
++        fn = np.sum(~marked & ink & scored)
++        expected = 2 * tp / (2 * tp + fp + fn) if tp else 0.0
++        assert curve[t] == pytest.approx(expected)
++
++
++def test_calibrate_takes_median_and_scores_each_scroll_at_the_others(tmp_path):
++    cells = []
++    for scroll, name, best, seed in (("A", "a1", 90, 1), ("A", "a2", 92, 2), ("B", "b1", 120, 3)):
++        cells.append([scroll, *_segment(tmp_path, name, best, seed)])
++    out = tmp_path / "calibration.json"
++
++    result = threshold.calibrate(cells, out, checkpoint="test")
++
++    assert [cell["best_threshold"] for cell in result["cells"]] == [90, 92, 120]
++    assert all(cell["f1_best"] == pytest.approx(1.0) for cell in result["cells"])
++    assert result["threshold"] == 92
++    check = result["check_against_other_scrolls"]
++    assert check["A"]["threshold_from_other_scrolls"] == 120
++    assert check["B"]["threshold_from_other_scrolls"] == 91
++    assert check["A"]["mean_f1_loss_borrowed"] > 0
++    assert check["B"]["mean_f1_loss_128"] > 0
++    assert json.loads(out.read_text(encoding="utf-8")) == result
++
++
++def test_calibrate_mask_limits_scoring(tmp_path):
++    pred_path, label_path = _segment(tmp_path, "a1", 90, 1)
++    prediction = tifffile.imread(pred_path)
++    prediction[:5] = 255  # false positives outside the mask
++    tifffile.imwrite(pred_path, prediction)
++    mask = np.ones(prediction.shape, dtype=np.uint8)
++    mask[:5] = 0
++    mask_path = tmp_path / "a1_supervision_mask.tif"
++    tifffile.imwrite(mask_path, mask)
++
++    unmasked = threshold.calibrate([["A", pred_path, label_path]], tmp_path / "u.json")
++    masked = threshold.calibrate([["A", pred_path, label_path, str(mask_path)]], tmp_path / "m.json")
++
++    assert unmasked["cells"][0]["f1_best"] < 1.0
++    assert masked["cells"][0]["f1_best"] == pytest.approx(1.0)
++    assert masked["check_against_other_scrolls"] is None
++
++
++def test_apply_binarizes_at_the_calibrated_threshold(tmp_path):
++    prediction = np.arange(256, dtype=np.uint8).reshape(16, 16)
++    pred_path = tmp_path / "unlabelled.tif"
++    tifffile.imwrite(pred_path, prediction)
++    calibration = tmp_path / "calibration.json"
++    calibration.write_text(json.dumps({"threshold": 100}), encoding="utf-8")
++    out = tmp_path / "mask.tif"
++
++    report = threshold.apply(pred_path, calibration, out)
++
++    mask = tifffile.imread(out)
++    assert mask.dtype == np.uint8
++    assert np.array_equal(mask, np.where(prediction >= 100, 255, 0))
++    assert report["threshold"] == 100
++
++
++def test_rejects_mismatched_shapes_and_non_uint8(tmp_path):
++    pred_path, _ = _segment(tmp_path, "a1", 90, 1)
++    small_label = tmp_path / "small.tif"
++    tifffile.imwrite(small_label, np.ones((10, 10), dtype=np.uint8))
++    with pytest.raises(ValueError, match="shape"):
++        threshold.calibrate([["A", pred_path, str(small_label)]], tmp_path / "x.json")
++
++    float_pred = tmp_path / "float.tif"
++    tifffile.imwrite(float_pred, np.zeros((4, 4), dtype=np.float32))
++    with pytest.raises(ValueError, match="uint8"):
++        threshold.read_prediction(float_pred)
++
++
++def test_cli_round_trip(tmp_path):
++    pred_a, label_a = _segment(tmp_path, "a1", 90, 1)
++    pred_b, label_b = _segment(tmp_path, "b1", 110, 2)
++    out = tmp_path / "calibration.json"
++    assert threshold.main(
++        ["calibrate", "--cell", "A", pred_a, label_a, "--cell", "B", pred_b, label_b, "--out", str(out)]
++    ) == 0
++    assert threshold.main(["apply", pred_a, "--calibration", str(out), "--out", str(tmp_path / "m.tif")]) == 0
++    assert json.loads(out.read_text(encoding="utf-8"))["threshold"] == 100
+-- 
+2.53.0.windows.2
+

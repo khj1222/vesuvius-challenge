@@ -1,0 +1,12 @@
+rootdir: D:\vw15\vesuvius
+configfile: pytest.ini
+collecting ... collected 6 items
+
+tests/ink_detection/test_inference_threshold.py::test_f1_curve_matches_direct_count PASSED [ 16%]
+tests/ink_detection/test_inference_threshold.py::test_calibrate_takes_median_and_scores_each_scroll_at_the_others PASSED [ 33%]
+tests/ink_detection/test_inference_threshold.py::test_calibrate_mask_limits_scoring PASSED [ 50%]
+tests/ink_detection/test_inference_threshold.py::test_apply_binarizes_at_the_calibrated_threshold PASSED [ 66%]
+tests/ink_detection/test_inference_threshold.py::test_rejects_mismatched_shapes_and_non_uint8 PASSED [ 83%]
+tests/ink_detection/test_inference_threshold.py::test_cli_round_trip PASSED [100%]
+
+============================== 6 passed in 1.70s ==============================

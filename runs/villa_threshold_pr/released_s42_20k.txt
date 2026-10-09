@@ -1,0 +1,12 @@
+PHerc0841  pherc0841-w00_s42_020000.tif: best threshold 120 (F1 0.662; at 128: 0.657)
+PHerc0841  pherc0841-ag144_s42_020000.tif: best threshold 120 (F1 0.662; at 128: 0.660)
+PHerc0841  pherc0841-ag174_s42_020000.tif: best threshold 126 (F1 0.591; at 128: 0.590)
+PHerc0009B  pherc0009b-ag055_s42_020000.tif: best threshold 126 (F1 0.736; at 128: 0.736)
+PHerc0500P2  pherc0500p2-s1_s42_020000.tif: best threshold 110 (F1 0.660; at 128: 0.637)
+
+each scroll scored at the threshold of the other scrolls, and at 128 (mean F1 lost):
+  PHerc0009B: threshold 120 loses 0.002, 128 loses 0.000 (1 cells, best F1 0.736)
+  PHerc0500P2: threshold 123 loses 0.013, 128 loses 0.023 (1 cells, best F1 0.660)
+  PHerc0841: threshold 118 loses 0.001, 128 loses 0.003 (3 cells, best F1 0.638)
+
+threshold 120 -> <out>\released_s42_20k.json

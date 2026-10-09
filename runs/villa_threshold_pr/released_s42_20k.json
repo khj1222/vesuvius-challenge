@@ -1,0 +1,64 @@
+{
+  "checkpoint": "ink_9um hybrid_3d2d-seed42 step-020000",
+  "threshold": 120,
+  "cells": [
+    {
+      "scroll": "PHerc0841",
+      "prediction": "E:\\vesuvius-challenge\\runs\\ink9um_openlabels\\preds\\pherc0841-w00_s42_020000.tif",
+      "best_threshold": 120,
+      "f1_best": 0.6624691696566258,
+      "f1_at_128": 0.6567574249725334
+    },
+    {
+      "scroll": "PHerc0841",
+      "prediction": "E:\\vesuvius-challenge\\runs\\ink9um_openlabels\\preds\\pherc0841-ag144_s42_020000.tif",
+      "best_threshold": 120,
+      "f1_best": 0.6616315745171082,
+      "f1_at_128": 0.6598508993250523
+    },
+    {
+      "scroll": "PHerc0841",
+      "prediction": "E:\\vesuvius-challenge\\runs\\ink9um_openlabels\\preds\\pherc0841-ag174_s42_020000.tif",
+      "best_threshold": 126,
+      "f1_best": 0.590688452330603,
+      "f1_at_128": 0.590467241586054
+    },
+    {
+      "scroll": "PHerc0009B",
+      "prediction": "E:\\vesuvius-challenge\\runs\\ink9um_openlabels\\preds\\pherc0009b-ag055_s42_020000.tif",
+      "best_threshold": 126,
+      "f1_best": 0.7358031806345477,
+      "f1_at_128": 0.7355723875069314
+    },
+    {
+      "scroll": "PHerc0500P2",
+      "prediction": "E:\\vesuvius-challenge\\runs\\ink9um_openlabels\\preds\\pherc0500p2-s1_s42_020000.tif",
+      "best_threshold": 110,
+      "f1_best": 0.6595915245880195,
+      "f1_at_128": 0.6367060476267417
+    }
+  ],
+  "check_against_other_scrolls": {
+    "PHerc0009B": {
+      "cells": 1,
+      "threshold_from_other_scrolls": 120,
+      "mean_f1_best": 0.7358031806345477,
+      "mean_f1_loss_borrowed": 0.0015979724409002083,
+      "mean_f1_loss_128": 0.00023079312761631332
+    },
+    "PHerc0500P2": {
+      "cells": 1,
+      "threshold_from_other_scrolls": 123,
+      "mean_f1_best": 0.6595915245880195,
+      "mean_f1_loss_borrowed": 0.013018059752523237,
+      "mean_f1_loss_128": 0.02288547696127785
+    },
+    "PHerc0841": {
+      "cells": 3,
+      "threshold_from_other_scrolls": 118,
+      "mean_f1_best": 0.6382630655014457,
+      "mean_f1_loss_borrowed": 0.000743720440131009,
+      "mean_f1_loss_128": 0.0025712102068990994
+    }
+  }
+}

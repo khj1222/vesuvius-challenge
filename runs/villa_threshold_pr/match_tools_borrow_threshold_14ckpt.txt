@@ -1,0 +1,15 @@
+seed 42 step 010000: threshold 129  MATCH
+seed 42 step 020000: threshold 120  MATCH
+seed 42 step 030000: threshold 118  MATCH
+seed 42 step 040000: threshold 123  MATCH
+seed 42 step 050000: threshold 106  MATCH
+seed 42 step 060000: threshold 110  MATCH
+seed 42 step 075000: threshold 102  MATCH
+seed 43 step 010000: threshold 121  MATCH
+seed 43 step 020000: threshold 104  MATCH
+seed 43 step 030000: threshold 101  MATCH
+seed 43 step 040000: threshold 120  MATCH
+seed 43 step 050000: threshold 121  MATCH
+seed 43 step 060000: threshold 113  MATCH
+seed 43 step 075000: threshold 109  MATCH
+all match
