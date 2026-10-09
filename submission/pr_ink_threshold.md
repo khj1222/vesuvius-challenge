@@ -11,7 +11,8 @@ villa PR draft: vesuvius.ink_detection.inference.threshold (2026-10-09). NOT ope
       and a block after native inference -> different hunks.
     - merge_predictions.py's FOREGROUND_THRESHOLD_U8 = 128 is a vote between predictions, not the final
       binarization; this PR does not touch it.
-  ⚠️ The "Why / where this is useful" paragraph must be written by the user (CONTRIBUTING: human-written
+  Why paragraph: the user's own words (Korean, 10-09), translated without adding content; user confirmed "내 생각 맞다".
+  ⚠️ (kept for reference) The "Why / where this is useful" paragraph must be written by the user (CONTRIBUTING: human-written
      commentary). Facts the user can draw on:
        - every reading of an unlabelled scroll ends with a threshold; the package had none, so people use 0.5/128
        - for the released ink_9um checkpoints 128 is fine on three new scrolls (this tool confirms it)
@@ -61,7 +62,7 @@ pherc0139-w028, predicted by the model trained without PHerc. 0139 (seed 42, ste
 
 For the released `ink_9um` checkpoints the same command says 128 is fine. Seed 42, step 20,000, on the five open-data segments of PHerc. 0841, 0009B and 0500P2 published on 2026-09-22 (not in the ink_9um training set): 128 loses 0.000–0.023 and the threshold from the other scrolls 0.001–0.013. The tool is for finding out which case your checkpoint is in.
 
-**Why / where this is useful:** <!-- USER WRITES THIS -->
+**Why / where this is useful:** Most people just cut at 0.5 (128), but the best cut-off probably differs by model and data, and it bothered me that we were picking it by feel. This is for someone applying a model they trained themselves to a new scroll for the first time, who wants to pull the letters out of unlabelled data reliably without missing them.
 
 - [ ] I personally verified that the example and proof above were produced by this PR on the stated data.
 
