@@ -1,0 +1,59 @@
+{
+ "control-manuallabels-step075000.pth": {
+  "sha256": "e60cee6b2c08a021ddfa9683869dab91787531cef762d833cc1f21fdee7fa114",
+  "keys": [
+   "config",
+   "model",
+   "step"
+  ],
+  "step": 74999,
+  "tensors": 508,
+  "out": "klavis_control-manuallabels-step075000.pth"
+ },
+ "dense9um-all7-step075000.pth": {
+  "sha256": "4e23f3cd6e5742a2911431145e825fe4523f8abdcb8790615e209dfc20be7977",
+  "keys": [
+   "config",
+   "model",
+   "step"
+  ],
+  "step": 74999,
+  "tensors": 508,
+  "out": "klavis_dense9um-all7-step075000.pth"
+ },
+ "dense9um-w016excluded-step060000-best.pth": {
+  "sha256": "a92875559e654a35a0702e3563a95914131692ae8b832a0f86ac8e239947897d",
+  "keys": [
+   "config",
+   "model",
+   "step"
+  ],
+  "step": 60000,
+  "tensors": 508,
+  "out": "klavis_dense9um-w016excluded-step060000-best.pth"
+ },
+ "dense9um-w016excluded-step075000.pth": {
+  "sha256": "1d7b99bc641b459736a762b2a1d8c357f61ada4f0117c24c7327b6a1293ba1eb",
+  "keys": [
+   "config",
+   "model",
+   "step"
+  ],
+  "step": 74999,
+  "tensors": 508,
+  "out": "klavis_dense9um-w016excluded-step075000.pth"
+ },
+ "dense_native_016000.safetensors": {
+  "sha256": "d3d95dc41dcb24ed76b84b5e12ca5dae25d7fb34edf1dfbb93e0186f91e6fc6d",
+  "tensors": 508,
+  "step": 16000,
+  "out": "nieuwlaar_dense_native_016000.pth"
+ },
+ "key_match": {
+  "klavis_control-manuallabels-step075000.pth": true,
+  "klavis_dense9um-all7-step075000.pth": true,
+  "klavis_dense9um-w016excluded-step060000-best.pth": true,
+  "klavis_dense9um-w016excluded-step075000.pth": true,
+  "nieuwlaar_dense_native_016000.pth": true
+ }
+}
