@@ -5,6 +5,11 @@
 > 128"). It held for the leave-one-scroll-out models; the released models want 98–141, and for them 128
 > is fine. The method — borrow a model's own optimum from other scrolls scored with that model —
 > passed both times. Sections are kept as written; the replication is at the bottom.
+>
+> **Update (2026-10-09):** a third pre-registered test, on public checkpoints trained with dense
+> pseudo-labels (KLAVIS, Nieuwlaar), found the method's value rule (R1b) failing on one of the three
+> scrolls (PHerc0500P2, 0.062), while the quantile rule (R3) held on all three:
+> [docs/29](29_threshold_other_recipes.md).
 
 **Status: pre-registered, not yet run.** This file is committed before any rule below has
 been scored. The results section is appended after the run; nothing above it changes.
@@ -317,6 +322,8 @@ checkpoints:
 PHerc0500P2 (seed 43, step 20k), calibrated on the other two scrolls, gives 105 and 103, the R1b and
 R3 thresholds in `openlabels_cells.csv`.
 
-It inherits every limit above. It has been checked on one recipe's checkpoints, and a threshold
-calibrated before fine-tuning does not apply after it.
+It inherits every limit above, and a threshold calibrated before fine-tuning does not apply after it.
+On manual-label checkpoints the value rule held; on dense-label checkpoints it failed on one scroll and
+the quantile rule held ([docs/29](29_threshold_other_recipes.md)), so check what `calibrate` prints and
+consider `--rule quantile`.
 

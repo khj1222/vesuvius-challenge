@@ -321,6 +321,13 @@ own model: [`borrow_threshold.py`](tools/borrow_threshold.py) (`calibrate` on la
 `apply` to the unlabelled scroll; on the replication's data it reproduces every cell's optimum and
 each scroll's borrowed threshold and losses, for all 14 checkpoints).
 
+**A third test narrowed it** ([docs/29](docs/29_threshold_other_recipes.md), pre-registered): on public
+checkpoints trained with dense pseudo-labels (KLAVIS `ink9um-dense`, Nieuwlaar `dense-native`), the
+same scrolls, borrowing the value failed on PHerc0500P2 (0.062 lost; its optimum sits ~25 grey levels
+below the other two), and so did 128. Borrowing the *quantile* held on all three (0.003–0.010), as it has in
+every test so far. Three of my four predictions failed. `calibrate`'s own check shows the 0.06 loss, so
+a user sees which case they are in; `apply --rule quantile` is the safer default for an unfamiliar model.
+
 ### 14. How much of a 2.4 µm fiber reading survives at 9 µm? — [docs/28](docs/28_fiber_9um_agreement.md)
 
 PHerc. 0139 has segment meshes on both its 9.362 µm and its 2.399 µm scan, on one UV grid, so the
@@ -524,3 +531,7 @@ vesuvius-challenge/
       maps agree with a 2.399 µm reading of the same surface at F1 0.69 (null 0.45); the 9 µm
       fine-tune does not move it ([docs/28](docs/28_fiber_9um_agreement.md)).
 - [x] **Copy TTA direction priors merged** — #1796 (2026-10-08).
+- [x] **Threshold tool offered upstream** — villa #2012 (open, 2026-10-09).
+- [x] **Threshold rules on dense-label checkpoints** (2026-10-09) — pre-registered; borrowing the value
+      fails on one of three scrolls, borrowing the quantile holds
+      ([docs/29](docs/29_threshold_other_recipes.md)).

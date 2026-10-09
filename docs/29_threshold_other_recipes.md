@@ -106,3 +106,75 @@ segments, the other two one each). Noise floor 0.03 (docs/09).
 - The four primary checkpoints are not independent (three are one KLAVIS run family; Nieuwlaar starts from
   KLAVIS's dense model). "A second recipe" means one more label recipe, not four.
 - One scroll each for PHerc0009B and 0500P2: a per-scroll mean there is one segment.
+
+---
+
+# Results (2026-10-09, run after commit a2a187c)
+
+25 predictions, all completed (0.4–0.8 min each). Raw:
+[`otherrecipes_summary.json`](../runs/ink9um_scorecard/otherrecipes_summary.json),
+[`otherrecipes_cells.csv`](../runs/ink9um_scorecard/otherrecipes_cells.csv) (one row per cell),
+[`otherrecipes_hists.npz`](../runs/ink9um_scorecard/otherrecipes_hists.npz) (every histogram),
+[`otherrecipes_infer.log`](../runs/ink9um_scorecard/otherrecipes_infer.log).
+
+**Reading gate: all 15 checkpoint × scroll pairs read** (oracle F1 above the all-ink F1 by 0.27–0.38
+for the dense checkpoints, 0.22–0.31 for the control). Nothing was dropped.
+
+## Primary: the four dense checkpoints (mean F1 lost against each cell's own optimum)
+
+| rule | PHerc0841 (12 cells) | PHerc0009B (4) | PHerc0500P2 (4) | under 0.03 on all three |
+|---|---|---|---|---|
+| R0 = 128 | 0.003 | 0.001 | **0.062** | no |
+| **R1b** borrow the value | 0.011 | 0.002 | **0.062** | **no** |
+| R2 Otsu | 0.009 | 0.005 | 0.014 | yes |
+| R3 borrow the quantile | 0.010 | 0.004 | 0.003 | yes |
+
+Optima: PHerc0841 115–137, PHerc0009B 121–136, **PHerc0500P2 94–106**. R1b gave PHerc0500P2 123–133,
+taken from the other two scrolls, and lost 0.047–0.071 on each of the four checkpoints. The worst R1b cell
+elsewhere was 0.030 (PHerc0841 w00, `K_ex016_75k`).
+
+## Control: KLAVIS's manual-label run (the released recipe, retrained)
+
+| rule | PHerc0841 (3) | PHerc0009B (1) | PHerc0500P2 (1) |
+|---|---|---|---|
+| R0 = 128 | 0.014 | 0.002 | 0.032 |
+| R1b | 0.003 | 0.002 | 0.012 |
+| R2 | 0.002 | 0.001 | 0.005 |
+| R3 | 0.016 | 0.007 | 0.005 |
+
+Optima 95–120. R1b stays under the floor on all three, as it did for the released checkpoints.
+
+## Predictions, scored
+
+1. *R1b passes on all three (≤ 0.02).* **Failed:** 0.062 on PHerc0500P2.
+2. *Dense optima below the released ones (median below 110).* **Failed:** they sit at or above the
+   released ones on PHerc0841 and 0009B (median 126.5), and below only on PHerc0500P2.
+3. *R0 loses ≥ 0.03 on at least one scroll.* Held (PHerc0500P2, 0.062), but not for the reason given in 2.
+4. *The control behaves like the released checkpoints (optimum within 98–141, R0 under 0.03 everywhere).*
+   **Failed narrowly:** one optimum is 95 and R0 loses 0.032 on PHerc0500P2.
+
+## What it means
+
+- **Borrowing a value is not safe for every recipe.** For the dense checkpoints, PHerc0500P2's optimum is
+  about 25 grey levels below the other two scrolls', and taking the value from them costs twice the noise
+  floor. On the same inputs, the released checkpoints and the manual-label control lost about 0.01 there
+  (0.008 and 0.012). So docs/27's rule R1b passes for the manual-label recipe three times and fails once for a dense-label
+  recipe.
+- **Borrowing the quantile held.** R3 (take the fraction of the sheet the other scrolls' optima mark, and
+  cut this prediction where it marks the same fraction) stayed under 0.03 on all three scrolls for both
+  groups, here and in docs/27's replication. It was the secondary rule there; across the three tests it is
+  the one that never failed.
+- **The tool's own check catches this case.** `calibrate` with these three scrolls scores each one at the
+  other two's value; for each dense checkpoint it prints a 0.05–0.07 loss on PHerc0500P2, so a user would see
+  the problem before applying the value. It does not tell them what to use instead.
+
+**Not tested, observed after the fact:** PHerc0500P2 is the one input on a different grid (8.86 µm,
+listed as a known deviation before the run). Its optimum was also the lowest of the three for the released
+checkpoints (median 107.5 vs 117), but the gap was about 10 grey levels, not 25. Whether the grid, the
+scroll or the dense labels make the gap larger is not separated here.
+
+## Follow-ups
+
+- docs/27, `tools/borrow_threshold.py` and the README point here instead of saying "one recipe".
+  `tools/borrow_threshold.py apply --rule quantile` already implements R3; villa #2012 implements only
+  R1b, and this result belongs in its thread.

@@ -9,6 +9,10 @@ docs/27 tested this twice, pre-registered: on leave-one-scroll-out models over t
 0.056-0.145 on the first set. What transfers is a model's own threshold, not a number: the two sets wanted 84-92
 and 98-141. So calibrate with the model you will run, and re-calibrate after fine-tuning.
 
+docs/29 (a third test, dense-label checkpoints) found the value rule failing on one of three scrolls
+(0.062 lost) while the quantile rule held on all three; the quantile rule has passed every test so far.
+Read the borrowing check `calibrate` prints, and prefer ``apply --rule quantile`` for an unfamiliar model.
+
 Step 1, ``calibrate``: run the model on segments you have ink labels for -- ideally from more
 than one scroll -- and give it each (prediction, ink labels, supervision mask) triple. It
 records each cell's F1-optimal threshold and writes their median (``value`` rule, R1 in
