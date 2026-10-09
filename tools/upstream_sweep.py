@@ -35,6 +35,7 @@ US = "khj1222"
 
 # threads we opened, were asked into, or commented on
 THREADS = [
+    (2012, "our PR: ink threshold calibrate/apply (docs/27 tool, on main)"),
     (1703, "our PR: eager fallback (F2, on main)"),
     (1705, "our PR: staged publish (F3, on main)"),
     (1796, "our PR: Copy TTA direction priors (on main)"),

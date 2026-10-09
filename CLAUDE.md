@@ -23,7 +23,7 @@
 | #1701 | 패치 캐시 지문(F4, main) | 머지 09-21 (hendrikschilling) |
 | #1703 | `torch.compile` 첫 forward eager 폴백(F2, main) | 머지 09-28 (hendrikschilling, `795ca2b`) |
 | #1796 | Copy TTA 방향 벡터 | **머지 10-08 15:43Z** (bruniss, 리뷰 0, `12f21236a`). 워크트리 `D:/vw10`은 이제 정리 가능 |
-| (새 PR 예정) | `vesuvius.ink_detection.inference.threshold` (docs/27 도구의 villa판) | **미개설.** `D:/vw15` 로컬 `096760d7c`(미푸시). 증거 `runs/villa_threshold_pr/`, 본문 `submission/pr_ink_threshold.md`. Why 문단 = 사용자 |
+| **#2012** | `vesuvius.ink_detection.inference.threshold` (docs/27 도구의 villa판) | **open 10-09 06:35Z**(사용자 개설, ready, 리뷰어 자동 jrudolph·bruniss). 헤드 `096760d7c` = 포크 `feat/ink-borrow-threshold`(`D:/vw15`). 게시본=초안(그림 자리만 업로드 이미지로 바뀜). Why = 사용자 말 번역("내 생각 맞다" 확인), 체크박스 끔(테스트는 내가 돌림). 14일 무활동 10-23, 28일 상한 11-06 저녁 KST. 앱 PR 모니터에 bind |
 | #1705 | staged publish Windows 재시도(F3) | 10-03 봇 자동 종료, 재개설 안 함 |
 | #1893 | (남의 이슈) 렌더 voxel 단위 | #1831 먼저 머지, 작성자가 10-01 닫음. 끝 |
 | #192 | (남의 이슈) 3D 잉크 라벨 | kartoun이 우리 Frag1 결과를 자기 결과표에 올려도 되는지 물음(10-07) → **사용자 허락, 답글 게시 10-09 05:56Z(issuecomment-6075223909), 게시본=초안 462자 일치** |
@@ -33,8 +33,8 @@
 닫힌 것: #1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(연구 리드가 닫고 잠금), #1611(완료).
 
 ### 남은 할 일 (다음 세션)
-0. **사용자 몫**: ① ~~kartoun 답글~~ 10-09 게시·대조 완료 ② ~~Qual HF 토론~~ 10-09 06:02Z 게시(`Qualzz20/afv_fiber_9um/discussions/1`), 제목·본문 2,909자 초안과 일치 — 다음 스윕에서 답 확인(스윕 밖, HF API) ③ villa threshold PR Why 문단 작성(+직접 테스트 돌리면 체크박스). 게시 뒤엔 게시본=초안 대조.
-1. **threshold PR 개설 절차**(Why 받은 뒤): main 재확인(같은 파일 건드린 새 PR·커밋 없나, #1872 진행) → 필요하면 리베이스·테스트 재실행 → `D:/vw15` 브랜치 포크에 푸시 → 사용자가 PR 개설(그림 업로드) → 게시본=초안 대조. 열린 non-draft 상한 3건 중 현재 0건. 28일 상한 주의.
+0. **사용자 몫**: ① ~~kartoun 답글~~ 10-09 게시·대조 완료 ② ~~Qual HF 토론~~ 10-09 06:02Z 게시(`Qualzz20/afv_fiber_9um/discussions/1`), 제목·본문 2,909자 초안과 일치 — 다음 스윕에서 답 확인(스윕 밖, HF API) ③ ~~villa threshold PR~~ #2012로 개설 완료. 게시 뒤엔 게시본=초안 대조.
+1. **#2012 관리**: 스윕에 #2012 추가(tools/upstream_sweep.py 목록), CI(python 테스트 zarr 2.18.7/3.2.1) 결과 확인, 리뷰 오면 답. 10월 제출 초안 field 4·5에 "open PR #2012" 한 줄 넣을지 사용자 결정(열린 PR은 머지 전이라 청구는 약하게).
 2. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T03:30:00Z` + HF 6건 + Qual 토론(게시했다면) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만). 마지막 스윕 10-09 ~03:30Z(GitHub·HF), Discord 10-09 ~05:30Z.
 3. **10월 제출**: 마감 10-31 23:59 PT. 사용자 일정에 맞춰 최종 통독·링크 200 확인·해시 → 사용자 제출.
 4. 선택: `D:/vw10`(#1796 머지됨)·`D:/vw14`(Frag1 점검 끝) 워크트리 정리, 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB는 당분간 유지(10-02 사용자 결정).
