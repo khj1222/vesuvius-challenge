@@ -1,0 +1,18 @@
+mean F1 lost per scroll, each rule taken from the other scrolls (villa threshold calibrate)
+
+study1_loso_steps10k20k
+  PHerc0139    value 0.016  quantile 0.022  128 0.145
+  PHerc1667    value 0.007  quantile 0.001  128 0.056
+  PHercParis4  value 0.014  quantile 0.025  128 0.113
+study2_released_14
+  PHerc0009B   value 0.001  quantile 0.004  128 0.008
+  PHerc0500P2  value 0.008  quantile 0.003  128 0.026
+  PHerc0841    value 0.005  quantile 0.005  128 0.009
+study3_dense_4
+  PHerc0009B   value 0.002  quantile 0.003  128 0.001
+  PHerc0500P2  value 0.062  quantile 0.003  128 0.062
+  PHerc0841    value 0.011  quantile 0.009  128 0.002
+study3_control
+  PHerc0009B   value 0.002  quantile 0.006  128 0.002
+  PHerc0500P2  value 0.012  quantile 0.001  128 0.032
+  PHerc0841    value 0.003  quantile 0.010  128 0.014

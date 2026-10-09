@@ -1,0 +1,70 @@
+{
+ "study1_loso_steps10k20k": {
+  "PHerc0139": {
+   "mean_f1_loss_value": 0.016188011808991647,
+   "mean_f1_loss_quantile": 0.022185701004964614,
+   "mean_f1_loss_128": 0.14458947377716436
+  },
+  "PHerc1667": {
+   "mean_f1_loss_value": 0.006754188848763073,
+   "mean_f1_loss_quantile": 0.0014753426292335888,
+   "mean_f1_loss_128": 0.05593750520304771
+  },
+  "PHercParis4": {
+   "mean_f1_loss_value": 0.014042464831183652,
+   "mean_f1_loss_quantile": 0.02489160726378236,
+   "mean_f1_loss_128": 0.11306100109063155
+  }
+ },
+ "study2_released_14": {
+  "PHerc0009B": {
+   "mean_f1_loss_value": 0.0012913464412096826,
+   "mean_f1_loss_quantile": 0.0037258796455567384,
+   "mean_f1_loss_128": 0.007993120817716668
+  },
+  "PHerc0500P2": {
+   "mean_f1_loss_value": 0.007954398327007204,
+   "mean_f1_loss_quantile": 0.0029132566855082603,
+   "mean_f1_loss_128": 0.026480390681811294
+  },
+  "PHerc0841": {
+   "mean_f1_loss_value": 0.004526866150777562,
+   "mean_f1_loss_quantile": 0.004504288248877178,
+   "mean_f1_loss_128": 0.008855085354452768
+  }
+ },
+ "study3_dense_4": {
+  "PHerc0009B": {
+   "mean_f1_loss_value": 0.0016527269626356866,
+   "mean_f1_loss_quantile": 0.003108570334066002,
+   "mean_f1_loss_128": 0.0009633527506402173
+  },
+  "PHerc0500P2": {
+   "mean_f1_loss_value": 0.061866121555943954,
+   "mean_f1_loss_quantile": 0.00281234301318517,
+   "mean_f1_loss_128": 0.06153307968665078
+  },
+  "PHerc0841": {
+   "mean_f1_loss_value": 0.010588983409825559,
+   "mean_f1_loss_quantile": 0.009368022141386165,
+   "mean_f1_loss_128": 0.002468648767364375
+  }
+ },
+ "study3_control": {
+  "PHerc0009B": {
+   "mean_f1_loss_value": 0.0018559796608927925,
+   "mean_f1_loss_quantile": 0.005607528723449939,
+   "mean_f1_loss_128": 0.002448539593228216
+  },
+  "PHerc0500P2": {
+   "mean_f1_loss_value": 0.012055303302259901,
+   "mean_f1_loss_quantile": 0.001027161898605633,
+   "mean_f1_loss_128": 0.0321632845433395
+  },
+  "PHerc0841": {
+   "mean_f1_loss_value": 0.00278092849905065,
+   "mean_f1_loss_quantile": 0.009904718398439205,
+   "mean_f1_loss_128": 0.014003293874616518
+  }
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "docs27_replication_released": {
+  "PHerc0841": {
+   "cells": 42,
+   "R3_prediction_gt0": 0.004504288248877177,
+   "R3_published_volume_sheet": 0.005800285714285714,
+   "max_cell_threshold_shift": 5
+  },
+  "PHerc0009B": {
+   "cells": 14,
+   "R3_prediction_gt0": 0.0037258796455567384,
+   "R3_published_volume_sheet": 0.005027928571428572,
+   "max_cell_threshold_shift": 3
+  },
+  "PHerc0500P2": {
+   "cells": 14,
+   "R3_prediction_gt0": 0.0029132566855082603,
+   "R3_published_volume_sheet": 0.002114285714285714,
+   "max_cell_threshold_shift": 4
+  }
+ },
+ "docs29_dense_and_control": {
+  "PHerc0841": {
+   "cells": 15,
+   "R3_prediction_gt0": 0.009475361392796774,
+   "R3_published_volume_sheet": 0.011383333333333334,
+   "max_cell_threshold_shift": 5
+  },
+  "PHerc0009B": {
+   "cells": 5,
+   "R3_prediction_gt0": 0.0036083620119427896,
+   "R3_published_volume_sheet": 0.0049794,
+   "max_cell_threshold_shift": 2
+  },
+  "PHerc0500P2": {
+   "cells": 5,
+   "R3_prediction_gt0": 0.0024553067902692628,
+   "R3_published_volume_sheet": 0.0035848000000000004,
+   "max_cell_threshold_shift": 4
+  }
+ }
+}
