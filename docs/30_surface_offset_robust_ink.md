@@ -100,5 +100,6 @@ differ, since both already train with whole-window jitter.
 
 **Deviation recorded before any result (2026-10-11):** the first control run died at the start with Windows
 error 1455 (shared-memory mapping failed) while the test renders were being built in parallel. All four
-configs were changed from `dataloader_workers` 12 to 6, the setting this machine's earlier ink_9um runs used.
+configs were changed from `dataloader_workers` 12 to 6 to leave memory headroom (the earlier ink_9um runs
+here used 12, without anything else running).
 This changes data-loading parallelism only; both arms get the same change, and nothing had been evaluated.
