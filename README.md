@@ -349,6 +349,22 @@ fine-tune and its parent are indistinguishable here (−0.005 [−0.021, +0.009]
 lead by 0.03. This is agreement with a model-made reference, not accuracy, and a presence map cannot
 test whether touching fibers stay separate. [`fiber9_check.py`](tools/fiber9_check.py).
 
+### 15. Does an ink reader need training against a surface that is off? — [docs/30](docs/30_surface_offset_robust_ink.md)
+
+A traced surface that sits a little off the sheet feeds the ink model the wrong depths. Pre-registered:
+the released `ink_9um` checkpoints fine-tuned 10,000 steps with and without an in-patch depth wander
+(a smooth, spatially varying shift of up to 2 slices inside each training patch), two seeds, scored on
+the five open-label segments of three scrolls none of them trained on, under clean, shifted and
+wandering renders.
+
+**It did not help.** On wandering renders the wander arm scored 0.005–0.006 F1 *below* the control
+(the rule needed +0.015), with no clean-render cost. The reason is in the controls: every model,
+released or fine-tuned, loses only 0.009–0.019 F1 to a 2-slice wander, because the recipe already
+jitters the whole depth window by ±2 slices. What remains is one-sided (a 1–2 slice shift one way costs
+about 0.02) and offsets larger than the 21-slice renders can hold, which this study could not test.
+Checked: the augmentation ran on 40 of 40 sampled training patches and 0 of 40 in the control; clean
+scores reproduce docs/27 to 5e-7. [`run_segrobust.py`](tools/run_segrobust.py).
+
 ---
 
 ## Upstream contributions to ScrollPrize/villa
@@ -537,3 +553,5 @@ vesuvius-challenge/
 - [x] **Threshold rules on dense-label checkpoints** (2026-10-09) — pre-registered; borrowing the value
       fails on one of three scrolls, borrowing the quantile holds
       ([docs/29](docs/29_threshold_other_recipes.md)).
+- [x] **Depth-wander training for surface offsets** (2026-10-11) — pre-registered; no gain within
+      ±2 slices, where the released recipe is already tolerant ([docs/30](docs/30_surface_offset_robust_ink.md)).

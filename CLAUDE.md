@@ -13,7 +13,7 @@
 - **docs/28 9µm 섬유 일치도**(사전등록 `735404f` → 결과 `1b781bf`): PHerc0139, `fiber_hz_vt` F1 0.691 / Qual `afv_fiber_9um` 0.685 vs 2.399 µm 기준(영가설 0.45), 미세조정 차이 없음(−0.005), 손실은 재현율. 일치도이지 정확도 아님.
 - **공개·게시(전부 사용자 게시, 게시본=초안 확인)**: README 13·14절 + Status, docs/27 상단 배너(정정 + docs/29 업데이트). Discord #robots: docs/27 스레드(원글·정정·docs/29 업데이트 10-09 18:45 KST), docs/28 포스트. HF `Qualzz20/afv_fiber_9um/discussions/1`(10-09). #192 kartoun 답글 2건.
 - **외부 인용**: kartoun이 우리 Frag1 결과를 자기 저장소 README "Findings so far" 9번 외부 항목으로 등재(10-09 11:45Z, 커밋 `61d657961`, 크레딧+우리 댓글 링크).
-- **10월 제출 초안 v3** = `planning/2026-10_submission_draft.md`(10-09, field 4 3,848자·field 5 8,573자, 통독 1회). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 구성: docs/27(+도구) + docs/28 + docs/29 + #1796(10-08 머지) + #1703("09-20 9월 제출 뒤 09-28 머지" 명시) + #2012(open PR, field 4 한 줄). kartoun 맥락 줄 없음(사용자 결정 — 단 10-09 README 등재는 새 사실이라 넣을지 다시 물을 수 있음), Discord 이름 `jamiolrangmalrang4936`. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. #2012가 그 전에 머지되면 문구를 "merged"로. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
+- **10월 제출 초안 v4** = `planning/2026-10_submission_draft.md`(10-11, field 4 4,372자·field 5 9,871자, 통독 1회; docs/30 음성 결과 포함). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 구성: docs/27(+도구) + docs/28 + docs/29 + #1796(10-08 머지) + #1703("09-20 9월 제출 뒤 09-28 머지" 명시) + #2012(open PR, field 4 한 줄). kartoun 맥락 줄 없음(사용자 결정 — 단 10-09 README 등재는 새 사실이라 넣을지 다시 물을 수 있음), Discord 이름 `jamiolrangmalrang4936`. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. #2012가 그 전에 머지되면 문구를 "merged"로. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
 - **9월 라운드 $500 수상**(10-11 10:53 KST #announcements "27 Progress Prize winners for September": "Hyojun Kwon, for various ink detection experiments with manual and pseudo labels, measuring cross-scroll generalisation and more"). 송금 안내 메일(7월은 지급 양식→전신환) 오면 사용자 처리. 참고: 최고 $20k Samir Lerognon(섬유 자동 추출), $5k Ben Kyles(ScrollFiesta)·**Domenico Russo=KLAVIS reader-v2("seeing wide use")**, 머지된 villa PR 묶음은 $250 등급 다수 → 10월 기대치 조정 근거.
 
 ### 업스트림 PR/이슈 (ScrollPrize/villa)
@@ -32,7 +32,7 @@
 닫힌 것: #1705·#1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(닫고 잠금), #1611(완료), #1893(#1831로 해결).
 
 ### 남은 할 일 (다음 세션)
-0. **docs/30 완료 = 음성 결과(10-11 밤, `bc87201`).** 사전등록 `8b6aefc`(+워커 12→6 `845160e`, 결과 전). 위치마다 흔드는 깊이 증강(wander) vs 대조군, 공개 75k에서 10k 미세조정 × 시드 2. **P1 실패**(흔든 렌더 차이 −0.005/−0.006, 기준 +0.015, 양수 스크롤 1/3), P2 통과. 모든 모델이 진폭 2층 흔들림에 0.009~0.019만 잃음 → 기존 ±2층 창 지터가 이미 이 범위를 덮음. 한쪽 방향 깊이 민감도(−쪽 ~0.02)는 모든 모델에 남음. 큰 어긋남(>±2층)은 21층 렌더로 시험 불가 = 미해결. 점검: 증강 호출 40/40 vs 0/40(`tools/check_wander_active.py`, ⚠️ 스크립트를 D:/vw2 밖에서 돌리면 venv가 external/villa의 옛 koine_machines를 불러옴 → `PYTHONPATH=D:/vw2/ink-detection`), base clean 점수 docs/27과 5e-7 일치. 체크포인트 공개 안 함. **다음 결정(사용자)**: ① 큰 어긋남 확장(2.4µm에서 넓은 렌더·29개 재준비·다운로드, 11월 현실적) ② 10월은 docs/30을 음성 결과로 한 줄 넣고 정리 ③ A(VC3D 버튼, Discord 문의는 사용자). 추천 = ②+③.
+0. **docs/30 완료 = 음성 결과(10-11 밤, `bc87201`).** 사전등록 `8b6aefc`(+워커 12→6 `845160e`, 결과 전). 위치마다 흔드는 깊이 증강(wander) vs 대조군, 공개 75k에서 10k 미세조정 × 시드 2. **P1 실패**(흔든 렌더 차이 −0.005/−0.006, 기준 +0.015, 양수 스크롤 1/3), P2 통과. 모든 모델이 진폭 2층 흔들림에 0.009~0.019만 잃음 → 기존 ±2층 창 지터가 이미 이 범위를 덮음. 한쪽 방향 깊이 민감도(−쪽 ~0.02)는 모든 모델에 남음. 큰 어긋남(>±2층)은 21층 렌더로 시험 불가 = 미해결. 점검: 증강 호출 40/40 vs 0/40(`tools/check_wander_active.py`, ⚠️ 스크립트를 D:/vw2 밖에서 돌리면 venv가 external/villa의 옛 koine_machines를 불러옴 → `PYTHONPATH=D:/vw2/ink-detection`), base clean 점수 docs/27과 5e-7 일치. 체크포인트 공개 안 함. **사용자 결정(10-11 밤)**: ② 오늘 정리 완료 — README 15절·Status 한 줄, 10월 초안 v4(field 4 3링크, field 5 서두 "세 질문"·(1) 문단·(2) 한 문단·(4) 실패 항목, 9,871자, 통독 1회). ①(큰 어긋남 확장: 2.4µm에서 넓은 렌더로 29개 재준비 + 다운로드 승인 필요)과 ③(VC3D "내 잉크 예측 열기" 버튼: 담당 bruniss·hendrikschilling에게 Discord 문의는 사용자)은 **시간 날 때**.
 1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-11T02:30:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대). 9월 수상 발표 확인.
 2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한.
 3. **10월 제출**: 마감 10-31 23:59 PT. **10-24 무렵** 최종 통독·링크 200·해시 → 사용자 제출. kartoun README 등재를 field 4/5에 넣을지 그때 사용자에게 물을 것.
@@ -113,7 +113,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 `README.md`(공개 랜딩) · `docs/08` Windows 재현 · `docs/09` 검증 하네스 · `docs/10–12` 깊이 라벨(8월) · `docs/13` 9월 정찰 ·
 `docs/14` 스코어카드 · `docs/15` LOSO 4부작 · `docs/16` First Letters 렌더 · `docs/17` held-out 감사 · `docs/18` UDA 사다리 ·
-`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `docs/29` 임계값 규칙 3차(dense 라벨) · `tools/README.md`(툴 설명).
+`docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `docs/29` 임계값 규칙 3차(dense 라벨) · `docs/30` 표면 어긋남 깊이 증강(음성) · `tools/README.md`(툴 설명).
 비공개 계획: `planning/2026-10_merge_month_plan.md`, `planning/2026-10_working_plan.md`.
 
 ## 최근 기록
