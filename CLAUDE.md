@@ -36,7 +36,7 @@
 1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-11T02:30:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대). 9월 수상 발표 확인.
 2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한.
 3. **10월 제출**: 마감 10-31 23:59 PT. **10-24 무렵** 최종 통독·링크 200·해시 → 사용자 제출. kartoun README 등재를 field 4/5에 넣을지 그때 사용자에게 물을 것.
-4. **Z: 연결되면 planning/ 백업 동기화**(10-11 조사 메모 `planning/2026-10-11_november_survey.md` 미백업 — Z: 미연결로 실패). 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB 당분간 유지(10-02 사용자 결정).
+4. planning/ 백업은 10-11 밤 동기화 완료(4,415파일, 2개 복사, 해시 불일치 0). 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB 당분간 유지(10-02 사용자 결정).
 5. docs/28 재실행 필요 시: 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`.
 6. docs/29 재실행 필요 시: 서드파티 체크포인트는 `data/ink_9um/models_ext/clean/`(gitignore, 재생성은 `tools/convert_thirdparty_ckpts.py`), 예측 `runs/ink9um_openlabels/preds_otherrecipes*`.
 
