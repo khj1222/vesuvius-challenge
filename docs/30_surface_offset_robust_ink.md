@@ -103,3 +103,61 @@ error 1455 (shared-memory mapping failed) while the test renders were being buil
 configs were changed from `dataloader_workers` 12 to 6 to leave memory headroom (the earlier ink_9um runs
 here used 12, without anything else running).
 This changes data-loading parallelism only; both arms get the same change, and nothing had been evaluated.
+
+---
+
+# Results (2026-10-11, run after commit 8b6aefc; worker change 845160e)
+
+Four fine-tunes (control 40 and 45 min, wander 64 and 60 min on one RTX 5090), 330 predictions, all
+completed. Raw: [`segrobust_cells.csv`](../runs/ink9um_scorecard/segrobust_cells.csv) (one row per
+segment × model × render), [`segrobust_summary.json`](../runs/ink9um_scorecard/segrobust_summary.json).
+
+## Decision
+
+| endpoint | seed 42 | seed 43 | rule | verdict |
+|---|---|---|---|---|
+| **P1** wander − control on the six wander renders, mean of 3 scrolls | −0.005 | −0.006 | ≥ +0.015 in both seeds, ≥ 2/3 scrolls positive | **fails** (1 of 3 scrolls positive in each seed) |
+| **P2** wander − control on clean renders | −0.001 | −0.007 | ≥ −0.01 in both seeds | passes |
+
+**The study fails.** Training with an in-patch depth wander did not make the reader hold up better on
+wandering renders; if anything it was slightly worse. Nothing is released.
+
+## Mean best F1 by render group (three scrolls weighted equally)
+
+| model | clean | shift −1/−2 | shift +1/+2 | wander peak 1 | wander peak 2 |
+|---|---|---|---|---|---|
+| released s42 | 0.642 | 0.622 | 0.645 | 0.630 | 0.623 |
+| released s43 | 0.646 | 0.627 | 0.651 | 0.641 | 0.637 |
+| control s42 | 0.647 | 0.631 | 0.656 | 0.641 | 0.636 |
+| control s43 | 0.649 | 0.622 | 0.653 | 0.644 | 0.636 |
+| wander s42 | 0.646 | 0.632 | 0.645 | 0.638 | 0.630 |
+| wander s43 | 0.642 | 0.621 | 0.649 | 0.636 | 0.631 |
+
+## Predictions, scored
+
+1. *P1 passes narrowly (+0.015 to +0.025).* **Failed:** −0.005 and −0.006.
+2. *P2 passes.* Held.
+3. *No difference on whole-surface shifts.* Roughly held on −1/−2; on +1/+2 the wander arm was 0.004–0.011 lower.
+
+## What it means
+
+- **Within ±2 slices the released recipe is already fairly tolerant.** A smooth wander with peak 2 slices
+  costs every model here 0.009–0.019 F1, much less than the 0.04 the feasibility check saw with a
+  step-20k checkpoint on two segments. The recipe's whole-window jitter of ±2 slices already covers most of
+  what this augmentation adds, so there was little to recover.
+- **One-sided depth sensitivity persists in every model.** Shifting the surface one way costs about 0.02;
+  the other way gains a little. Fine-tuning did not change that.
+- **Not tested, and where the problem probably lives:** offsets larger than ±2 slices. The 21-slice renders
+  cannot hold them, for training or for testing. A real tracing error of tens of micrometres, a sheet
+  switch or a fold needs wider renders from the 2.4 µm volumes.
+
+## Checks (after the result)
+
+- **The augmentation ran.** Building the training set exactly as the trainer does and drawing 40 samples
+  per arm: `_apply_local_wander` was called 40 of 40 times in the wander arm, 0 times in the control
+  ([`wander_active_check.json`](../runs/segrobust/wander_active_check.json),
+  [`check_wander_active.py`](../tools/check_wander_active.py)). The trainer imports the branch's own code,
+  checked by module path; a script run from elsewhere picks up an older install without the function,
+  which is how this check first failed.
+- **Scoring reproduces earlier numbers.** The released checkpoints' clean-render scores on all ten
+  segment × seed pairs equal the docs/27 replication's to 5e-7.
