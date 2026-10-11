@@ -117,7 +117,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
-- **10-11 (토)**: 스윕(10-09 12:16Z~) GitHub·HF 새 글 0, #2012 리뷰 0. Discord: **9월 $500 수상 발표**(위), #robots 두 스레드 남의 답글 0. README 상단에 9월 수상 한 줄.
+- **10-11 (토)**: 스윕(10-09 12:16Z~) GitHub·HF 새 글 0, #2012 리뷰 0. Discord: **9월 $500 수상 발표**(위), #robots 두 스레드 남의 답글 0. README 상단에 9월 수상 한 줄. **10월 기대치 판단(사용자 질문)**: 9월 $1k는 새 방법·VC3D에 들어간 도구, $500은 실험·측정, 머지 PR 묶음은 $250 → 지금 구성은 $500(범위 $250–500)이 유력, **#2012가 10월 안에 머지되면 $1k 가능**. 10-24 최종 점검 때 ① #2012 리뷰 요청(Discord 일반 채널이면 사용자가 직접 씀) ② field 5 중심을 '도구(villa PR) + 세 번의 사전등록 검증'으로 재구성할지 사용자와 상의.
 - **10-09 (밤, 마감 점검)**: 사용자 "진짜 다 됐나" → 현재 상태 절·메모리·현황 문서가 분위수 푸시 이전 상태였음을 발견해 갱신. **`tools/upstream_sweep.py`에 HF 토론 7건(1667 카드 6 + Qual) 추가**(공개 API, 우리 이벤트 제외). 그 스윕에서 **kartoun이 우리 Frag1 결과를 README Findings 9번 외부 항목으로 등재**(11:45Z, `61d657961`) 확인.
 - **10-09 (밤) 4·5번**: `D:/vw10`·`D:/vw14` 제거(깨끗, vw10 브랜치는 포크에 있음). **#2012용 분위수 규칙 — `D:/vw15` 커밋 `720a487d4`, 사용자 "추천대로" 후 포크에 푸시(PR head=720a487d4, 커밋 2개).** sheet=`prediction>0`로 대체해도 되는지 먼저 확인(`tools/check_quantile_sheet.py`, 차이 ±0.002 이내) → calibrate가 value·quantile·128을 나란히 보고, `apply --rule quantile`(기본은 value 유지), 테스트 8/8. 세 연구 데이터로 villa CLI 재계산(`runs/villa_threshold_pr/quantile_evidence.*`): quantile 최대 0.025, value는 dense 0500P2 0.062. 후속 댓글 초안 `submission/pr2012_quantile_update.md`(푸시 후 게시, 게시 전 스레드 재확인). CI 통과(zarr 2·3) 확인 후 사용자가 후속 댓글 게시 12:06Z(issuecomment-6080542847, 1,222자 초안과 일치).
 - **10-09 (마무리)**: 진행 현황 문서 갱신(10-09 표에 docs/29·게시 4건, 더 할 만한 분야 1·3번 완료 표시, 초안 v3 글자 수), 메모리 갱신(10월·Copy TTA 항목 + 피드백 2건: 의외 결과는 양성 대조까지 점검 / 한국어로 소통), planning/·AGENTS.md를 Z:/아카이브/vesuvius-local-only에 동기화(4,414파일 중 22개 복사, 해시 불일치 0, 백업에만 있는 파일 0).
