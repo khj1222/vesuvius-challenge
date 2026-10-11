@@ -1,0 +1,166 @@
+From 47957aee4ae1472fc279ee350b370c447aa0605a Mon Sep 17 00:00:00 2001
+From: khj1222 <39723594+khj1222@users.noreply.github.com>
+Date: Sun, 11 Oct 2026 14:06:47 +0900
+Subject: [PATCH] ink_dataset: optional flat_z_local_wander (smooth in-plane
+ depth shift inside a training patch)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../koine_machines/data/ink_dataset.py        | 72 +++++++++++++++++++
+ .../data/tests/test_local_wander.py           | 54 ++++++++++++++
+ 2 files changed, 126 insertions(+)
+ create mode 100644 ink-detection/koine_machines/data/tests/test_local_wander.py
+
+diff --git a/ink-detection/koine_machines/data/ink_dataset.py b/ink-detection/koine_machines/data/ink_dataset.py
+index c7a2a8995..a1ba78ac0 100644
+--- a/ink-detection/koine_machines/data/ink_dataset.py
++++ b/ink-detection/koine_machines/data/ink_dataset.py
+@@ -150,6 +150,61 @@ def _flat_z_window_bbox(
+     return (z0 + offset, y0, x0, z1 + offset, y1, x1), offset
+ 
+ 
++def _local_wander_settings(config, *, do_augmentations: bool, is_validation: bool):
++    """Return (max_amplitude, corr_px_range) when the local Z wander applies to this patch, else None."""
++    cfg = config.get("flat_z_local_wander") or {}
++    if not bool(cfg.get("enabled", False)) or not do_augmentations or is_validation:
++        return None
++    probability = float(cfg.get("probability", 1.0))
++    if not 0.0 <= probability <= 1.0:
++        raise ValueError(f"flat_z_local_wander.probability must be in [0, 1], got {probability}")
++    if random.random() >= probability:
++        return None
++    max_amplitude = float(cfg.get("max_amplitude", 2.0))
++    corr = cfg.get("corr_px", [64, 256])
++    corr_range = (float(corr[0]), float(corr[1]))
++    if max_amplitude < 0 or corr_range[0] <= 0 or corr_range[1] < corr_range[0]:
++        raise ValueError(f"invalid flat_z_local_wander settings: {cfg!r}")
++    return max_amplitude, corr_range
++
++
++def _smooth_field(shape, *, corr_px: float, rng) -> np.ndarray:
++    """A smooth random field on `shape` (Y, X) with roughly `corr_px` between independent values, peak |1|."""
++    grid = (max(2, int(round(shape[0] / corr_px)) + 1), max(2, int(round(shape[1] / corr_px)) + 1))
++    coarse = rng.standard_normal(grid)
++    field = ndimage.zoom(coarse, (shape[0] / grid[0], shape[1] / grid[1]), order=1, grid_mode=True,
++                         mode="nearest")
++    field = field[: shape[0], : shape[1]]
++    peak = float(np.abs(field).max())
++    return field / peak if peak > 0 else field
++
++
++def _apply_local_wander(full_crop, *, window_depth: int, window_offset: int, max_amplitude: float,
++                        corr_range, rng) -> np.ndarray:
++    """Resample a (D, Y, X) crop to a `window_depth` window whose depth varies smoothly in Y/X.
++
++    The window starts at the canonical centred position plus `window_offset` (the existing whole-window
++    jitter) plus a smooth field of peak |amplitude| <= `max_amplitude` slices; the total shift is clipped to
++    the real layers on either side, so no padding is ever sampled. Linear interpolation along Z.
++    """
++    depth = int(full_crop.shape[0])
++    trim = (depth - int(window_depth)) // 2
++    amplitude = float(rng.uniform(0.0, max_amplitude))
++    corr_px = float(rng.uniform(corr_range[0], corr_range[1]))
++    field = _smooth_field(full_crop.shape[1:], corr_px=corr_px, rng=rng) * amplitude
++    shift = np.clip(window_offset + field, -trim, trim).astype(np.float32)
++    pos = trim + np.arange(window_depth, dtype=np.float32)[:, None, None] + shift[None]
++    pos = np.clip(pos, 0, depth - 1)
++    lo = np.floor(pos).astype(np.int64)
++    hi = np.minimum(lo + 1, depth - 1)
++    weight = pos - lo
++    full = full_crop.astype(np.float32, copy=False)
++    out = np.take_along_axis(full, lo, 0) * (1.0 - weight) + np.take_along_axis(full, hi, 0) * weight
++    if np.issubdtype(full_crop.dtype, np.floating):
++        return out.astype(full_crop.dtype)
++    return np.rint(out).astype(full_crop.dtype)
++
++
+ def _require_z_bbox_inside(array, bbox, *, name: str) -> None:
+     z0, y0, x0, z1, y1, x1 = (int(value) for value in bbox)
+     shape = tuple(int(value) for value in array.shape)
+@@ -1965,6 +2020,23 @@ class InkDataset(Dataset):
+                 if require_real_z:
+                     _require_z_bbox_inside(image_vol, flat_bbox, name="image")
+                 image_crop, image_valid_slices = _read_bbox_with_padding(image_vol, flat_bbox, fill_value=0)
++                wander = _local_wander_settings(
++                    self.config,
++                    do_augmentations=self.do_augmentations,
++                    is_validation=patch.is_validation,
++                )
++                if wander is not None:
++                    full_bbox = tuple(int(value) for value in patch.bbox)
++                    _require_z_bbox_inside(image_vol, full_bbox, name="image")
++                    full_crop, _ = _read_bbox_with_padding(image_vol, full_bbox, fill_value=0)
++                    image_crop = _apply_local_wander(
++                        full_crop,
++                        window_depth=int(image_crop.shape[0]),
++                        window_offset=int(_z_window_offset),
++                        max_amplitude=wander[0],
++                        corr_range=wander[1],
++                        rng=np.random.default_rng(random.getrandbits(32)),
++                    )
+                 if getattr(patch, 'is_unlabeled', False):
+                     supervision_crop = np.zeros(expected_shape, dtype=np.uint8)
+                     inklabels_crop = np.zeros(expected_shape, dtype=np.uint8)
+diff --git a/ink-detection/koine_machines/data/tests/test_local_wander.py b/ink-detection/koine_machines/data/tests/test_local_wander.py
+new file mode 100644
+index 000000000..66dc5734a
+--- /dev/null
++++ b/ink-detection/koine_machines/data/tests/test_local_wander.py
+@@ -0,0 +1,54 @@
++import numpy as np
++
++from koine_machines.data.ink_dataset import (
++    _apply_local_wander,
++    _local_wander_settings,
++    _smooth_field,
++)
++
++
++def _ramp_volume(depth=21, size=32):
++    """Each layer z holds the value 10*z, so the sampled depth can be read back from the output."""
++    return (np.arange(depth, dtype=np.float32)[:, None, None] * 10.0) * np.ones((depth, size, size), np.float32)
++
++
++def test_zero_amplitude_equals_whole_window_shift():
++    full = _ramp_volume()
++    for offset in (-2, 0, 2):
++        out = _apply_local_wander(full, window_depth=17, window_offset=offset, max_amplitude=0.0,
++                                  corr_range=(64, 256), rng=np.random.default_rng(0))
++        np.testing.assert_array_equal(out, full[2 + offset: 2 + offset + 17])
++
++
++def test_wander_stays_inside_real_layers_and_varies_in_plane():
++    full = _ramp_volume()
++    for seed in range(20):
++        out = _apply_local_wander(full, window_depth=17, window_offset=2, max_amplitude=2.0,
++                                  corr_range=(8, 16), rng=np.random.default_rng(seed))
++        depth_read = out / 10.0                       # first output layer sits at 2 + shift
++        assert depth_read.min() >= 0.0 and depth_read.max() <= 20.0
++        assert (depth_read[0] >= 2.0 - 2.0 - 1e-5).all() and (depth_read[0] <= 2.0 + 2.0 + 1e-5).all()
++    out = _apply_local_wander(full, window_depth=17, window_offset=0, max_amplitude=2.0,
++                              corr_range=(8, 16), rng=np.random.default_rng(3))
++    assert np.ptp(out[0]) > 0.0                        # the start depth differs across the patch
++
++
++def test_integer_input_keeps_dtype():
++    full = (_ramp_volume() % 256).astype(np.uint8)
++    out = _apply_local_wander(full, window_depth=17, window_offset=0, max_amplitude=1.0,
++                              corr_range=(64, 256), rng=np.random.default_rng(1))
++    assert out.dtype == np.uint8 and out.shape == (17, 32, 32)
++
++
++def test_smooth_field_peak_and_smoothness():
++    field = _smooth_field((128, 128), corr_px=64, rng=np.random.default_rng(0))
++    assert abs(np.abs(field).max() - 1.0) < 1e-6
++    assert np.abs(np.diff(field, axis=0)).max() < 0.2   # no pixel-scale noise
++
++
++def test_settings_only_for_augmented_training_patches():
++    cfg = {"flat_z_local_wander": {"enabled": True, "max_amplitude": 2.0, "corr_px": [64, 256]}}
++    assert _local_wander_settings(cfg, do_augmentations=True, is_validation=False) == (2.0, (64.0, 256.0))
++    assert _local_wander_settings(cfg, do_augmentations=False, is_validation=False) is None
++    assert _local_wander_settings(cfg, do_augmentations=True, is_validation=True) is None
++    assert _local_wander_settings({}, do_augmentations=True, is_validation=False) is None
+-- 
+2.53.0.windows.2
+
