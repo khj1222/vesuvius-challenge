@@ -97,3 +97,8 @@ differ, since both already train with whole-window jitter.
   steps.
 - Five segments on three scrolls, one starting checkpoint per seed. The seed spread rule in P1 is the only
   noise control; the 0.03 floor of docs/09 is larger than the effect predicted.
+
+**Deviation recorded before any result (2026-10-11):** the first control run died at the start with Windows
+error 1455 (shared-memory mapping failed) while the test renders were being built in parallel. All four
+configs were changed from `dataloader_workers` 12 to 6, the setting this machine's earlier ink_9um runs used.
+This changes data-loading parallelism only; both arms get the same change, and nothing had been evaluated.

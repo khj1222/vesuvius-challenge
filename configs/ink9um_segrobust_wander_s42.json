@@ -73,7 +73,7 @@
   "val_steps": 32,
   "val_preview_batches": 1,
   "log_every": 50,
-  "dataloader_workers": 12,
+  "dataloader_workers": 6,
   "pin_memory": true,
   "verify_finite_gradients_steps": 0,
   "max_amp_overflow_events": 0,
