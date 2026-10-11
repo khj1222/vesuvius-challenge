@@ -12,6 +12,8 @@ upstream patches built on top of it. Everything here is MIT-licensed.
 
 **A July 2026 Progress Prize was awarded to the held-out validation harness in
 this repository.**
+**A September 2026 Progress Prize was awarded to the ink-detection experiments here
+(manual and pseudo labels, cross-scroll generalisation; docs/14–26).**
 
 ---
 

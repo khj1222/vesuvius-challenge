@@ -14,7 +14,7 @@
 - **공개·게시(전부 사용자 게시, 게시본=초안 확인)**: README 13·14절 + Status, docs/27 상단 배너(정정 + docs/29 업데이트). Discord #robots: docs/27 스레드(원글·정정·docs/29 업데이트 10-09 18:45 KST), docs/28 포스트. HF `Qualzz20/afv_fiber_9um/discussions/1`(10-09). #192 kartoun 답글 2건.
 - **외부 인용**: kartoun이 우리 Frag1 결과를 자기 저장소 README "Findings so far" 9번 외부 항목으로 등재(10-09 11:45Z, 커밋 `61d657961`, 크레딧+우리 댓글 링크).
 - **10월 제출 초안 v3** = `planning/2026-10_submission_draft.md`(10-09, field 4 3,848자·field 5 8,573자, 통독 1회). 폼 = `docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform`. 구성: docs/27(+도구) + docs/28 + docs/29 + #1796(10-08 머지) + #1703("09-20 9월 제출 뒤 09-28 머지" 명시) + #2012(open PR, field 4 한 줄). kartoun 맥락 줄 없음(사용자 결정 — 단 10-09 README 등재는 새 사실이라 넣을지 다시 물을 수 있음), Discord 이름 `jamiolrangmalrang4936`. 제출 직전 `submission/2026-10_progress_prize.md`로 옮겨 커밋·해시. #2012가 그 전에 머지되면 문구를 "merged"로. 기대치 $500~$1k(머지 2건 더해 조금 위 가능).
-- 9월 라운드는 09-20 v30 제출(`submission/2026-09_form_answers.md`, 동결). **10-09 기준 9월 수상 발표 아직 없음**(#announcements 최신 = 10-09 First Letters $50K PHerc.343 Erwin Nieuwlaar, 남은 대상 21개; 09-26 PHerc1447 First Letters 제외).
+- **9월 라운드 $500 수상**(10-11 10:53 KST #announcements "27 Progress Prize winners for September": "Hyojun Kwon, for various ink detection experiments with manual and pseudo labels, measuring cross-scroll generalisation and more"). 송금 안내 메일(7월은 지급 양식→전신환) 오면 사용자 처리. 참고: 최고 $20k Samir Lerognon(섬유 자동 추출), $5k Ben Kyles(ScrollFiesta)·**Domenico Russo=KLAVIS reader-v2("seeing wide use")**, 머지된 villa PR 묶음은 $250 등급 다수 → 10월 기대치 조정 근거.
 
 ### 업스트림 PR/이슈 (ScrollPrize/villa)
 
@@ -32,7 +32,7 @@
 닫힌 것: #1705·#1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(닫고 잠금), #1611(완료), #1893(#1831로 해결).
 
 ### 남은 할 일 (다음 세션)
-1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-09T12:16:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대). 9월 수상 발표 확인.
+1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-11T02:30:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 두 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대). 9월 수상 발표 확인.
 2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한.
 3. **10월 제출**: 마감 10-31 23:59 PT. **10-24 무렵** 최종 통독·링크 200·해시 → 사용자 제출. kartoun README 등재를 field 4/5에 넣을지 그때 사용자에게 물을 것.
 4. 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB 당분간 유지(10-02 사용자 결정).
@@ -117,6 +117,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **10-11 (토)**: 스윕(10-09 12:16Z~) GitHub·HF 새 글 0, #2012 리뷰 0. Discord: **9월 $500 수상 발표**(위), #robots 두 스레드 남의 답글 0. README 상단에 9월 수상 한 줄.
 - **10-09 (밤, 마감 점검)**: 사용자 "진짜 다 됐나" → 현재 상태 절·메모리·현황 문서가 분위수 푸시 이전 상태였음을 발견해 갱신. **`tools/upstream_sweep.py`에 HF 토론 7건(1667 카드 6 + Qual) 추가**(공개 API, 우리 이벤트 제외). 그 스윕에서 **kartoun이 우리 Frag1 결과를 README Findings 9번 외부 항목으로 등재**(11:45Z, `61d657961`) 확인.
 - **10-09 (밤) 4·5번**: `D:/vw10`·`D:/vw14` 제거(깨끗, vw10 브랜치는 포크에 있음). **#2012용 분위수 규칙 — `D:/vw15` 커밋 `720a487d4`, 사용자 "추천대로" 후 포크에 푸시(PR head=720a487d4, 커밋 2개).** sheet=`prediction>0`로 대체해도 되는지 먼저 확인(`tools/check_quantile_sheet.py`, 차이 ±0.002 이내) → calibrate가 value·quantile·128을 나란히 보고, `apply --rule quantile`(기본은 value 유지), 테스트 8/8. 세 연구 데이터로 villa CLI 재계산(`runs/villa_threshold_pr/quantile_evidence.*`): quantile 최대 0.025, value는 dense 0500P2 0.062. 후속 댓글 초안 `submission/pr2012_quantile_update.md`(푸시 후 게시, 게시 전 스레드 재확인). CI 통과(zarr 2·3) 확인 후 사용자가 후속 댓글 게시 12:06Z(issuecomment-6080542847, 1,222자 초안과 일치).
 - **10-09 (마무리)**: 진행 현황 문서 갱신(10-09 표에 docs/29·게시 4건, 더 할 만한 분야 1·3번 완료 표시, 초안 v3 글자 수), 메모리 갱신(10월·Copy TTA 항목 + 피드백 2건: 의외 결과는 양성 대조까지 점검 / 한국어로 소통), planning/·AGENTS.md를 Z:/아카이브/vesuvius-local-only에 동기화(4,414파일 중 22개 복사, 해시 불일치 0, 백업에만 있는 파일 0).
