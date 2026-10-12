@@ -762,3 +762,22 @@ $PY tools/fiber9_check.py score                                # gates G2/G3, H1
 share a parametrisation. `score` reads only the saved tiles and also writes `fiber9_maps.npz`
 (1.3 MB, every 2-D map it scores), which is committed. GPU for `run` (about one minute per tile on an
 RTX 5090; the 2.399 µm crops are read from the open-data bucket).
+
+## `prepare_wide_volumes.py`, `prepare_wide_labels.py`, `run_widejitter.py` — 27-slice inputs for larger surface offsets
+
+The [docs/31](../docs/31_wide_depth_jitter.md) run. The ink_9um recipe pools the central 84 planes of each
+2.4 µm surface volume into 21 slices; `prepare_wide_volumes.py` pools the central 108 into 27 (slices 3–23
+equal the old volume, checked per volume), and `prepare_wide_labels.py` copies the 21 label channels to
+3–23 of a 27-channel array (read back and compared). With 27 slices the model's 17-slice window can move
+±5 slices on real layers instead of ±2.
+
+```bash
+UVPY="uv run --project external/villa/ink-detection --no-sync python"
+$UVPY tools/prepare_wide_volumes.py          # streams level 2 from the open-data bucket (~267 GB read, ~48 GB written)
+$UVPY tools/prepare_wide_labels.py
+python tools/run_widejitter.py configs      # control (jitter +-2) and jitter5 (+-5), seeds 42/43
+python tools/run_widejitter.py train        # needs the feat/flat-depth-targets tree at D:/vw2/ink-detection
+$UVPY tools/run_widejitter.py perturb        # 17 test renders per open-label segment (shifts to +-5, wander)
+python tools/run_widejitter.py infer
+$UVPY tools/run_widejitter.py score          # the pre-registered P1/P2 rules
+```

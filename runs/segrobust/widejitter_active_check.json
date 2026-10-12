@@ -1,0 +1,47 @@
+{
+ "module": "D:\\vw2\\ink-detection\\koine_machines\\data\\ink_dataset.py",
+ "control": {
+  "samples": 200,
+  "training_patches": 133807,
+  "base_depths": [
+   17
+  ],
+  "image_depths": [
+   17
+  ],
+  "offset_min": -2,
+  "offset_max": 2,
+  "offset_counts": {
+   "-2": 46,
+   "-1": 48,
+   "0": 36,
+   "1": 40,
+   "2": 30
+  }
+ },
+ "jitter5": {
+  "samples": 200,
+  "training_patches": 133807,
+  "base_depths": [
+   17
+  ],
+  "image_depths": [
+   17
+  ],
+  "offset_min": -5,
+  "offset_max": 5,
+  "offset_counts": {
+   "-5": 26,
+   "-4": 18,
+   "-3": 23,
+   "-2": 18,
+   "-1": 18,
+   "0": 19,
+   "1": 19,
+   "2": 16,
+   "3": 10,
+   "4": 14,
+   "5": 19
+  }
+ }
+}
