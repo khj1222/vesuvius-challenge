@@ -106,3 +106,74 @@ less than 0.01.
   the released recipe.
 - Five segments on three scrolls, one starting checkpoint per seed; the seed rule in P1 is the only noise
   control.
+
+---
+
+# Results (2026-10-13, run after commit 987b778)
+
+Four fine-tunes (control 49 and 68 min, jitter5 56 and 70 min on one RTX 5090), 510 predictions, all
+completed with no retries. Raw: [`widejitter_cells.csv`](../runs/ink9um_scorecard/widejitter_cells.csv) (one
+row per segment × model × render), [`widejitter_summary.json`](../runs/ink9um_scorecard/widejitter_summary.json).
+
+## Decision
+
+| endpoint | seed 42 | seed 43 | rule | verdict |
+|---|---|---|---|---|
+| **P1** jitter5 − control on the large set, mean of 3 scrolls | +0.001 | +0.007 | ≥ +0.015 in both seeds, ≥ 2/3 scrolls positive, > control seed spread (0.005) | **fails** (1 and 3 of 3 scrolls positive, both means under +0.015) |
+| **P2** jitter5 − control on clean renders | +0.002 | +0.001 | ≥ −0.01 in both seeds | passes |
+
+**The study fails.** Widening the whole-window jitter from ±2 to ±5 slices did not make the reader
+meaningfully more robust to surface offsets of 3–5 slices. It cost nothing on clean renders. Nothing is
+released.
+
+## Mean best F1 by shift (three scrolls weighted equally)
+
+Shift k means the model reads the slices k positions further along the volume's slice axis than the
+traced surface puts them (as if the surface sat k slices the other way). `w3`/`w5`: mean of the three smooth
+wander renders with peak 3 and 5 slices.
+
+| model | −5 | −4 | −3 | −2 | −1 | clean | +1 | +2 | +3 | +4 | +5 | w3 | w5 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| released s42 | 0.485 | 0.523 | 0.582 | 0.613 | 0.632 | 0.642 | 0.645 | 0.645 | 0.635 | 0.624 | 0.609 | 0.613 | 0.610 |
+| released s43 | 0.475 | 0.513 | 0.567 | 0.618 | 0.635 | 0.646 | 0.651 | 0.650 | 0.640 | 0.627 | 0.606 | 0.632 | 0.627 |
+| control s42 | 0.500 | 0.538 | 0.583 | 0.623 | 0.643 | 0.648 | 0.660 | 0.658 | 0.644 | 0.633 | 0.617 | 0.627 | 0.625 |
+| control s43 | 0.486 | 0.527 | 0.574 | 0.622 | 0.642 | 0.651 | 0.654 | 0.657 | 0.639 | 0.620 | 0.611 | 0.631 | 0.630 |
+| jitter5 s42 | 0.511 | 0.547 | 0.592 | 0.624 | 0.647 | 0.651 | 0.648 | 0.652 | 0.641 | 0.634 | 0.613 | 0.623 | 0.619 |
+| jitter5 s43 | 0.497 | 0.540 | 0.576 | 0.622 | 0.641 | 0.652 | 0.656 | 0.652 | 0.639 | 0.635 | 0.621 | 0.636 | 0.633 |
+
+## Predictions, scored
+
+1. *Released and control models lose at least 0.05 F1 at ±5 (mean of both directions).* **Held:** 0.090–0.105.
+2. *P1 passes, +0.03 to +0.08.* **Failed:** +0.001 and +0.007.
+3. *P2 passes with a small cost (−0.01 to 0).* P2 passed; there was no cost (+0.002, +0.001).
+4. *On the small set the arms differ by less than 0.01.* **Held:** −0.004 and +0.002.
+
+## What it means
+
+- **Larger surface offsets do cost a lot, and mostly in one direction.** At −5 slices (≈ 48 µm) every model
+  loses 0.14–0.17 F1; at +5 it loses 0.03–0.04. At −3 the loss is already 0.06–0.08. This is the first
+  measurement here of how the released 9 µm reader behaves beyond ±2 slices, and the size a
+  segmentation-quality budget would need to know: a surface a few tens of micrometres off on the wrong side
+  costs about as much as the worst threshold choice in docs/27, and far more than any augmentation in
+  docs/30–31 recovered.
+- **Training on those offsets does not buy the loss back.** jitter5 was trained with the window at −5 in
+  about one patch in eleven and still loses about as much there (0.15 vs 0.16 for control, averaged over
+  seeds). The gains on the −side are consistent only on PHerc0500P2 (+0.016 to +0.026 at −4/−5 in both
+  seeds); elsewhere they are within the seed spread, and the +side gives some back.
+- **Why the −side is so much worse is not established.** A post-hoc look at where annotated ink differs most
+  from background along depth ([`check_ink_depth_profile.py`](../tools/check_ink_depth_profile.py),
+  [`widejitter_ink_depth_profile.json`](../runs/segrobust/widejitter_ink_depth_profile.json); not
+  pre-registered) puts the difference at slices 15–18 on the test segments, 2–5 slices to the + side of the
+  annotation centre (13), against 12 and 15 on two training segments checked (a third, PHerc0139 w028, shows
+  no clear peak). That would put the signal near or past the edge of a window moved to −5. But it does not match per scroll: PHerc0009B, whose difference peaks
+  at slice 15 (still inside the −5 window), loses 0.17–0.19 at −5, while PHerc0841, where it peaks at 17–18,
+  loses 0.07–0.10. The profile measures papyrus-versus-gap as much as ink. Left open.
+
+## Checks (after the result)
+
+- **Scoring reproduces earlier numbers.** The released checkpoints' clean-render best F1 on all ten
+  segment × seed pairs equals docs/30's exactly (difference 0.0); the 0841-w00 seed-42 clean prediction is
+  pixel-identical to docs/30's, as it should be, since the centred 17 slices of the wide render are the old
+  render's.
+- **The arms differ only where intended.** The pre-run training-set check (above) drew offsets −5…+5 for
+  jitter5 and −2…+2 for control from the configs the runs used; all four runs logged no non-finite loss.
