@@ -361,9 +361,26 @@ wandering renders.
 (the rule needed +0.015), with no clean-render cost. The reason is in the controls: every model,
 released or fine-tuned, loses only 0.009–0.019 F1 to a 2-slice wander, because the recipe already
 jitters the whole depth window by ±2 slices. What remains is one-sided (a 1–2 slice shift one way costs
-about 0.02) and offsets larger than the 21-slice renders can hold, which this study could not test.
+about 0.02) and offsets larger than the 21-slice renders can hold, which this study could not test
+(section 16 does).
 Checked: the augmentation ran on 40 of 40 sampled training patches and 0 of 40 in the control; clean
 scores reproduce docs/27 to 5e-7. [`run_segrobust.py`](tools/run_segrobust.py).
+
+### 16. And larger offsets? — [docs/31](docs/31_wide_depth_jitter.md)
+
+The published 2.4 µm surface volumes hold more depth than the recipe uses: pooling all of it gives 27
+slices instead of 21, room to move the model's 17-slice window ±5 slices (≈ ±48 µm) on real data
+([`prepare_wide_volumes.py`](tools/prepare_wide_volumes.py),
+[`prepare_wide_labels.py`](tools/prepare_wide_labels.py)). Pre-registered: the same fine-tune with the
+recipe's whole-window jitter widened from ±2 to ±5 slices, two seeds, the same five held-out segments,
+17 renders each (shifts up to ±5 slices, smooth wander up to 5).
+
+**It did not help either:** +0.001 and +0.007 F1 on 3–5 slice offsets (the rule needed +0.015), with no
+cost on clean renders. **The measurement worth keeping:** the released reader loses **0.14–0.17 F1 when
+the surface is 5 slices off one way and 0.03–0.04 the other way**, and already 0.06–0.08 at 3 slices.
+Training on those offsets does not buy it back, and why the loss is one-sided is still open (a post-hoc
+depth profile did not explain it per scroll). Checked: clean scores equal docs/30's exactly.
+[`run_widejitter.py`](tools/run_widejitter.py).
 
 ---
 
@@ -555,3 +572,5 @@ vesuvius-challenge/
       ([docs/29](docs/29_threshold_other_recipes.md)).
 - [x] **Depth-wander training for surface offsets** (2026-10-11) — pre-registered; no gain within
       ±2 slices, where the released recipe is already tolerant ([docs/30](docs/30_surface_offset_robust_ink.md)).
+- [x] **Wider jitter for 3–5 slice offsets** (2026-10-13) — pre-registered; no gain. The released reader
+      loses 0.14–0.17 F1 at 5 slices one way, 0.03–0.04 the other ([docs/31](docs/31_wide_depth_jitter.md)).
