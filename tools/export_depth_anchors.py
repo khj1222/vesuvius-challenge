@@ -108,7 +108,7 @@ def main(argv=None) -> int:
     for reg in regions:
         y0, y1, x0, x1 = reg["bbox"]
         in_bbox |= (yy >= y0 - cell) & (yy < y1 + cell) & (xx >= x0 - cell) & (xx < x1 + cell)
-    sampled_from = np.where(keep, "center", "")
+    sampled_from = np.where(keep, "center", "").astype("<U12")  # room for "block_median"
     recovered = 0
     for i in np.flatnonzero(~keep & in_bbox):
         r0, c0 = int(yy[i]) - cell // 2, int(xx[i]) - cell // 2
