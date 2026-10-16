@@ -5,7 +5,7 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-10-14 저녁 기준, 이 절이 최우선)
+## 현재 상태 (2026-10-16 기준, 이 절이 최우선)
 
 **10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 세 건 모두 사전등록·실행·공개 완료:
 - **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
@@ -21,7 +21,7 @@
 
 | 번호 | 내용 | 상태 |
 |---|---|---|
-| **#2012** | `vesuvius.ink_detection.inference.threshold` calibrate/apply (docs/27 도구의 villa판) | **open**(10-09 06:35Z 사용자 개설, 리뷰어 자동 jrudolph·bruniss, 리뷰 0). **10-11 23:40Z erdpx가 자기 자신에게 배정**(댓글·리뷰는 아직 없음; 배정도 활동이라 14일 시계가 다시 시작됐을 수 있음). 커밋 2개: `096760d7c`(빌린 값) + `720a487d4`(분위수 `--rule quantile`, 기본은 value). CI 통과(zarr 2·3), Vercel 실패는 권한 문제. 댓글 2건(docs/29 결과 09:45Z, 분위수 추가 12:06Z) 게시본=초안. Why = 사용자 말 번역, 체크박스 끔. **14일 무활동 10-23, 28일 상한 11-06 저녁 KST.** 앱 Auto-fix 켬(실패·리뷰 시 세션 깨움) |
+| **#2012** | `vesuvius.ink_detection.inference.threshold` calibrate/apply (docs/27 도구의 villa판) | **open**(10-09 06:35Z 사용자 개설, 리뷰어 자동 jrudolph·bruniss, 리뷰 0). **10-11 23:40Z pmh47이 erdpx를 배정**(10-16 정정: 자기 배정 아님. 댓글·리뷰 없음. 선례 #1872는 같은 식으로 배정된 뒤 리뷰 없이 14일 후 봇 종료 → 배정은 시계를 되돌리지만 검토 신호는 아님). 커밋 2개: `096760d7c`(빌린 값) + `720a487d4`(분위수 `--rule quantile`, 기본은 value). CI 통과(zarr 2·3), Vercel 실패는 권한 문제. 댓글 2건(docs/29 결과 09:45Z, 분위수 추가 12:06Z) 게시본=초안. Why = 사용자 말 번역, 체크박스 끔. **14일 무활동 종료 ≈10-26 16:00 KST(배정 기준; 보수적으로 10-23 전에 건드릴 것), 28일 상한 11-06 저녁 KST.** 앱 Auto-fix 켬(실패·리뷰 시 세션 깨움) |
 | #1796 | Copy TTA 방향 벡터 | 머지 10-08 (bruniss, `12f21236a`) |
 | #1703 | `torch.compile` 첫 forward eager 폴백 | 머지 09-28 (hendrikschilling, `795ca2b`) |
 | #1701 | 패치 캐시 지문 | 머지 09-21 |
@@ -36,9 +36,10 @@
 0a. **docs/31 완료 = 음성 결과(10-13 새벽, `4a7e797`, 사전등록 `987b778`)**: 27층 입력에서 창 jitter ±5 vs ±2(native9 제외, 시드 42·43). **P1 실패**(큰 어긋남 대비 +0.001/+0.007, 기준 +0.015), P2 통과(깨끗한 입력 +0.002/+0.001, 손해 없음). **새로 잰 것: 공개 모델은 −5층(≈48µm)에서 F1 0.14–0.17, +5층에서 0.03–0.04 잃음**(−3층부터 0.06–0.08) — 한쪽 방향 민감도가 크게 확대됨. ±5로 학습해도 −5 손실 0.16→0.15뿐. 원인 미확정: 사후 깊이 프로파일(`tools/check_ink_depth_profile.py`)은 시험 스크롤 신호 15–18층(중심 13) vs 학습 12·15층이지만 스크롤별 손실과 안 맞음(0009B 피크 15인데 −5 손실 0.17–0.19, 0841 피크 17–18인데 0.07–0.10) → 미해결로 명시. 점검: base clean F1 docs/30과 차 0.0, 0841-w00 clean 예측 픽셀 동일. 체크포인트 공개 안 함. **사용자 결정(10-13 저녁 "추천대로")**: ① 반영 완료 — README 16절·Status(`7b93839`), 10월 초안 **v5**(field 4 docs/31 링크 묶음 4줄, field 5 서두·(1)·(2) 오차 예산 문단·(3) 27층 입력 문단·(4) 해시·점검·실패 항목·Limits; **field 4 5,159자 `c85baf26`, field 5 11,453자 `cc99510d`**, 통독 1회, 새 링크 6개 200) ② **10월은 새 연구 없이 마무리**(#2012 대응 + 10-24 최종 점검), **VC3D 버튼(③)은 11월 주제 후보**(Discord 문의는 10월 중 사용자가 시간 날 때), 원인 추적(A)은 버림(11월에 B가 막히면 재검토). 데이터: `aligned9_wide`·`openlabels9_wide`(48GB), 라벨 `aligned-scrollprizeorg-27slices`, 시험 렌더 `perturbed31`, 예측 `runs/ink9um_openlabels/preds_widejitter`(510장).
 0. **docs/30 완료 = 음성 결과(10-11 밤, `bc87201`).** 사전등록 `8b6aefc`(+워커 12→6 `845160e`, 결과 전). 위치마다 흔드는 깊이 증강(wander) vs 대조군, 공개 75k에서 10k 미세조정 × 시드 2. **P1 실패**(흔든 렌더 차이 −0.005/−0.006, 기준 +0.015, 양수 스크롤 1/3), P2 통과. 모든 모델이 진폭 2층 흔들림에 0.009~0.019만 잃음 → 기존 ±2층 창 지터가 이미 이 범위를 덮음. 한쪽 방향 깊이 민감도(−쪽 ~0.02)는 모든 모델에 남음. 큰 어긋남(>±2층)은 21층 렌더로 시험 불가 = 미해결. 점검: 증강 호출 40/40 vs 0/40(`tools/check_wander_active.py`, ⚠️ 스크립트를 D:/vw2 밖에서 돌리면 venv가 external/villa의 옛 koine_machines를 불러옴 → `PYTHONPATH=D:/vw2/ink-detection`), base clean 점수 docs/27과 5e-7 일치. 체크포인트 공개 안 함. **사용자 결정(10-11 밤)**: ② 오늘 정리 완료 — README 15절·Status 한 줄, 10월 초안 v4(field 4 3링크, field 5 서두 "세 질문"·(1) 문단·(2) 한 문단·(4) 실패 항목, 9,871자, 통독 1회). ①(큰 어긋남 확장: 원본 2.4µm 표면 볼륨은 **109층**(0500P2 118층) → 지금은 가운데 84층만 써서 21층, 전부 쓰면 **27층 = 여유 ±5층(≈±48µm)**이 한계(±2층→±5층). S3 레벨2 다운로드 = 학습 24개 + 시험 5개 **총 267GB**(1667·Paris4가 대부분, 최대 Paris4-w07 34GB), 준비 도구가 스트리밍으로 풀링하면 디스크엔 결과만 ~50GB(현재 aligned9 21층 35.8GB × 27/21). E: 여유 281GB(10-11). native9 5개(0139 원본 9.36µm 렌더)는 2.4µm에서 못 늘림 → 빼거나 21층 유지 결정 필요. **다운로드 완료(10-12 00:15, 사용자 승인)**: `tools/prepare_wide_volumes.py`로 29개 모두 108층→27층 풀링(`surface-volumes/aligned9_wide` 46GB + `openlabels9_wide` 1.8GB, .partial 0), 2시간 27분. 검증 = 넓은 볼륨의 3~23층이 기존 21층 볼륨과 바이트 동일: **28/29 일치**, 0139-w016만 가장자리 띠(y72–383) 49만 복셀이 '기존 0 / 새 값 있음'(둘 다 값 있는 곳은 동일 → 원본 재배포·보충으로 판단, 라벨 무관). 보고서 `runs/segrobust/wide_report.json`. 다음: 27층 라벨(주석 Z=10→13) 만들기, 학습 설정에서 jitter/wander 최대 ±5, native9 처리 결정, 사전등록(docs/31))과 ③(VC3D "내 잉크 예측 열기" 버튼: 담당 bruniss·hendrikschilling에게 Discord 문의는 사용자)은 **시간 날 때**.
 **→ 10-14에 사용자가 일찍 와서 1b(#robots 포스트)와 #192 답글까지 게시 완료 후 "여기까지 마무리". 10월 내용물은 완성(초안 v5), 남은 건 반응 확인·#2012(10-20)·10-24 절차뿐.**
-1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-14T06:00:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 세 스레드·#announcements(Chrome, 읽기만; JS 추출은 막히니 스크린샷 확대).
+1. **스윕**: `python tools/upstream_sweep.py --since 2026-10-16T06:00:00Z`(GitHub 스레드 + HF 7건) + Discord #robots 세 스레드(10-16엔 안 봄 → 다음에 반드시)·#announcements(Chrome, 읽기만; 메시지 목록은 `find`로 ref를 잡고 `read_page`(ref)로 읽으면 텍스트가 나옴, 100자에서 잘리면 스크린샷 확대).
+1c. **11월 = 추론 시점 시트 재정렬, 11-01 시작**(`planning/2026-11_plan.md`): 첫 일은 게이트 규칙을 로컬에 고정(방법 R-bright·R-ink, 통과 = 큰 어긋남 손실 50% 이상 회복·clean 손해 ≤0.01·offset 상관 ≥0.8) → `perturbed31`로 실행. 착수 전 rodriguescarson 스레드·저장소 재확인, ScrollFiesta mesh snapping과 겹치는지 확인.
 1b. **게시 완료(10-14, 사용자) docs/30·31 #robots 포스트** — 스레드 `1559894798830272512`(Chrome 대조 = 초안 일치, Human 줄은 사용자가 뺌). #192 답글 issuecomment-6167550553(11:44Z, API 대조 1,302자 동일). 다음 스윕 때 두 곳 반응 확인: 심사 축 '조기 공개·커뮤니티 채택'용. 핵심 숫자 = 공개 리더가 −5층(≈48µm)에서 F1 0.14–0.17, +5층 0.03–0.04 손실(세그멘테이션 오차 예산). 초안은 내가 쓰고(AI 공개 형식, 영어 + 한국어 요약) 게시는 사용자. 주말에 사용자에게 다시 제안할 것(10-13 제안, 미결).
-2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한. 10월 안 머지 = 기대치 $500→$1k 가능. erdpx 자기 배정(10-11)만 있고 리뷰 0.
+2. **#2012**: 리뷰 오면 대응(Auto-fix가 깨움). **10-20 무렵까지 리뷰 0이면** 14일 무활동 종료(10-23) 전에 한 번 건드릴 것(사용자와 상의). 11-06 상한. 10월 안 머지 = 기대치 $500→$1k 가능. pmh47의 erdpx 배정(10-11)만 있고 리뷰 0.
 3. **10월 제출**: 마감 10-31 23:59 PT. **10-24 무렵** 최종 통독·링크 200·해시 → 사용자 제출. kartoun README 등재를 field 4/5에 넣을지 그때 사용자에게 물을 것.
 4. planning/ 백업은 10-11 밤 동기화 완료(4,415파일, 2개 복사, 해시 불일치 0). 선택: 빈 폴더 `E:/envs` 삭제(가드가 막아서 사용자 몫). external/villa 미추적 76GB 당분간 유지(10-02 사용자 결정).
 5. docs/28 재실행 필요 시: 재채점만이면 커밋된 `runs/fiber9/fiber9_maps.npz`로 충분. 전체 재실행이면 ① `uv venv E:/envs/fiber9 --python 3.12` + torch(cu128 인덱스) + `nnunetv2 zarr==2.18.7 s3fs tifffile scipy huggingface_hub pynrrd` ② 체크포인트는 docs/28에 적힌 HF 리비전으로 재다운로드 ③ `git -C external/villa worktree add --no-checkout --detach D:/vw13 5a4388f08` → `git -C D:/vw13 sparse-checkout set --no-cone 'vesuvius/*' 'scripts/fiber_5class/*'` → `git -C D:/vw13 read-tree -mu HEAD`(Git Bash에선 `MSYS_NO_PATHCONV=1`). 타일 508MB 원본은 `Z:/아카이브/vesuvius-runs/fiber9/tiles`.
@@ -63,7 +64,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 핵심 사실 (상금·제출)
 
-- 등급 $500·$1k·$2.5k·$5k·$10k·$20k, 월 최고 $20k 보장, **월 복수 제출·복수 수상 허용**. 등급 이름(Papyrus 등)은 페이지에 없으니 쓰지 말 것.
+- 등급 $500·$1k·$2.5k·$5k·$10k·$20k, 월 최고 $20k 보장, **월 복수 제출·복수 수상 허용**. 등급 이름은 prizes 페이지 frontmatter에 있다(Papyrus $1k / Sestertius $2.5k / Denarius $10k / Gold Aureus $20k, 10-16 확인). #2102(10-14): 작은 수정은 한 제출로 묶고 새 방법·모델·데이터셋은 각각 따로 제출.
 - 마감 매월 말 23:59 PT. **폼 URL은 라운드마다 새로 발급, 옛 폼은 결국 닫힘** → 매번 https://scrollprize.org/prizes 에서 받을 것. 새 폼은 전월 수상 발표 후에야 뜬다(Discord, Paul 09-04).
 - 심사 Core Requirements: ①VC 데이터의 특정 문제 + 구현·시연 + 기존 대비 이점 ②문서화 + 사용 예 ③표준 포맷(OME-Zarr/tifxyz) 수용·모듈식 통합.
 - 상금 이력상 $2.5k 위는 전부 "남이 매일 돌리는 소프트웨어"(머지된 수정 묶음 $5k 1건, 도구 $10k, 파이프라인 묶음 $20k). 측정·음의 결과는 $1k대.
@@ -118,10 +119,11 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 `README.md`(공개 랜딩) · `docs/08` Windows 재현 · `docs/09` 검증 하네스 · `docs/10–12` 깊이 라벨(8월) · `docs/13` 9월 정찰 ·
 `docs/14` 스코어카드 · `docs/15` LOSO 4부작 · `docs/16` First Letters 렌더 · `docs/17` held-out 감사 · `docs/18` UDA 사다리 ·
 `docs/20` 주석 타겟팅 · `docs/21–23` 표현 격차 시도 · `docs/24` 의사라벨 검증 · `docs/25` 스카우팅 · `docs/26` 고정 임계값 · `docs/27` 라벨 없는 임계값 선택 · `docs/28` 9µm 섬유 일치도 · `docs/29` 임계값 규칙 3차(dense 라벨) · `docs/30` 표면 어긋남 깊이 증강(음성) · `docs/31` 넓은 깊이 jitter(음성) · `tools/README.md`(툴 설명).
-비공개 계획: `planning/2026-10_merge_month_plan.md`, `planning/2026-10_working_plan.md`.
+비공개 계획: `planning/2026-10_merge_month_plan.md`, `planning/2026-10_working_plan.md`, **`planning/2026-11_plan.md`(11월 후보·일정, 10-16)**.
 
 ## 최근 기록
 
+- **10-16**: 스윕(10-14 06:00Z~) 남의 새 글 0. 사용자 "11월 $1k 이상 조사·계획" → `planning/2026-11_plan.md`. 핵심 근거: **rodriguescarson #ink-detection 10-13**(`eligible-scroll-atlas` 브랜치 `evidence/window-layer-drift`): 상금 대상 8개 스크롤 표면 223개가 파피루스에서 중앙값 8.7복셀(대조 w043 1.8), 측정만 하고 교정 없음 + 우리 docs/31 −5층 손실 → **추천 주력 = 추론 시점 패치별 시트 재정렬(recentering)**, 게이트는 `perturbed31`로 1–2일·학습 0회. VC3D는 `ink-detections.json` `local_file` 경로가 이미 있어 버튼만으론 얇음($250급) → 1번의 노출 부분으로만. 3D 잉크·새 리더는 혼잡해서 제외. 9월 Paul 코멘트: "materially help get more scrolls read". **사용자 결정(10-16): 10월은 계획대로 마무리, 재정렬 게이트는 11-01 시작.**
 - **10-14**: 스윕(10-13 12:00Z~) 새 글 1 = **#192 stantheman0128(10-13 16:40Z, issuecomment-6150453855)**: 일회성 채점 스크립트를 villa **#1945**(`foundation/volume-registration/interface_distance.py`, open, head `21c920a`, 사람 리뷰 0)로 올렸고 우리 `depth_anchors` CSV를 그대로 읽음(@khj1222, PR 본문이 `tools/export_depth_anchors.py`를 "accepted CSV format"으로 인용 = 채택 근거, 단 8월 작업이라 10월 청구 금지). 대조하다 **exporter 버그 발견·수정 `8f49482`**(`sampled_from` <U6 → 1,609행이 `block_`로 잘림; 재생성 CSV는 그 열만 다르고 center 5,396행·JSON 동일, #1945 수치 무영향). **법선 부호 점검(스크래치, 규칙 사전 고정) = 판정 불가**: 30점 중 25가 +1, 상관 중앙값 0.335 < 0.5 — 로컬 표면볼륨이 `esrf/20260311` 내부 렌더(65층)라 공개본(109층)과 다름. region 15 offset 중앙값 −2.72층 → 부호가 틀리면 ~5복셀 이동. 초안 2개 커밋 `321b3ef` → **둘 다 사용자 게시·대조 완료**(#192 issuecomment-6167550553 동일, #robots 스레드 1559894798830272512 화면 대조 일치): `submission/issue192_reply_stantheman_pr1945.md`(1,308자) · `submission/discord_robots_docs30_31.md`(1,907자 → 사람 코멘트 ~90자 여유, 게시 직전 #robots 재확인). Discord(읽기만): 우리 두 스레드 남의 답글 0, docs/30·31과 겹치는 글 없음(Matteo Bulloni 09-25 GrowPatch drift 글은 Limits에 크레딧), #announcements 10-13 Jordi 퇴임·Federica+Paul 공동 리드. #2012 변화 없음.
 - **10-13 (저녁)**: 스윕(10-12~) 새 글 0, #2012 리뷰 0. 사용자 "추천대로" → docs/31을 README 16절·Status·초안 v5에 반영, 10월은 마무리 모드, VC3D 버튼은 11월 후보(위 0a).
 - **10-13 (새벽)**: 학습 4회(49–70분)·추론 510장 무재시도 완료 → 채점 → 결과·점검 커밋 `4a7e797` push(위 0a). 처음 세운 '잉크가 창 밖으로 나감' 가설은 스크롤별 수치와 안 맞아 철회하고 미해결로 기록.
