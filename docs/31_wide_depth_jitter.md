@@ -169,6 +169,14 @@ wander renders with peak 3 and 5 slices.
   at slice 15 (still inside the −5 window), loses 0.17–0.19 at −5, while PHerc0841, where it peaks at 17–18,
   loses 0.07–0.10. The profile measures papyrus-versus-gap as much as ink. Left open.
 
+  *Update 2026-10-17:* sean (Discord #robots) pointed out that the trace lies on the sheet's front surface,
+  so one direction runs into the target sheet and the other into the gap or the back of the next sheet. Mean
+  intensity per slice ([`check_depth_intensity_profile.py`](../tools/check_depth_intensity_profile.py),
+  [`widejitter_depth_intensity_profile.json`](../runs/segrobust/widejitter_depth_intensity_profile.json);
+  post-hoc) says which is which: the costly −side reads into the target sheet, the cheap +side toward the gap
+  at slices 17–19 (7 of 8 segments). That gives the direction, not the size: the per-scroll losses are still
+  unexplained.
+
 ## Checks (after the result)
 
 - **Scoring reproduces earlier numbers.** The released checkpoints' clean-render best F1 on all ten
