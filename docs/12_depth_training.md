@@ -430,6 +430,26 @@ does not, at least mostly. The training comparison itself is unchanged; what
 changes is what it indicts — this estimator's per-cell movement, not per-pixel
 bands as such.
 
+**Update (2026-10-18): the normal's sign.** The export leaves one convention
+unverified: whether surface-volume layers increase along `+normal` or
+`-normal` (the sidecar says so). Our own attempt to settle it (2026-10-14,
+correlating the w00 surface-volume column with the public 2.4 um volume along
+±normal) leaned `+` in 25 of 30 anchors, but the correlations were weak (median
+0.34) and our local surface volume came from a different render, so it does
+not count. stantheman0128 then re-ran the scoring, now
+[villa #1945](https://github.com/ScrollPrize/villa/pull/1945), with the three
+`normal_*` columns negated
+([#192, 2026-10-18](https://github.com/ScrollPrize/villa/issues/192#issuecomment-6245982183)).
+The summary barely moves (no smoothing: median D 2.0 both ways, 123 of 164 vs
+113 of 163 within 3 voxels), yet negating moves a point by a median 5.5 voxels
+and the within-3 verdict agrees for only 104 of 163 points. So the distance
+score cannot tell apart two readings about 5 voxels apart, which also means it
+cannot place the band centre at the right depth to within a few voxels. The
+"near an interface" sentence above should be read with that limit. Anything
+built on these anchors should carry both signs until something that sees the
+surface directly decides it; both readings and the comparison are in
+[their repository](https://github.com/stantheman0128/vesuvius-ink3d-depth-validation/tree/master/results/villa_pr_interface_band_flipped_normals_2026-10-18).
+
 ---
 
 MIT-licensed.

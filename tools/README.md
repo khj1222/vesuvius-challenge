@@ -713,6 +713,11 @@ python tools/export_depth_anchors.py data/ink-dataset/phercparis4/w00_2023101615
 and the layer step are conventions, and guessing them silently is how two pipelines agree on
 numbers that mean different things. The sidecar states every assumption instead.
 
+**The sign is still unverified (2026-10-18).** Negating the normal moves a typical w00 point by
+about 5 voxels, but the distance-to-interface score on #192 comes out nearly the same either
+way, so that score cannot decide it ([docs/12](../docs/12_depth_training.md), last update).
+If you build on the anchors, run both signs.
+
 
 ---
 
