@@ -1,0 +1,28 @@
+{
+  "ours": "data\\a_lite\\PHerc0139_w045\\_segment_ink\\20260126000000-w045_hybrid_3d2d-seed43_step-075000.tif",
+  "team": "data\\a_lite\\PHerc0139_w045\\team\\ink_2.4um_ds8.jpg",
+  "ours_shape": [
+    5980,
+    8240
+  ],
+  "team_shape": [
+    2910,
+    4010
+  ],
+  "aspect_ours": 1.3779264214046822,
+  "aspect_team": 1.3780068728522337,
+  "orientation_corr": {
+    "as_is": 0.3888804018497467,
+    "flip_lr": 0.07839398831129074,
+    "flip_ud": -0.026211032643914223,
+    "rot180": -0.021888108924031258
+  },
+  "shifted_null_corr": {
+    "shift_x+10%": 0.08065108954906464,
+    "shift_y+10%": 0.03933870047330856,
+    "shift_x-10%": 0.08129806071519852,
+    "shift_y-10%": 0.03930974751710892
+  },
+  "best_orientation": "as_is",
+  "pass": true
+}

@@ -788,3 +788,54 @@ $UVPY tools/run_widejitter.py perturb        # 17 test renders per open-label se
 python tools/run_widejitter.py infer
 $UVPY tools/run_widejitter.py score          # the pre-registered P1/P2 rules
 ```
+
+## `segment_ink.py`, `check_segment_ink_alignment.py` — an ink model on one segment, shown in VC3D
+
+VC3D's Ink Detection panel lists, for each segment folder of the open project, the records in
+`<segment>/ink-detections.json` and stretches each record's image over the segment's point grid.
+`segment_ink.py` fills that file for a segment you choose: it renders the tifxyz mesh to a flat surface
+volume (`vc_render_tifxyz`, 28 slices, `--flip-normals`, the orientation that reproduces the team's
+published surface volumes), runs villa's unmodified `vesuvius.ink_detection.inference.infer` on it, and
+adds a record. No VC3D change is needed.
+
+```bash
+PY=external/villa/ink-detection/.venv/Scripts/python.exe   # villa's ink-detection environment
+$PY tools/segment_ink.py SEGMENT_DIR --scroll PHerc0139 \
+    --volume 20250728140407-9.362um-1.2m-113keV-masked.zarr \
+    --checkpoint data/ink_9um/models/hybrid_3d2d-seed43/step-075000.pth --direction both
+python tools/check_segment_ink_alignment.py WORK/<segment>_<name>.tif TEAM_MAP_ds8.jpg --out align.json
+```
+
+`SEGMENT_DIR` is a tifxyz folder (`meta.json`, `x/y/z.tif`) on the 9.362 µm scan, for example the
+`mesh/<id>-on-<volume>-9.362um.tifxyz` folder of an open-data segment. `--direction both` also runs the
+model with the layer order reversed and writes a second record, because which way the layers face is the
+one thing that most often goes wrong on a new segment. The raw uint8 TIFFs and the render stay in
+`<segment>/../_segment_ink`. On Windows the render runs through WSL (`render_wsl.sh`).
+
+What goes into the segment folder, and why:
+- `ink-detections/<name>.jpg` (and `<name>_reverse.jpg`). VC3D hides every non-JPEG record of a segment
+  that also has a JPEG record, and catalog maps are JPEGs, so a TIFF would vanish on exactly the
+  segments people compare against.
+- `ink-detections.json`. Once this file exists VC3D reads it instead of `catalog-origin.json`, so when
+  it is created the catalog's `ink_detections` records are copied in first. Existing records are kept.
+  Ours carry the checkpoint, its sha256, the render, the layer direction and the raw TIFF's path.
+
+Checked (2026-10-25): VC3D main `322cb0899`'s overlay controller, built with the CI image and run on these
+folders, lists and loads our records on a plain segment and next to a catalog record. The control,
+a file holding only our record, hides the catalog map. Against the team's 2.4 µm catalog map, on two
+segments the ink_9um checkpoints were not trained on:
+
+| segment | forward, as is | best flip | best shifted map | reversed layers |
+|---|---|---|---|---|
+| PHerc0814 20250925212701 | 0.220 | −0.02 | 0.042 | 0.035 (fails) |
+| PHerc0139 w045 (20260126000000) | 0.389 | 0.078 | 0.081 | 0.017 (fails) |
+
+The numbers are the correlation of the two maps, each blurred (σ 2) and reduced to the same size. The rule
+was fixed before the runs: as-is is the best of the four flips, above 0.1, and above twice the best
+shifted map. It checks that the map lands on the right pixels, not that it reads well: at 9 µm the
+letters are much fainter than in the team's 2.4 µm map ([w045 side by side](../runs/segment_ink/pherc0139_w045_team_fwd_rev.png):
+team, forward, reversed). Reports: [`runs/segment_ink/`](../runs/segment_ink).
+
+Caveats: saving a segment over itself in VC3D currently deletes its subfolders (villa #2222, fix proposed
+in #2223), and a catalog segment that VC3D re-downloads is replaced as a whole folder. In both cases,
+run the tool again.
