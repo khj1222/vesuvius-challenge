@@ -15,6 +15,8 @@ run. Everything else below is a variation on those three.
 | Tool | What it's for |
 |---|---|
 | [`ink_viz.py`](ink_viz.py) | Turn a prediction TIFF into images you can actually read |
+| [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and put the map where VC3D's Ink Detection panel lists it, next to any catalog maps (no VC3D change) |
+| [`check_segment_ink_alignment.py`](check_segment_ink_alignment.py) | Check that such a map lands on the same pixels as the team's catalog map for that segment (flips and shifted maps as controls) |
 
 ### Hold something out, and score against it
 
