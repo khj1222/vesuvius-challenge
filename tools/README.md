@@ -819,9 +819,14 @@ What goes into the segment folder, and why:
 - `ink-detections.json`. Once this file exists VC3D reads it instead of `catalog-origin.json`, so when
   it is created the catalog's `ink_detections` records are copied in first. Existing records are kept.
   Ours carry the checkpoint, its sha256, the render, the layer direction and the raw TIFF's path.
+  A record shows when its `segment_id` or `segment_long_id` equals VC3D's key for the segment: the
+  folder name in builds since villa #2077 ("VC3D Latest", 2026-10-13 on), the `meta.json` uuid in
+  older ones ("VC3D Stable"), so ours carry both.
 
 Checked (2026-10-25): VC3D main `322cb0899`'s overlay controller, built with the CI image and run on these
-folders, lists and loads our records on a plain segment and next to a catalog record. The control,
+folders, lists and loads our records on a plain segment, on the same segment keyed by its uuid as older builds
+do, and next to a catalog record. On the 2026-09-19 release build the panel shows them on PHerc0139 w045
+and lays them on the grid unflipped. The control,
 a file holding only our record, hides the catalog map. Against the team's 2.4 µm catalog map, on two
 segments the ink_9um checkpoints were not trained on:
 

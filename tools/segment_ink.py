@@ -4,7 +4,8 @@ VC3D (villa main, apps/VC3D/overlays/InkDetectionOverlayController.cpp) lists, f
 folder of the open project, the records in <segment>/ink-detections.json and stretches the image
 named by each record's `local_file` over the segment's point grid. A record shows on a segment
 when its `segment_id` or `segment_long_id` equals the segment's key: the catalog keys in
-meta.json when present, else the folder name. So no VC3D change is needed: this tool
+meta.json when present, else the folder name (builds before villa #2077: meta.json's uuid; both
+are written). So no VC3D change is needed: this tool
   1. renders the segment to a flat surface volume with vc_render_tifxyz (28 slices, --flip-normals,
      the orientation that reproduces the team's published surface volumes -- docs/25 section 8),
   2. runs villa's own `vesuvius.ink_detection.inference.infer` on it (code not copied),
@@ -60,11 +61,20 @@ def sha256(path: Path) -> str:
 
 
 def segment_key(seg_dir: Path, meta: dict) -> tuple[str, str]:
-    """(segment_id, segment_long_id) as VC3D will match them for this folder."""
+    """(segment_id, segment_long_id) as VC3D will match them for this folder.
+
+    VC3D since villa #2077 (2026-10-13, in "VC3D Latest") keys a plain segment by its folder name;
+    older builds ("VC3D Stable" and earlier) key it by meta.json's uuid. A record shows when either
+    field equals the key, so the uuid goes in segment_long_id. Two segments sharing a uuid are
+    already indistinguishable to those older builds, so this adds no new collision.
+    """
     for key in CATALOG_KEYS:
         value = meta.get(key)
         if isinstance(value, str) and value:
             return value, value
+    uuid = meta.get("uuid")
+    if isinstance(uuid, str) and uuid and uuid != seg_dir.name:
+        return seg_dir.name, uuid
     return seg_dir.name, ""
 
 
