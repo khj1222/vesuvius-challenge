@@ -3,8 +3,8 @@
 **Form:** https://docs.google.com/forms/d/e/1FAIpQLSc4flEfgK2nyjoczz2_U_XrIGMlgrnSknWatLqrFPnbtKfZwg/viewform
 ("October 2026 Progress Prizes", taken from https://scrollprize.org/prizes; the form URL is round-specific.)
 **Deadline:** 2026-10-31 23:59 Pacific = 2026-11-01 15:59 KST.
-**Status:** prepared 2026-10-23 (KST), not yet submitted. The user performs the form submission.
-Fields 4 and 5 below are the final text; their hashes are recorded at the end.
+**Status:** submitted 2026-10-25 18:48 KST. The Google Forms receipt matches this file in all five
+answers, character for character; fields 4 and 5 hash to the values recorded at the end.
 
 Final pre-submit check, 2026-10-23: fields 4 and 5 read through; all 37 field-4 links returned
 HTTP 200; the evidence files they point to exist on `main`; villa
@@ -224,8 +224,8 @@ submission of 2026-09-20, so it was not part of that submission.
 
 - [x] Re-check the live form and deadline on https://scrollprize.org/prizes (2026-10-06).
 - [x] Read fields 4 and 5 straight through; check every field-4 link (2026-10-23).
-- [ ] Paste the fenced answers, accept the Terms, and submit (user).
-- [ ] Compare the submitted text with this file and mark it submitted.
+- [x] Paste the fenced answers, accept the Terms, and submit (user, 2026-10-25).
+- [x] Compare the submitted text with this file and mark it submitted (receipt e-mail, 2026-10-25).
 
 ## Field hashes
 
