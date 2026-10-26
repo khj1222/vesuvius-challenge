@@ -1,0 +1,204 @@
+{
+ "what": "segment_ink on three PHerc0841 segments (held out for both models): released ink_9um seed43 step-075000 vs KLAVIS Reader V3",
+ "prereg": {
+  "w00": "PREREG.md sha256 eba6683b9767 (before inference)",
+  "ag144_ag174": "PREREG_ag.md sha256 39969f5bb427 (after w00 results, before inference on these two; same rules)"
+ },
+ "render": "segment_ink: vc_render_tifxyz 28 slices --flip-normals on 20250821151531-9.366um; villa main e2254ebe0 infer, overlap 0.5 hann, both directions",
+ "metrics": {
+  "M1": "placement: tools/check_segment_ink_alignment.py vs team 2.4 um ds8 map",
+  "M2": "letter-scale: correlation after removing a ~48 um blur from both maps",
+  "M3": "AUC vs open human ink labels (20260918) inside supervision"
+ },
+ "results": {
+  "w00": {
+   "segment_id": "20260220213127",
+   "ink_9um_forward": {
+    "M1": 0.3548,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.0395,
+    "M2": 0.0222,
+    "M2_shift_null_max": 0.0033,
+    "M3_auc": 0.7719,
+    "supervised_px": 1600064,
+    "ink_px": 355098
+   },
+   "ink_9um_reverse": {
+    "M1": 0.0693,
+    "M1_pass": false,
+    "M1_shift_null_max": 0.0125,
+    "M2": 0.0051,
+    "M2_shift_null_max": -0.0004,
+    "M3_auc": 0.5984,
+    "supervised_px": 1600064,
+    "ink_px": 355098
+   },
+   "reader_v3_forward": {
+    "M1": 0.6662,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.0745,
+    "M2": 0.1009,
+    "M2_shift_null_max": 0.0038,
+    "M3_auc": 0.9158,
+    "supervised_px": 1600064,
+    "ink_px": 355098
+   },
+   "reader_v3_reverse": {
+    "M1": 0.1207,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.0588,
+    "M2": 0.0118,
+    "M2_shift_null_max": 0.0034,
+    "M3_auc": 0.566,
+    "supervised_px": 1600064,
+    "ink_px": 355098
+   },
+   "M3_diff_forward": 0.1439
+  },
+  "ag144": {
+   "segment_id": "20260220214732",
+   "ink_9um_forward": {
+    "M1": 0.3522,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.0488,
+    "M2": 0.0261,
+    "M2_shift_null_max": 0.0029,
+    "M3_auc": 0.681,
+    "supervised_px": 983740,
+    "ink_px": 318252
+   },
+   "ink_9um_reverse": {
+    "M1": 0.0402,
+    "M1_pass": false,
+    "M1_shift_null_max": 0.0225,
+    "M2": 0.0024,
+    "M2_shift_null_max": 0.0027,
+    "M3_auc": 0.5531,
+    "supervised_px": 983740,
+    "ink_px": 318252
+   },
+   "reader_v3_forward": {
+    "M1": 0.6782,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.1074,
+    "M2": 0.1208,
+    "M2_shift_null_max": 0.0035,
+    "M3_auc": 0.8338,
+    "supervised_px": 983740,
+    "ink_px": 318252
+   },
+   "reader_v3_reverse": {
+    "M1": 0.0424,
+    "M1_pass": false,
+    "M1_shift_null_max": 0.038,
+    "M2": 0.0074,
+    "M2_shift_null_max": 0.0037,
+    "M3_auc": 0.5403,
+    "supervised_px": 983740,
+    "ink_px": 318252
+   },
+   "M3_diff_forward": 0.1528
+  },
+  "ag174": {
+   "segment_id": "20260221022814",
+   "ink_9um_forward": {
+    "M1": 0.3761,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.0583,
+    "M2": 0.0313,
+    "M2_shift_null_max": 0.0013,
+    "M3_auc": 0.7562,
+    "supervised_px": 1278954,
+    "ink_px": 289928
+   },
+   "ink_9um_reverse": {
+    "M1": 0.0328,
+    "M1_pass": false,
+    "M1_shift_null_max": 0.0313,
+    "M2": 0.001,
+    "M2_shift_null_max": 0.0034,
+    "M3_auc": 0.6167,
+    "supervised_px": 1278954,
+    "ink_px": 289928
+   },
+   "reader_v3_forward": {
+    "M1": 0.6269,
+    "M1_pass": true,
+    "M1_shift_null_max": 0.1005,
+    "M2": 0.1151,
+    "M2_shift_null_max": 0.0036,
+    "M3_auc": 0.8533,
+    "supervised_px": 1278954,
+    "ink_px": 289928
+   },
+   "reader_v3_reverse": {
+    "M1": 0.0094,
+    "M1_pass": false,
+    "M1_shift_null_max": 0.0425,
+    "M2": 0.0122,
+    "M2_shift_null_max": 0.0035,
+    "M3_auc": 0.5754,
+    "supervised_px": 1278954,
+    "ink_px": 289928
+   },
+   "M3_diff_forward": 0.0971
+  }
+ },
+ "M3_diff_forward_mean": 0.1313,
+ "checks": {
+  "auc_recomputed_label_grid_histogram": {
+   "w00": [
+    0.7724,
+    0.916
+   ],
+   "ag144": [
+    0.6811,
+    0.8337
+   ],
+   "ag174": [
+    0.7564,
+    0.8533
+   ]
+  },
+  "klavis_published_auc": {
+   "0841_w00": {
+    "reader_v3": 0.8805,
+    "base": 0.7217
+   },
+   "0841_ag1": {
+    "reader_v3": 0.8258,
+    "base": 0.8281
+   },
+   "0841_ag2": {
+    "reader_v3": 0.8372,
+    "base": 0.7766
+   },
+   "note": "KLAVIS's 'base' is not necessarily the same checkpoint; ag1/ag2 naming vs ag144/ag174 not mapped"
+  }
+ },
+ "predictions": {
+  "all three pass M1 forward": "held",
+  "V3-ink_9um M3 >= +0.02 on at least one ag segment": "held on both (+0.153, +0.097)",
+  "mean M3 diff over three >= +0.05": "held (+0.131)"
+ },
+ "limits": [
+  "one scroll (PHerc0841, 9.366 um, 113 keV), one ink_9um checkpoint",
+  "Reader V3's w00 map shows a staircase band along the left and bottom canvas edge (384 px tiles); ag144/ag174 not inspected for it",
+  "replicates KLAVIS's result through our render and VC3D path"
+ ],
+ "speed_s_per_direction": {
+  "w00": {
+   "ink_9um": 157,
+   "reader_v3": 25
+  },
+  "ag144": {
+   "ink_9um": 80,
+   "reader_v3": 26
+  },
+  "ag174": {
+   "ink_9um": 74,
+   "reader_v3": 25
+  },
+  "source": "infer log timestamps, RTX 5090"
+ }
+}

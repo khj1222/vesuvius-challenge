@@ -847,21 +847,25 @@ team, forward, reversed). Reports: [`runs/segment_ink/`](../runs/segment_ink).
 
 Any checkpoint villa's `infer` loads works the same way (`--checkpoint`, `--name`, `--label`; reuse a render
 with `--render-zarr`). Example (2026-10-26): KLAVIS's [Reader V3](https://github.com/DomRusso2/reader-v3) on
-PHerc0841 w00, a segment neither model was trained on (0814 and w045 above are in Reader V3's training set, so
-they are not used here). Same render, both directions, comparison fixed before inference; forward is the
-reading direction for both:
+three PHerc0841 segments neither model was trained on (0814 and w045 above are in Reader V3's training set, so
+they are not used here). Same render per segment, both directions; forward is the reading direction for both
+models on all three:
 
-| PHerc0841 w00 (20260220213127) | placement vs team map | letter-scale correlation | AUC vs human ink labels |
+| PHerc0841 segment | placement vs team map | letter-scale correlation | AUC vs human ink labels |
 |---|---|---|---|
-| ink_9um seed43 step-075000 | 0.355 | 0.022 | 0.772 |
-| Reader V3 | 0.666 | 0.101 | 0.916 |
+| w00 (20260220213127) | 0.355 → **0.666** | 0.022 → **0.101** | 0.772 → **0.916** |
+| ag144 (20260220214732) | 0.352 → **0.678** | 0.026 → **0.121** | 0.681 → **0.834** |
+| ag174 (20260221022814) | 0.376 → **0.627** | 0.031 → **0.115** | 0.756 → **0.853** |
 
-Letter-scale correlation is the same comparison after removing a ~48 µm blur from both maps (shifted maps
-≤ 0.004); AUC is inside the open labels' supervision mask. KLAVIS's own numbers for this segment are 0.881
-(V3) and 0.722 (base), so the gap reproduces through this render path, not just on his. Reader V3 also ran
-about 6× faster here (384 px tiles), and its map has a staircase band along the left and bottom canvas edge.
+Each cell is ink_9um seed43 step-075000 → Reader V3. Letter-scale correlation is the same comparison after
+removing a ~48 µm blur from both maps (shifted maps ≤ 0.004); AUC is inside the open labels' supervision
+mask (mean gain +0.131). The rules were fixed on w00 before inference and applied unchanged to ag144 and
+ag174 afterwards. KLAVIS's own numbers for w00 are 0.881 (V3) and 0.722 (base), so the gap reproduces
+through this render path, not just on his. Reader V3 also ran 3–6× faster here (384 px tiles: ~25 s per
+direction against 75–160 s), and its w00 map has a staircase band along the left and bottom canvas edge.
 [Side by side](../runs/segment_ink/pherc0841_w00_ink9um_vs_readerv3.png) (team map, ink_9um, Reader V3; zoom box
-picked from the team map), [numbers](../runs/segment_ink/pherc0841_w00_ink9um_vs_readerv3.json).
+picked from the team map), numbers for [w00](../runs/segment_ink/pherc0841_w00_ink9um_vs_readerv3.json) and
+[all three segments](../runs/segment_ink/pherc0841_ink9um_vs_readerv3_3seg.json).
 Third-party checkpoints are re-saved without unpickling by [`convert_thirdparty_ckpts.py`](convert_thirdparty_ckpts.py).
 
 Caveats: saving a segment over itself in VC3D currently deletes its subfolders (villa #2222, fix proposed
