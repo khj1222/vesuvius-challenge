@@ -47,6 +47,18 @@ report["dense_native_016000.safetensors"] = {"sha256": sha256(nd / "weights" / "
                                             "tensors": len(weights), "step": 16000, "out": dst.name}
 print("nieuwlaar", len(weights), flush=True)
 
+# KLAVIS Reader V3 (huggingface.co/domenicor046/reader-v3 @ aee1d64, 2026-10-20), same restricted load
+rv3 = ROOT / "raw_reader_v3" / "reader-v3.pth"
+if rv3.exists():
+    payload = torch.load(rv3, map_location="cpu", weights_only=True)
+    model = payload["model"]
+    assert all(isinstance(v, torch.Tensor) for v in model.values()), rv3
+    dst = OUT / "klavis_reader-v3.pth"
+    torch.save({"model": model, "config": payload["config"], "step": payload.get("step")}, dst)
+    report[rv3.name] = {"sha256": sha256(rv3), "keys": sorted(payload), "step": payload.get("step"),
+                        "tensors": len(model), "out": dst.name}
+    print(rv3.name, sorted(payload), payload.get("step"), len(model), flush=True)
+
 # key sets must match a released ink_9um checkpoint's
 ref = torch.load(Path(r"E:\vesuvius-challenge\data\ink_9um\models\hybrid_3d2d-seed42\step-010000.pth"),
                  map_location="cpu", weights_only=True)["model"]

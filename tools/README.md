@@ -797,7 +797,10 @@ VC3D's Ink Detection panel lists, for each segment folder of the open project, t
 `segment_ink.py` fills that file for a segment you choose: it renders the tifxyz mesh to a flat surface
 volume (`vc_render_tifxyz`, 28 slices, `--flip-normals`, the orientation that reproduces the team's
 published surface volumes), runs villa's unmodified `vesuvius.ink_detection.inference.infer` on it, and
-adds a record. No VC3D change is needed.
+adds a record. No VC3D change is needed. If you render yourself, keep `--flip-normals`: without it
+`vc_render_tifxyz` writes the slices in the reverse order of the published volumes, and ink_9um then calls
+the whole segment ink ([docs/25 §8.1](../docs/25_scouting_eligible_volumes.md): 99.7% of bytes agree only
+after reversing z; best F1 falls to the trivial classifier's).
 
 ```bash
 PY=external/villa/ink-detection/.venv/Scripts/python.exe   # villa's ink-detection environment
@@ -841,6 +844,25 @@ was fixed before the runs: as-is is the best of the four flips, above 0.1, and a
 shifted map. It checks that the map lands on the right pixels, not that it reads well: at 9 µm the
 letters are much fainter than in the team's 2.4 µm map ([w045 side by side](../runs/segment_ink/pherc0139_w045_team_fwd_rev.png):
 team, forward, reversed). Reports: [`runs/segment_ink/`](../runs/segment_ink).
+
+Any checkpoint villa's `infer` loads works the same way (`--checkpoint`, `--name`, `--label`; reuse a render
+with `--render-zarr`). Example (2026-10-26): KLAVIS's [Reader V3](https://github.com/DomRusso2/reader-v3) on
+PHerc0841 w00, a segment neither model was trained on (0814 and w045 above are in Reader V3's training set, so
+they are not used here). Same render, both directions, comparison fixed before inference; forward is the
+reading direction for both:
+
+| PHerc0841 w00 (20260220213127) | placement vs team map | letter-scale correlation | AUC vs human ink labels |
+|---|---|---|---|
+| ink_9um seed43 step-075000 | 0.355 | 0.022 | 0.772 |
+| Reader V3 | 0.666 | 0.101 | 0.916 |
+
+Letter-scale correlation is the same comparison after removing a ~48 µm blur from both maps (shifted maps
+≤ 0.004); AUC is inside the open labels' supervision mask. KLAVIS's own numbers for this segment are 0.881
+(V3) and 0.722 (base), so the gap reproduces through this render path, not just on his. Reader V3 also ran
+about 6× faster here (384 px tiles), and its map has a staircase band along the left and bottom canvas edge.
+[Side by side](../runs/segment_ink/pherc0841_w00_ink9um_vs_readerv3.png) (team map, ink_9um, Reader V3; zoom box
+picked from the team map), [numbers](../runs/segment_ink/pherc0841_w00_ink9um_vs_readerv3.json).
+Third-party checkpoints are re-saved without unpickling by [`convert_thirdparty_ckpts.py`](convert_thirdparty_ckpts.py).
 
 Caveats: saving a segment over itself in VC3D currently deletes its subfolders (villa #2222, fix proposed
 in #2223), and a catalog segment that VC3D re-downloads is replaced as a whole folder. In both cases,
