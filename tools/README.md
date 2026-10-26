@@ -52,6 +52,7 @@ run. Everything else below is a variation on those three.
 | [`borrow_threshold.py`](borrow_threshold.py) | Use it: calibrate a model's threshold on scrolls you can score (with a check of what borrowing costs), then binarize a prediction of an unlabelled scroll |
 | [`run_other_recipes_threshold.py`](run_other_recipes_threshold.py) | The same rules on public checkpoints trained with other labels (docs/29) |
 | [`convert_thirdparty_ckpts.py`](convert_thirdparty_ckpts.py) | Re-save third-party checkpoints without unpickling them (`weights_only` / safetensors) |
+| [`check_dinovol_ink_labels.py`](check_dinovol_ink_labels.py) | List which open-data ink labels a dinovol checkpoint saw in pretraining (its loader's rule, replayed on `metadata.json`), before calling a test segment held out ([640k report](../runs/dinovol_ink_labels/teacher_step_640000.json)) |
 | [`fiber9_check.py`](fiber9_check.py) | Read the same papyrus surface at 9.362 µm and 2.399 µm through a segment's two meshes, and score 9 µm fiber maps against a 2.4 µm one |
 
 ### How much annotation, and where

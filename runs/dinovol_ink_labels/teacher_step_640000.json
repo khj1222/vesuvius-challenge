@@ -1,0 +1,281 @@
+{
+ "checkpoint": "teacher_step_640000.pt",
+ "config": {
+  "use_metadata_meshes": [
+   true
+  ],
+  "ink_weight": [
+   0.1
+  ],
+  "output_dir": [
+   "/ephemeral/sean/dinovol_perf/runs/pretrain_8_9um_objects_meshes_ink_160k"
+  ]
+ },
+ "training_volumes": [
+  "s3://vesuvius-challenge-open-data/PHerc0125/volumes/20250821151825-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0139/volumes/20260102150214-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0172/volumes/20241024131839-7.910um-53keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0175A/volumes/20250521115057-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0175B/volumes/20250521125822-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0191/volumes/20250821151635-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0211/volumes/20250821151803-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0257/volumes/20250821151750-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0268/volumes/20251110183117-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0306B/volumes/20250521133212-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0332/volumes/20251211183505-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0343/volumes/20250521140437-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0358/volumes/20250821151737-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0483A/volumes/20250521140913-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0483B/volumes/20251124083638-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0490A/volumes/20250521151210-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0490B/volumes/20250521151215-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0800/volumes/20250521135224-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0813/volumes/20250821151723-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0814/volumes/20250804134230-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0826/volumes/20250821151701-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0841/volumes/20250821151531-9.366um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0846A/volumes/20250728152254-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0846B/volumes/20250804142305-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1203/volumes/20250820131727-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1218/volumes/20250521120456-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1447/volumes/20250521151220-8.640um-1.2m-116keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1451/volumes/20260319101107-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1545/volumes/20250821151648-9.362um-1.2m-113keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1667/volumes/20251217075048-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHercParis4/volumes/20260411134726-2.400um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc1299/volumes/20260309130042-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHercMAN5/volumes/20260311104824-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHercMANB/volumes/20260323091048-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHercMANBp/volumes/20251216152116-2.399um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHercParis3/volumes/20260427095331-2.400um-0.2m-78keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0009B/volumes/20260319104112-2.401um-0.3m-77keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0343P/volumes/20260304131111-2.215um-0.4m-111keV-masked.zarr/",
+  "s3://vesuvius-challenge-open-data/PHerc0500P2/volumes/20250526151718-2.215um-0.4m-111keV-masked.zarr/"
+ ],
+ "segments": [
+  {
+   "sample": "PHerc0139",
+   "segment": "20260317000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20250831000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20260126000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20260302000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20260108000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20250108000005",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20260112000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0139",
+   "segment": "20260115000000",
+   "original_volume": "20260102150214",
+   "training_volume": "20260102150214",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0814",
+   "segment": "20260226000000",
+   "original_volume": "20260309142202",
+   "training_volume": "20250804134230",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0841",
+   "segment": "20260221022814",
+   "original_volume": "20250821151531",
+   "training_volume": "20250821151531",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0841",
+   "segment": "20260220213127",
+   "original_volume": "20250821151531",
+   "training_volume": "20250821151531",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0841",
+   "segment": "20260220214732",
+   "original_volume": "20250821151531",
+   "training_volume": "20250821151531",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20251212185248",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20251208130119",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20251223230000",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20240304144031",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20240304141531",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc1667",
+   "segment": "20240304161941",
+   "original_volume": "20231117161658",
+   "training_volume": "20251217075048",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20230702185753",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231016151002",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231106155351",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231031143852",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231210121321",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231012184424",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20231007101619",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHercParis4",
+   "segment": "20230929220926",
+   "original_volume": "20230205180739",
+   "training_volume": "20260411134726",
+   "used": true,
+   "route": "tifxyz-transformed"
+  },
+  {
+   "sample": "PHerc0009B",
+   "segment": "20250919125754",
+   "original_volume": "20250521125136",
+   "training_volume": "20260319104112",
+   "used": false,
+   "route": null
+  },
+  {
+   "sample": "PHerc0500P2",
+   "segment": "20250825181859",
+   "original_volume": "20250528085330",
+   "training_volume": "20250526151718",
+   "used": true,
+   "route": "tifxyz-transformed"
+  }
+ ]
+}
