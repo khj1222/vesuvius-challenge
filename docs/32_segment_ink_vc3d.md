@@ -16,7 +16,11 @@ over the segment's point grid. But the maps it can show are the ones the catalog
 managers that run Lasagna, NeuralTrace and the spiral fit from inside the viewer, and none for ink (villa
 main `bbe7f8af6`, 2026-10-28: `*ServiceManager*` files mention no ink model). So someone who traces a new
 segment, or who wants to compare a new checkpoint against the team's map on an old one, has to render a
-surface volume, run inference, and then line the result up with the mesh by hand. The open-problems page
+surface volume, run inference, and then get the result onto the mesh in VC3D by hand. The first two steps
+have a ready runner: LimeGS and pscamillo's [ink-sdk](https://github.com/LimeGS/ink-sdk) (MIT, started
+2026-10-23, the same week as this tool) renders a tifxyz mesh with the same `vc_render_tifxyz` and runs
+several 9 µm models in both directions, writing maps and a receipt. What this tool adds is the VC3D end:
+the image and record the Ink Detection panel actually reads, next to the catalog's. The open-problems page
 makes the same point from the other side: a prediction you cannot inspect on the geometry is hard to
 validate.
 
