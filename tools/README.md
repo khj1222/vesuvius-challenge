@@ -792,6 +792,8 @@ $UVPY tools/run_widejitter.py score          # the pre-registered P1/P2 rules
 
 ## `segment_ink.py`, `check_segment_ink_alignment.py` — an ink model on one segment, shown in VC3D
 
+Write-up with all checks and the Reader V3 comparison: [docs/32](../docs/32_segment_ink_vc3d.md).
+
 VC3D's Ink Detection panel lists, for each segment folder of the open project, the records in
 `<segment>/ink-detections.json` and stretches each record's image over the segment's point grid.
 `segment_ink.py` fills that file for a segment you choose: it renders the tifxyz mesh to a flat surface

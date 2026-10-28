@@ -382,6 +382,22 @@ Training on those offsets does not buy it back, and why the loss is one-sided is
 depth profile did not explain it per scroll). Checked: clean scores equal docs/30's exactly.
 [`run_widejitter.py`](tools/run_widejitter.py).
 
+### 17. Any ink checkpoint on a segment, opened in VC3D — [docs/32](docs/32_segment_ink_vc3d.md)
+
+VC3D's Ink Detection panel shows the maps the catalog ships; nothing in VC3D runs an ink model on a
+segment. [`segment_ink.py`](tools/segment_ink.py) does it in one command: render the tifxyz mesh with
+VC3D's `vc_render_tifxyz`, run villa's unmodified `infer` with any checkpoint it loads, and write a JPEG
+plus an `ink-detections.json` record next to the catalog's, in both layer directions. No VC3D change.
+VC3D's own overlay code reads the records (8 of 8 test cases, and by eye in the release build), and
+[`check_segment_ink_alignment.py`](tools/check_segment_ink_alignment.py) confirms against the team's map
+that they land on the right pixels (two scrolls, flips and shifted maps as controls).
+
+**Swapping the checkpoint:** KLAVIS's Reader V3 through the same path, on three PHerc0841 segments
+neither model trained on, raises AUC against the open human labels from 0.68–0.77 (ink_9um) to
+**0.83–0.92**, places better against the team's map (0.35–0.38 → 0.63–0.68), and runs 3–6× faster. This
+reproduces KLAVIS's published gap through a different render path; it is not a new claim about the
+model. Reversing the layers costs either model most of its AUC, which is why the tool writes both.
+
 ---
 
 ## Upstream contributions to ScrollPrize/villa
@@ -566,7 +582,8 @@ vesuvius-challenge/
       maps agree with a 2.399 µm reading of the same surface at F1 0.69 (null 0.45); the 9 µm
       fine-tune does not move it ([docs/28](docs/28_fiber_9um_agreement.md)).
 - [x] **Copy TTA direction priors merged** — #1796 (2026-10-08).
-- [x] **Threshold tool offered upstream** — villa #2012 (open, 2026-10-09).
+- [x] **Threshold tool offered upstream** — villa #2012 (opened 2026-10-09, closed unmerged 2026-10-21:
+      the maintainers advise against binarizing ink predictions).
 - [x] **Threshold rules on dense-label checkpoints** (2026-10-09) — pre-registered; borrowing the value
       fails on one of three scrolls, borrowing the quantile holds
       ([docs/29](docs/29_threshold_other_recipes.md)).
@@ -574,3 +591,6 @@ vesuvius-challenge/
       ±2 slices, where the released recipe is already tolerant ([docs/30](docs/30_surface_offset_robust_ink.md)).
 - [x] **Wider jitter for 3–5 slice offsets** (2026-10-13) — pre-registered; no gain. The released reader
       loses 0.14–0.17 F1 at 5 slices one way, 0.03–0.04 the other ([docs/31](docs/31_wide_depth_jitter.md)).
+- [x] **Any ink checkpoint on a segment, in VC3D's Ink Detection panel** (2026-10-25/28) — `segment_ink`;
+      read by VC3D's own overlay code, placement checked on two scrolls; Reader V3 through it beats
+      ink_9um on three held-out PHerc0841 segments, AUC +0.131 ([docs/32](docs/32_segment_ink_vc3d.md)).
