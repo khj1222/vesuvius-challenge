@@ -102,3 +102,27 @@ erdpx). The open human ink labels are the team's. ink_9um is the team's; Reader 
 
 AI disclosure: the design, code, runs and this text were produced by Claude (Anthropic) via Claude Code, directed
 by Hyojun Kwon (khj1222), who chose the problem, the data and the decisions.
+
+---
+
+## Addendum before inference (2026-10-29, written before any 3D output was read)
+
+The cost estimate above was wrong. The surface bands of the 18 windows touch 5,381 of the 64³ output units of the
+4.8 µm grid (13,528 in the windows' bounding boxes). They need 28,450 CT chunks, about **58 GB**, not about 25 GB.
+Streaming them through `infer_volume` ran at about 2.7 units per minute on the first positive-control window,
+because the reads were the bottleneck (GPU 9% busy). That run was stopped after 69 units. The user approved the
+larger download.
+
+What changes (compute only):
+- The CT chunks the bands need are copied locally first. That is, for every output unit within 32 output voxels of
+  a window's band, the chunks covering the level-0 context of every crop that overlaps the unit. `infer_volume`
+  then runs with `--ct` set to that local copy, the same `--box` as above, and `--unit 64 --chunk 64 --compressor
+  none`.
+- Units in the box that lie away from the band read chunks that were not copied. By the branch's own rule they are
+  skipped, or computed from zeros, and they are never sampled. Every sampled voxel's crops have their full
+  parent256 in the copy, so the values at sampled voxels equal those of a run on the bucket.
+- A check is added: the 69 positive-control units already computed from the bucket are compared with the same
+  units computed from the local copy. Identical codes are expected; the model card warns that logits can depend
+  on the batch slot, so any difference is reported.
+
+Nothing else changes: segments, windows, sampling, rules and predictions stay as committed in `f9037dc`.
