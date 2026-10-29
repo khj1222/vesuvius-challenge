@@ -1,0 +1,179 @@
+{
+ "labels_equal_openlabels9": {
+  "pherc0841-w00": true,
+  "pherc0841-ag144": true,
+  "pherc0841-ag174": true,
+  "pherc0009b-ag055": true,
+  "pherc0500p2-s1": true
+ },
+ "ct_alignment": {
+  "phercparis4-20230702185753": {
+   "window": {
+    "row": 512,
+    "col": 7680,
+    "supervised": 65536,
+    "ink": 25320
+   },
+   "surface_volume": {
+    "z": 54,
+    "nz": 109,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.05000000074505806,
+     -0.05000000074505806
+    ],
+    "nonzero": 0.999542236328125
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 0.99957275390625
+   },
+   "chosen": "A"
+  },
+  "pherc0841-w00": {
+   "window": {
+    "row": 1536,
+    "col": 3072,
+    "supervised": 65536,
+    "ink": 14014
+   },
+   "surface_volume": {
+    "z": 54,
+    "nz": 109,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.10000000149011612,
+     -0.05000000074505806
+    ],
+    "nonzero": 1.0
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 0.999969482421875
+   },
+   "chosen": "A"
+  },
+  "pherc0841-ag144": {
+   "window": {
+    "row": 768,
+    "col": 2048,
+    "supervised": 65536,
+    "ink": 28510
+   },
+   "surface_volume": {
+    "z": 54,
+    "nz": 109,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.10000000149011612,
+     -0.10000000149011612
+    ],
+    "nonzero": 1.0
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 1.0
+   },
+   "chosen": "A"
+  },
+  "pherc0841-ag174": {
+   "window": {
+    "row": 1024,
+    "col": 2304,
+    "supervised": 65536,
+    "ink": 9319
+   },
+   "surface_volume": {
+    "z": 54,
+    "nz": 109,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.10000000149011612,
+     -0.10000000149011612
+    ],
+    "nonzero": 1.0
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 1.0
+   },
+   "chosen": "A"
+  },
+  "pherc0009b-ag055": {
+   "window": {
+    "row": 4608,
+    "col": 1792,
+    "supervised": 65536,
+    "ink": 27261
+   },
+   "surface_volume": {
+    "z": 54,
+    "nz": 109,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.10000000149011612,
+     -0.05000000074505806
+    ],
+    "nonzero": 0.9998779296875
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 0.9999237060546875
+   },
+   "chosen": "A"
+  },
+  "pherc0500p2-s1": {
+   "window": {
+    "row": 2816,
+    "col": 1280,
+    "supervised": 65536,
+    "ink": 18641
+   },
+   "surface_volume": {
+    "z": 59,
+    "nz": 118,
+    "compressor": null
+   },
+   "A": {
+    "d": [
+     -0.05000000074505806,
+     -0.10000000149011612
+    ],
+    "nonzero": 1.0
+   },
+   "B": {
+    "d": [
+     -2.5,
+     -2.5
+    ],
+    "nonzero": 1.0
+   },
+   "chosen": "A"
+  }
+ }
+}

@@ -1,0 +1,122 @@
+{
+ "pherc0841-w00": [
+  {
+   "row": 1536,
+   "col": 3072,
+   "supervised": 65536,
+   "ink": 14014
+  },
+  {
+   "row": 1792,
+   "col": 3072,
+   "supervised": 65536,
+   "ink": 13150
+  },
+  {
+   "row": 1792,
+   "col": 3328,
+   "supervised": 65536,
+   "ink": 13490
+  }
+ ],
+ "pherc0841-ag144": [
+  {
+   "row": 768,
+   "col": 2048,
+   "supervised": 65536,
+   "ink": 28510
+  },
+  {
+   "row": 2560,
+   "col": 1792,
+   "supervised": 65536,
+   "ink": 21528
+  },
+  {
+   "row": 2816,
+   "col": 1792,
+   "supervised": 64688,
+   "ink": 17981
+  }
+ ],
+ "pherc0841-ag174": [
+  {
+   "row": 1024,
+   "col": 2304,
+   "supervised": 65536,
+   "ink": 9319
+  },
+  {
+   "row": 1280,
+   "col": 2304,
+   "supervised": 65536,
+   "ink": 20637
+  },
+  {
+   "row": 1280,
+   "col": 2560,
+   "supervised": 65536,
+   "ink": 22367
+  }
+ ],
+ "pherc0009b-ag055": [
+  {
+   "row": 4608,
+   "col": 1792,
+   "supervised": 65536,
+   "ink": 27261
+  },
+  {
+   "row": 4608,
+   "col": 2048,
+   "supervised": 65536,
+   "ink": 13672
+  },
+  {
+   "row": 4608,
+   "col": 2304,
+   "supervised": 65536,
+   "ink": 13621
+  }
+ ],
+ "pherc0500p2-s1": [
+  {
+   "row": 2816,
+   "col": 1280,
+   "supervised": 65536,
+   "ink": 18641
+  },
+  {
+   "row": 2816,
+   "col": 1536,
+   "supervised": 65536,
+   "ink": 27424
+  },
+  {
+   "row": 3072,
+   "col": 768,
+   "supervised": 65536,
+   "ink": 38189
+  }
+ ],
+ "phercparis4-20230702185753": [
+  {
+   "row": 512,
+   "col": 7680,
+   "supervised": 65536,
+   "ink": 25320
+  },
+  {
+   "row": 1024,
+   "col": 5376,
+   "supervised": 65536,
+   "ink": 30190
+  },
+  {
+   "row": 1024,
+   "col": 5632,
+   "supervised": 65536,
+   "ink": 28296
+  }
+ ]
+}

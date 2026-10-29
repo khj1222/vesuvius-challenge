@@ -1,0 +1,96 @@
+{
+ "verdict": "partial",
+ "control_auc": 0.9066630344383965,
+ "primary_auc": {
+  "pherc0841-w00": 0.6606497122143368,
+  "pherc0841-ag144": 0.8560051273246806,
+  "pherc0841-ag174": 0.6395113493197462,
+  "pherc0009b-ag055": 0.7272015287580683
+ },
+ "competitive": false,
+ "better": false,
+ "rows": {
+  "phercparis4-20230702185753": {
+   "convention": "A",
+   "n_supervised": 196608,
+   "ink_fraction": 0.4262593587239583,
+   "auc_max": 0.9066630344383965,
+   "coverage_max": 1.0,
+   "auc_t0": 0.8133100588540961,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.8426174722294555,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.4999347997020847
+  },
+  "pherc0841-w00": {
+   "convention": "A",
+   "n_supervised": 196608,
+   "ink_fraction": 0.20677693684895834,
+   "auc_max": 0.6606497122143368,
+   "coverage_max": 1.0,
+   "auc_t0": 0.6192648494055897,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.6403272609446853,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.4246508543279346,
+   "auc_ink9um_s43": 0.8899244757704081,
+   "auc_reader_v3": 0.8160587278398811
+  },
+  "pherc0841-ag144": {
+   "convention": "A",
+   "n_supervised": 195760,
+   "ink_fraction": 0.347461176951369,
+   "auc_max": 0.8560051273246806,
+   "coverage_max": 1.0,
+   "auc_t0": 0.8214906355011863,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.839105757080873,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.5044828126068089,
+   "auc_ink9um_s43": 0.790467731739374,
+   "auc_reader_v3": 0.8511020114668043
+  },
+  "pherc0841-ag174": {
+   "convention": "A",
+   "n_supervised": 196608,
+   "ink_fraction": 0.2661285400390625,
+   "auc_max": 0.6395113493197462,
+   "coverage_max": 1.0,
+   "auc_t0": 0.6304160964236629,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.6336185419114068,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.48961481234478094,
+   "auc_ink9um_s43": 0.7973796276569074,
+   "auc_reader_v3": 0.8516011005160049
+  },
+  "pherc0009b-ag055": {
+   "convention": "A",
+   "n_supervised": 196608,
+   "ink_fraction": 0.2774759928385417,
+   "auc_max": 0.7272015287580683,
+   "coverage_max": 1.0,
+   "auc_t0": 0.7073908898457181,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.7220824590302081,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.45712876065811997,
+   "auc_ink9um_s43": 0.8547815244477529,
+   "auc_reader_v3": 0.9635582744429458
+  },
+  "pherc0500p2-s1": {
+   "convention": "A",
+   "n_supervised": 196608,
+   "ink_fraction": 0.4285380045572917,
+   "auc_max": 0.6511023904117502,
+   "coverage_max": 1.0,
+   "auc_t0": 0.5965387784158009,
+   "coverage_t0": 1.0,
+   "auc_mean": 0.6116462193444097,
+   "coverage_mean": 1.0,
+   "auc_negative_control": 0.46670465498919544,
+   "auc_ink9um_s43": 0.897346721886259,
+   "auc_reader_v3": 0.9443173488135519
+  }
+ }
+}

@@ -126,3 +126,70 @@ What changes (compute only):
   on the batch slot, so any difference is reported.
 
 Nothing else changes: segments, windows, sampling, rules and predictions stay as committed in `f9037dc`.
+
+---
+
+## Results (2026-10-29/30, run after `f9037dc` and the addendum `1c05f2d`)
+
+**Setup as run.**
+- **Model and code.** The model is at Hub revision `4c71198`; its sha256 matches the card. The branch code is
+  `c9ca2dc52`: the packages `paris4_3d_gambiarra` and `models` were copied byte for byte under an empty `vesuvius`
+  package, because the branch's `vesuvius/__init__.py` imports modules this run does not need.
+- **Environment.** villa's ink-detection environment (Python 3.12, torch 2.10 cu128), not 3.14. The student loads
+  strictly, with 24,500,769 parameters.
+- **CT copy.** 22,736 chunks, 45 GB, copied in 25 min.
+- **Inference.** 15 test windows and 3 control windows, 2.6–9.2 min each on one RTX 5090.
+- Tool: [`tools/paris4_3d_cross_scroll.py`](../tools/paris4_3d_cross_scroll.py). Numbers:
+  [`runs/paris4_3d/`](../runs/paris4_3d).
+
+**Method checks: all passed.**
+1. The level-2 labels equal `openlabels9` on all five test segments.
+2. CT sampled along the mesh lines up with the published surface volume to within 0.1 px on all six segments
+   under node = pixel × 0.05. The other convention is off by 2.5 px, as predicted.
+3. The positive-control units computed from the bucket and from the local copy are identical on all 20 band
+   units. The 42 off-band units that differ read chunks that were not copied, as the addendum says; they are not
+   sampled.
+
+AUCs were recomputed with `sklearn.metrics.roc_auc_score`: they are identical.
+
+**Pipeline valid:** the positive control (PHercParis4 `20230702185753`) gives AUC **0.907**
+(windows 0.831, 0.940, 0.944).
+
+**Verdict: partial.** Two of the four primary segments are at or above 0.70 and none is at or below 0.60.
+**Not competitive with ink_9um:** the 3D model is within 0.02 of it on 1 of 4 segments, not 3.
+
+AUC over each segment's three windows (supervised pixels, level-2 grid):
+
+| segment | 3D, band max | 3D, t = 0 | 3D, band mean | ink_9um seed43 | Reader V3 | negative control |
+|---|---|---|---|---|---|---|
+| PHercParis4 (control) | **0.907** | 0.813 | 0.843 | — | — | 0.500 |
+| PHerc0841 w00 | 0.661 | 0.619 | 0.640 | 0.890 | 0.816 | 0.425 |
+| PHerc0841 ag144 | **0.856** | 0.822 | 0.839 | 0.790 | 0.851 | 0.505 |
+| PHerc0841 ag174 | 0.640 | 0.630 | 0.634 | 0.797 | 0.852 | 0.490 |
+| PHerc0009B ag055 | 0.727 | 0.707 | 0.722 | 0.855 | 0.964 | 0.457 |
+| PHerc0500P2 s1 (secondary, 2.215 µm) | 0.651 | 0.597 | 0.612 | 0.897 | 0.944 | 0.467 |
+
+The 3D model minus ink_9um is −0.229, +0.066, −0.158 and −0.128 on the four primary segments.
+
+**My predictions:**
+- The positive control passes: right.
+- "Partial": right. But I leaned towards "does not transfer", and no segment is at or below 0.60.
+- "If anything transfers it is PHerc0841": wrong. PHerc0841 holds both the best segment (ag144) and the worst
+  (ag174).
+- Not competitive with ink_9um: right.
+
+What the table shows, read from it and not tested by a rule:
+- **The released Paris4 model carries ink signal on scrolls it never saw.** On the 77 keV scans it scores
+  0.64–0.86, against negative controls of 0.42–0.50. So it is not reading Paris4-specific texture only. It is
+  also clearly weaker there than the 9 µm 2D models on three of four segments.
+- **It varies a lot between windows of one segment.** On the test segments the windows range from 0.39 to 0.89;
+  on the control, from 0.83 to 0.94 (`auc_recheck_sklearn.json`). One PHerc0841 ag174 window is below 0.5 for
+  both the 3D model and ink_9um (0.39 and 0.48). Both models disagree with the labels there, so that window says
+  little about either.
+- **PHerc0841 ag144 is the one segment where the 3D model beats ink_9um,** in all three windows (+0.04 to +0.10),
+  and matches Reader V3. It is also the segment where docs/33 found every 2D model scoring best when shifted by
+  4–8 px against the labels. One untested reading: the 2D models pay for a label-to-canvas offset there, and the
+  3D model's band maximum along the normal tolerates part of it. We did not test this.
+- **The band maximum helps.** It beats the single surface layer (t = 0) on every segment, by 0.009 to 0.094.
+- The maintainer's suggestion of a 9 µm or fine-tuned version is the obvious next question. This run does not
+  answer it.

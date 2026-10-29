@@ -1,0 +1,19 @@
+{
+ "note": "chunks from the bucket (stopped streaming run) vs the local copy; [identical, different, missing]",
+ "band_units_in_window": 284,
+ "band": [
+  20,
+  0,
+  0
+ ],
+ "off_band": [
+  8,
+  42,
+  1
+ ],
+ "max_code_diff": {
+  "band": 0,
+  "off_band": 123
+ },
+ "streaming_done_markers": 71
+}
