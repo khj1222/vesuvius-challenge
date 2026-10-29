@@ -390,7 +390,9 @@ VC3D's `vc_render_tifxyz`, run villa's unmodified `infer` with any checkpoint it
 plus an `ink-detections.json` record next to the catalog's, in both layer directions. No VC3D change.
 VC3D's own overlay code reads the records (8 of 8 test cases, and by eye in the release build), and
 [`check_segment_ink_alignment.py`](tools/check_segment_ink_alignment.py) confirms against the team's map
-that they land on the right pixels (two scrolls, flips and shifted maps as controls).
+that they land on the right pixels (two scrolls, flips and shifted maps as controls). *Update
+2026-10-29:* VC3D built from villa main after #2358 shows only catalog-published ink images, so these
+records show in builds up to the 2026-10-28 "VC3D Latest", not later ones ([docs/32](docs/32_segment_ink_vc3d.md)).
 
 **Swapping the checkpoint:** KLAVIS's Reader V3 through the same path, on three PHerc0841 segments
 neither model trained on, raises AUC against the open human labels from 0.68–0.77 (ink_9um) to

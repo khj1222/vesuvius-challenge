@@ -8,6 +8,16 @@ judges, but only in our own notes, not committed publicly first, so read it as a
 reproduction, not as a pre-registered test. The Reader V3 comparison repeats a result KLAVIS (Domenico
 Russo) published; it is not a new claim about that model.
 
+**Update (2026-10-29): VC3D builds from villa main after #2358 no longer read these records.** #2358
+(merged 2026-10-29, `e1aa625a6`) moved segments into VC3D's object store and rewrote the Ink Detection
+panel. The panel now lists only the ink images published with a catalog surface: the files named in its
+catalog record, downloaded the first time they are shown. The scan of segment folders for
+`ink-detections.json` is gone. The records this tool writes still show in the 2026-09-19 build used in
+Check 1 and in the "VC3D Latest" release of 2026-10-28 (villa `7154682e1`, before #2358). They do not show
+in builds after it. The maps themselves (the JPEG and the raw TIFF) and every number below are unchanged;
+only the last step, seeing them in VC3D's panel, is affected. On villa main `8ff06f762` we found no
+supported way to put a locally made map on a surface in the new panel.
+
 ## The problem
 
 VC3D can already show an ink map on a segment: its Ink Detection panel lists the records in a segment
@@ -137,9 +147,9 @@ VC3D path, not the finding.
 - The rules were not committed publicly before the runs (see Status).
 - Saving a segment over itself in VC3D currently deletes its subfolders (villa #2222, fix proposed in #2223),
   and a catalog segment that VC3D re-downloads is replaced as a whole folder; in both cases run the tool
-  again. VC3D is moving parts of its storage into a central object store (`vc_object_store`); as of villa
-  main `bbe7f8af6` only fibers have moved and the ink panel still reads the segment folder, so the tool
-  will need a second look if segments move too.
+  again. VC3D is moving its storage into a central object store (`vc_object_store`). When this was written
+  (villa main `bbe7f8af6`), only fibers had moved and the ink panel still read the segment folder. Segments
+  moved the next day (#2358; see the Update at the top), and the panel no longer reads the folder.
 
 ## Reproduce
 

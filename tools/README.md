@@ -15,7 +15,7 @@ run. Everything else below is a variation on those three.
 | Tool | What it's for |
 |---|---|
 | [`ink_viz.py`](ink_viz.py) | Turn a prediction TIFF into images you can actually read |
-| [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and put the map where VC3D's Ink Detection panel lists it, next to any catalog maps (no VC3D change) |
+| [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and put the map where VC3D's Ink Detection panel lists it, next to any catalog maps (no VC3D change; VC3D builds up to 2026-10-28, see docs/32) |
 | [`check_segment_ink_alignment.py`](check_segment_ink_alignment.py) | Check that such a map lands on the same pixels as the team's catalog map for that segment (flips and shifted maps as controls) |
 
 ### Hold something out, and score against it
@@ -793,6 +793,12 @@ $UVPY tools/run_widejitter.py score          # the pre-registered P1/P2 rules
 ## `segment_ink.py`, `check_segment_ink_alignment.py` — an ink model on one segment, shown in VC3D
 
 Write-up with all checks and the Reader V3 comparison: [docs/32](../docs/32_segment_ink_vc3d.md).
+
+**Update (2026-10-29):** VC3D built from villa main after #2358 (`e1aa625a6`) no longer reads
+`ink-detections.json` from segment folders. Its Ink Detection panel lists only the images published with
+a catalog surface, so the records below show in the 2026-09-19 build and the 2026-10-28 "VC3D Latest"
+(villa `7154682e1`), not in later builds. The maps and the checks are unaffected; see
+[docs/32](../docs/32_segment_ink_vc3d.md).
 
 VC3D's Ink Detection panel lists, for each segment folder of the open project, the records in
 `<segment>/ink-detections.json` and stretches each record's image over the segment's point grid.
