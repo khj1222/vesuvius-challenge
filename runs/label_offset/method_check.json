@@ -1,0 +1,38 @@
+{
+ "known_shift": [
+  5,
+  -3
+ ],
+ "recovered_relative": [
+  5.0,
+  -3.0
+ ],
+ "auc_rows": [
+  {
+   "segment": "pherc0841-w00",
+   "hist_auc": 0.8911398902799682,
+   "sklearn_auc": 0.8911398902799682
+  },
+  {
+   "segment": "pherc0841-ag144",
+   "hist_auc": 0.8004419119042349,
+   "sklearn_auc": 0.800441911904235
+  },
+  {
+   "segment": "pherc0841-ag174",
+   "hist_auc": 0.8204814723430044,
+   "sklearn_auc": 0.8204814723430045
+  },
+  {
+   "segment": "pherc0009b-ag055",
+   "hist_auc": 0.8595652302161063,
+   "sklearn_auc": 0.8595652302161062
+  },
+  {
+   "segment": "pherc0500p2-s1",
+   "hist_auc": 0.857011719853755,
+   "sklearn_auc": 0.8570117198537549
+  }
+ ],
+ "pass": true
+}

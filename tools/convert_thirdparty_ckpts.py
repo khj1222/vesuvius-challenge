@@ -59,6 +59,18 @@ if rv3.exists():
                         "tensors": len(model), "out": dst.name}
     print(rv3.name, sorted(payload), payload.get("step"), len(model), flush=True)
 
+# KLAVIS Reader v2 (huggingface.co/domenicor046/reader-v2 @ 72633d8, 2026-09-27), same restricted load
+rv2 = ROOT / "raw_reader_v2" / "reader-v2-step040000.pth"
+if rv2.exists():
+    payload = torch.load(rv2, map_location="cpu", weights_only=True)
+    model = payload["model"]
+    assert all(isinstance(v, torch.Tensor) for v in model.values()), rv2
+    dst = OUT / "klavis_reader-v2.pth"
+    torch.save({"model": model, "config": payload["config"], "step": payload.get("step")}, dst)
+    report[rv2.name] = {"sha256": sha256(rv2), "keys": sorted(payload), "step": payload.get("step"),
+                        "tensors": len(model), "out": dst.name}
+    print(rv2.name, sorted(payload), payload.get("step"), len(model), flush=True)
+
 # key sets must match a released ink_9um checkpoint's
 ref = torch.load(Path(r"E:\vesuvius-challenge\data\ink_9um\models\hybrid_3d2d-seed42\step-010000.pth"),
                  map_location="cpu", weights_only=True)["model"]

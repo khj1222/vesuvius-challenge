@@ -101,3 +101,57 @@ team's; the dense-native model is Erwin Nieuwlaar's.
 
 AI disclosure: the design, code, runs and this text were produced by Claude (Anthropic) via Claude Code, directed
 by Hyojun Kwon (khj1222), who chose the problem, the data and the decisions.
+
+---
+
+## Results — Stage 1 (2026-10-29, run after the pre-registration commit `e1e4af2`)
+
+Reader v2 was downloaded at revision `72633d8` (sha256 `654ec5ac…`, matching the Hub's linked ETag) and re-saved
+without unpickling (step 39999, 508 tensors). Reader V3 and v2 ran on the five segments with the command used for
+the existing predictions (0.5–0.7 min each). Tool: [`tools/label_offset_shift.py`](../tools/label_offset_shift.py).
+Numbers: [`runs/label_offset/`](../runs/label_offset).
+
+**Method check: passed.** A prediction drawn +5 rows and −3 columns away is recovered as (+5.0, −3.0). The
+histogram AUC equals `roc_auc_score` on all five segments (to 1e-15).
+
+**Verdict: unclear for both Reader V3 and Reader v2, under the rule as written.** Neither model has a single
+segment inside the [+4, +10] window on both axes. The rule could not have returned "present" anyway, because its
+control failed: ink_9um seed42, the same recipe as the reference with another seed, stays within 2 px of seed43
+on only 1 of 5 segments.
+
+Shift relative to ink_9um seed43, (rows, columns) in px:
+
+| model | w00 | ag144 | ag174 | ag055 | s1 | mean |
+|---|---|---|---|---|---|---|
+| ink_9um seed42 (control) | (−1.8, −1.5) | (+7.0, +3.6) | (+3.4, −2.6) | (−0.5, +2.2) | (+4.7, −2.7) | (+2.5, −0.2) |
+| Reader V3 | (−0.6, +0.4) | (+3.8, +3.6) | (+1.1, −0.9) | (+0.7, +3.3) | (+1.8, −1.7) | (+1.4, +1.0) |
+| Reader v2 | (+1.9, +2.2) | (+4.3, +3.7) | (+1.0, −3.0) | (+0.0, +2.7) | (+0.5, −2.1) | (+1.5, +0.7) |
+| KLAVIS ink9um-dense all7 | (−0.5, −0.7) | (+5.3, +2.1) | (−0.9, −4.6) | (−0.8, +2.9) | (−1.2, −3.7) | (+0.4, −0.8) |
+| KLAVIS manual-label control | (+1.2, −0.6) | (+7.7, +6.0) | (−2.6, −0.1) | (−0.7, +0.6) | (+0.1, −4.5) | (+1.1, +0.3) |
+| Nieuwlaar dense-native | (+0.3, −0.6) | (+4.5, +0.7) | (+0.3, −4.0) | (−0.8, +2.8) | (+0.4, −4.5) | (+0.9, −1.1) |
+
+**Post-hoc fix: not useful.** The fixed vector came out as (8, 7): the seed43 mean shift (1.4, 0.1) rounded, plus
+(7, 7). Moving predictions by it lowers mean AUC for every model, by 0.004 to 0.009. For Reader V3 the change is
+−0.0046, positive on 1 of 5 segments. **Do not shift Reader v2 or V3 maps to compensate for #2243.**
+
+My predictions: the controls within ±2 px failed (seed42 1 of 5, KLAVIS all7 1 of 5, KLAVIS manual-label control
+2 of 5). Reader V3 and v2 at +5 to
++8 failed. The post-hoc gain failed. All three were wrong.
+
+What this does and does not show, read from the table (not tested by a rule):
+- **The instrument is too coarse for the question.** The AUC surface around the best shift is flat: the best
+  shift beats d = 0 by at most 0.007 AUC. Two seeds of one recipe disagree by up to 7 px. A learned shift smaller
+  than about 4 px cannot be told from that spread, so a partial shift cannot be excluded.
+- **No model shows the full offset.** Reader V3 and v2 average +1.4/+1.0 and +1.5/+0.7 px against seed43, inside
+  the range of the three models trained on labels that share their input canvas (seed42, KLAVIS all7, KLAVIS
+  manual-label control: means from −0.8 to +2.5 px per axis). The largest shifts sit on one segment,
+  PHerc0841 ag144, for nearly every model, the unshifted-label ones included. That points at the segment or its
+  labels, not at the training labels.
+- **It bounds what Stage 2 could find.** Moving any of these maps by 7–8 px costs 0.004–0.009 AUC. A model fully
+  displaced by the label offset would therefore lose about that much against unshifted human labels, which is
+  at or below KLAVIS's checkpoint noise of about 0.01. Retraining on corrected labels (Stage 2) is unlikely to
+  show an effect larger than its own noise on this metric, so **we do not run it.**
+
+The canvas offset itself stands: #2243 measured it, and our check replicated it on seven more segments. What this
+stage found is that on these five held-out segments, neither model trained on the shifted labels draws ink
+measurably displaced. And shifting the output back hurts.
