@@ -1,0 +1,10 @@
+{
+ "voxels": 200000,
+ "compared": 200000,
+ "crops": 1129,
+ "minutes": 0.6726697047551473,
+ "identical_fraction": 1.0,
+ "max_code_diff": 0,
+ "ours_missing_where_branch_has_code": 0,
+ "pass": true
+}

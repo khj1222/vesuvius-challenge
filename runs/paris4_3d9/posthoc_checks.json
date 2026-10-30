@@ -1,0 +1,83 @@
+{
+ "note": "post-hoc checks (not pre-registered). auc: ink_9um seed43 step-075000 on aligned9, the same validation-mask pixels (positive control for the validation scoring). sklearn_recheck_3d_maps: [rank AUC, sklearn roc_auc_score] of the band-max maps.",
+ "auc": {
+  "pherc0139-w016": {
+   "val_auc": 0.9366208952308528,
+   "train_px_auc": 0.999688533350881,
+   "val_px": 175222
+  },
+  "pherc0814-46527": {
+   "val_auc": 0.8626363105258337,
+   "train_px_auc": 0.9997935107633786,
+   "val_px": 161051
+  },
+  "pherc1667-w029": {
+   "val_auc": 0.929911936324333,
+   "train_px_auc": 0.9995877505688645,
+   "val_px": 382353
+  },
+  "pooled_val_auc": 0.9133556124968211
+ },
+ "sklearn_recheck_3d_maps": {
+  "A0:pherc0841-w00": [
+   0.714556,
+   0.714556
+  ],
+  "A0:pherc0009b-ag055": [
+   0.68756,
+   0.68756
+  ],
+  "A0:pherc1667-w029": [
+   0.495114,
+   0.495114
+  ],
+  "A1_s0:pherc0841-w00": [
+   0.73095,
+   0.73095
+  ],
+  "A1_s0:pherc0009b-ag055": [
+   0.648089,
+   0.648089
+  ],
+  "A1_s0:pherc1667-w029": [
+   0.557528,
+   0.557528
+  ],
+  "A1_s1:pherc0841-w00": [
+   0.713831,
+   0.713831
+  ],
+  "A1_s1:pherc0009b-ag055": [
+   0.613846,
+   0.613846
+  ],
+  "A1_s1:pherc1667-w029": [
+   0.598167,
+   0.598167
+  ],
+  "A2_s0:pherc0841-w00": [
+   0.621531,
+   0.621531
+  ],
+  "A2_s0:pherc0009b-ag055": [
+   0.651085,
+   0.651085
+  ],
+  "A2_s0:pherc1667-w029": [
+   0.536264,
+   0.536264
+  ],
+  "A2_s1:pherc0841-w00": [
+   0.644773,
+   0.644773
+  ],
+  "A2_s1:pherc0009b-ag055": [
+   0.668064,
+   0.668064
+  ],
+  "A2_s1:pherc1667-w029": [
+   0.516019,
+   0.516019
+  ]
+ }
+}

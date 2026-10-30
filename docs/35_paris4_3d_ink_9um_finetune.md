@@ -208,3 +208,79 @@ by Hyojun Kwon (khj1222), who chose the problem, the data and the decisions.
     unpooled).
 
 Nothing else changes.
+
+---
+
+## Results (2026-10-30, run after `80411bb` and the addendum `8fc17c5`)
+
+**Verdict: pipeline failure under rule (b), so no test verdict.** Rule (a) passed. Rule (b) failed: the two A1
+seeds reach only 0.572 and 0.602 AUC on the pooled validation regions, against the 0.75 required. Everything below
+is reported as measured, but the judged rules give no verdict on "reads held-out scrolls".
+
+**Whole-segment AUC (band maximum).** The A1 and A2 columns are means of two seeds.
+
+| Segment | A0 (zero-shot) | A1 s0 / s1 | A1 | A2 s0 / s1 | A2 | ink_9um s43 | Reader V3 |
+|---|---|---|---|---|---|---|---|
+| 0841 w00 | 0.715 | 0.731 / 0.714 | 0.722 | 0.622 / 0.645 | 0.633 | 0.891 | 0.930 |
+| 0841 ag144 | 0.783 | 0.757 / 0.741 | 0.749 | 0.676 / 0.678 | 0.677 | 0.800 | 0.859 |
+| 0841 ag174 | 0.664 | 0.697 / 0.685 | 0.691 | 0.603 / 0.610 | 0.607 | 0.820 | 0.862 |
+| 0009B ag055 | 0.688 | 0.648 / 0.614 | 0.631 | 0.651 / 0.668 | 0.660 | 0.860 | 0.954 |
+| 0500P2 s1 (secondary) | 0.604 | 0.680 / 0.683 | 0.682 | 0.583 / 0.606 | 0.595 | 0.857 | 0.919 |
+| Validation regions, pooled | 0.502 | 0.572 / 0.602 | — | 0.534 / 0.517 | — | 0.913 (post hoc) | — |
+
+What the measurements say, with the caveat that the run is invalid by its own rule:
+- **Not competitive with ink_9um.** A1 is below ink_9um by 0.05 to 0.23 on all four primary segments.
+- **Fine-tuning barely moved the test numbers.** A1 − A0 is −0.057 to +0.027. The released model read 9.6 µm CT
+  zero-shot about as well as after 10,000 fine-tuning updates: 0.66–0.78 against a predicted 0.55–0.70.
+- **The Paris4 start matters** (secondary rule: "yes"). A1 − A2 is +0.073 to +0.089 on the three PHerc0841
+  segments, with the same sign in both seed pairs. On 0009B ag055 it is −0.029.
+- **The band maximum beats t = 0 on three of four** primary segments for both A1 seeds, by 0.005 to 0.021. On
+  0009B ag055, t = 0 is higher, by 0.010 to 0.017. In docs/34 the band maximum won on every segment.
+- **The negative control is weak at segment scale.** Rolling the labels by half the segment height gives 0.38–0.65
+  where both classes remain. On ag174 and ag055 it is undefined: no ink falls on supervised pixels after the roll,
+  because the labels sit in one half. A window-scale roll, as in docs/34, would have been the better null.
+
+**Predictions:** two of six right.
+- ✗ A0 weak at 0.55–0.70. It was 0.66–0.78; two of four were above the range.
+- ✗ The pipeline is valid. It failed rule (b).
+- ✗ A1 partial, around 0.75–0.85. It was 0.63–0.75, and gets no verdict.
+- ✔ Not competitive with ink_9um on at least 2 of 4. It is below on 4 of 4.
+- ✔ The Paris4 start matters.
+- ✗ ag144 at least level with ink_9um. A1 is 0.749 against 0.800, and A0 0.783.
+
+**Checks after the run (not pre-registered).**
+- **The validation scoring is right.** ink_9um seed43 on the same validation-mask pixels (`aligned9` input) gives
+  AUC 0.937 / 0.863 / 0.930, pooled 0.913. So the labels, masks and AUC code are sound; the 3D model is weak there.
+- **The fine-tune fits, but loosely.** Two training tiles and two unused eligible tiles were drawn per training
+  segment of PHerc0139, PHerc1667 and Paris4 (seed 7). The scores below are for A1 seed 0; the other two arms are
+  given for comparison.
+
+  | Arm | Training tiles | Unused tiles | Validation regions |
+  |---|---|---|---|
+  | A1 seed 0 | 0.839 | 0.757 | 0.572 |
+  | A0 | 0.658 | 0.697 | 0.502 |
+  | A2 seed 0 | 0.723 | 0.683 | — |
+  | ink_9um, for contrast | 0.9996–0.9998 (training px) | — | 0.913 |
+
+  Within the training scrolls, A1 is 0.18 lower on the validation regions than on unused tiles. We did not find
+  why.
+- **AUC recheck.** The rank AUC equals `sklearn.metrics.roc_auc_score` to 6 decimals on 15 arm × segment
+  checks.
+- **Reading.**
+  - The CT reads were complete: no lazy fetches, and coverage 1.000 on every scored pixel.
+  - On docs/34's 18 windows, A0 at 9.6 µm scores 0.53 / 0.82 / 0.61 / 0.83. The released model at 4.8 µm scored
+    0.66 / 0.86 / 0.64 / 0.73 there: means 0.70 against 0.72, per segment −0.13 to +0.10.
+
+**What it means.**
+- A short fine-tune of the 3D model, at 9.6 µm on four scrolls' labels with a band-maximum loss, does not produce
+  a model that passes our in-distribution check. It does not approach ink_9um on held-out scrolls.
+- The run cannot say whether longer training, the full label set, the authors' own distillation recipe, or a
+  native 9 µm scan would change this. ink_9um's memorised training pixels (AUC ≈ 1.0) and its 0.91 on the
+  validation regions show how far apart the two recipes are in training budget.
+- The positive findings are narrow. On average the released 3D model reads 9.6 µm CT zero-shot about as well as
+  4.8 µm on these windows (per segment the two differ by up to 0.13), and its Paris4 weights are a better start than random init.
+
+Evidence: `runs/paris4_3d9/` (`summary.json`, `method_check.json`, `pyramid_check.json`, `loopcheck.json`,
+`tiles.json`, `chunks.json`, `posthoc_checks.json`, `diag_insample.json`, `train/*/COMPLETE.json` and
+`curve.jsonl`; the synthetic loop test `selftest_sparse.py` and the diagnostic `diag_insample.py`). Code:
+`tools/paris4_3d_9um_finetune.py`. The fine-tuned weights are not released.

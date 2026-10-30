@@ -1,0 +1,86 @@
+{
+ "PHerc0009B/volumes/20250820154339-2.401um-0.3m-77keV-masked.zarr": {
+  "k2": [
+   47,
+   30,
+   36
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.26339101791381836,
+  "max_abs_vs_stride4": 121.0,
+  "mean_abs_vs_stride4": 16.9830322265625
+ },
+ "PHerc0139/volumes/20260102150214-2.399um-0.2m-78keV-masked.zarr": {
+  "k2": [
+   47,
+   28,
+   26
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.2635989189147949,
+  "max_abs_vs_stride4": 137.0,
+  "mean_abs_vs_stride4": 9.5894775390625
+ },
+ "PHerc0500P2/volumes/20250526151718-2.215um-0.4m-111keV-masked.zarr": {
+  "k2": [
+   27,
+   16,
+   19
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.2622857093811035,
+  "max_abs_vs_stride4": 86.0,
+  "mean_abs_vs_stride4": 8.55804443359375
+ },
+ "PHerc0814/volumes/20260309142202-2.399um-0.2m-78keV-masked.zarr": {
+  "k2": [
+   27,
+   22,
+   32
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.26465320587158203,
+  "max_abs_vs_stride4": 137.0,
+  "mean_abs_vs_stride4": 17.75164794921875
+ },
+ "PHerc0841/volumes/20260319124803-2.403um-0.2m-77keV-masked.zarr": {
+  "k2": [
+   10,
+   31,
+   29
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.2640824317932129,
+  "max_abs_vs_stride4": 119.0,
+  "mean_abs_vs_stride4": 19.567596435546875
+ },
+ "PHerc1667/volumes/20251217075048-2.399um-0.2m-78keV-masked.zarr": {
+  "k2": [
+   19,
+   17,
+   15
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.26512813568115234,
+  "max_abs_vs_stride4": 87.0,
+  "mean_abs_vs_stride4": 5.4217529296875
+ },
+ "PHercParis4/volumes/20260411134726-2.400um-0.2m-78keV-masked.zarr": {
+  "k2": [
+   138,
+   39,
+   33
+  ],
+  "max_abs_vs_rounded_mean": 1.0,
+  "max_abs_vs_floor_mean": 1.0,
+  "mean_abs_vs_mean": 0.26476478576660156,
+  "max_abs_vs_stride4": 111.0,
+  "mean_abs_vs_stride4": 8.220062255859375
+ }
+}
