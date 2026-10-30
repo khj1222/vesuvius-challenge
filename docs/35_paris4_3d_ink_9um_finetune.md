@@ -174,3 +174,37 @@ segments are the same as in docs/27–34.
 
 AI disclosure: the design, code, runs and this text were produced by Claude (Anthropic) via Claude Code, directed
 by Hyojun Kwon (khj1222), who chose the problem, the data and the decisions.
+
+---
+
+## Addendum before training (2026-10-30, written before any fine-tune or test-segment inference)
+
+- **Length: N = 10,000.** The 200-update smoke run of A1 seed 0 ran at 0.19 s per update after the first 20
+  (10,000 updates ≈ 32 min ≤ 3 h). Its loss fell from 1.13 to 0.57. The smoke weights are not used.
+- **Training tiles** (seed 0, labels only): PHerc0139 91 tiles / 3.02 M supervised px, PHerc1667 78 / 3.01 M,
+  PHercParis4 73 / 3.05 M, PHerc0814 8 / 0.33 M; 9.41 M px in all. No tile holds a validation-region pixel.
+- **Method checks.**
+  - CT alignment: all 29 segments (24 training, 5 test) pass under convention A, with |d| ≤ 0.15 px on both axes;
+    convention B is off by about 2.5 px.
+  - Labels: the five test label sets equal `openlabels9`.
+  - Pyramid: level 2 equals the 4×4×4 mean of level 0 to within 1 grey level, mean absolute difference 0.26, on
+    all seven CTs. It is a mean, not a stride.
+  - Rule (a) passes. Our loop with pooling, on the docs/34 control window, matches the branch's `infer_volume`
+    codes at 200,000 sampled voxels: 100% identical, maximum difference 0.
+- **Data.** 11,425 level-2 chunks, 22.3 GiB, against about 11 GB estimated. The estimate counted ±64 voxels around
+  each surface point. A crop's 128³ parent reaches ±92 voxels around a training point and ±108 around a scored
+  point. That is within the 25 GiB stop rule. 75 chunks are absent on the bucket (outside the scroll mask) and
+  read as zeros.
+- **Two code corrections, made before any validation or test inference.**
+  - The validation regions are disjoint from the supervision masks. The released pipeline uses the validation mask
+    in place of the supervision mask (koine_machines `supervision_mask_override`). The validation AUC is therefore
+    computed over every validation-mask pixel, with the ink labels. Our first code took supervised ∩ validation,
+    which is empty.
+  - A JSON-writing bug was fixed.
+- **Inference implementation.**
+  - Our loop computes blended logits only at the voxels the band samples read. It covers all crops of the global
+    grid that contain one of them, in lexicographic order, with float64 accumulators.
+  - On synthetic volumes, a dense brute-force blend over every crop agrees with it to 3 × 10⁻¹⁶ (pooled and
+    unpooled).
+
+Nothing else changes.
