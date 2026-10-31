@@ -596,3 +596,16 @@ vesuvius-challenge/
 - [x] **Any ink checkpoint on a segment, in VC3D's Ink Detection panel** (2026-10-25/28) — `segment_ink`;
       read by VC3D's own overlay code, placement checked on two scrolls; Reader V3 through it beats
       ink_9um on three held-out PHerc0841 segments, AUC +0.131 ([docs/32](docs/32_segment_ink_vc3d.md)).
+- [x] **The 7–8 px offset in 2.4→9 µm transferred labels** (2026-10-29) — pre-registered. The offset is
+      present on public data (6 of 7 segments). Models trained on such labels show no shift this instrument
+      can resolve, and shifting their maps back costs 0.004–0.009 AUC, so stage 2 was not run
+      ([docs/33](docs/33_label_offset_9um.md)).
+- [x] **The Paris 4 3D ink model on held-out scrolls** (2026-10-30) — pre-registered; partial transfer
+      (AUC 0.64–0.86, positive control 0.91), below ink_9um on 3 of 4 segments
+      ([docs/34](docs/34_paris4_3d_ink_cross_scroll.md)).
+- [x] **That 3D model fine-tuned at 9.6 µm** (2026-10-30) — pre-registered; invalid under its own rule
+      (validation AUC 0.57/0.60 < 0.75), and below ink_9um on all four held-out segments
+      ([docs/35](docs/35_paris4_3d_ink_9um_finetune.md)).
+- [x] **villa main's default augmentation vs the released recipe's** (2026-10-31) — pre-registered, then
+      withdrawn before any run: the released recipe's `default` preset already builds main's graph
+      ([docs/36](docs/36_main_default_augmentation.md)).
