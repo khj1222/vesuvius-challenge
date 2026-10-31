@@ -1,0 +1,294 @@
+{
+ "__class__": "ComposeTransforms",
+ "transforms": [
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.5,
+   "transform": {
+    "__class__": "Rot90Transform",
+    "allowed_axes": [
+     1,
+     2
+    ],
+    "num_axis_combinations": 1,
+    "num_rot_per_combination": [
+     1,
+     2,
+     3
+    ]
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.2,
+   "transform": {
+    "__class__": "TransposeAxesTransform",
+    "allowed_axes": [
+     1,
+     2
+    ],
+    "normal_keys": []
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.1,
+   "transform": {
+    "__class__": "BlankRectangleTransform",
+    "color_fn": {
+     "__class__": "ColorFunctionExtractor",
+     "rectangle_value": {
+      "__class__": "_ArrayFunctionDispatcher"
+     }
+    },
+    "force_square": false,
+    "num_rectangles": [
+     1,
+     5
+    ],
+    "p_per_channel": 0.5,
+    "p_per_sample": 0.4,
+    "rectangle_size": [
+     [
+      2,
+      5
+     ],
+     [
+      21,
+      42
+     ],
+     [
+      21,
+      42
+     ]
+    ]
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.3,
+   "transform": {
+    "__class__": "SmearTransform",
+    "alpha": 0.2,
+    "num_prev_slices": 3,
+    "shift": [
+     5,
+     0
+    ],
+    "smear_axis": 3
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.4,
+   "transform": {
+    "__class__": "InhomogeneousSliceIlluminationTransform",
+    "base_p": [
+     0.2,
+     0.4
+    ],
+    "base_red": [
+     0.5,
+     0.9
+    ],
+    "defect_width": [
+     25,
+     50
+    ],
+    "mult_brightness_reduction_at_defect": [
+     0.3,
+     1.5
+    ],
+    "num_defects": [
+     2,
+     5
+    ],
+    "p_per_channel": 0.5,
+    "p_per_sample": 1.0,
+    "per_channel": true
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.2,
+   "transform": {
+    "__class__": "BrightnessGradientAdditiveTransform",
+    "clip_intensities": false,
+    "loc": [
+     -0.5,
+     1.5
+    ],
+    "max_strength": 0.5,
+    "mean_centered": true,
+    "p_per_channel": 0.5,
+    "same_for_all_channels": false,
+    "scale": [
+     2.8333333333333335,
+     8.5
+    ]
+   }
+  },
+  {
+   "__class__": "OneOfTransform",
+   "list_of_transforms": [
+    {
+     "__class__": "RandomTransform",
+     "apply_probability": 0.3,
+     "transform": {
+      "__class__": "GaussianBlurTransform",
+      "blur_sigma": [
+       0.3,
+       1.5
+      ],
+      "p_per_channel": 0.5,
+      "synchronize_axes": false,
+      "synchronize_channels": false
+     }
+    }
+   ]
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.3,
+   "transform": {
+    "__class__": "GaussianNoiseTransform",
+    "noise_variance": [
+     0,
+     0.2
+    ],
+    "p_per_channel": 0.5,
+    "synchronize_channels": true
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.2,
+   "transform": {
+    "__class__": "SharpeningTransform",
+    "p_clamp_intensities": 0.5,
+    "p_per_channel": 0.5,
+    "p_same_for_each_channel": 0.5,
+    "strength": [
+     0.1,
+     1.5
+    ]
+   }
+  },
+  {
+   "__class__": "OneOfTransform",
+   "list_of_transforms": [
+    {
+     "__class__": "RandomTransform",
+     "apply_probability": 0.3,
+     "transform": {
+      "__class__": "ContrastTransform",
+      "contrast_range": {
+       "__class__": "BGContrast",
+       "contrast_range": [
+        0.75,
+        1.25
+       ]
+      },
+      "p_per_channel": 0.5,
+      "preserve_range": true,
+      "synchronize_channels": false
+     }
+    },
+    {
+     "__class__": "RandomTransform",
+     "apply_probability": 0.3,
+     "transform": {
+      "__class__": "MultiplicativeBrightnessTransform",
+      "multiplier_range": {
+       "__class__": "BGContrast",
+       "contrast_range": [
+        0.75,
+        1.25
+       ]
+      },
+      "p_per_channel": 0.5,
+      "synchronize_channels": false
+     }
+    }
+   ]
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.1,
+   "transform": {
+    "__class__": "BrightnessAdditiveTransform",
+    "mu": 0,
+    "p_per_channel": 0.5,
+    "sigma": 0.5,
+    "synchronize_channels": false
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.4,
+   "transform": {
+    "__class__": "SimulateLowResolutionTransform",
+    "allowed_channels": null,
+    "ignore_axes": null,
+    "p_per_channel": 0.5,
+    "scale": [
+     0.25,
+     1
+    ],
+    "synchronize_axes": true,
+    "synchronize_channels": false,
+    "upmodes": {
+     "1": "linear",
+     "2": "bilinear",
+     "3": "trilinear"
+    }
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.2,
+   "transform": {
+    "__class__": "GammaTransform",
+    "gamma": {
+     "__class__": "BGContrast",
+     "contrast_range": [
+      0.7,
+      1.5
+     ]
+    },
+    "p_invert_image": 1,
+    "p_per_channel": 1,
+    "p_retain_stats": 1,
+    "synchronize_channels": false
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.4,
+   "transform": {
+    "__class__": "GammaTransform",
+    "gamma": {
+     "__class__": "BGContrast",
+     "contrast_range": [
+      0.7,
+      1.5
+     ]
+    },
+    "p_invert_image": 0,
+    "p_per_channel": 1,
+    "p_retain_stats": 1,
+    "synchronize_channels": false
+   }
+  },
+  {
+   "__class__": "RandomTransform",
+   "apply_probability": 0.2,
+   "transform": {
+    "__class__": "InvertImageTransform",
+    "p_invert_image": 1,
+    "p_per_channel": 0.5,
+    "p_synchronize_channels": 0.5
+   }
+  }
+ ]
+}

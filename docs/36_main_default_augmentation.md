@@ -1,5 +1,9 @@
 # 36 — Does villa main's stronger default augmentation change ink_9um on unseen scrolls? (pre-registered)
 
+> **Withdrawn before any run (2026-10-31; banner added after the pre-registration).** The released recipe's
+> `default` preset already builds the same augmentation graph as villa main's, so the two arms would not
+> differ. See [the section at the end](#withdrawn-before-any-run-2026-10-31). Nothing was trained.
+
 **Status: pre-registration, committed before any fine-tuned checkpoint below exists.** Results will be
 appended under a separate heading; nothing above it changes afterwards.
 
@@ -123,3 +127,40 @@ strong arm narrows the native gap by +0.01 to +0.03. H does not hold.
 - The strong arm loads the CPU more. Steps are fixed, so this changes run time, not the comparison.
 
 Cost: four fine-tunes (about 45–90 min each on one RTX 5090) and about an hour of inference; no downloads.
+
+---
+
+# Withdrawn before any run (2026-10-31)
+
+**The premise is false, so the study is withdrawn.** Nothing was configured, trained or scored. We found this
+while setting up check 1, after the pre-registration commit `1c648ec` and before any code change.
+
+- In `koine_machines`, `augmentation_preset: "default"` does not call the `create_training_transforms`
+  in `koine_machines/augmentation/default_augmentations.py`, which is what the left column of the table in
+  "Why" describes. `ink_dataset.py` imports `create_training_transforms` from the shared library,
+  `vesuvius.models.augmentation.pipelines.training_transforms` (line 27, confirmed at run time by the
+  function's module). For `default` it calls that one (line 1323). The import has been there since the
+  branch's 2026-07-13 commit `4b8694ab7`, before the released recipe's commit `4c33995ce` (2026-08-09).
+  Nothing in the ink pipeline calls the builder in `default_augmentations.py`.
+- We built both graphs for the recipe's 17×128×128 patch and dumped them in order, with every parameter
+  ([`tools/check_augmentation_graphs.py`](../tools/check_augmentation_graphs.py)). The graph the released
+  recipe uses (fork library `fc6d9a7f4`) and villa main's `create_default_training_transforms` (`e2254ebe0`,
+  file unchanged at `a23ec7c34`) are byte-identical: [`graph_released_recipe.json`](../runs/presetab/graph_released_recipe.json),
+  [`graph_main_default.json`](../runs/presetab/graph_main_default.json). Both have 15 top-level members:
+  low-resolution simulation p 0.4, both gammas, brightness gradient, smear, and the rest of the right
+  column above. The unused builder has 9 ([`graph_koine_unused_builder.json`](../runs/presetab/graph_koine_unused_builder.json)).
+  In the branch history the library file was last changed on 07-13.
+
+So both arms would have trained with the same transform graph. Main's ink default did not strengthen the
+recipe's augmentation. It carried over the graph the recipe already used. The left column of the table in
+"Why" and the words "much stronger" are wrong. They describe code that never runs. The docs/30 control and,
+as far as the published code and config show, the released checkpoints were trained with the strong graph.
+We cannot see the machine the released checkpoints were trained on.
+
+What this leaves:
+
+- The question in "Why" about the native-render gap (PHerc0841 AUC 0.891 / 0.800 / 0.820 downsampled,
+  against 0.772 / 0.681 / 0.756 native) stays open. Augmentation strength does not explain it, because the
+  released checkpoints already trained with low-resolution simulation and stronger blur.
+- The mistake was ours, made on 2026-10-30. We read the preset's contents from the file named after it
+  instead of following the import.
