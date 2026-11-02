@@ -5,7 +5,7 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-11-01 기준, 이 절이 최우선)
+## 현재 상태 (2026-11-02 기준, 이 절이 최우선)
 
 **10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 세 건 모두 사전등록·실행·공개 완료:
 - **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
@@ -33,6 +33,13 @@
 닫힌 것: #1705·#1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(닫고 잠금), #1611(완료), #1893(#1831로 해결).
 
 ### 남은 할 일 (다음 세션)
+**▶ 11-02 밤 세션 종료 시점 요약 (다음 세션은 이것부터)**
+- **11월 방향 = I1 (사용자 결정 11-02 "I1으로 가서 검증해보고")**: VC3D Ink Detection 패널이 객체 저장소 표면의 `ink`/`ink_*` 채널도 선택지로 보여주게 하는 작은 C++ 변경. 근거: 저장소는 잉크 채널 자리를 문서화(`vc_object_store/README.md:82` `--surface-channel UUID ink pred.tif`, "ink rendered at 20 pixels per grid step")했는데 패널은 카탈로그 파일만 읽음, 겹치는 PR 없음. 재조사 근거 `planning/2026-11_plan.md` §4i(bruniss 11-01: 점검 도구 머지 안 함·학습 비교 증거 요구, sean 11-02: 안 쓰는 스크립트 PR 폐기).
+- **게이트(코드 전 고정 `planning/2026-11_i1_store_ink_channel.md` sha256 `2082e335dea5`) G1·G2·G3 통과**: G1 CI 이미지 `test_ink_detection_overlay` 9/9(새 2개) · G2 0841 w00 + Reader V3 채널 저장소 왕복 픽셀 동일(격자×20) · G3 **사용자가 직접** VC3D(Docker+WSLg Release 빌드)에서 전 0개/후 2개 확인, 스크린샷 6장. 패치 = `D:/vw20` 브랜치 `feat/vc3d-ink-surface-channel` 커밋 `0df26c427`(+137/−12, **로컬만, 포크에도 미푸시**). 빌드·실행 스크립트 `planning/2026-11-02_i1_build/`(README에 순서), docker 볼륨 `vc_i1`(빌드)·`vc3d_home`(VC3D 프로젝트·캐시), 가져오기 폴더 `data/a_lite/g3_import/`.
+- **다음 할 일**: ① **사용자가 11-03에 sean 질문 게시**(`submission/discord_robots_segment_ink_i1_question.md`, w045 정정 줄 포함 3줄) → 게시본=초안 대조 ② 스윕 `--since 2026-11-02T00:00:00Z` + Discord(sean 답, 10월 수상 발표·11월 폼) ③ sean이 반대 안 하면 PR 준비: main `CONTRIBUTING.md`·PR 템플릿 재확인, Why는 사용자 말, 체크박스는 G3를 사용자가 직접 했으니 켤 수 있음, 증거 = 스크린샷 전후 + 테스트 출력, 같이 낼 것 = segment_ink v2(결과를 저장소 채널로 쓰기, 공개 tifxyz `meta.json` uuid가 `output_tifxyz`라 그대로 못 넣는 문제 처리) + docs/32 갱신 → 11월 제출 중심. **G4 기한 11-16**: 답 없으면 PR 대신 우리 저장소 패치 + 문서.
+- **11-02 w045 정정 완료(`bb35177` 푸시)**: ink_9um 0139 케이스 번호 ≠ 공개 w번호(케이스 w016/w017/w028/w029 = 공개 w029/w030/w044/w045, jo-tud #2349). docs/32·tools/README·docs/15 고침. #robots 정정은 sean 질문 글의 마지막 줄로.
+- 미푸시 커밋(이 저장소): `2908a46`(sean 질문 초안) 이후 CLAUDE.md 커밋들 — 공개 경로 변경은 초안 하나. 게시 전에 푸시할 것(초안 링크는 docs/32라 무관).
+
 **▶ 10-30 저녁 세션 종료 시점 요약 (다음 세션은 이것부터)**
 - **11월 연구 상태**: F1·F2·F3′·G3(docs/34, 부분 전이)·G3b(docs/35, 9.6µm 미세조정 = 규칙 (b)로 무효, ink_9um 아래 4/4) 모두 닫힘. 전부 푸시됨(main `f43042b` 이후 CLAUDE.md 커밋). 밝기·질감 무작위화는 villa main 기본값(08-27 #1625)에 이미 있어 새 방법 아님 → 남은 연구 후보는 **약한(koine) vs 강한(main) preset A/B 측정**(하루, $500급, main 코드로 ink_9um 설정 돌리는 경로 필요)과 **sean 답 오면 A**. 3D 잉크는 팀(err, Jason W) 영역이라 접는 쪽.
 - **주말(10-31~11-01) 할 일**: ~~① 스윕 ② Z: 백업~~ **10-31 완료**(아래 최근 기록) ③ 사용자와 11월 방향 결정(남음). 다음 스윕은 `--since 2026-10-31T00:00:00Z`.
@@ -67,6 +74,7 @@
 - 10-02 제거: vw2·vw3·vw4~vw7·vw8·vw11. 브랜치는 로컬·포크에 남아 있고, 미커밋 수정 3건(vw2 `extra_blur`=docs/23 코드, vw6·vw7=#1471 검증 패치)은 `planning/2026-10-02_cleanup/*.patch`(적용 확인).
 - ⚠️ ink_9um config는 `external/villa`(스키마 이전 체크아웃)로는 못 돌린다. 예전엔 `D:/vw2/ink-detection`에서 `uv run --project E:/vesuvius-challenge/external/villa/ink-detection --no-sync python -m ...`로 돌렸다 → 필요하면 `feat/flat-depth-targets`로 워크트리를 다시 만들고 `vw2_uncommitted.patch` 적용.
 - `external/villa` 본 작업트리는 `fix/stream-untiled-label-images` + 미커밋(train/infer/test 구버전, pyproject/uv.lock cu128 핀) — **체크아웃 전환 금지**.
+- **11-02 추가**: `D:/vw20` = villa 브랜치 `feat/vc3d-ink-surface-channel`(main `fd97a4b60` + `0df26c427`, sparse `volume-cartographer/`·`vc_object_store/`·`vc_reader/` — VC CMake가 `../vc_reader`·`../vc_object_store`를 부름) · `D:/vw21` = 같은 main 패치 없음(비교 빌드용). VC 빌드는 저장소 CLI 도구를 끄니 `vc_object_ingest/export`는 `vc_object_store` 단독 빌드(`/work/build_store`). WSLg 창은 computer-use로 클릭이 안 됨 → VC3D GUI는 사용자가 조작.
 - **10-25 추가**: `D:/vw18` = villa main `322cb0899`(sparse `volume-cartographer/`, VC3D 잉크 패널 검증; 빌드 볼륨 `vc_ink25`, 테스트 패치는 planning에).
 - **10-23 추가**: `D:/vw16` = villa `dinovol-refactor` `5c3ffb91d`(sparse `dinovol/`, B 보류 중) · `D:/vw17` = villa main `e2254ebe0`(sparse `vesuvius/`, A-lite 추론: `external/villa/ink-detection/.venv` python + `PYTHONPATH=D:/vw17/vesuvius/src`) · `E:/envs/dinovol`(py3.13, torch 2.11 cu128 — timm 설치가 torch를 CPU판으로 바꾸니 torch+torchvision을 cu128 인덱스에서 함께 재설치할 것; imagecodecs 없음 → LZW TIFF는 ink-detection venv로 읽기).
 - `D:/shots`(PR 증거 이미지 스크립트), `D:/docker`(Docker 디스크)는 E: 이전 때 안 옮김.
