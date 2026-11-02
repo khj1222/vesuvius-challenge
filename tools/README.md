@@ -840,7 +840,7 @@ folders, lists and loads our records on a plain segment, on the same segment key
 do, and next to a catalog record. On the 2026-09-19 release build the panel shows them on PHerc0139 w045
 and lays them on the grid unflipped. The control,
 a file holding only our record, hides the catalog map. Against the team's 2.4 µm catalog map, on two
-segments the ink_9um checkpoints were not trained on:
+segments (PHerc0814 20250925212701 is outside ink_9um's training set; PHerc0139 w045 is inside it, see below):
 
 | segment | forward, as is | best flip | best shifted map | reversed layers |
 |---|---|---|---|---|
@@ -852,6 +852,11 @@ was fixed before the runs: as-is is the best of the four flips, above 0.1, and a
 shifted map. It checks that the map lands on the right pixels, not that it reads well: at 9 µm the
 letters are much fainter than in the team's 2.4 µm map ([w045 side by side](../runs/segment_ink/pherc0139_w045_team_fwd_rev.png):
 team, forward, reversed). Reports: [`runs/segment_ink/`](../runs/segment_ink).
+
+Correction (2026-11-02): this paragraph first called both segments untrained. The ink_9um label set uses its
+own PHerc0139 case numbers, and its case `pherc0139-w029` is the public w045, so w045 is a training segment
+(jo-tud, [villa #2349](https://github.com/ScrollPrize/villa/pull/2349#issuecomment-6542288910)). The
+placement check still passes; details in [docs/32](../docs/32_segment_ink_vc3d.md#check-2--the-map-lands-on-the-right-pixels).
 
 Any checkpoint villa's `infer` loads works the same way (`--checkpoint`, `--name`, `--label`; reuse a render
 with `--render-zarr`). Example (2026-10-26): KLAVIS's [Reader V3](https://github.com/DomRusso2/reader-v3) on

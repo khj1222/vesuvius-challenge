@@ -64,15 +64,24 @@ lays it on the grid unflipped.
 
 ## Check 2 — the map lands on the right pixels
 
-On two segments the ink_9um checkpoints were not trained on, our map against the team's 2.4 µm catalog map
-for the same segment. The number is the correlation of the two maps, each blurred (σ 2 px) and reduced to the
-same size. Rule fixed before the runs: as-is must be the best of four flips, above 0.1, and above twice the
+On two segments, our map against the team's 2.4 µm catalog map for the same segment. PHerc0814
+20250925212701 is outside ink_9um's training set; PHerc0139 w045 is inside it (see the correction below).
+The number is the correlation of the two maps, each blurred (σ 2 px) and reduced to the same size. Rule fixed before the runs: as-is must be the best of four flips, above 0.1, and above twice the
 best map shifted by ±10%.
 
 | segment | forward, as is | best flip | best shifted map | reversed layers |
 |---|---|---|---|---|
 | PHerc0814 20250925212701 | 0.220 | −0.02 | 0.042 | 0.035 (fails) |
 | PHerc0139 w045 (20260126000000) | 0.389 | 0.078 | 0.081 | 0.017 (fails) |
+
+**Correction (2026-11-02): w045 is an ink_9um training segment.** This section first said both segments were
+outside ink_9um's training set. The ink_9um label set names PHerc0139 cases with its own numbers, not the
+public w-numbers, and its case `pherc0139-w029` is the public w045 (`20260126000000-w045`; our copy's
+`source` attribute names it). jo-tud pointed this out in
+[villa #2349](https://github.com/ScrollPrize/villa/pull/2349#issuecomment-6542288910). The placement check
+still passes, since it asks where the map lands, not how well it reads, but on w045 it is a check on a
+segment the model was trained on. PHerc0814 20250925212701 is outside the set (its one 0814 case is
+`20260226000000`).
 
 This checks placement, not reading quality: at 9 µm ink_9um's letters are much fainter than the team's
 ([w045 side by side](../runs/segment_ink/pherc0139_w045_team_fwd_rev.png)). Our render of the PHerc0814 segment
