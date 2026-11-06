@@ -15,7 +15,7 @@ run. Everything else below is a variation on those three.
 | Tool | What it's for |
 |---|---|
 | [`ink_viz.py`](ink_viz.py) | Turn a prediction TIFF into images you can actually read |
-| [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and put the map where VC3D's Ink Detection panel lists it, next to any catalog maps (no VC3D change; VC3D builds up to 2026-10-28, see docs/32) |
+| [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and store the map as an `ink_*` surface channel for VC3D's object store (v2), or, with `--target legacy-json`, as the records VC3D builds up to 2026-10-28 list (see docs/32) |
 | [`check_segment_ink_alignment.py`](check_segment_ink_alignment.py) | Check that such a map lands on the same pixels as the team's catalog map for that segment (flips and shifted maps as controls) |
 
 ### Hold something out, and score against it
@@ -799,6 +799,18 @@ Write-up with all checks and the Reader V3 comparison: [docs/32](../docs/32_segm
 a catalog surface, so the records below show in the 2026-09-19 build and the 2026-10-28 "VC3D Latest"
 (villa `7154682e1`), not in later builds. The maps and the checks are unaffected; see
 [docs/32](../docs/32_segment_ink_vc3d.md).
+
+**v2 (2026-11-06): the map goes into VC3D's object store as a surface channel.** The store keeps an ink
+map as a channel whose sides are whole multiples of the point grid (20 px per grid step here).
+`--target store-folder` (now the default) writes `<work>/<segment>-store/`, an importable tifxyz folder
+with the map as an `ink_<name>.tif` sidecar (VC3D: File → Object Store → Import from Folder, or
+`vc_object_ingest --surface`); published meshes say `"uuid": "output_tifxyz"`, which the store refuses, so
+the folder gets a UUID derived from the segment (the same on every run, old value kept as
+`segment_ink_source_uuid`). `--target store --store objects.vcobj [--store-uuid UUID] --ingest-cmd ...`
+adds the channel to a surface already in a store. `--prediction PRED.tif` skips rendering and inference.
+**The old records below now need `--target legacy-json`.** Checked on PHerc0841 w00 (store tools from villa
+main `baf5e605b`): all three maps come back from the store pixel-identical. VC3D's panel does not list
+surface channels on villa main yet; that needs a VC3D change (see docs/32).
 
 VC3D's Ink Detection panel lists, for each segment folder of the open project, the records in
 `<segment>/ink-detections.json` and stretches each record's image over the segment's point grid.

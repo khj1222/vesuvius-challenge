@@ -1,6 +1,23 @@
 """Run an ink model on one tifxyz segment and put the result where VC3D's Ink Detection panel finds it.
 
-VC3D (villa main, apps/VC3D/overlays/InkDetectionOverlayController.cpp) lists, for every segment
+v2 (2026-11): VC3D now keeps surfaces in an object store (villa #2358, 2026-10-29) and its Ink
+Detection panel no longer reads ink-detections.json. The store already has a place for ink: a surface
+channel, an image whose size is a whole multiple of the point grid ("ink rendered at 20 pixels per
+grid step", vc_object_store/docs/README.md). So v2 writes the prediction as a channel, by target:
+  store-folder (default)  an importable tifxyz folder <work>/<segment>-store/ with the prediction as an
+                          `ink_<name>.tif` sidecar, which ingestion turns into a channel (VC3D: File ->
+                          Object Store -> Import from Folder, or `vc_object_ingest --surface`). The
+                          published tifxyz meta.json uuid is often not a UUID ("output_tifxyz"), which
+                          the store refuses; the folder gets a UUID derived from the segment
+                          (uuid5, so re-running gives the same one) and keeps the old value as
+                          `segment_ink_source_uuid`.
+  store                   add the channel to a surface already in a store
+                          (`vc_object_ingest --surface-channel UUID NAME TIFF`, through --ingest-cmd).
+  legacy-json             the v0 behaviour below, for VC3D builds from before #2358.
+Showing an `ink*` channel in the panel needs a VC3D change that is not in villa main yet (our branch
+feat/vc3d-ink-surface-channel); without it the channel is stored and exported but not drawn.
+
+v0 (legacy-json): VC3D (villa main before #2358, apps/VC3D/overlays/InkDetectionOverlayController.cpp) lists, for every segment
 folder of the open project, the records in <segment>/ink-detections.json and stretches the image
 named by each record's `local_file` over the segment's point grid. A record shows on a segment
 when its `segment_id` or `segment_long_id` equals the segment's key: the catalog keys in
@@ -29,6 +46,8 @@ Usage (Windows, render through WSL as tools/render_wsl.sh does):
       --volume 20250804134230-9.362um-1.2m-113keV-masked.zarr \
       --checkpoint data/ink_9um/models/hybrid_3d2d-seed43/step-075000.pth --direction both
   python tools/segment_ink.py SEGMENT_DIR --render-zarr existing_render.zarr --checkpoint ...
+  python tools/segment_ink.py SEGMENT_DIR --prediction existing_pred.tif --name reader_v3 \
+      --target store --store objects.vcobj --store-uuid UUID --ingest-cmd "vc_object_ingest"
 """
 from __future__ import annotations
 
@@ -37,14 +56,21 @@ import hashlib
 import json
 import os
 import platform
+import re
+import shlex
+import shutil
 import subprocess
 import sys
 import time
+import uuid as uuidlib
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TOOL_VERSION = "segment_ink v0"
+TOOL_VERSION = "segment_ink v2"
+UUID_RE = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+# uuid5 namespace for segments whose meta.json uuid is not a UUID (fixed; changing it renames surfaces).
+SEGMENT_NS = uuidlib.UUID("6f0c1d52-3b1e-5e7a-9f43-5e9a1c0b7d21")
 S3 = "https://vesuvius-challenge-open-data.s3.amazonaws.com"
 # The catalog keys VC3D prefers over the folder name (canonicalSegmentKey), in its order.
 CATALOG_KEYS = ("vc_open_data_segment_long_id", "vc_open_data_catalog_segment_lineage_id",
@@ -161,10 +187,67 @@ def place(seg_dir: Path, image: Path, name: str, record: dict) -> Path:
     return dest
 
 
+def channel_name(stem: str) -> str:
+    """`ink_<stem>` in the lowercase form ingestion recognizes as a sidecar channel.
+
+    The VC3D panel change lists exactly `ink` and `ink_*` channels (not `inked`, not `ink9um`)."""
+    name = re.sub(r"[^a-z0-9_]+", "_", stem.lower()).strip("_")
+    return name if name == "ink" or name.startswith("ink_") else f"ink_{name}"
+
+
+def check_channel_shape(seg_dir: Path, image: Path) -> tuple[int, int]:
+    """The store takes a channel only when each side is a whole multiple of the point grid."""
+    import tifffile
+
+    grid = tifffile.TiffFile(seg_dir / "x.tif").pages[0].shape[:2]
+    with tifffile.TiffFile(image) as tif:
+        if len(tif.pages) != 1:
+            sys.exit(f"{image}: {len(tif.pages)} pages; a channel must be a single-page TIFF")
+        shape = tif.pages[0].shape[:2]
+    if shape[0] % grid[0] or shape[1] % grid[1]:
+        sys.exit(f"{image}: {shape} is not a whole multiple of the point grid {grid}")
+    return shape[0] // grid[0], shape[1] // grid[1]
+
+
+def store_uuid(seg_dir: Path, meta: dict) -> str:
+    value = meta.get("uuid")
+    if isinstance(value, str) and UUID_RE.match(value):
+        return value.lower()
+    # Not a UUID (published tifxyz say "output_tifxyz"): derive one from the scroll/segment names.
+    return str(uuidlib.uuid5(SEGMENT_NS, f"{seg_dir.parent.name}/{seg_dir.name}/{value}"))
+
+
+def write_store_folder(seg_dir: Path, meta: dict, out: Path, channels: dict[str, Path]) -> str:
+    """An importable tifxyz folder: x/y/z (+mask), meta.json with a valid uuid, one sidecar per channel."""
+    out.mkdir(parents=True, exist_ok=True)
+    for name in ("x.tif", "y.tif", "z.tif", "mask.tif"):
+        if (seg_dir / name).is_file():
+            shutil.copyfile(seg_dir / name, out / name)
+    uid = store_uuid(seg_dir, meta)
+    new_meta = dict(meta, uuid=uid)
+    if meta.get("uuid") != uid:
+        new_meta["segment_ink_source_uuid"] = meta.get("uuid")
+    tmp = out / "meta.json.tmp"
+    tmp.write_text(json.dumps(new_meta, indent=2) + "\n", encoding="utf-8")
+    os.replace(tmp, out / "meta.json")
+    for name, image in channels.items():
+        # The prediction TIFF itself: ingestion keeps exact samples, so no re-encoding.
+        shutil.copyfile(image, out / f"{name}.tif")
+    return uid
+
+
+def add_store_channel(ingest_cmd: str, db: str, author: str, uid: str, name: str, image: Path) -> None:
+    cmd = shlex.split(ingest_cmd) + [  # POSIX quoting; use forward slashes on Windows
+        "--db", db, "--author", author, "--surface-channel", uid, name, image.as_posix()]
+    proc = subprocess.run(cmd)
+    if proc.returncode != 0:
+        sys.exit(f"vc_object_ingest failed (exit {proc.returncode}): {' '.join(cmd)}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("segment", type=Path, help="tifxyz segment folder (meta.json, x/y/z.tif)")
-    ap.add_argument("--checkpoint", type=Path, required=True)
+    ap.add_argument("--checkpoint", type=Path, help="ink checkpoint (optional with --prediction)")
     ap.add_argument("--scroll", help="open-data scroll folder, e.g. PHerc0814 (for rendering)")
     ap.add_argument("--volume", help="volume zarr name under <scroll>/volumes/ (for rendering)")
     ap.add_argument("--render-zarr", type=Path, help="use this flat surface volume instead of rendering")
@@ -176,7 +259,19 @@ def main() -> None:
     ap.add_argument("--python", default=sys.executable, help="python with villa's ink_detection dependencies")
     ap.add_argument("--villa-src", type=Path, default=Path("D:/vw17/vesuvius/src"),
                     help="villa vesuvius/src checkout providing vesuvius.ink_detection")
+    ap.add_argument("--prediction", type=Path, help="skip rendering and inference: use this uint8 TIFF")
+    ap.add_argument("--prediction-reverse", type=Path, help="with --prediction: the reverse-direction TIFF")
+    ap.add_argument("--target", action="append", choices=("store-folder", "store", "legacy-json"),
+                    help="where the result goes (repeatable; default store-folder)")
+    ap.add_argument("--store", help="object store (.vcobj) for --target store")
+    ap.add_argument("--store-uuid", help="surface UUID in --store (default: the uuid store-folder would use)")
+    ap.add_argument("--ingest-cmd", default="vc_object_ingest",
+                    help="command (with any wrapper prefix) that runs vc_object_ingest")
+    ap.add_argument("--author", default=os.environ.get("USER") or os.environ.get("USERNAME") or "segment_ink")
     args = ap.parse_args()
+    targets = args.target or ["store-folder"]
+    if "store" in targets and not args.store:
+        sys.exit("--target store needs --store")
 
     seg_dir = args.segment.resolve()
     meta = check_segment(seg_dir)
@@ -186,28 +281,60 @@ def main() -> None:
     work = (args.work or seg_dir.parent / "_segment_ink").resolve()
     work.mkdir(parents=True, exist_ok=True)
 
-    if args.render_zarr:
-        render_zarr = args.render_zarr.resolve()
+    ckpt = args.checkpoint.resolve() if args.checkpoint else None
+    stem = args.name or (f"{ckpt.parent.name}_{ckpt.stem}" if ckpt else None)
+    if not stem:
+        sys.exit("give --name when there is no --checkpoint")
+    if args.prediction:
+        render_zarr = args.render_zarr.resolve() if args.render_zarr else None
+        outs, directions = [args.prediction.resolve()], ["forward" if args.direction == "both" else args.direction]
+        if args.prediction_reverse:
+            outs.append(args.prediction_reverse.resolve())
+            directions = ["forward", "reverse"]
     else:
-        if not (args.scroll and args.volume):
-            sys.exit("give --scroll and --volume to render, or --render-zarr")
-        render_zarr = work / f"{seg_dir.name}_render.zarr"
-        render(seg_dir, args.scroll, args.volume, render_zarr)
+        if not ckpt:
+            sys.exit("--checkpoint is required unless --prediction is given")
+        if args.render_zarr:
+            render_zarr = args.render_zarr.resolve()
+        else:
+            if not (args.scroll and args.volume):
+                sys.exit("give --scroll and --volume to render, or --render-zarr")
+            render_zarr = work / f"{seg_dir.name}_render.zarr"
+            render(seg_dir, args.scroll, args.volume, render_zarr)
+        raw = work / f"{seg_dir.name}_{stem}.tif"
+        outs = infer(render_zarr, ckpt, raw, args.direction, args.python, args.villa_src)
+        directions = ["forward", "reverse"] if args.direction == "both" else [args.direction]
 
-    ckpt = args.checkpoint.resolve()
-    stem = args.name or f"{ckpt.parent.name}_{ckpt.stem}"
-    raw = work / f"{seg_dir.name}_{stem}.tif"
-    outs = infer(render_zarr, ckpt, raw, args.direction, args.python, args.villa_src)
+    channels = {}
+    for out, direction in zip(outs, directions):
+        scale = check_channel_shape(seg_dir, out)
+        name = channel_name(f"{stem}_reverse" if direction == "reverse" else stem)
+        channels[name] = out
+        print(f"channel {name}: {out.name}, {scale[0]}x{scale[1]} px per grid step")
 
-    ckpt_sha = sha256(ckpt)
-    for out, direction in zip(outs, ("forward", "reverse") if args.direction == "both" else (args.direction,)):
+    if "store-folder" in targets:
+        folder = work / f"{seg_dir.name}-store"
+        uid = write_store_folder(seg_dir, meta, folder, channels)
+        print(f"store folder (surface uuid {uid}): {folder}")
+        print("  import it in VC3D (File -> Object Store -> Import from Folder) or with "
+              "`vc_object_ingest --db objects.vcobj --author NAME --surface <folder>`")
+    if "store" in targets:
+        uid = args.store_uuid or store_uuid(seg_dir, meta)
+        for name, out in channels.items():
+            add_store_channel(args.ingest_cmd, args.store, args.author, uid, name, out)
+            print(f"store {args.store}: surface {uid} channel {name}")
+    if "legacy-json" not in targets:
+        return
+
+    ckpt_sha = sha256(ckpt) if ckpt else ""
+    for out, direction in zip(outs, directions):
         record = {
             "label": f"{args.label or stem} ({direction})",
             "segment_id": seg_id,
             "artifact_type": "local-ink-run",
-            "checkpoint": ckpt.name,
+            "checkpoint": ckpt.name if ckpt else "",
             "checkpoint_sha256": ckpt_sha,
-            "render": str(render_zarr),
+            "render": str(render_zarr) if render_zarr else "",
             "layer_direction": direction,
             "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "tool_version": TOOL_VERSION,
