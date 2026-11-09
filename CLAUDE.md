@@ -5,7 +5,7 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-11-07 기준, 이 절이 최우선)
+## 현재 상태 (2026-11-09 기준, 이 절이 최우선)
 
 **10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 세 건 모두 사전등록·실행·공개 완료:
 - **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
@@ -35,7 +35,7 @@
 ### 남은 할 일 (다음 세션)
 **▶ 11-06 세션 종료 시점 요약 (다음 세션은 이것부터)**
 - 오늘 끝낸 것: segment_ink v2 푸시(`72bc3c7`), 입력 경로 격차 진단(값싼 원인 없음), I1 PR 본문·docs/32 Update 초안, Z: 백업(57개, 불일치 0), **11월 제출 초안 v0**(`planning/2026-11_submission_draft.md`). 새 연구는 안 함(사용자와 합의: I2·I3 약함, 측정을 더 붙여도 등급 안 오름, 열쇠는 I1 채택).
-- 이제 **기다림**: ① 매일 스윕 `--since 2026-11-07T00:00:00Z` + Discord(segment_ink 스레드 sean 답, #announcements 10월 수상 발표; 11-07 확인 = 둘 다 아직) ② **11-16 G4**: sean 동의 → B안(PR, 새 이미지로 앱 빌드 → 사용자 G3 재확인 → PR) / 무응답 → A안(포크 브랜치 푸시 = 사용자 결정, 스크린샷 공개, docs/32 Update 게시) ③ 수상 발표 뒤 11월 폼 URL ④ 초안 최종 점검(A/B 줄 정리, 한 건 vs 두 건 제출 결정, 링크·숫자 재확인, 통독) → 마감 11-30 PT.
+- 이제 **기다림**: ① 매일 스윕 `--since 2026-11-09T00:00:00Z` + Discord(segment_ink 스레드 sean 답, #announcements 10월 수상 발표; 11-09 확인 = 둘 다 아직). **11-09: I1 브랜치가 #2462(11-06 머지)와 overlay .cpp/.hpp에서 충돌 → 재기반 필요(사용자 결정)** ② **11-16 G4**: sean 동의 → B안(PR, 새 이미지로 앱 빌드 → 사용자 G3 재확인 → PR) / 무응답 → A안(포크 브랜치 푸시 = 사용자 결정, 스크린샷 공개, docs/32 Update 게시) ③ 수상 발표 뒤 11월 폼 URL ④ 초안 최종 점검(A/B 줄 정리, 한 건 vs 두 건 제출 결정, 링크·숫자 재확인, 통독) → 마감 11-30 PT.
 - 사용자 몫: G3를 재기반 커밋으로 다시(앱 새로 빌드할 때), 포크 푸시 여부, 제출 분할 여부.
 
 **▶ 11-04 저녁 세션 종료 시점 요약**
@@ -170,6 +170,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **11-09 (월)**: 스윕(11-07~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 마지막 = 우리 11-04 질문(sean 답 없음), #announcements 마지막 = 11-03 306B(10월 수상 발표 아직). **villa main `445fc644c`에서 I1 브랜치(`0af58057b`)가 다시 충돌**: 원인 = **#2462 "Vc obj store hub rework"(sean 작성, bruniss 머지 11-06 17:36Z, 290파일)**가 `InkDetectionOverlayController.{cpp,hpp}`의 `Option`에 `url`을 넣고 공개 파일 위치를 artifacts 폴더 → VC3D 원격 캐시(`publishedFileLocation`/`fetchPublishedFile`)로 바꿈. 기계적 충돌(구조체 필드·다운로드 블록)로 보임. 패치 전제는 그대로: `--surface-channel`(README 82→**77행**, ingest·docs/editing.md), `channelNames()`·`SURF_CHANNEL_NORESIZE` 존재, CI 이미지 `1bebf104edbd` 그대로, 겹치는 열린 PR 없음. 재기반은 안 함(사용자 결정 대기). sean이 이 영역을 계속 고치고 있음 = G4 질문의 맥락. 다음 스윕 `--since 2026-11-09T00:00:00Z`.
 - **11-07 (토)**: 스윕(11-06~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 마지막 = 우리 11-04 질문(sean 답 없음), #announcements 마지막 = 11-03 306B(10월 수상 발표 아직). 다음 스윕 `--since 2026-11-07T00:00:00Z`.
 - **11-05 (목)**: 스윕(11-04~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 sean 답 없음(우리 11-04 질문이 마지막), #announcements 10월 수상 발표 아직. rodriguescarson #robots 11-02 글(inkrepro: ink_9um 시드 두 체크포인트 IoU 중앙값 0.160, 잉크 면적과 상관 +0.83·마스크 규칙에 따라 최대 0.151 변동, 0139 w043 대조군은 학습 세그먼트라 철회) = I1과 겹침 없음. 사용자 결정으로 CLAUDE.md 푸시 + `data/ink_3d`·`data/ink_3d9` 삭제.
 - **11-04 (수)**: 사용자 복귀("전체적으로 할 일"). 스윕(11-02~) 남의 새 글 0, HF 7건 변화 없음, 미푸시 커밋 없었음. Discord(Chrome, 읽기만): sean 질문 **미게시** 확인 → 초안 사실을 새 main에서 재확인(README:82 그대로, 패널은 여전히 `reference->files`만) → **사용자 게시 20:34 KST**, 게시본=초안(멘션 정상, 굵게·콜론 앞 공백만 다름). 새로 본 것: **villa #2440**(bruniss, 11-04 02:27Z 머지, +73k/−241k, 잉크 오버레이 파일 읽기 변경 + CI 이미지 교체), gomyway(Leo Tang) #robots 11-03 `gomyway/vesuvius-ink-maps`(0800·1447 21개 세그먼트 잉크 지도, VC3D **Volume Overlay**용 스크롤 공간 볼륨, villa #2427·#2428 — I1과 경로 다름), rodriguescarson 새 #robots 글(11-03, 미독), #announcements PHerc.306B First Letters $50K(Liam Warner·Nicola Bodill), 10월 수상 발표 아직. 사용자 "맞춰둬" → I1 재기반(`0af58057b`) + 새 CI 이미지 받아 G1 9/9(`planning/2026-11-02_i1_build/README.md` 상단 Update). 다음 스윕 `--since 2026-11-04T00:00:00Z`.
