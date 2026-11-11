@@ -5,7 +5,7 @@
 (gitignore, 원문 그대로; 커밋 `827e216`의 CLAUDE.md와도 동일). 옛 결정의 이유·수치 출처가 필요하면 거기서 찾을 것.
 새 기록은 아래 "현재 상태" 절을 갱신하고, 날짜별 로그는 짧게 "최근 기록"에만 쌓는다.
 
-## 현재 상태 (2026-11-09 기준, 이 절이 최우선)
+## 현재 상태 (2026-11-11 기준, 이 절이 최우선)
 
 **10월 = 머지 + 소형 연구 + 10월 제출.** 10월 연구 세 건 모두 사전등록·실행·공개 완료:
 - **docs/27 라벨 없는 임계값 선택**(두 번 사전등록): ① LOSO 322칸(`1b5917e` → `93c5f50`) ② 공개 체크포인트 × 새 공개라벨 스크롤 3개 70칸(`72c7679` → `393ab46`). 방법(같은 모델로 채점 가능한 스크롤에서 빌리기)은 두 번 통과, 숫자(84–92, "128 쓰지 마라")는 철회(공개 모델 최적값 98–141, 공개 모델엔 128로 충분). 도구 `tools/borrow_threshold.py`(`b6da7af`).
@@ -33,7 +33,12 @@
 닫힌 것: #1705·#1535·#1608(봇 자동 종료), #1661·#1662·#1663(main 버전으로 대체), #1803(#1886 중복), #1638(닫고 잠금), #1611(완료), #1893(#1831로 해결).
 
 ### 남은 할 일 (다음 세션)
-**▶ 11-09 세션 종료 시점 요약 (다음 세션은 이것부터)**
+**▶ 11-11 확인 (다음 세션은 이것부터)**
+- 스윕·Discord 새 소식 없음(sean 답·10월 수상 발표 둘 다 아직). villa main `f0e441016`(+9커밋) 잉크 오버레이 파일 변화 없음, I1 브랜치 `19aa7a474` 깨끗이 병합됨, 겹치는 열린 PR 없음 → 재기반 불필요.
+- **새 사실: 11월 폼은 이미 열려 있음** — villa #2301(봇, 11-05 03:54Z 머지)이 prizes 페이지를 2026-11로 넘김. 폼 = `docs.google.com/forms/d/e/1FAIpQLSeB6MC_--4UCCEGc3zalX57-uE4puRcE_vJoYJCrEt4uYaaaw/viewform`, 마감 11-30 23:59 PT(라이브 페이지 11-11 확인). 즉 "수상 발표 뒤 폼" 전제는 이번 달엔 안 맞음 → 제출 일정은 수상 발표와 무관. #2492(Paul 11-09): 월 전환이 폼을 자동으로 바꾸지 않고 수동 컷오프. 10월 수상자는 winners 페이지·#announcements 둘 다 아직.
+- 남은 것 그대로: G4 11-16(sean 답) → A/B, 초안 최종 점검, 마감 11-30 PT. 다음 스윕 `--since 2026-11-11T00:00:00Z`.
+
+**▶ 11-09 세션 종료 시점 요약**
 - 오늘: 스윕·Discord 새 소식 없음(sean 답·10월 수상 발표 둘 다 아직). sean의 villa #2462(11-06 머지)에 맞춰 I1 재기반 `19aa7a474` + G1 9/9(상세는 최근 기록 11-09). 사용자 "오늘은 여기까지".
 - **미푸시**: 이 저장소의 CLAUDE.md 커밋들(`801bfba` 이후). Z: 백업 안 함(오늘 바뀐 planning = `2026-11-02_i1_build/README.md` + `results/g1_rebase_445fc644c/`).
 - 다음 세션 첫 일: 스윕 `--since 2026-11-09T00:00:00Z` + Discord(segment_ink 스레드, #announcements) + villa main이 잉크 오버레이 파일을 또 바꿨는지(sean이 이 영역을 계속 고침 → PR 전 재기반 한 번 더 예상). 그 밖은 아래 11-06 요약 그대로(G4 11-16, 마감 11-30 PT).
@@ -175,6 +180,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 
 ## 최근 기록
 
+- **11-11 (수)**: 스윕(11-09~) 남의 새 글 0, HF 7건 변화 없음. villa main `f0e441016`(445fc644c 뒤 9커밋: spiral-fitting·vc_reader 캐시·Progress Prizes 자동화 #2492·grand prize 메일 제거 #2503·jrudolph CODEOWNERS `/vesuvius/`에서 빠짐 #2507 등) — I1 패치 파일 3개 변화 없음, `git merge-tree` 깨끗. Discord(Chrome, 읽기만): segment_ink 스레드 마지막 = 우리 11-04 질문, #announcements 마지막 = 11-03 306B. **11월 폼이 11-05(#2301)부터 prizes 페이지에 있음**(위 11-11 요약) — 11-06·11-09엔 못 봄. 다음 스윕 `--since 2026-11-11T00:00:00Z`.
 - **11-09 (월)**: 스윕(11-07~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 마지막 = 우리 11-04 질문(sean 답 없음), #announcements 마지막 = 11-03 306B(10월 수상 발표 아직). **villa main `445fc644c`에서 I1 브랜치(`0af58057b`)가 다시 충돌**: 원인 = **#2462 "Vc obj store hub rework"(sean 작성, bruniss 머지 11-06 17:36Z, 290파일)**가 `InkDetectionOverlayController.{cpp,hpp}`의 `Option`에 `url`을 넣고 공개 파일 위치를 artifacts 폴더 → VC3D 원격 캐시(`publishedFileLocation`/`fetchPublishedFile`)로 바꿈. 기계적 충돌(구조체 필드·다운로드 블록)로 보임. 패치 전제는 그대로: `--surface-channel`(README 82→**77행**, ingest·docs/editing.md), `channelNames()`·`SURF_CHANNEL_NORESIZE` 존재, CI 이미지 `1bebf104edbd` 그대로, 겹치는 열린 PR 없음. sean이 이 영역을 계속 고치고 있음 = G4 질문의 맥락. **사용자 "맞춰둬" → 재기반 완료**: 브랜치 = `19aa7a474`(main `445fc644c` 위, +147/−18), 옛 커밋은 `…-base-baf5e605b`(`0af58057b`) 보존. 충돌 해결 = `Option{label,name,url,localPath,channel}`. #2462가 `ObjectStoreSession::act/read`를 지워 우리 테스트가 컴파일 실패 → main 방식(`newRequest`+`CreateObjectOp`/`PutGeometryOp`+`submit`, `readStore`)으로 옮김. **G1 9/9**(main 7 + 우리 2, docker 볼륨 `vc_i1c`, `planning/2026-11-02_i1_build/results/g1_rebase_445fc644c/`, README 상단 Update). G2·G3 안 다시 함. PR 본문 초안의 "+141/−17"은 PR 준비 때 갱신. 다음 스윕 `--since 2026-11-09T00:00:00Z`.
 - **11-07 (토)**: 스윕(11-06~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 마지막 = 우리 11-04 질문(sean 답 없음), #announcements 마지막 = 11-03 306B(10월 수상 발표 아직). 다음 스윕 `--since 2026-11-07T00:00:00Z`.
 - **11-05 (목)**: 스윕(11-04~) 남의 새 글 0, HF 7건 변화 없음. Discord(Chrome, 읽기만): segment_ink 스레드 sean 답 없음(우리 11-04 질문이 마지막), #announcements 10월 수상 발표 아직. rodriguescarson #robots 11-02 글(inkrepro: ink_9um 시드 두 체크포인트 IoU 중앙값 0.160, 잉크 면적과 상관 +0.83·마스크 규칙에 따라 최대 0.151 변동, 0139 w043 대조군은 학습 세그먼트라 철회) = I1과 겹침 없음. 사용자 결정으로 CLAUDE.md 푸시 + `data/ink_3d`·`data/ink_3d9` 삭제.
