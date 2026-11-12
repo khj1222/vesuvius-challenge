@@ -50,7 +50,7 @@
 1. `python tools/upstream_sweep.py --since <지난 확인일>T00:00:00Z` — **다음 = `2026-11-12T00:00:00Z`**.
 2. Discord(Chrome, 읽기만): segment_ink 스레드 `discord.com/channels/1079907749569237093/1564220086158495754`(sean 답) · #announcements(10월 수상 발표) · #robots 새 글 훑기. `find`로 ref를 잡고 `read_page`/`get_page_text`, 잘리면 스크린샷.
 3. villa main 확인: `git -C D:/vw20 fetch origin +refs/heads/main:refs/remotes/origin/main` → 잉크 오버레이 파일(`volume-cartographer/apps/VC3D/overlays/InkDetectionOverlayController.*`, `core/test/test_ink_detection_overlay.cpp`) 변화 + `git merge-tree --write-tree origin/main feat/vc3d-ink-surface-channel` + 겹치는 열린 PR.
-4. 가끔: planning/·AGENTS.md를 `Z:\아카이브\vesuvius-local-only`에 동기화(새·바뀐 파일만 복사 → 해시 대조, 삭제 없음). 마지막 11-06.
+4. 가끔: planning/·AGENTS.md를 `Z:\아카이브\vesuvius-local-only`에 동기화(새·바뀐 파일만 복사 → 해시 대조, 삭제 없음). 마지막 11-06 — **11-12 이후 새 파일이 밀려 있음**(Z: 연결되면 바로).
 
 ### 사용자 몫 (선택, 미결)
 - Discord #ink-detection 입력창의 미전송 초안("PHerc.1667-iteration-0..5 model cards…") 삭제.
@@ -149,7 +149,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 ## 최근 기록
 
 (11-11 이전 상세는 `planning/history_2026-10_11/CLAUDE_full_2026-11-12.md`)
-- **11-12 (목)**: 스윕(11-11~)·HF 새 글 0. Discord: sean 답·10월 수상 발표 없음, #robots 새 글 = Blucca AFV 섬유 추적 점검기(11-10, 겹침 없음). villa #2491(hendrikschilling, 11-12 머지)이 잉크 오버레이를 다시 고침(공개 파일 목록을 활성 표면 `meta`에서) → I1 체리픽 충돌 없음, **G1 9/9**(볼륨 `vc_i1d`, `results/g1_main_1c638d715/`) → 사용자 결정으로 브랜치를 `bb5623f1d`로 옮김. CLAUDE.md 정리(옛 세션 요약·10월 로그를 history로).
+- **11-12 (목)**: 스윕(11-11~)·HF 새 글 0. Discord: sean 답·10월 수상 발표 없음, #robots 새 글 = Blucca AFV 섬유 추적 점검기(11-10, 겹침 없음). villa #2491(hendrikschilling, 11-12 머지)이 잉크 오버레이를 다시 고침(공개 파일 목록을 활성 표면 `meta`에서) → I1 체리픽 충돌 없음, **G1 9/9**(볼륨 `vc_i1d`, `results/g1_main_1c638d715/`) → 사용자 결정으로 브랜치를 `bb5623f1d`로 옮김. CLAUDE.md 정리(옛 세션 요약·10월 로그를 history로, `42ae7d1` 푸시). Z: 미연결 → 백업 못 함(밀린 것: history 사본, `g1_main_1c638d715/`, 빌드 README). 사용자 "오늘은 여기까지".
 - **11-11 (수)**: 새 글 0. 11월 폼이 11-05(#2301)부터 열려 있음을 발견. villa main `f0e441016`, 잉크 파일 변화 없음.
 - **11-09 (월)**: 새 글 0. villa #2462(sean, 11-06 머지)로 I1 충돌 → 재기반 `19aa7a474`, 테스트를 새 저장소 API로 옮김, G1 9/9.
 - **11-07·11-05 확인**: 새 글 0. 11-05 사용자 결정 = CLAUDE.md 푸시, `data/ink_3d*` 삭제.
