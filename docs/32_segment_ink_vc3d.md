@@ -8,6 +8,10 @@ judges, but only in our own notes, not committed publicly first, so read it as a
 reproduction, not as a pre-registered test. The Reader V3 comparison repeats a result KLAVIS (Domenico
 Russo) published; it is not a new claim about that model.
 
+**Update (2026-11-14): for VC3D after #2358, see [docs/37](37_ink_maps_as_vc3d_channels.md).** segment_ink
+v2 writes the map as an `ink_*` surface channel in VC3D's object store, `tools/ink_sdk_channel.py` does the
+same for ink-sdk runs, and docs/37 covers the panel change that lists those channels.
+
 **Update (2026-10-29): VC3D builds from villa main after #2358 no longer read these records.** #2358
 (merged 2026-10-29, `e1aa625a6`) moved segments into VC3D's object store and rewrote the Ink Detection
 panel. The panel now lists only the ink images published with a catalog surface: the files named in its

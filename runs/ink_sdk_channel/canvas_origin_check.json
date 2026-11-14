@@ -1,0 +1,23 @@
+{
+  "forward": {
+    "same_input_full_vs_cropped_canvas_corr": 0.8618,
+    "diff_grey_median_p90_p99": [
+      1.0,
+      7.0,
+      57.0
+    ],
+    "mesh_run_vs_same_canvas_depth_matched_corr": 0.9933,
+    "mesh_run_vs_full_canvas_depth_matched_corr": 0.86006
+  },
+  "reverse": {
+    "same_input_full_vs_cropped_canvas_corr": 0.92518,
+    "diff_grey_median_p90_p99": [
+      2.0,
+      13.0,
+      57.0
+    ],
+    "mesh_run_vs_same_canvas_depth_matched_corr": 0.99335,
+    "mesh_run_vs_full_canvas_depth_matched_corr": 0.92161
+  },
+  "note": "ink-sdk 'reverse' is the reading side on w00 here (ink-sdk renders without --flip-normals). Depth-matched input: layer i = mean of layers 21-i and 22-i of our 28-layer render."
+}

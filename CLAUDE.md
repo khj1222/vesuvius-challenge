@@ -20,7 +20,8 @@
 
 ### 11월 제출
 - 폼(11-05부터 열림, villa #2301; #2492 이후 월 전환은 수동) = `docs.google.com/forms/d/e/1FAIpQLSeB6MC_--4UCCEGc3zalX57-uE4puRcE_vJoYJCrEt4uYaaaw/viewform`, 마감 11-30 23:59 PT. 수상 발표와 무관하게 열려 있음.
-- **초안 v0** `planning/2026-11_submission_draft.md`(11-06): A부분 segment_ink(docs/32 + v2 + VC3D 패널 변경, `[A]` 포크/`[B]` PR 두 줄) + B부분 docs/33·34·35 사전등록 측정 + docs/36 철회 + dinovol 27/28 + w045 정정. field 4 4,667자(링크 31개 200, 포크 브랜치·#NNNN·Discord는 미확인), field 5 9,479자, 통독 1회.
+- **초안 v1** `planning/2026-11_submission_draft.md`(11-14, v0은 `…_v0.md`): 사용자 결정 = **두 건**(S1 도구 = segment_ink v2 + `ink_sdk_channel` + VC3D 패널, 중심 문서 **새 docs/37**; S2 측정 = docs/33–36 + dinovol + w045). S1 field 4 1,755자 / 5 5,705자, S2 3,369 / 4,683. 링크: S2 25개 200, S1은 docs/37·새 runs 폴더(미푸시)와 [A]/[B]만 404. docs/33·34 첫 줄이 아직 "DRAFT pre-registration"이라 결과 배너를 docs/33–35 맨 위에 추가(미커밋). 남은 것 = 11-16 A/B, docs/37+증거+배너 푸시(사용자 OK), (선택) 최신 커밋 G3, 해시·통독·제출 2회.
+- (옛) **초안 v0** `planning/2026-11_submission_draft_v0.md`(11-06): A부분 segment_ink(docs/32 + v2 + VC3D 패널 변경, `[A]` 포크/`[B]` PR 두 줄) + B부분 docs/33·34·35 사전등록 측정 + docs/36 철회 + dinovol 27/28 + w045 정정. field 4 4,667자(링크 31개 200, 포크 브랜치·#NNNN·Discord는 미확인), field 5 9,479자, 통독 1회.
 - **남은 결정(사용자)**: A/B 줄 정리, 한 건 vs 두 건 제출(#2102: 도구 / 측정 분리), G3를 최신 커밋에서 다시, 입력 경로 단락 `[if published]`. 그 뒤 링크·숫자 재확인 + 통독 → 사용자 제출 → 영수증=파일 대조 → submitted 표시.
 
 ### 11월 연구 갈래 (전부 닫힘 — 새 연구는 안 하기로 11-06 합의: 측정을 더 붙여도 등급이 안 오름, 열쇠는 I1 채택)

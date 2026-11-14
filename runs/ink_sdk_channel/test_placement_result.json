@@ -1,0 +1,170 @@
+{
+  "P_shape": [
+    4220,
+    4760
+  ],
+  "P_nonzero_outside_crop": 1,
+  "P_nonzero_px_outside_crop": 205440,
+  "native_autocrop": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t0r0c0": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t0r0c1": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t0r1c0": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t0r1c1": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t1r0c0": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t1r0c1": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t1r1c0": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "orient_t1r1c1": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "roi": {
+    "ok": true,
+    "canvas": [
+      4220,
+      4760
+    ],
+    "crop": [
+      19,
+      19,
+      4181,
+      4721
+    ],
+    "diff_px_in_box": 0,
+    "nonzero_outside_box": 0
+  },
+  "pool4": {
+    "ok": true,
+    "diff_px": 0,
+    "corr_with_P_in_crop": 0.998188279485922
+  },
+  "refusals": {
+    "resample_mode": "refused: scale plan mode 'resample' is not supported (native and integer pooling only)",
+    "render_shape_mismatch": "refused: recomputed render crop (4181, 4721) != receipt render shape (4182, 4721)",
+    "map_vs_receipt_shape": "refused: forward: array (4181, 4721) != receipt shape [4181, 4720]",
+    "level_not_0": "refused: render was not from CT level 0"
+  },
+  "all_ok": true
+}

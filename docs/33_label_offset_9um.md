@@ -1,5 +1,11 @@
 # 33 — Do 9 µm models learn the ~7 px offset in labels moved from 2.4 µm maps? (pre-registered)
 
+> **Result (banner added 2026-11-14, after the pre-registration and its results):** pre-registered and committed
+> as `e1e4af2` before any measurement; Stage 1 ran on 2026-10-29. Verdict **unclear** for Reader V3 and Reader v2:
+> no measurable learned shift, and the control seeds wander up to 7 px. Shifting any model's map by the offset lowers
+> AUC by 0.004–0.009. Stage 2 (retraining) was not run. The status line below is the pre-registration's own; see
+> "Results — Stage 1" at the end.
+
 **Status: DRAFT pre-registration, not yet committed.** Once committed, it is committed before any Stage 1
 measurement below is run. Results will be appended under a separate heading; nothing above it changes
 afterwards.

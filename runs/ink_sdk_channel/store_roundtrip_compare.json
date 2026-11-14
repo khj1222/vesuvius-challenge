@@ -1,0 +1,30 @@
+{
+  "ink_9um_reader_v3": {
+    "export_shape": [
+      4220,
+      4760
+    ],
+    "dtype": "uint8",
+    "export_equals_written": true,
+    "export_equals_original_inside_crop": true,
+    "original_nonzero_outside_crop": 205440
+  },
+  "ink_9um_reader_v3_reverse": {
+    "export_shape": [
+      4220,
+      4760
+    ],
+    "dtype": "uint8",
+    "export_equals_written": true,
+    "export_equals_original_inside_crop": true,
+    "original_nonzero_outside_crop": 205440
+  },
+  "ink_9um_scrollprize_seed43_step75000": {
+    "export_shape": [
+      4220,
+      4760
+    ],
+    "dtype": "uint8",
+    "export_equals_written": true
+  }
+}

@@ -1,5 +1,10 @@
 # 34 — Does the Paris4 3D ink model read other scrolls? (pre-registered)
 
+> **Result (banner added 2026-11-14, after the pre-registration and its results):** pre-registered and committed
+> as `f9037dc` (addendum `1c05f2d`) before any test-segment inference; run 2026-10-29/30. Verdict **partial**: the
+> released Paris4 3D model reads other scrolls at AUC 0.64–0.86, against 0.907 on its Paris4 control. It is below
+> ink_9um on three of four segments. The status line below is the pre-registration's own; see "Results" at the end.
+
 **Status: DRAFT pre-registration, not yet committed.** Once committed, it is committed before the 3D model is run
 on any test segment. Results will be appended under a separate heading; nothing above it changes afterwards.
 

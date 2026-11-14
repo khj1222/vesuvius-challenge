@@ -1,0 +1,264 @@
+{
+  "full_v3": {
+    "schema": "ink-sdk.receipt.v1",
+    "sdk_version": "0.1.0",
+    "profile_id": "ink_9um@reader-v3",
+    "checkpoint": {
+      "bytes": 138379659,
+      "path": "<path>/reader-v3.pth",
+      "sha256": "ea405417450abd8ace1b8ff79ebce3adb646c5e48ab95da46844d77efe984d8a",
+      "verified": true
+    },
+    "input": {
+      "origin_px": [
+        0,
+        0
+      ],
+      "pixel_um": [
+        9.366,
+        9.366,
+        9.366
+      ],
+      "prepared_receipt": {
+        "roi": null,
+        "scale_plan": {
+          "factors_zyx": [
+            1,
+            1,
+            1
+          ],
+          "mode": "native",
+          "note": "",
+          "resample_from_um": null,
+          "source_um": 9.366,
+          "target_um": 9.362
+        },
+        "scaled": false,
+        "source": "<path>/20260220213127-w00_render.zarr"
+      },
+      "roi": null,
+      "scale_plan": {
+        "factors_zyx": [
+          1,
+          1,
+          1
+        ],
+        "mode": "native",
+        "note": "",
+        "resample_from_um": null,
+        "source_um": 9.366,
+        "target_um": 9.362
+      },
+      "shape_zyx": [
+        28,
+        4220,
+        4760
+      ]
+    },
+    "primary": "forward",
+    "runtime_seconds": 91.45,
+    "villa_revision": "3ea17f54a9b3d5fd1aaf73e1d2c8386dbaa9f30e",
+    "maps": {
+      "forward": {
+        "shape_yx": [
+          4220,
+          4760
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "forward",
+        "liveness": "ALIVE"
+      },
+      "mean": {
+        "shape_yx": [
+          4220,
+          4760
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "mean",
+        "liveness": "ALIVE"
+      },
+      "reverse": {
+        "shape_yx": [
+          4220,
+          4760
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "reverse",
+        "liveness": "ALIVE"
+      }
+    }
+  },
+  "mesh_v3": {
+    "schema": "ink-sdk.receipt.v1",
+    "sdk_version": "0.1.0",
+    "profile_id": "ink_9um@reader-v3",
+    "checkpoint": {
+      "bytes": 138379659,
+      "path": "<path>/reader-v3.pth",
+      "sha256": "ea405417450abd8ace1b8ff79ebce3adb646c5e48ab95da46844d77efe984d8a",
+      "verified": true
+    },
+    "input": {
+      "origin_px": [
+        0,
+        0
+      ],
+      "pixel_um": [
+        9.366,
+        9.366,
+        9.366
+      ],
+      "prepared_receipt": {
+        "roi": null,
+        "scale_plan": {
+          "factors_zyx": [
+            1,
+            1,
+            1
+          ],
+          "mode": "native",
+          "note": "",
+          "resample_from_um": null,
+          "source_um": 9.366,
+          "target_um": 9.362
+        },
+        "scaled": false,
+        "source": "<path>/render"
+      },
+      "roi": null,
+      "scale_plan": {
+        "factors_zyx": [
+          1,
+          1,
+          1
+        ],
+        "mode": "native",
+        "note": "",
+        "resample_from_um": null,
+        "source_um": 9.366,
+        "target_um": 9.362
+      },
+      "shape_zyx": [
+        17,
+        4181,
+        4721
+      ]
+    },
+    "primary": "forward",
+    "runtime_seconds": 72.96,
+    "villa_revision": "3ea17f54a9b3d5fd1aaf73e1d2c8386dbaa9f30e",
+    "maps": {
+      "forward": {
+        "shape_yx": [
+          4181,
+          4721
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "forward",
+        "liveness": "ALIVE"
+      },
+      "mean": {
+        "shape_yx": [
+          4181,
+          4721
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "mean",
+        "liveness": "ALIVE"
+      },
+      "reverse": {
+        "shape_yx": [
+          4181,
+          4721
+        ],
+        "origin_px": [
+          0,
+          0
+        ],
+        "direction": "reverse",
+        "liveness": "ALIVE"
+      }
+    }
+  },
+  "mesh_render": {
+    "schema": "ink-sdk.render-receipt.v1",
+    "command": [
+      "/opt/vc3d/squashfs-root/AppRun",
+      "vc_render_tifxyz",
+      "-v",
+      "<path>/PHerc0841_20250821151531_w00band.zarr",
+      "-g",
+      "0",
+      "--scale",
+      "1.0",
+      "-s",
+      "<path>/20260220213127-w00",
+      "-n",
+      "17",
+      "--zarr-output",
+      "<path>/render.zarr",
+      "--zarr-compressor",
+      "none",
+      "--slice-step",
+      "1",
+      "--auto-crop"
+    ],
+    "scale": 1.0,
+    "num_slices": 17,
+    "slice_step": 1,
+    "auto_crop": true,
+    "orientation": {
+      "columnas_invertidas": false,
+      "filas_invertidas": false,
+      "flip_normals": false,
+      "inward_fraction": 0.0,
+      "orientation_source": "unverified-no-umbilicus",
+      "outward_fraction": 0.0,
+      "reading_orientation": "unverified",
+      "requested": "auto",
+      "source": "unverified-no-umbilicus",
+      "traspuesta": false,
+      "z_por_col": 1.8544921875,
+      "z_por_fila": 36.4658203125
+    },
+    "shape_zyx": [
+      17,
+      4181,
+      4721
+    ],
+    "pixel_um": [
+      9.366,
+      9.366,
+      9.366
+    ],
+    "mesh": {
+      "path": "<path>/20260220213127-w00",
+      "sha256": {
+        "meta.json": "cd1cb9722578a2fa2af59e3e32b0fdf1a6a9dc154d2169211e5884f9a2a43e5a",
+        "x": "e9ecdbe1481d9d50303cefe51d83e65dfa129f32e9921a4d28adc5b689326b9e",
+        "y": "ba2567e70adfa7a12b72448aa3b39f176a4156896085b429938e491507eff97f",
+        "z": "14a84cadd3a2216b0a32b3d3cc3852877f17a73c3564041779b95d5496c50762"
+      },
+      "shape_hw": [
+        4181,
+        4721
+      ]
+    },
+    "render_crop": null
+  }
+}

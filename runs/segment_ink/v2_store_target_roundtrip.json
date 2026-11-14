@@ -1,0 +1,62 @@
+{
+ "grid": [
+  211,
+  238
+ ],
+ "files": {
+  "ink_reader_v3.tif": {
+   "shape": [
+    4220,
+    4760
+   ],
+   "dtype": "uint8",
+   "identical": true,
+   "pixel_sha256_16": "e39cbb8aadf065ae",
+   "px_per_grid_step": [
+    20.0,
+    20.0
+   ]
+  },
+  "x.tif": {
+   "shape": [
+    211,
+    238
+   ],
+   "dtype": "float32",
+   "identical": true,
+   "pixel_sha256_16": "277172155f4d080d",
+   "px_per_grid_step": [
+    1.0,
+    1.0
+   ]
+  },
+  "y.tif": {
+   "shape": [
+    211,
+    238
+   ],
+   "dtype": "float32",
+   "identical": true,
+   "pixel_sha256_16": "af1aa629cce800a2",
+   "px_per_grid_step": [
+    1.0,
+    1.0
+   ]
+  },
+  "z.tif": {
+   "shape": [
+    211,
+    238
+   ],
+   "dtype": "float32",
+   "identical": true,
+   "pixel_sha256_16": "5e0b4fb92240cb1c",
+   "px_per_grid_step": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "exported_uuid": "31d4619f-0769-54cd-bd5d-712dc055b195",
+ "all_identical": true
+}

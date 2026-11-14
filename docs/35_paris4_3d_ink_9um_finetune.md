@@ -1,5 +1,10 @@
 # 35 — Can the Paris4 3D ink model be fine-tuned to read other scrolls at 9.6 µm? (pre-registered)
 
+> **Result (banner added 2026-11-14, after the pre-registration and its results):** pre-registered and committed
+> as `80411bb` (addendum `8fc17c5`) before any fine-tune; run 2026-10-30. **No verdict**: the run failed its own
+> validation rule (b) (0.57 / 0.60 against 0.75 required). The fine-tuned model scores 0.63–0.75 and is below
+> ink_9um on all four segments. See "Results" at the end.
+
 **Status: pre-registration**, committed before any fine-tuned model is run on a test segment. Results will be appended under a separate heading; nothing above it changes afterwards.
 
 ## Why
