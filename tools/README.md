@@ -16,6 +16,7 @@ run. Everything else below is a variation on those three.
 |---|---|
 | [`ink_viz.py`](ink_viz.py) | Turn a prediction TIFF into images you can actually read |
 | [`segment_ink.py`](segment_ink.py) | Run an ink model on one tifxyz segment and store the map as an `ink_*` surface channel for VC3D's object store (v2), or, with `--target legacy-json`, as the records VC3D builds up to 2026-10-28 list (see docs/32) |
+| [`ink_sdk_channel.py`](ink_sdk_channel.py) | Take [ink-sdk](https://github.com/LimeGS/ink-sdk) run folders (one model, or a whole battery) and store each map as an `ink_<profile>` surface channel on the segment's point grid. Undoes ink-sdk's `--auto-crop` offset, umbilicus transpose/flips, 4× pooling and ROI from its receipts; refuses what it cannot place exactly. Checked on PHerc0841 w00 against the renderer's own printed crop and a real ink-sdk mesh + CT run |
 | [`check_segment_ink_alignment.py`](check_segment_ink_alignment.py) | Check that such a map lands on the same pixels as the team's catalog map for that segment (flips and shifted maps as controls) |
 
 ### Hold something out, and score against it
