@@ -7,7 +7,7 @@
 
 ## 현재 상태 (2026-11-12 기준, 이 절이 최우선)
 
-**지금은 기다리는 중.** ① sean(=GitHub bruniss) 답 — G4 기한 **11-16** ② 11월 제출 마감 **11-30 23:59 PT**.
+**지금은 기다리는 중.** ① sean(=GitHub bruniss) 답 — G4 기한 **11-16**(→ A/B 정하고 S1 패키지) ② LimeGS/ink-sdk #18 답 ③ 11월 제출 마감 **11-30 23:59 PT** — **S1·S2를 마감 전 한꺼번에**(S2 패키지 `submission/2026-11_progress_prize_s2.md` 준비됨).
 **10월 결과(11-13 10:06 KST 발표)**: **$250** "Copy displacement tracer fix"(= #1796만). docs/27–31 측정은 **0**. Paul: 기준을 계속 올림, 사소한 버그픽스·호환성 수정도 다음부터 더 엄격. 같은 달 **ink-sdk**(LimeGS+pscamillo, `github.com/LimeGS/ink-sdk`, $500) = 세그먼트에 여러 잉크 모델을 돌리는 도구(렌더+추론+receipt, 15개 프로필, 예시가 우리와 같은 0841 w00 + Reader V3) — **segment_ink 앞 절반과 겹침(10-28부터 알았고 docs/32가 credit), VC3D 되쓰기는 여전히 없음**(11-14 README 재확인, 마지막 푸시 11-11). reader-v3 $5k("First Letters 대부분이 씀"), Rectina(evilaliv3) 새 9µm 모델.
 
 ### 11월 = I1 (VC3D Ink Detection 패널이 객체 저장소 표면의 `ink`/`ink_*` 채널도 보여주게)
@@ -20,7 +20,7 @@
 
 ### 11월 제출
 - 폼(11-05부터 열림, villa #2301; #2492 이후 월 전환은 수동) = `docs.google.com/forms/d/e/1FAIpQLSeB6MC_--4UCCEGc3zalX57-uE4puRcE_vJoYJCrEt4uYaaaw/viewform`, 마감 11-30 23:59 PT. 수상 발표와 무관하게 열려 있음.
-- **초안 v1** `planning/2026-11_submission_draft.md`(11-14, v0은 `…_v0.md`): 사용자 결정 = **두 건**(S1 도구 = segment_ink v2 + `ink_sdk_channel` + VC3D 패널, 중심 문서 **새 docs/37**; S2 측정 = docs/33–36 + dinovol + w045). S1 field 4 1,755자 / 5 5,705자, S2 3,369 / 4,683. 링크: S2 25개 200, S1은 docs/37·새 runs 폴더(미푸시)와 [A]/[B]만 404. docs/33·34 첫 줄이 아직 "DRAFT pre-registration"이라 결과 배너를 docs/33–35 맨 위에 추가(미커밋). 남은 것 = 11-16 A/B, docs/37+증거+배너 푸시(사용자 OK), (선택) 최신 커밋 G3, 해시·통독·제출 2회.
+- **초안 v1** `planning/2026-11_submission_draft.md`(11-14, v0은 `…_v0.md`): 사용자 결정 = **두 건**(S1 도구 = segment_ink v2 + `ink_sdk_channel` + VC3D 패널, 중심 문서 **새 docs/37**; S2 측정 = docs/33–36 + dinovol + w045). S1 field 4 1,755자 / 5 5,705자, S2 3,369 / 4,683. 링크: S2 25개 200, S1은 docs/37·새 runs 폴더(미푸시)와 [A]/[B]만 404. docs/33·34 첫 줄이 아직 "DRAFT pre-registration"이라 결과 배너를 docs/33–35 맨 위에 추가(미커밋). docs/37+증거+배너는 `114f513`으로 푸시됨. S2 패키지 `submission/2026-11_progress_prize_s2.md`(해시 기록, 링크 25개 200, 11-14). **사용자 결정(11-14): S1·S2는 최종 마감 전에 한꺼번에 제출**(같은 November 폼에 두 번). 남은 것 = 11-16 A/B → S1 패키지, (선택) 최신 커밋 G3(앱 빌드 완료 `run_vc3d_new.sh`), 제출 직전 링크·통독 재확인. ⚠️ Grand Prize 폼("2027 Vesuvius Challenge Grand Prize")과 헷갈리지 말 것 — Progress 폼 id `1FAIpQLSeB6MC_`.
 - (옛) **초안 v0** `planning/2026-11_submission_draft_v0.md`(11-06): A부분 segment_ink(docs/32 + v2 + VC3D 패널 변경, `[A]` 포크/`[B]` PR 두 줄) + B부분 docs/33·34·35 사전등록 측정 + docs/36 철회 + dinovol 27/28 + w045 정정. field 4 4,667자(링크 31개 200, 포크 브랜치·#NNNN·Discord는 미확인), field 5 9,479자, 통독 1회.
 - **남은 결정(사용자)**: A/B 줄 정리, 한 건 vs 두 건 제출(#2102: 도구 / 측정 분리), G3를 최신 커밋에서 다시, 입력 경로 단락 `[if published]`. 그 뒤 링크·숫자 재확인 + 통독 → 사용자 제출 → 영수증=파일 대조 → submitted 표시.
 
@@ -30,6 +30,9 @@
 - 입력 경로 격차(11-06, `planning/2026-11-06_input_gap/`): 값싼 원인 없음, 네이티브 9µm엔 V3.
 - 음성·철회: F1 열간 공백(게이트 실패) · F2(#2358로 소멸) · F3′ = docs/33(라벨 7px 어긋남, 보정 무익) · G3 = docs/34(Paris4 3D 모델 교차 스크롤 부분 전이, 0.907 대조) · G3b = docs/35(9.6µm 미세조정 무효) · H1 공간 겹침(접음) · docs/36 preset A/B(학습 전 철회: 두 preset이 같은 그래프 — 파일 이름이 아니라 import를 따라갈 것).
 - **B dinovol 보류**: 공개 640k·781k 사전학습이 메타데이터 잉크 라벨 28개 중 27개를 대조 손실로 씀(깨끗한 건 0009B ag055뿐, `tools/check_dinovol_ink_labels.py`) → 시험 세트 오염. sean 질문(무잉크 체크포인트)은 10-26 #robots 글로 해 둠.
+
+### 큰 상 검토 (11-14, 결정 대기)
+- 2027 Grand Prize · Paris4 제목상 · First Letters 진입 검토와 제목상 탐침 결과는 **비공개 노트에만** 있다: `planning/2026-11-14_big_prizes_entry_review.md`, `planning/2026-11-14_paris4_title_report.md`(그림 `planning/2026-11-14_paris4_title_probe/figs/`, 데이터 `data/paris4_title/` 약 47 GB). ⚠️ 제목상·First Letters는 **발견물을 수상 발표 전에 공개하면 안 된다** → 이 파일(공개)·docs·Discord·이슈에 내용을 쓰지 말 것. playbook ENTRY §8 행은 사용자 결정 뒤에 기입.
 
 ### 10월 (끝남)
 - **제출 10-25 18:48 KST**(사용자), 영수증 = `submission/2026-10_progress_prize.md`(`ce44ad6`). 구성: docs/27(+`tools/borrow_threshold.py`) · docs/28 · docs/29 · docs/30 · docs/31 · #1796 · #1703 · #2012(닫힘). 기대 $500. **수상 발표 대기**.
@@ -50,7 +53,7 @@
 | HF 7건 | `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1`, `Qualzz20/afv_fiber_9um/discussions/1` | open, 무활동 |
 
 ### 매일 확인 (루틴)
-1. `python tools/upstream_sweep.py --since <지난 확인일>T00:00:00Z` — **다음 = `2026-11-12T00:00:00Z`**.
+1. `python tools/upstream_sweep.py --since <지난 확인일>T00:00:00Z` — **다음 = `2026-11-14T00:00:00Z`**(ink-sdk #18도 포함됨).
 2. Discord(Chrome, 읽기만): segment_ink 스레드 `discord.com/channels/1079907749569237093/1564220086158495754`(sean 답) · #announcements(10월 수상 발표) · #robots 새 글 훑기. `find`로 ref를 잡고 `read_page`/`get_page_text`, 잘리면 스크린샷.
 3. villa main 확인: `git -C D:/vw20 fetch origin +refs/heads/main:refs/remotes/origin/main` → 잉크 오버레이 파일(`volume-cartographer/apps/VC3D/overlays/InkDetectionOverlayController.*`, `core/test/test_ink_detection_overlay.cpp`) 변화 + `git merge-tree --write-tree origin/main feat/vc3d-ink-surface-channel` + 겹치는 열린 PR.
 4. 가끔: planning/·AGENTS.md를 `Z:\아카이브\vesuvius-local-only`에 동기화(새·바뀐 파일만 복사 → 해시 대조, 삭제 없음). 마지막 11-06 — **11-12 이후 새 파일이 밀려 있음**(Z: 연결되면 바로).
@@ -152,7 +155,7 @@ Vesuvius Challenge **Progress Prizes**(월간 롤링, 리더보드 아님) 진�
 ## 최근 기록
 
 (11-11 이전 상세는 `planning/history_2026-10_11/CLAUDE_full_2026-11-12.md`)
-- **11-14 (토)**: 스윕(11-12~)·HF 새 글 0. sean 답 없음. **10월 발표: $250(#1796), 측정 0.** ink-sdk 겹침 확인(위). villa main `97fb9336c`(#2531 Delta3D 0.3.2, CI 이미지 digest 같음, `vc3d-ci.yml`에 `vc_object_server_app` 빌드 추가) — 잉크 파일 변화 없음, merge-tree 깨끗, 겹치는 열린 PR 없음. Z: 미연결. **G1 9/9 on `97fb9336c`**(임시 워크트리 `D:/vw22` = `db0fda397`, I1 체리픽 충돌 없음, 볼륨 `vc_i1e`, `results/g1_main_97fb9336c/`; 브랜치는 안 옮김). 함정 재발: Git Bash가 `sparse-checkout set /volume-cartographer/`를 `C:/Program Files/Git/...`로 바꿈 → `MSYS_NO_PATHCONV=1`. **ink-sdk → VC3D 다리 `tools/ink_sdk_channel.py`(미커밋)**: 영수증+메시로 auto-crop 오프셋·방향·pool·ROI를 되돌려 `ink_*` 채널로. 렌더러가 찍은 crop 2건(w00 (19,19), ag144 (19,39))과 일치(**float32 0.05 → 1/0.05f = 19.9999997 함정**), 배치 테스트 전부 0px, 저장소 왕복 픽셀 동일. 이어서 **실제 ink-sdk 실행**(사용자 OK): `E:/envs/inksdk` + WSL `~/inksdk-venv`, 9µm 레인 = villa `3ea17f54a` 워크트리 `D:/vw23`. 표면볼륨 실행 → segment_ink 맵과 상관 0.99994. 메시+CT 실행(로컬 CT = w00 표면 ±24복셀 청크 1,878개 3.7GiB `data/ct_partial/`) → ink-sdk 자체 auto-crop 렌더를 다리가 (19,19)에 놓음, CT 질감으로 xy 위치 확인, 저장소 왕복 동일. 맵 상관 0.916의 원인은 **깊이 반 층이 아니라 auto-crop의 19px 캔버스 이동**(같은 입력을 전체/잘린 캔버스로 돌리면 0.925/0.862, 캔버스를 맞추면 0.993 — Reader V3가 캔버스 원점에 민감). 처음엔 반 층 탓이라고 잘못 적었다가 검증으로 정정. 기록 `planning/2026-11-14_ink_sdk_bridge/README.md`. **10월 지급 폼**(Paul 메일 11-13): 사용자가 직접 작성(세부는 비공개 메모리). 초안 재검증에서 2건 정정(1/0.05f 값, 0.92 원인 → 캔버스 이동; `3cbeb62`) 후 **ink-sdk #18 게시**(사용자, 게시본=초안 2,549자 동일).
+- **11-14 (토)**: 스윕(11-12~)·HF 새 글 0. sean 답 없음. **10월 발표: $250(#1796), 측정 0.** ink-sdk 겹침 확인(위). villa main `97fb9336c`(#2531 Delta3D 0.3.2, CI 이미지 digest 같음, `vc3d-ci.yml`에 `vc_object_server_app` 빌드 추가) — 잉크 파일 변화 없음, merge-tree 깨끗, 겹치는 열린 PR 없음. Z: 미연결. **G1 9/9 on `97fb9336c`**(임시 워크트리 `D:/vw22` = `db0fda397`, I1 체리픽 충돌 없음, 볼륨 `vc_i1e`, `results/g1_main_97fb9336c/`; 브랜치는 안 옮김). 함정 재발: Git Bash가 `sparse-checkout set /volume-cartographer/`를 `C:/Program Files/Git/...`로 바꿈 → `MSYS_NO_PATHCONV=1`. **ink-sdk → VC3D 다리 `tools/ink_sdk_channel.py`(`9285d99`)**: 영수증+메시로 auto-crop 오프셋·방향·pool·ROI를 되돌려 `ink_*` 채널로. 렌더러가 찍은 crop 2건(w00 (19,19), ag144 (19,39))과 일치(**float32 0.05 → 1/0.05f = 19.9999997 함정**), 배치 테스트 전부 0px, 저장소 왕복 픽셀 동일. 이어서 **실제 ink-sdk 실행**(사용자 OK): `E:/envs/inksdk` + WSL `~/inksdk-venv`, 9µm 레인 = villa `3ea17f54a` 워크트리 `D:/vw23`. 표면볼륨 실행 → segment_ink 맵과 상관 0.99994. 메시+CT 실행(로컬 CT = w00 표면 ±24복셀 청크 1,878개 3.7GiB `data/ct_partial/`) → ink-sdk 자체 auto-crop 렌더를 다리가 (19,19)에 놓음, CT 질감으로 xy 위치 확인, 저장소 왕복 동일. 맵 상관 0.916의 원인은 **깊이 반 층이 아니라 auto-crop의 19px 캔버스 이동**(같은 입력을 전체/잘린 캔버스로 돌리면 0.925/0.862, 캔버스를 맞추면 0.993 — Reader V3가 캔버스 원점에 민감). 처음엔 반 층 탓이라고 잘못 적었다가 검증으로 정정. 기록 `planning/2026-11-14_ink_sdk_bridge/README.md`. **10월 지급 폼**(Paul 메일 11-13): 사용자 제출 완료(세부는 비공개 메모리), 입금 대기. 초안 재검증에서 2건 정정(1/0.05f 값, 0.92 원인 → 캔버스 이동; `3cbeb62`) 후 **ink-sdk #18 게시**(사용자, 게시본=초안 2,549자 동일). **저녁:** 11월 초안 v1(S1/S2 두 건) + docs/37 공개(`114f513`), 큰 상 검토·제목상 탐침은 비공개 노트(위 "큰 상 검토"). VC3D 최신 앱 빌드 완료(`run_vc3d_new.sh`, 화면 확인은 사용자 선택). 사용자 "오늘은 마무리".
 - **11-12 (목)**: 스윕(11-11~)·HF 새 글 0. Discord: sean 답·10월 수상 발표 없음, #robots 새 글 = Blucca AFV 섬유 추적 점검기(11-10, 겹침 없음). villa #2491(hendrikschilling, 11-12 머지)이 잉크 오버레이를 다시 고침(공개 파일 목록을 활성 표면 `meta`에서) → I1 체리픽 충돌 없음, **G1 9/9**(볼륨 `vc_i1d`, `results/g1_main_1c638d715/`) → 사용자 결정으로 브랜치를 `bb5623f1d`로 옮김. CLAUDE.md 정리(옛 세션 요약·10월 로그를 history로, `42ae7d1` 푸시). Z: 미연결 → 백업 못 함(밀린 것: history 사본, `g1_main_1c638d715/`, 빌드 README). 사용자 "오늘은 여기까지".
 - **11-11 (수)**: 새 글 0. 11월 폼이 11-05(#2301)부터 열려 있음을 발견. villa main `f0e441016`, 잉크 파일 변화 없음.
 - **11-09 (월)**: 새 글 0. villa #2462(sean, 11-06 머지)로 I1 충돌 → 재기반 `19aa7a474`, 테스트를 새 저장소 API로 옮김, G1 9/9.
