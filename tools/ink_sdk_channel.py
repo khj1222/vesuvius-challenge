@@ -73,7 +73,7 @@ def render_canvas(grid_hw: tuple[int, int], meta: dict, render_scale: float, x: 
     """Full canvas (H, W) and crop (y0, x0, h, w) in render pixels, as vc_render_tifxyz computes them."""
     msx, msy = grid_scale(meta)
     # QuadSurface::_scale is cv::Vec2f: 0.05 is stored as float32 0.0500000007, so the factor is
-    # 19.99999997, not 20, and floor(col_min * sx) lands one pixel low (0841 w00: crop from (19,19),
+    # 19.9999997, not 20, and floor(col_min * sx) lands one pixel low (0841 w00: crop from (19,19),
     # as the renderer itself prints). Reproduce the float32 -> double promotion exactly.
     sx = float(render_scale) / float(np.float32(msx))
     sy = float(render_scale) / float(np.float32(msy))
