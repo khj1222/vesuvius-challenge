@@ -62,6 +62,12 @@ THREADS = [
 ]
 
 
+# threads in other GitHub repositories: (owner/repo, number, label)
+OTHER_THREADS = [
+    ("LimeGS/ink-sdk", 18, "our issue: offer ink-sdk -> VC3D object-store ink channels"),
+]
+
+
 # Hugging Face discussions we opened (not on GitHub, so the GitHub API above never sees them)
 HF_THREADS = [
     *[(f"scrollprize/PHerc.1667-iteration-{i}", 1, "our HF PR: card /255 input convention")
@@ -91,12 +97,12 @@ def find_gh() -> str | None:
     return None
 
 
-def api(path: str):
+def api(path: str, repo: str = REPO):
     """GET one API path. `path` is repo-relative, e.g. issues/1608/comments?per_page=100."""
 
-    url = f"https://api.github.com/repos/{REPO}/{path}"
+    url = f"https://api.github.com/repos/{repo}/{path}"
     if _GH:
-        done = subprocess.run([_GH, "api", f"repos/{REPO}/{path}"],
+        done = subprocess.run([_GH, "api", f"repos/{repo}/{path}"],
                               capture_output=True, text=True, errors="replace")
         raw = done.stdout
     else:
@@ -165,22 +171,23 @@ def main(argv=None) -> int:
     print(f"api:    {backend} — {rate_limit()}\n")
 
     news = []
-    for number, label in THREADS:
-        issue = api(f"issues/{number}")
+    for repo, number, label in [(REPO, n, l) for n, l in THREADS] + OTHER_THREADS:
+        ref = f"#{number}" if repo == REPO else f"{repo}#{number}"
+        issue = api(f"issues/{number}", repo)
         if not issue or "number" not in issue:
-            print(f"  #{number}: could not read")
+            print(f"  {ref}: could not read")
             continue
         is_pr = "pull_request" in issue
         extra = ""
         if is_pr:
-            pull = api(f"pulls/{number}") or {}
+            pull = api(f"pulls/{number}", repo) or {}
             extra = (f" draft={pull.get('draft')} merged={pull.get('merged')} "
                      f"mergeable={pull.get('mergeable')} reviewers="
                      f"{[r['login'] for r in pull.get('requested_reviewers') or []]}")
-        print(f"  #{number:<5} {issue['state']:<6} {issue.get('state_reason') or '':<12} "
+        print(f"  {ref:<6} {issue['state']:<6} {issue.get('state_reason') or '':<12} "
               f"upd {issue['updated_at'][:16]} cmts {issue['comments']:<3}{extra}  {label}")
 
-        for comment in api(f"issues/{number}/comments?per_page=100") or []:
+        for comment in api(f"issues/{number}/comments?per_page=100", repo) or []:
             if comment["user"]["login"] == US:
                 continue
             created, edited = comment["created_at"], comment.get("updated_at") or ""
@@ -192,13 +199,13 @@ def main(argv=None) -> int:
                 kind, when = f"comment EDITED (posted {created[:10]})", edited
             else:
                 continue
-            news.append((when, number, comment["user"]["login"], kind,
+            news.append((when, ref, comment["user"]["login"], kind,
                          " ".join((comment.get("body") or "").split())[:400],
                          comment["html_url"]))
         if is_pr:
-            for review in api(f"pulls/{number}/reviews?per_page=100") or []:
+            for review in api(f"pulls/{number}/reviews?per_page=100", repo) or []:
                 if (review.get("submitted_at") or "") > cutoff and review["user"]["login"] != US:
-                    news.append((review["submitted_at"], number, review["user"]["login"],
+                    news.append((review["submitted_at"], ref, review["user"]["login"],
                                  f"review {review['state']}",
                                  " ".join((review.get("body") or "").split())[:400],
                                  review["html_url"]))
