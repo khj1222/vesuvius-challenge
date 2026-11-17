@@ -1,6 +1,6 @@
 # 37 — Ink maps on VC3D surfaces after the object-store move: segment_ink v2, ink-sdk runs, and the panel
 
-**Status: tools and checks, 2026-11-02 to 2026-11-14.** Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
+**Status: tools and checks, 2026-11-02 to 2026-11-17.** Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
 [`tools/ink_sdk_channel.py`](../tools/ink_sdk_channel.py). Evidence: [`runs/ink_sdk_channel/`](../runs/ink_sdk_channel),
 [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel), and the v2 files in [`runs/segment_ink/`](../runs/segment_ink).
 The rules for each check were written before it ran, but only in our own notes. Read this as a checked tool,
@@ -28,7 +28,7 @@ in [`vc_object_store/README.md`](https://github.com/ScrollPrize/villa/blob/main/
 |---|---|---|
 | `segment_ink.py` v2 ([`72bc3c7`](https://github.com/khj1222/vesuvius-challenge/commit/72bc3c74770050057820df306cfe121c1629fd59)) | renders a tifxyz segment with VC3D's own `vc_render_tifxyz`, runs villa's unmodified ink inference with any checkpoint it loads, writes the map as an `ink_<name>` channel | public |
 | `ink_sdk_channel.py` | takes [ink-sdk](https://github.com/LimeGS/ink-sdk) run folders (one model or a whole battery) and writes each map as an `ink_<profile>` channel | public |
-| VC3D panel change (3 files, +147/−18) | the Ink Detection panel also lists the active surface's `ink` and `ink_*` channels and draws the selected one | not in villa; asked the VC3D maintainers on 2026-11-04 (Discord #robots), no answer yet |
+| VC3D panel change (3 files, +147/−18) | the Ink Detection panel also lists the active surface's `ink` and `ink_*` channels and draws the selected one | on our fork, [`khj1222/villa` branch `feat/vc3d-ink-surface-channel`](https://github.com/khj1222/villa/tree/feat/vc3d-ink-surface-channel) (one commit, [`bb9ec5e2c`](https://github.com/khj1222/villa/commit/bb9ec5e2cb9a896974c32cbb0f0c58b1ce3e8a6b), on villa main `8e21d010f`); not in villa: we asked the VC3D maintainers on 2026-11-04 (Discord #robots) before opening a pull request and had no answer by 2026-11-16 |
 
 Both tools write either an importable tifxyz folder with the maps as sidecars, which ingestion turns into
 channels (VC3D: File → Stores → Import from Folder, or `vc_object_ingest --surface`), or add the channels to a
@@ -115,15 +115,17 @@ built in villa's CI image. The exports are pixel-identical to what was written:
 **5. The panel.**
 
 - *Automated test:* VC3D's own `test_ink_detection_overlay`, with two cases added for channels, passes 9 of
-  9 in villa's CI image on villa main `97fb9336c` (2026-11-14).
-  → [`test_ink_detection_overlay_main_97fb9336c.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_97fb9336c.txt)
+  9 in villa's CI image on villa main `97fb9336c` (2026-11-14), and again on the published branch (villa
+  main `8e21d010f`) in the CI image main switched to on 2026-11-16 (2026-11-17).
+  → [`test_ink_detection_overlay_main_97fb9336c.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_97fb9336c.txt),
+  [`test_ink_detection_overlay_main_8e21d010f.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_8e21d010f.txt)
 - *By hand:* a person checked it in VC3D on 2026-11-02, on the first version of the change (on villa
   main `fd97a4b60`), with the w00 folder imported:
   - built with the change, the panel offers `ink_ink9um_s43` and `ink_reader_v3` and draws them on the surface;
   - built from main, the same surface offers nothing (`None`, disabled).
   - Screenshots: [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel) (`before_*`, `after_*`).
-- The change has since been rebased three times over upstream edits to the same file. The by-hand check
-  has not been repeated on the latest version.
+- The change has since been rebased four times over upstream edits to the same file. The by-hand check
+  has not been repeated on the published version.
 
 ## Observation: Reader V3's map depends on where the canvas starts
 
@@ -149,7 +151,7 @@ One segment, one model; not investigated further.
 
 - One scroll (PHerc0841): two segments for the crop rule, one for everything else.
 - Only ink-sdk's 9 µm lane was run for real. Pooled, transposed and ROI runs were checked on synthetic cases only.
-- The panel change is not in villa, and the by-hand check was on its first version.
+- The panel change is on our fork, not in villa, and the by-hand check was on its first version.
 - Nobody else has used these tools yet.
 
 ## Reproduce
