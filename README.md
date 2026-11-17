@@ -393,12 +393,33 @@ VC3D's own overlay code reads the records (8 of 8 test cases, and by eye in the 
 that they land on the right pixels (two scrolls, flips and shifted maps as controls). *Update
 2026-10-29:* VC3D built from villa main after #2358 shows only catalog-published ink images, so these
 records show in builds up to the 2026-10-28 "VC3D Latest", not later ones ([docs/32](docs/32_segment_ink_vc3d.md)).
+For later builds the map goes into VC3D's object store instead: see section 18 and [docs/37](docs/37_ink_maps_as_vc3d_channels.md).
 
 **Swapping the checkpoint:** KLAVIS's Reader V3 through the same path, on three PHerc0841 segments
 neither model trained on, raises AUC against the open human labels from 0.68–0.77 (ink_9um) to
 **0.83–0.92**, places better against the team's map (0.35–0.38 → 0.63–0.68), and runs 3–6× faster. This
 reproduces KLAVIS's published gap through a different render path; it is not a new claim about the
 model. Reversing the layers costs either model most of its AUC, which is why the tool writes both.
+
+### 18. Ink maps on VC3D surfaces after the object-store move — [docs/37](docs/37_ink_maps_as_vc3d_channels.md)
+
+Since villa #2358, VC3D keeps segments in an object store and its Ink Detection panel lists only the ink
+images the catalog publishes, so a map you made yourself had no supported way onto a surface. The store
+already has a place for one: a *surface channel*, an image at a whole multiple of the point grid.
+[`segment_ink.py`](tools/segment_ink.py) v2 writes its map there as an `ink_<name>` channel (an importable
+tifxyz folder, or into an existing store). [`ink_sdk_channel.py`](tools/ink_sdk_channel.py) does the same
+for [ink-sdk](https://github.com/LimeGS/ink-sdk) runs, one model or a whole battery: it recomputes the
+renderer's auto-crop offset, undoes ink-sdk's transposes, flips, pooling and ROI, and refuses what it
+cannot place exactly. Checked on PHerc0841: synthetic runs are placed back with 0 px different, a real
+ink-sdk run agrees with segment_ink's map at correlation 0.99994, and every set of channels comes back
+from the store with identical pixels.
+
+The last step, the panel listing those channels, is a three-file VC3D change (+147/−18) on our fork,
+[`khj1222/villa` `feat/vc3d-ink-surface-channel`](https://github.com/khj1222/villa/tree/feat/vc3d-ink-surface-channel),
+not in villa: we asked the VC3D maintainers before opening a pull request and had no answer. VC3D's own
+`test_ink_detection_overlay`, with two channel cases added, passes 9 of 9 in villa's CI image. Checked by
+hand on the first version of the change: built with it, the panel lists and draws both maps on the w00
+surface; built from main, it offers nothing.
 
 ---
 
@@ -532,7 +553,9 @@ vesuvius-challenge/
 │                           15 cross-scroll LOSO · 16 First Letters render
 │                           17 held-out mask audit · 18 adaptation ladder
 │                           20 annotation targeting · 21-23 the aligned-gap attempts
-│                           24 pseudo-label validation
+│                           24 pseudo-label validation · 25 scouting
+│                           26-27, 29 thresholds · 28 9 µm fibres · 30-31 depth offsets
+│                           32, 37 ink maps in VC3D · 33-36 November measurements
 │   └── images/          <- before/after figures
 ├── configs/             <- training configs where validation actually runs
 ├── tools/               <- ink_viz, the validation harness, depth measurement,
@@ -609,3 +632,6 @@ vesuvius-challenge/
 - [x] **villa main's default augmentation vs the released recipe's** (2026-10-31) — pre-registered, then
       withdrawn before any run: the released recipe's `default` preset already builds main's graph
       ([docs/36](docs/36_main_default_augmentation.md)).
+- [x] **Ink maps on VC3D surfaces after the object-store move** (2026-11-14/17) — segment_ink v2 and
+      ink-sdk runs written as `ink_*` surface channels, placement checked to 0 px; the panel change that
+      lists them is on our fork, not in villa ([docs/37](docs/37_ink_maps_as_vc3d_channels.md)).
