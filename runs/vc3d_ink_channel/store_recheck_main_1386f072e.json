@@ -1,0 +1,154 @@
+{
+ "date": "2026-11-18",
+ "villa_main": "1386f072e (store schema 22, after villa #2546; vc_object_store unchanged since 8e21d010f)",
+ "image": "ghcr.io/scrollprize/villa/volume-cartographer@sha256:9407753393547c422c9689cb8da6b6f4415cc91ad8fa4d89eb476a3df540d7f8 (main's vc3d-ci.yml)",
+ "tools": "vc_object_ingest / vc_object_export built from that commit; script store_recheck.sh",
+ "comparison": "decoded pixels of every exported .tif against the file written (runs/segment_ink/v2_compare_export.py)",
+ "cases": {
+  "seg": {
+   "what": "segment_ink v2 store folder (3 maps on PHerc0841 w00)",
+   "all_identical": true,
+   "channels": {
+    "ink_ink9um_s43.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "12125085af611787",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_ink9um_s43_reverse.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "f223312cdf216ae6",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_reader_v3.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "e39cbb8aadf065ae",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    }
+   }
+  },
+  "sdk": {
+   "what": "ink_sdk_channel, synthetic ink-sdk runs (3 channels)",
+   "all_identical": true,
+   "channels": {
+    "ink_9um_reader_v3.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "5bf1f40a1517de3c",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_9um_reader_v3_reverse.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "d4e9630ac736c59d",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_9um_scrollprize_seed43_step75000.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "b321686539ddd16b",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    }
+   }
+  },
+  "real": {
+   "what": "ink_sdk_channel, real ink-sdk mesh + CT run (3 channels)",
+   "all_identical": true,
+   "channels": {
+    "ink_9um_reader_v3.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "6e6afb2a64319419",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_9um_reader_v3_mean.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "869d7e089f2b691b",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    },
+    "ink_9um_reader_v3_reverse.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "299ef82324b5212b",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    }
+   }
+  },
+  "target": {
+   "what": "store mode: surface ingested first, then vc_object_ingest --surface-channel (segment_ink --target store)",
+   "all_identical": true,
+   "channels": {
+    "ink_reader_v3.tif": {
+     "shape": [
+      4220,
+      4760
+     ],
+     "identical": true,
+     "pixel_sha256_16": "e39cbb8aadf065ae",
+     "px_per_grid_step": [
+      20.0,
+      20.0
+     ]
+    }
+   }
+  }
+ },
+ "all_identical": true
+}

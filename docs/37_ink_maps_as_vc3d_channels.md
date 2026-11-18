@@ -1,6 +1,7 @@
 # 37 — Ink maps on VC3D surfaces after the object-store move: segment_ink v2, ink-sdk runs, and the panel
 
-**Status: tools and checks, 2026-11-02 to 2026-11-17.** Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
+**Status: tools and checks, 2026-11-02 to 2026-11-18** (store round trips and the panel test rerun on villa main
+`1386f072e` on 2026-11-18). Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
 [`tools/ink_sdk_channel.py`](../tools/ink_sdk_channel.py). Evidence: [`runs/ink_sdk_channel/`](../runs/ink_sdk_channel),
 [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel), and the v2 files in [`runs/segment_ink/`](../runs/segment_ink).
 The rules for each check were written before it ran, but only in our own notes. Read this as a checked tool,
@@ -112,13 +113,22 @@ built in villa's CI image. The exports are pixel-identical to what was written:
 - the synthetic bridge channels → [`store_roundtrip_compare.json`](../runs/ink_sdk_channel/store_roundtrip_compare.json);
 - the real mesh-run channels → [`real_mesh_store_roundtrip_compare.json`](../runs/ink_sdk_channel/real_mesh_store_roundtrip_compare.json).
 
+Those runs (2026-11-06 and 2026-11-14) used the store before villa #2546 moved it to schema 22. On 2026-11-18
+all of them were run again with the store tools of villa main `1386f072e`, in main's CI image: the three folder
+round trips above, and the store mode (surface first, then `vc_object_ingest --surface-channel`). Every exported
+channel is again pixel-identical to what was written, with the same pixel hashes as before.
+→ [`store_recheck_main_1386f072e.json`](../runs/vc3d_ink_channel/store_recheck_main_1386f072e.json),
+[`store_recheck.sh`](../runs/vc3d_ink_channel/store_recheck.sh)
+
 **5. The panel.**
 
 - *Automated test:* VC3D's own `test_ink_detection_overlay`, with two cases added for channels, passes 9 of
   9 in villa's CI image on villa main `97fb9336c` (2026-11-14), and again on the published branch (villa
-  main `8e21d010f`) in the CI image main switched to on 2026-11-16 (2026-11-17).
+  main `8e21d010f`) in the CI image main switched to on 2026-11-16 (2026-11-17), and once more with the same commit
+  on villa main `1386f072e` (2026-11-18; no conflict).
   → [`test_ink_detection_overlay_main_97fb9336c.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_97fb9336c.txt),
-  [`test_ink_detection_overlay_main_8e21d010f.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_8e21d010f.txt)
+  [`test_ink_detection_overlay_main_8e21d010f.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_8e21d010f.txt),
+  [`test_ink_detection_overlay_main_1386f072e.txt`](../runs/vc3d_ink_channel/test_ink_detection_overlay_main_1386f072e.txt)
 - *By hand:* a person checked it in VC3D on 2026-11-02, on the first version of the change (on villa
   main `fd97a4b60`), with the w00 folder imported:
   - built with the change, the panel offers `ink_ink9um_s43` and `ink_reader_v3` and draws them on the surface;

@@ -14,6 +14,10 @@ Final pre-submit check, 2026-11-17: the VC3D panel change is published on the fo
 VC3D maintainers by 2026-11-16, so no villa pull request); docs/37 updated to say so; field 5 read through;
 all 12 field-4/5 links other than Discord returned HTTP 200.
 
+Update 2026-11-18: every store round trip and the panel test rerun on villa main `1386f072e` (store schema 22,
+after villa #2546): all exported channels pixel-identical, 9 of 9 (docs/37 checks 4 and 5). Field 5's Store and
+Panel lines say so; field 5 read through again; all 12 links 200 again. Field 4 unchanged.
+
 ## Form answers
 
 **Your full name**
@@ -104,12 +108,13 @@ main, the same surface offers nothing to choose.
   (max 3 grey levels); from the mesh and a local copy of the CT around the surface, ink-sdk's own
   auto-cropped render placed at (19,19), confirmed on the CT texture (9.38 at (0,0), ≥ 12.04 at ±1).
 - Store: every set of channels (segment_ink's three maps, the synthetic and the real ink-sdk channels)
-  ingested and exported with the store tools from villa main returns identical pixels.
+  ingested and exported with the store tools from villa main returns identical pixels; all rerun on 11-18
+  on villa main 1386f072e, after the store moved to schema 22 (#2546), with the same pixel hashes.
 - Panel: VC3D's own test_ink_detection_overlay with two channel cases added, 9 of 9 in villa's CI image
   on villa main 97fb9336c (11-14), and again on the published branch (villa main 8e21d010f) in main's new
-  CI image (11-17). Before and after checked by hand in VC3D on 11-02 on the first version of the change;
-  screenshots in runs/vc3d_ink_channel. It has been rebased four times since over
-  upstream edits to the same file; the hand check was not repeated.
+  CI image (11-17) and on villa main 1386f072e (11-18). Before and after checked by hand in VC3D on
+  11-02 on the first version of the change; screenshots in runs/vc3d_ink_channel. It has been rebased
+  four times since over upstream edits to the same file; the hand check was not repeated.
 - Side finding: Reader V3's map on w00 depends on where the canvas starts. The same input on the full
   and on the 19-px auto-cropped canvas correlates 0.925 on the reading side (median difference 2 grey
   levels, 99th percentile 57). That is most of why ink-sdk's mesh run and segment_ink agree at 0.92, not
@@ -117,8 +122,8 @@ main, the same surface offers nothing to choose.
   canvas.
 
 Limits: one scroll; only ink-sdk's 9 µm lane run for real (pooled, transposed and ROI runs checked on
-synthetic cases); the panel change is on my fork, not in villa; the rules for each check were in my own notes, not
-committed before the run, so this is a checked tool, not a pre-registered test.
+synthetic cases); the panel change is on my fork, not in villa; the rules for each check were in my own
+notes, not committed before the run, so this is a checked tool, not a pre-registered test.
 
 Integration: reads the open data directly (OME-Zarr scans, tifxyz meshes) and writes what VC3D's object
 store reads (tifxyz folders, surface channels). Rendering and inference are villa's own vc_render_tifxyz
@@ -130,7 +135,7 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 ## Checklist
 
 - [x] Re-check the live form on https://scrollprize.org/prizes (2026-11-14: same five questions as October).
-- [x] Read field 5 straight through; check every link (2026-11-17).
+- [x] Read field 5 straight through; check every link (2026-11-17, again 2026-11-18).
 - [ ] Re-check the form and links right before submitting.
 - [ ] Paste the fenced answers, accept the Terms, and submit (user).
 - [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
@@ -140,6 +145,7 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 Calculated over each fenced block body with LF line endings and exactly one trailing newline:
 
 - field 4 — 1,637 chars, `3e9d0677becc2c6613d04bd483872b2912192babbd79a19fbfe199629e927886`
-- field 5 — 5,685 chars, `5fef85693281b01eee8cfa9cc1db34ab52d6f0104aec2cf864ad62467d7447cb`
+- field 5 — 5,839 chars, `d8c3bd78eff2308e5c4bce98c34b7c9ad183f4adf0e0f097cecbae464e11c023` (2026-11-18;
+  the 11-17 text was 5,685 chars, `5fef8569…`)
 
 If either field is edited before submitting, recompute these against the actual pasted text.
