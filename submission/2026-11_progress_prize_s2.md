@@ -125,6 +125,8 @@ metadata, not the copy used at training time.
 
 - [x] Re-check the live form on https://scrollprize.org/prizes (2026-11-14: same five questions as October).
 - [x] Read fields 4 and 5 straight through; check every field-4 link (2026-11-14).
+- [x] Re-check the form and links right before submitting (2026-11-21: same form and five questions; field
+  hashes unchanged from 11-14; all 25 links 200).
 - [ ] Paste the fenced answers, accept the Terms, and submit (user).
 - [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
 

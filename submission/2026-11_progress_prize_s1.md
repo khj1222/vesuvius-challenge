@@ -144,7 +144,9 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 
 - [x] Re-check the live form on https://scrollprize.org/prizes (2026-11-14: same five questions as October).
 - [x] Read field 5 straight through; check every link (2026-11-17, again 2026-11-18 and 2026-11-21).
-- [ ] Re-check the form and links right before submitting.
+- [x] Re-check the form and links right before submitting (2026-11-21, after pushing `e6faf55`: prizes page
+  links the same form, "November 2026 Progress Prizes", same five questions + Terms; field 4 and 5 hashes as
+  below; all 12 links 200, plus the 7 new evidence files under runs/vc3d_ink_channel).
 - [ ] Paste the fenced answers, accept the Terms, and submit (user).
 - [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
 
