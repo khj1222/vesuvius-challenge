@@ -3,8 +3,9 @@
 **Form:** https://docs.google.com/forms/d/e/1FAIpQLSeB6MC_--4UCCEGc3zalX57-uE4puRcE_vJoYJCrEt4uYaaaw/viewform
 ("November 2026 Progress Prizes", taken from https://scrollprize.org/prizes; the form URL is round-specific.)
 **Deadline:** 2026-11-30 23:59 Pacific = 2026-12-01 16:59 KST.
-**Status:** ready (2026-11-14). Not submitted yet: the user will submit S1 and S2 together shortly before the deadline;
-re-check links and the form right before.
+**Status:** submitted 2026-11-21 10:53 KST, as a second response to the same form (S1 at 10:50). The Google Forms
+receipt matches this file in all five answers, character for character, except a line break left after the team
+description (invisible). Fields 4 and 5 hash to the values recorded at the end.
 
 This is the second of two November submissions, split as villa #2102 asks (new methods, models and
 measurements separately). S1, the tool (docs/37), is submitted separately.
@@ -127,8 +128,9 @@ metadata, not the copy used at training time.
 - [x] Read fields 4 and 5 straight through; check every field-4 link (2026-11-14).
 - [x] Re-check the form and links right before submitting (2026-11-21: same form and five questions; field
   hashes unchanged from 11-14; all 25 links 200).
-- [ ] Paste the fenced answers, accept the Terms, and submit (user).
-- [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
+- [x] Paste the fenced answers, accept the Terms, and submit (user, 2026-11-21 10:53 KST).
+- [x] Compare the submitted text with this file and mark it submitted (receipt e-mail, 2026-11-21: fields 4 and 5
+  identical).
 
 ## Field hashes
 

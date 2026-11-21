@@ -3,8 +3,11 @@
 **Form:** https://docs.google.com/forms/d/e/1FAIpQLSeB6MC_--4UCCEGc3zalX57-uE4puRcE_vJoYJCrEt4uYaaaw/viewform
 ("November 2026 Progress Prizes", taken from https://scrollprize.org/prizes; the form URL is round-specific.)
 **Deadline:** 2026-11-30 23:59 Pacific = 2026-12-01 16:59 KST.
-**Status:** ready (2026-11-17). Not submitted yet: the user will submit S1 and S2 together shortly before the deadline;
-re-check links and the form right before.
+**Status:** submitted 2026-11-21 10:50 KST (S2 followed at 10:53, as a second response to the same form). The
+Google Forms receipt matches this file in all five answers, character for character, with one exception: field 4
+lost its last character on paste, so the submitted text ends `(https://github.com/LimeGS/ink-sdk` without the
+closing `)` (1,636 chars, hash below). Cosmetic (the link still opens), so not resubmitted. Field 5 hashes to the
+value recorded at the end.
 
 This is the first of two November submissions, split as villa #2102 asks (new methods, models and
 measurements separately). S2, the measurements (docs/33–36), is submitted separately.
@@ -147,14 +150,16 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 - [x] Re-check the form and links right before submitting (2026-11-21, after pushing `e6faf55`: prizes page
   links the same form, "November 2026 Progress Prizes", same five questions + Terms; field 4 and 5 hashes as
   below; all 12 links 200, plus the 7 new evidence files under runs/vc3d_ink_channel).
-- [ ] Paste the fenced answers, accept the Terms, and submit (user).
-- [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
+- [x] Paste the fenced answers, accept the Terms, and submit (user, 2026-11-21 10:50 KST).
+- [x] Compare the submitted text with this file and mark it submitted (receipt e-mail, 2026-11-21: identical
+  except field 4's final `)`).
 
 ## Field hashes
 
 Calculated over each fenced block body with LF line endings and exactly one trailing newline:
 
-- field 4 — 1,637 chars, `3e9d0677becc2c6613d04bd483872b2912192babbd79a19fbfe199629e927886`
+- field 4 — 1,637 chars, `3e9d0677becc2c6613d04bd483872b2912192babbd79a19fbfe199629e927886`; as submitted (without
+  the final `)`) 1,636 chars, `eea837acebb72e0676175acf1910d3ef40ed0b93f06133f985f4cc2e143bf4dc`
 - field 5 — 5,905 chars, `452a2dc319a4657039bab8966df8b71a8d69d822831018b0b53595663d09d0b8` (2026-11-21;
   the 11-18 text was 5,839 chars, `d8c3bd78…`; the 11-17 text 5,685 chars, `5fef8569…`)
 
