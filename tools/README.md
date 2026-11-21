@@ -560,6 +560,10 @@ than adding one. Those now appear as `comment EDITED (posted <date>)` at the tim
 Hugging Face (`HF_THREADS`) are read through the public Hub API, no token needed, and other
 people's events after the cutoff are listed with the GitHub ones.
 
+**Watched files.** Every villa commit after the cutoff that touches a file in `WATCH_FILES` (the
+prize eligibility list and the prizes page) is listed too, since a scroll added to the prize list
+or a rule change arrives as a commit, not as a comment on any thread.
+
 `--since 2026-08-31T12:00:00Z` · `--hours` · `--no-gh`
 
 ## `score_pseudo_labels.py` — how good is the yardstick?

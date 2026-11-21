@@ -76,6 +76,13 @@ HF_THREADS = [
 ]
 HF_US = "khj1222"
 
+# files in villa whose every commit is news: (path, label). A new scroll on the prize list or a
+# rule change matters the day it lands, and nobody comments on a thread when it does.
+WATCH_FILES = [
+    ("scrollprize.org/src/data/prizeEligibility.json", "prize eligibility list"),
+    ("scrollprize.org/docs/34_prizes.md", "prizes page"),
+]
+
 _GH: str | None = None       # resolved gh binary, or None for the curl fallback
 
 
@@ -228,6 +235,21 @@ def main(argv=None) -> int:
             news.append((when, f"HF {repo}#{num}", author, event.get("type", "event"),
                          " ".join(str(body).split())[:400],
                          f"https://huggingface.co/{repo}/discussions/{num}"))
+
+    for path, label in WATCH_FILES:
+        commits = api(f"commits?path={path}&since={cutoff}&per_page=20")
+        if not isinstance(commits, list):
+            print(f"  {path}: could not read")
+            continue
+        print(f"  watch  {len(commits)} commit(s) since cutoff  {label} ({path})")
+        for commit in commits:
+            info = commit.get("commit") or {}
+            news.append(((info.get("committer") or {}).get("date") or "", f"villa {path}",
+                         (commit.get("author") or {}).get("login")
+                         or (info.get("author") or {}).get("name", ""),
+                         f"commit {commit.get('sha', '')[:9]} ({label})",
+                         (info.get("message") or "").splitlines()[0][:400],
+                         commit.get("html_url", "")))
 
     print()
     if not news:

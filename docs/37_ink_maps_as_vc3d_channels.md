@@ -1,7 +1,7 @@
 # 37 — Ink maps on VC3D surfaces after the object-store move: segment_ink v2, ink-sdk runs, and the panel
 
-**Status: tools and checks, 2026-11-02 to 2026-11-18** (store round trips and the panel test rerun on villa main
-`1386f072e` on 2026-11-18). Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
+**Status: tools and checks, 2026-11-02 to 2026-11-21** (store round trips and the panel test rerun on villa main
+`1386f072e` on 2026-11-18; the panel checked again in the VC3D app on villa main `c8f3ba453` on 2026-11-21). Code: [`tools/segment_ink.py`](../tools/segment_ink.py) (v2),
 [`tools/ink_sdk_channel.py`](../tools/ink_sdk_channel.py). Evidence: [`runs/ink_sdk_channel/`](../runs/ink_sdk_channel),
 [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel), and the v2 files in [`runs/segment_ink/`](../runs/segment_ink).
 The rules for each check were written before it ran, but only in our own notes. Read this as a checked tool,
@@ -134,8 +134,19 @@ channel is again pixel-identical to what was written, with the same pixel hashes
   - built with the change, the panel offers `ink_ink9um_s43` and `ink_reader_v3` and draws them on the surface;
   - built from main, the same surface offers nothing (`None`, disabled).
   - Screenshots: [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel) (`before_*`, `after_*`).
-- The change has since been rebased four times over upstream edits to the same file. The by-hand check
-  has not been repeated on the published version.
+- *In the app again, 2026-11-21:* the change has been rebased four times since over upstream edits to the
+  same file, so the same check was repeated on the published change (the fork commit's patch, applied to
+  villa main `c8f3ba453` with no conflict) and on that main without it, both built as the VC3D app in main's
+  CI image. This run was driven by the AI assistant at the owner's request, not by hand: VC3D ran on a
+  virtual display, the sample was opened and the w00 folder imported (bound at scale 1) and selected through
+  VC3D's own agent bridge, and the Ink Detection panel was clicked with xdotool.
+  - with the change: the dropdown offers `ink_ink9um_s43` and `ink_reader_v3`, and each draws on the surface
+    (Fire colormap in the screenshots);
+  - without it: the same surface offers nothing (`None`, disabled).
+  - Screenshots: `g3_c8f3ba453_after_dropdown.webp`, `…_after_reader_v3.webp`, `…_after_ink9um_s43.webp`,
+    `…_before_panel.webp` in [`runs/vc3d_ink_channel/`](../runs/vc3d_ink_channel); procedure:
+    [`g3_xvfb_start.sh`](../runs/vc3d_ink_channel/g3_xvfb_start.sh),
+    [`g3_drive.sh`](../runs/vc3d_ink_channel/g3_drive.sh), [`g3_bridge.py`](../runs/vc3d_ink_channel/g3_bridge.py).
 
 ## Observation: Reader V3's map depends on where the canvas starts
 
@@ -161,7 +172,8 @@ One segment, one model; not investigated further.
 
 - One scroll (PHerc0841): two segments for the crop rule, one for everything else.
 - Only ink-sdk's 9 µm lane was run for real. Pooled, transposed and ROI runs were checked on synthetic cases only.
-- The panel change is on our fork, not in villa, and the by-hand check was on its first version.
+- The panel change is on our fork, not in villa. The check by hand was on its first version; the check on
+  the published version was run by the AI assistant.
 - Nobody else has used these tools yet.
 
 ## Reproduce
@@ -186,4 +198,5 @@ The checks are scripted in [`runs/ink_sdk_channel/`](../runs/ink_sdk_channel). P
 - The object store and the Ink Detection panel: the VC3D maintainers (villa #2358, #2440, #2462, #2491).
 
 AI disclosure: the tools, checks and this text were made with Claude (Anthropic, Opus 5.5) via Claude Code,
-directed by the repository owner. The by-hand VC3D check was done by the owner.
+directed by the repository owner. The 2026-11-02 VC3D check was done by hand by the owner; the 2026-11-21
+repeat was driven by Claude through VC3D's agent bridge and xdotool, at the owner's request.

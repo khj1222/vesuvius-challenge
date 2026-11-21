@@ -18,6 +18,13 @@ Update 2026-11-18: every store round trip and the panel test rerun on villa main
 after villa #2546): all exported channels pixel-identical, 9 of 9 (docs/37 checks 4 and 5). Field 5's Store and
 Panel lines say so; field 5 read through again; all 12 links 200 again. Field 4 unchanged.
 
+Update 2026-11-21: the VC3D app check repeated on the published change (its patch on villa main
+`c8f3ba453`) and on that main without it, driven by the AI assistant at the user's request (agent bridge +
+xdotool on a virtual display; the user's 11-02 check was by hand). Same result as 11-02: with the change the
+panel offers and draws `ink_ink9um_s43` and `ink_reader_v3`; without it, `None`, disabled. docs/37 check 5,
+limits and disclosure updated; field 5's Panel line now says so instead of "the hand check was not
+repeated". Field 5 read through again. Field 4 unchanged.
+
 ## Form answers
 
 **Your full name**
@@ -112,9 +119,10 @@ main, the same surface offers nothing to choose.
   on villa main 1386f072e, after the store moved to schema 22 (#2546), with the same pixel hashes.
 - Panel: VC3D's own test_ink_detection_overlay with two channel cases added, 9 of 9 in villa's CI image
   on villa main 97fb9336c (11-14), and again on the published branch (villa main 8e21d010f) in main's new
-  CI image (11-17) and on villa main 1386f072e (11-18). Before and after checked by hand in VC3D on
-  11-02 on the first version of the change; screenshots in runs/vc3d_ink_channel. It has been rebased
-  four times since over upstream edits to the same file; the hand check was not repeated.
+  CI image (11-17) and on villa main 1386f072e (11-18). Before and after checked in the VC3D app: by
+  hand on 11-02 on the first version of the change, and again on 11-21 with the published change on
+  villa main c8f3ba453 (that run driven by the AI assistant through VC3D's agent bridge and xdotool, at
+  my request); screenshots in runs/vc3d_ink_channel.
 - Side finding: Reader V3's map on w00 depends on where the canvas starts. The same input on the full
   and on the 19-px auto-cropped canvas correlates 0.925 on the reading side (median difference 2 grey
   levels, 99th percentile 57). That is most of why ink-sdk's mesh run and segment_ink agree at 0.92, not
@@ -135,7 +143,7 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 ## Checklist
 
 - [x] Re-check the live form on https://scrollprize.org/prizes (2026-11-14: same five questions as October).
-- [x] Read field 5 straight through; check every link (2026-11-17, again 2026-11-18).
+- [x] Read field 5 straight through; check every link (2026-11-17, again 2026-11-18 and 2026-11-21).
 - [ ] Re-check the form and links right before submitting.
 - [ ] Paste the fenced answers, accept the Terms, and submit (user).
 - [ ] Compare the submitted text with this file and mark it submitted (receipt e-mail).
@@ -145,7 +153,7 @@ and ink inference, or ink-sdk unchanged. MIT-licensed.
 Calculated over each fenced block body with LF line endings and exactly one trailing newline:
 
 - field 4 — 1,637 chars, `3e9d0677becc2c6613d04bd483872b2912192babbd79a19fbfe199629e927886`
-- field 5 — 5,839 chars, `d8c3bd78eff2308e5c4bce98c34b7c9ad183f4adf0e0f097cecbae464e11c023` (2026-11-18;
-  the 11-17 text was 5,685 chars, `5fef8569…`)
+- field 5 — 5,905 chars, `452a2dc319a4657039bab8966df8b71a8d69d822831018b0b53595663d09d0b8` (2026-11-21;
+  the 11-18 text was 5,839 chars, `d8c3bd78…`; the 11-17 text 5,685 chars, `5fef8569…`)
 
 If either field is edited before submitting, recompute these against the actual pasted text.
