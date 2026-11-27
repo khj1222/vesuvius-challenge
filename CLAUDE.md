@@ -14,7 +14,7 @@
 
 ### 다음에 할 일 (11-27 정리 — 사용자: "계획만 남기고 조금 있다가", **아직 시작 안 함**)
 - **11-27 저녁 눈가림 보기 도구 만듦**(비공개 `planning/2026-11-27_blind_viewer/`, README에 명세·사용법): 보정 세트 `session/calib1/` 95개 → 사용자가 판정 → **사전 명세 판정 실패**(4개 통과선 중 3개 통과, 반전 일관성 8/11 < 0.80, 한 쌍 차이; 수치는 비공개 README "Calibration result"). 사용자 "2차 명세" → `SPEC_calib2.md`(sha256 `9490de39fe4a`, 반전 쌍 58개·이진 일관성·이동 격자, 실패하면 이 대조로 3차 없음) → `session/calib2/` 150개 → 사용자 판정 → **2차도 사전 명세 실패**(오경보 0.28 > 0.15; 민감도·일관성은 통과). 명세대로 3차 없음 → 눈 판정은 1월 결정 관문으로 못 씀(선별용). 1월 진행 방식은 사용자 결정(1월 초 남은 상 수 확인 때 함께). 좌우 반전은 눈 판정에선 음성이 아니라 일관성 확인으로 **바꿈**(사용자 "확인하고 바꿔", 근거는 README "Decision 11-27"). 1월 후보 세트 빌더는 보정 결과 뒤에.
-- **내가, 사용자가 시작하자고 하면**: ② `D:/ink-sdk-main`(`63c6c5a`)을 upstream `62fa3b9`(0.1.1 + 846A 우승 모델 프로필)로 올리고 새 모델의 학습 목록 확인.
+- **11-27 밤 ink-sdk 0.1.1로 올림**(비공개 `planning/2026-11-27_inksdk_011/`): `D:/ink-sdk-main` = `62fa3b9` + **로컬 패치 1줄**(`local_statvfs.patch`: 0.1.1의 `os.statvfs`가 Windows에 없어 ink_9um 프로필 전부 즉시 죽음 → `AttributeError`도 잡음; 깨끗한 내보내기로 재현·원인 커밋 `7133cfb` 확인, **ink-sdk #43으로 게시**(사용자, 11-27 20:05 KST, 게시본=초안 1,394자), 스윕 `OTHER_THREADS`에 추가. 업스트림이 고치면 로컬 패치를 빼고 재설치). 회귀 = 0211 Reader V3 바이트 동일. Argus V3 = 팀 맵과 r 1.000, Argus V2와 r 0.98(거의 같은 모델). jeff 0846A 모델 학습 목록은 체크포인트에서 읽음(비공개 노트).
 - **사용자(주말, 10–20분)**: Z: 연결 → 내가 밀린 백업 · (선택) G3 정리 결정 · (선택) Discord 미전송 초안 삭제(아래 "사용자 몫").
 - **12월**: 접속 때 루틴 · 12월 초 Progress 폼 확인(11-27 상 페이지엔 11월 폼뿐) · 11월 수상 발표(9·10월은 다음 달 11–13일에 나옴 → 12월 중순쯤, 추정) → 지급 폼(사용자) · #2687 머지되면 포크 재기반 결정 · 846A·B 세그먼트가 공개되면 (b) v2 · 12월 제출(마감 12-31 23:59 PT)은 지금 계획 없음, 후보 안은 비공개 `CANDIDATES.md` "1월 전에 할 것".
 - **1월 초(1/7 전)**: 남은 First Letters 상 수부터 확인 → 탐침 진행/접기, 두루마리 순서, 사전등록 커밋 → (유지되면) 1/7–1/28 탐침, 사용자 주 3–5시간. 후보가 없으면 선별 결과를 Progress로 내고 접음.
@@ -61,6 +61,7 @@
 | #1231 | (우리 이슈) 배포 세그먼트에 검증 마스크 없음 | open, 무응답 |
 | #1547 | (남의 이슈) 중복 표면 | open, 우리 0139 세트 안 중복 없음 |
 | #192·#1582·#1659 | 남의 이슈(우리 관여) | 11-01 bruniss 대량 정리로 닫힘 |
+| ink-sdk #43 | (우리 이슈) 0.1.1 ink_9um이 Windows에서 `os.statvfs`로 즉시 죽음, 초안 `submission/gh_inksdk_issue_windows_statvfs.md` | 11-27 사용자 게시, 게시본=초안, 스윕에 추가 |
 | ink-sdk #18 | (우리 이슈, LimeGS/ink-sdk) ink-sdk → VC3D 저장소 채널 제안 + 캔버스 원점 관찰, 초안 `submission/gh_inksdk_issue_vc3d_channels.md` | 11-14 사용자 게시, 게시본=초안, 스윕 `OTHER_THREADS`에 추가 |
 | HF 7건 | `scrollprize/PHerc.1667-iteration-{0..5}/discussions/1`, `Qualzz20/afv_fiber_9um/discussions/1` | open, 무활동 |
 
@@ -88,7 +89,7 @@
 - 큰 증거: 넓은 볼륨 `surface-volumes/aligned9_wide`·`openlabels9_wide`(48GB, docs/31), 예측 `runs/ink9um_openlabels/`.
 
 ### 작업 트리 (villa = `external/villa` 저장소의 워크트리)
-- **ink-sdk(D1)**: `D:/ink-sdk-main` = LimeGS/ink-sdk `63c6c5a` 워크트리(원 클론 `D:/ink-sdk` `2df3ab5`), venv `E:/envs/inksdk2`(py3.12, torch 2.11 cu128, opencv·pillow), 가중치 `E:/envs/inksdk_models`(11개 프로필), 9 µm 레인 = `--villa D:/vw23 --python external/villa/ink-detection/.venv/...` + `PYTHONPATH=D:/vw23/vesuvius/src`. 실행 스크립트 `planning/2026-11-21_1447_dryrun/run_w058.sh`, 데이터 `data/pherc1447/`(6 GB).
+- **ink-sdk(D1)**: `D:/ink-sdk-main` = LimeGS/ink-sdk **`62fa3b9`(0.1.1) + 로컬 statvfs 패치(미커밋, 지우지 말 것)** 워크트리(원 클론 `D:/ink-sdk` `2df3ab5`), venv `E:/envs/inksdk2`(py3.12, torch 2.11 cu128, opencv·pillow; pip·pytest 없음 → `uv pip install --python … --no-deps --reinstall D:/ink-sdk-main`), 가중치 `E:/envs/inksdk_models`(11개 프로필), 9 µm 레인 = `--villa D:/vw23 --python external/villa/ink-detection/.venv/...` + `PYTHONPATH=D:/vw23/vesuvius/src`. 실행 스크립트 `planning/2026-11-21_1447_dryrun/run_w058.sh`, 데이터 `data/pherc1447/`(6 GB).
 - **`D:/vw20`** = I1 브랜치(위), sparse `volume-cartographer/`·`vc_object_store/`·`vc_reader/`(VC CMake가 `../vc_reader`·`../vc_object_store`를 부름) · `D:/vw21` = main `fd97a4b60` 패치 없음(G3 '전' 빌드용). VC 빌드는 저장소 CLI를 끄니 `vc_object_ingest/export`는 `vc_object_store` 단독 빌드(`/work/build_store`). WSLg 창은 computer-use로 클릭이 안 됨 → VC3D GUI는 사용자가 조작.
 - `D:/vw15` = #2012 브랜치(닫힘) · `D:/vw2` = ink_9um 추론용(`feat/flat-depth-targets`, sparse) · `D:/vw12` = #1893 브랜치 `ca4a5bd68`(보존용) · `D:/vw16` = dinovol(B 보류) · `D:/vw17` = villa main `e2254ebe0`(sparse `vesuvius/`, segment_ink 추론: `external/villa/ink-detection/.venv` python + `PYTHONPATH=D:/vw17/vesuvius/src`) · `D:/vw18` = VC3D 잉크 패널 검증(10-25) · `D:/vw19` = Paris4 3D 브랜치 `c9ca2dc52`(docs/34).
 - `E:/envs/dinovol`(py3.13, torch 2.11 cu128 — timm 설치가 torch를 CPU판으로 바꾸니 torch+torchvision을 cu128 인덱스에서 함께 재설치; imagecodecs 없음).

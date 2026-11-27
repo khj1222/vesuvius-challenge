@@ -65,6 +65,7 @@ THREADS = [
 # threads in other GitHub repositories: (owner/repo, number, label)
 OTHER_THREADS = [
     ("LimeGS/ink-sdk", 18, "our issue: offer ink-sdk -> VC3D object-store ink channels"),
+    ("LimeGS/ink-sdk", 43, "our issue: ink_9um crashes on Windows in 0.1.1 (os.statvfs)"),
 ]
 
 
